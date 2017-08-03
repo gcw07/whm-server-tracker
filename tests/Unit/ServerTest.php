@@ -20,6 +20,14 @@ class ServerTest extends TestCase
     }
 
     /** @test */
+    public function a_server_has_accounts()
+    {
+        $this->assertInstanceOf(
+            'Illuminate\Database\Eloquent\Collection', $this->server->accounts
+        );
+    }
+
+    /** @test */
     public function a_server_can_add_an_account()
     {
         $this->server->addAccount([
