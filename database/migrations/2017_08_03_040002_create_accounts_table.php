@@ -22,7 +22,7 @@ class CreateAccountsTable extends Migration
             $table->boolean('suspended');
             $table->string('suspend_reason');
             $table->timestamp('suspend_time')->nullable();
-            $table->timestamp('setup_date');
+            $table->timestamp('setup_date')->nullable();
             $table->string('disk_used'); // in MB
             $table->string('disk_limit'); // in MB
             $table->string('plan');
