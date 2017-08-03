@@ -14,4 +14,9 @@ class Server extends Model
     {
         return $this->hasMany(Account::class);
     }
+
+    public function addAccount($account)
+    {
+        return $this->accounts()->create($account);
+    }
 }
