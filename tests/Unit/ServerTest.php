@@ -10,12 +10,19 @@ class ServerTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $server;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->server = create('App\Server');
+    }
+
     /** @test */
     public function a_server_can_add_an_account()
     {
-        $server = create('App\Server');
-
-        $server->addAccount([
+        $this->server->addAccount([
             'domain'         => 'my-server-name.com',
             'user'           => 'my-server',
             'backup'         => true,
@@ -28,6 +35,6 @@ class ServerTest extends TestCase
             'plan'           => '2 Gig'
         ]);
 
-        $this->assertCount(1, $server->accounts);
+        $this->assertCount(1, $this->server->accounts);
     }
 }
