@@ -37,6 +37,35 @@ class WHM
     public function getDiskUsage()
     {
         $url = "{$this->baseUrl}/getdiskusage?api.version=1";
+
+        /////////////////////////////////////
+//        $response = Zttp::withHeaders([
+//            'Authorization' => "whm root:XAT5VTR67T5"
+//        ])->withoutVerifying()->get($url);
+//
+//        dd($response->json());
+
+        //////////////////////////
+        $client = new Client();
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => "whm root:XAT5VTR67T5",
+            ],
+            'verify' => false
+        ]);
+        $data = json_decode($response->getBody(), true);
+        dd($data);
+
+        ////////////////////////
+        $client = new Client();
+        $request = new Request('GET', $url, [
+            'Authorization' => "whm root:XAT5VTR67T5"
+        ]);
+        dd($request);
+        $response = $client->send($request, ['verify' => false]);
+        $data = json_decode($response->getBody(), true);
+        dd($data);
+        /////////////////////////
     }
 
     private function setupConnection()
