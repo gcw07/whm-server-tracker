@@ -39,6 +39,17 @@ class WHM
         return $this->fetch($url);
     }
 
+    private function setupConnection()
+    {
+        $config = config('server-tracker');
+        $host = "{$this->server->address}:{$this->server->port}";
+
+        $this->baseUrl = "{$config['urls']['protocol']}://{$host}/{$config['urls']['api-path']}";
+        $this->authHeader = [
+            'Authorization' => "whm {$config['remote']['username']}:{$this->server->token}"
+        ];
+    }
+
     private function fetch($url)
     {
         $client = new Client();
@@ -49,16 +60,5 @@ class WHM
         ]);
 
         return json_decode($response->getBody(), true);
-    }
-
-    private function setupConnection()
-    {
-        $config = config('server-tracker');
-        $host = "{$this->server->address}:{$this->server->port}";
-
-        $this->baseUrl = "{$config['urls']['protocol']}://{$host}/{$config['urls']['api-path']}";
-        $this->authHeader = [
-            'Authorization' => "whm {$config['remote']['username']}:{$this->server->token}"
-        ];
     }
 }
