@@ -70,6 +70,27 @@ class WHMIntegrationTest extends TestCase
     }
 
     /** @test */
+    public function a_server_with_an_invalid_api_token_throws_an_exception()
+    {
+        $server = create('App\Server', [
+            'address' => '50.116.77.25',
+            'port' => '2087',
+            'server_type' => 'vps',
+            'token' => 'invalid-api-token'
+        ]);
+
+        try {
+            $api = WHM::create($server);
+            $diskUsage = $api->getDiskUsage();
+        } catch (ForbiddenAccessException $e) {
+            $this->assertEquals('invalid-api-token', $server->token);
+            return;
+        }
+
+        $this->fail("Server still connected even with an invalid server api token.");
+    }
+
+    /** @test */
     public function it_can_connect_to_remote_server()
     {
 //        $server = create('App\Server', [
