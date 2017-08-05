@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d997298f58d67e6e931882089cc05cb0",
+    "content-hash": "0b0a10beb4f50258baf9163af87268f0",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -583,52 +583,6 @@
                 }
             ],
             "time": "2015-04-20T18:58:01+00:00"
-        },
-        {
-            "name": "kitetail/zttp",
-            "version": "v0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kitetail/zttp.git",
-                "reference": "fb8f379c5d34d56399c5038226a1db845220ff8b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kitetail/zttp/zipball/fb8f379c5d34d56399c5038226a1db845220ff8b",
-                "reference": "fb8f379c5d34d56399c5038226a1db845220ff8b",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.0",
-                "php": ">=7.0",
-                "tightenco/collect": "^5.4"
-            },
-            "require-dev": {
-                "laravel/lumen-framework": "^5.4",
-                "phpunit/phpunit": "^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/Zttp.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Adam Wathan",
-                    "email": "adam.wathan@gmail.com"
-                }
-            ],
-            "description": "A developer-experience focused HTTP client, optimized for most common use cases.",
-            "keywords": [
-                "Guzzle",
-                "http"
-            ],
-            "time": "2017-07-20T14:16:37+00:00"
         },
         {
             "name": "laravel/framework",
