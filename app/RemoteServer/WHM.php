@@ -36,7 +36,13 @@ class WHM
     {
         $url = "{$this->baseUrl}/getdiskusage?api.version=1";
 
+        return $this->fetch($url);
+    }
+
+    private function fetch($url)
+    {
         $client = new Client();
+
         $response = $client->request('GET', $url, [
             'headers' => $this->authHeader,
             'verify' => false
