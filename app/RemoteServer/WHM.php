@@ -52,13 +52,17 @@ class WHM
 
     private function fetch($url)
     {
-        $client = new Client();
+        try {
+            $client = new Client();
 
-        $response = $client->request('GET', $url, [
-            'headers' => $this->authHeader,
-            'verify' => false
-        ]);
+            $response = $client->request('GET', $url, [
+                'headers' => $this->authHeader,
+                'verify' => false
+            ]);
 
-        return json_decode($response->getBody(), true);
+            return json_decode($response->getBody(), true);
+        } catch (ClientException $e) {
+            dd('remote server error');
+        }
     }
 }
