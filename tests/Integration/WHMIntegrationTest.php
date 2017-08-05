@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Integration;
+namespace Tests\Integration;
 
 use App\Exceptions\Server\ForbiddenAccessException;
 use App\Exceptions\Server\ServerConnectionException;
