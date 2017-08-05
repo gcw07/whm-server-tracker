@@ -62,7 +62,8 @@ class WHMIntegrationTest extends TestCase
 
         try {
             $api = WHM::create($server);
-            $diskUsage = $api->getBackups();
+            $api->setTimeout(3);
+            $diskUsage = $api->getDiskUsage();
         } catch (ServerConnectionException $e) {
             $this->assertEquals('invalid-address', $server->address);
             return;
@@ -83,6 +84,7 @@ class WHMIntegrationTest extends TestCase
 
         try {
             $api = WHM::create($server);
+            $api->setTimeout(3);
             $diskUsage = $api->getDiskUsage();
         } catch (ForbiddenAccessException $e) {
             $this->assertEquals('invalid-api-token', $server->token);
