@@ -39,9 +39,9 @@ class WHM
         return new static($server);
     }
 
-    public function setTimeout($timeout)
+    public function setTimeout($seconds)
     {
-        $this->timeout = $timeout;
+        $this->timeout = $seconds;
     }
 
     public function getDiskUsage()
