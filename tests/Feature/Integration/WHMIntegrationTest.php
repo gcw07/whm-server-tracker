@@ -93,20 +93,4 @@ class WHMIntegrationTest extends TestCase
 
         $this->fail("Server still connected even with an invalid server api token.");
     }
-
-    /** @test */
-    public function it_can_connect_to_remote_server()
-    {
-//        $server = create('App\Server', [
-//            'server_type' => 'vps',
-//            'token' => 'valid-api-token'
-//        ]);
-
-
-        $api = WHM::create($server);
-
-        $diskUsage = $api->getDiskUsage();
-
-        $this->assertNotEmpty($diskUsage->disk_available);
-    }
 }
