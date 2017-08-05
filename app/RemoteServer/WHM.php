@@ -4,10 +4,13 @@ namespace App\RemoteServer;
 
 use App\Backups;
 use App\DiskUsage;
-use App\Exceptions\InvalidServerTypeException;
-use App\Exceptions\MissingTokenException;
+use App\Exceptions\Server\ForbiddenAccessException;
+use App\Exceptions\Server\ServerConnectionException;
+use App\Exceptions\Server\InvalidServerTypeException;
+use App\Exceptions\Server\MissingTokenException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 
 class WHM
 {
