@@ -17,6 +17,7 @@ class WHM
     protected $authHeader;
     protected $baseUrl;
     protected $server;
+    protected $timeout;
 
     public function __construct($server)
     {
@@ -61,6 +62,7 @@ class WHM
         $this->authHeader = [
             'Authorization' => "whm {$config['remote']['username']}:{$this->server->token}"
         ];
+        $this->timeout = $config['remote']['timeout'];
     }
 
     private function fetch($url)
@@ -71,7 +73,7 @@ class WHM
             $response = $client->request('GET', $url, [
                 'headers' => $this->authHeader,
                 'verify'  => false,
-                'connect_timeout' => 5
+                'connect_timeout' => $this->timeout
             ]);
 
             return json_decode($response->getBody(), true);

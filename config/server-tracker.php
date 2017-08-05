@@ -17,10 +17,13 @@ return [
     |--------------------------------------------------------------------------
     | Remove Server Defaults
     |--------------------------------------------------------------------------
+    | This is the server username and the number of seconds before timing out
+    | on server requests. The timeout is in seconds.
     */
 
     'remote' => [
-        'username' => 'root'
+        'username' => 'root',
+        'timeout' => 5
     ]
 
 ];
