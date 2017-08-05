@@ -49,6 +49,27 @@ class WHMIntegrationTest extends TestCase
     }
 
     /** @test */
+    public function a_server_with_an_incorrect_address_throws_an_exception()
+    {
+        $server = create('App\Server', [
+            'address' => 'invalid-address',
+            'port' => '2087',
+            'server_type' => 'vps',
+            'token' => 'valid-api-token'
+        ]);
+
+        try {
+            $api = WHM::create($server);
+            $diskUsage = $api->getBackups();
+        } catch (ServerConnectionException $e) {
+            $this->assertEquals('invalid-address', $server->address);
+            return;
+        }
+
+        $this->fail("Server still connected even with an invalid server address.");
+    }
+
+    /** @test */
     public function it_can_connect_to_remote_server()
     {
 //        $server = create('App\Server', [
