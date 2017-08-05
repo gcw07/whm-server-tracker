@@ -39,6 +39,11 @@ class WHM
         return new static($server);
     }
 
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+    }
+
     public function getDiskUsage()
     {
         $url = "{$this->baseUrl}/getdiskusage?api.version=1";
