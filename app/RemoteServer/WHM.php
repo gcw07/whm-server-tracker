@@ -48,11 +48,9 @@ class WHM
     private function setupConnection()
     {
         $config = config('server-tracker');
-
         $host = "{$this->server->address}:{$this->server->port}";
 
         $this->baseUrl = "{$config['urls']['protocol']}://{$host}/{$config['urls']['api-path']}";
-
         $this->authHeader = [
             'Authorization' => "whm {$config['remote']['username']}:{$this->server->token}"
         ];
