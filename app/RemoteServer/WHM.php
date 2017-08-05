@@ -70,12 +70,15 @@ class WHM
 
             $response = $client->request('GET', $url, [
                 'headers' => $this->authHeader,
-                'verify' => false
+                'verify'  => false,
+                'connect_timeout' => 5
             ]);
 
             return json_decode($response->getBody(), true);
+        } catch (ConnectException $e) {
+            throw new ServerConnectionException;
         } catch (ClientException $e) {
-            dd('remote server error');
+            throw new ForbiddenAccessException;
         }
     }
 }
