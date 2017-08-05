@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace App\Exceptions\Server;
 
 class ServerConnectionException extends \RuntimeException
 {
