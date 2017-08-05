@@ -2,9 +2,12 @@
 
 namespace App\RemoteServer;
 
+use App\Backups;
+use App\DiskUsage;
 use App\Exceptions\InvalidServerTypeException;
 use App\Exceptions\MissingTokenException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class WHM
 {
