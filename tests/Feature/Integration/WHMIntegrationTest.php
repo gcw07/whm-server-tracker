@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Integration;
 
-use App\Exceptions\InvalidServerTypeException;
-use App\Exceptions\MissingTokenException;
+use App\Exceptions\Server\ForbiddenAccessException;
+use App\Exceptions\Server\ServerConnectionException;
+use App\Exceptions\Server\InvalidServerTypeException;
+use App\Exceptions\Server\MissingTokenException;
 use App\RemoteServer\WHM;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
