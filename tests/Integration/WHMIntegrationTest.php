@@ -93,4 +93,23 @@ class WHMIntegrationTest extends TestCase
 
         $this->fail("Server still connected even with an invalid server api token.");
     }
+
+    /** @test */
+    public function it_can_fetch_server_disk_usage()
+    {
+        $server = create('App\Server', [
+            'address' => '50.116.77.25',
+            'port' => '2087',
+            'server_type' => 'vps',
+            'token' => ''
+        ]);
+
+        $api = WHM::create($server);
+        $diskUsage = $api->getDiskUsage();
+
+        $this->assertNotEmpty($diskUsage['used']);
+        $this->assertNotEmpty($diskUsage['available']);
+        $this->assertNotEmpty($diskUsage['total']);
+        $this->assertNotEmpty($diskUsage['percentage']);
+    }
 }
