@@ -130,4 +130,20 @@ class WHMIntegrationTest extends TestCase
         $this->assertNotEmpty($backups['backupdays']);
         $this->assertNotEmpty($backups['backup_daily_retention']);
     }
+
+    /** @test */
+    public function it_can_fetch_server_account_list()
+    {
+        $server = create('App\Server', [
+            'address' => '50.116.77.25',
+            'port' => '2087',
+            'server_type' => 'vps',
+            'token' => ''
+        ]);
+
+        $api = WHM::create($server);
+        $accounts = $api->getAccounts();
+
+        $this->assertGreaterThan(0, sizeof($accounts));
+    }
 }
