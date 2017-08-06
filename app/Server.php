@@ -46,4 +46,29 @@ class Server extends Model
 
         return false;
     }
+
+    public function fetchBackupDetails()
+    {
+        try {
+            $api = WHM::create($this);
+
+            $backups = $api->getBackups();
+
+            $this->update([
+                'backup_enabled' => $backups['backupenable'],
+                'backup_days' => $backups['backupdays'],
+                'backup_retention' => $backups['backup_daily_retention'],
+            ]);
+        } catch (InvalidServerTypeException $e) {
+
+        } catch (MissingTokenException $e) {
+
+        } catch (ServerConnectionException $e) {
+
+        } catch (ForbiddenAccessException $e) {
+
+        }
+
+        return false;
+    }
 }
