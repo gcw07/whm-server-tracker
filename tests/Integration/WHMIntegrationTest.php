@@ -146,4 +146,20 @@ class WHMIntegrationTest extends TestCase
 
         $this->assertGreaterThan(0, sizeof($accounts));
     }
+
+    /** @test */
+    public function it_can_fetch_server_system_load_average()
+    {
+        $server = create('App\Server', [
+            'address' => '50.116.77.25',
+            'port' => '2087',
+            'server_type' => 'vps',
+            'token' => ''
+        ]);
+
+        $api = WHM::create($server);
+        $load = $api->getSystemLoadAvg();
+
+        $this->assertNotEmpty($load['one']);
+    }
 }
