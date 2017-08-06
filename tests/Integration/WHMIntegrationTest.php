@@ -95,7 +95,7 @@ class WHMIntegrationTest extends TestCase
     }
 
     /** @test */
-    public function it_can_fetch_server_disk_usage()
+    public function it_can_fetch_server_disk_usage_information()
     {
         $server = create('App\Server', [
             'address' => '50.116.77.25',
