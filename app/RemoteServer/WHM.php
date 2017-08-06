@@ -2,8 +2,6 @@
 
 namespace App\RemoteServer;
 
-use App\Backups;
-use App\DiskUsage;
 use App\Exceptions\Server\ForbiddenAccessException;
 use App\Exceptions\Server\ServerConnectionException;
 use App\Exceptions\Server\InvalidServerTypeException;
