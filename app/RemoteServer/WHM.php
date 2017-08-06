@@ -46,16 +46,14 @@ class WHM
 
     public function getDiskUsage()
     {
-        $url = "{$this->baseUrl}/getdiskusage?api.version=1";
-        $data = $this->fetch($url);
-        return new DiskUsage($data);
+        $data = $this->fetch("{$this->baseUrl}/getdiskusage?api.version=1");
+        return $data['data']['partition'][0];
     }
 
     public function getBackups()
     {
-        $url = "{$this->baseUrl}/backup_config_get?api.version=1";
-        $data = $this->fetch($url);
-        return new Backups($data);
+        $data = $this->fetch("{$this->baseUrl}/backup_config_get?api.version=1");
+        return $data['data']['backup_config'];
     }
 
     public function getAccounts()
