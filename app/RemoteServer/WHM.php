@@ -58,16 +58,14 @@ class WHM
 
     public function getAccounts()
     {
-        $url = "{$this->baseUrl}/listaccts?api.version=1";
-        $data = $this->fetch($url);
-        return new Backups($data);
+        $data = $this->fetch("{$this->baseUrl}/listaccts?api.version=1");
+        return $data['data']['acct'];
     }
 
-    public function getSystemLoad()
+    public function getSystemLoadAvg()
     {
-        $url = "{$this->baseUrl}/systemloadavg?api.version=1";
-        $data = $this->fetch($url);
-        return new Backups($data);
+        $data = $this->fetch("{$this->baseUrl}/systemloadavg?api.version=1");
+        return $data['data'];
     }
 
     private function setupConnection()
