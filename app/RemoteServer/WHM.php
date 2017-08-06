@@ -58,6 +58,20 @@ class WHM
         return new Backups($data);
     }
 
+    public function getAccounts()
+    {
+        $url = "{$this->baseUrl}/listaccts?api.version=1";
+        $data = $this->fetch($url);
+        return new Backups($data);
+    }
+
+    public function getSystemLoad()
+    {
+        $url = "{$this->baseUrl}/systemloadavg?api.version=1";
+        $data = $this->fetch($url);
+        return new Backups($data);
+    }
+
     private function setupConnection()
     {
         $config = config('server-tracker');
