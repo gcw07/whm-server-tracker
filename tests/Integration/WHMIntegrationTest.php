@@ -14,6 +14,21 @@ class WHMIntegrationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $whmTestServerAddress;
+    protected $whmTestServerToken;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        if (! $this->canTestWHMServerConnector()) {
+            $this->markTestSkipped('Skipping WHM Server Integration tests because no WHM test env variables found.');
+        }
+
+        $this->whmTestServerAddress = getenv('WHM_TEST_SERVER_ADDRESS');
+        $this->whmTestServerToken = getenv('WHM_TEST_SERVER_TOKEN');
+    }
+
     /** @test */
     public function a_server_with_the_wrong_server_type_throws_an_exception()
     {
@@ -161,5 +176,11 @@ class WHMIntegrationTest extends TestCase
         $load = $api->getSystemLoadAvg();
 
         $this->assertNotEmpty($load['one']);
+    }
+
+    public function canTestWHMServerConnector()
+    {
+        return ! (empty(getenv('WHM_TEST_SERVER_TOKEN')) or
+            empty(getenv('WHM_TEST_SERVER_ADDRESS')));
     }
 }
