@@ -17,6 +17,7 @@ class UpdateServerTest extends TestCase
             'address'          => '1.1.1.1',
             'port'             => 1000,
             'server_type'      => 'dedicated',
+            'notes'            => 'old server note',
             'token'            => 'old-server-api-token',
             'disk_used'        => 10000000,
             'disk_available'   => 115000000,
@@ -35,6 +36,7 @@ class UpdateServerTest extends TestCase
             'address'          => '192.1.1.1',
             'port'             => 2000,
             'server_type'      => 'vps',
+            'notes'            => 'new server note',
             'token'            => 'new-server-api-token',
             'disk_used'        => 5000000,
             'disk_available'   => 145000000,
@@ -90,6 +92,7 @@ class UpdateServerTest extends TestCase
             'address'          => '1.1.1.1',
             'port'             => 1000,
             'server_type'      => 'dedicated',
+            'notes'            => 'old server note',
             'token'            => 'old-server-api-token',
             'disk_used'        => 10000000,
             'disk_available'   => 115000000,
@@ -105,6 +108,7 @@ class UpdateServerTest extends TestCase
             'address'          => '192.1.1.1',
             'port'             => 2000,
             'server_type'      => 'vps',
+            'notes'            => 'new server note',
             'token'            => 'new-server-api-token',
             'disk_used'        => 5000000,
             'disk_available'   => 145000000,
@@ -120,6 +124,7 @@ class UpdateServerTest extends TestCase
             $this->assertEquals('192.1.1.1', $server->address);
             $this->assertEquals(2000, $server->port);
             $this->assertEquals('vps', $server->server_type);
+            $this->assertEquals('new server note', $server->notes);
             $this->assertEquals('new-server-api-token', $server->token);
             $this->assertEquals(5000000, $server->disk_used);
             $this->assertEquals(145000000, $server->disk_available);
@@ -233,6 +238,24 @@ class UpdateServerTest extends TestCase
 
         tap($server->fresh(), function ($server) {
             $this->assertEquals('vps', $server->server_type);
+        });
+    }
+
+    /** @test */
+    public function server_notes_is_optional()
+    {
+        $this->signIn();
+
+        $server = create('App\Server', [
+            'notes' => 'old server notes',
+        ]);
+
+        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
+            'notes' => '',
+        ]));
+
+        tap($server->fresh(), function ($server) {
+            $this->assertNull($server->notes);
         });
     }
 
