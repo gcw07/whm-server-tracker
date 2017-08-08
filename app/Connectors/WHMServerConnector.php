@@ -1,6 +1,6 @@
 <?php
 
-namespace App\RemoteServer;
+namespace App\Connectors;
 
 use App\Exceptions\Server\ForbiddenAccessException;
 use App\Exceptions\Server\ServerConnectionException;
@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 
-class WHM
+class WHMServerConnector
 {
     protected $authHeader;
     protected $baseUrl;
