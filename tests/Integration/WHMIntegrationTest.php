@@ -91,7 +91,7 @@ class WHMIntegrationTest extends TestCase
     public function a_server_with_an_invalid_api_token_throws_an_exception()
     {
         $server = create('App\Server', [
-            'address' => '50.116.77.25',
+            'address' => $this->whmTestServerAddress,
             'port' => '2087',
             'server_type' => 'vps',
             'token' => 'invalid-api-token'
