@@ -113,10 +113,10 @@ class WHMIntegrationTest extends TestCase
     public function it_can_fetch_server_disk_usage_information()
     {
         $server = create('App\Server', [
-            'address' => '50.116.77.25',
+            'address' => $this->whmTestServerAddress,
             'port' => '2087',
             'server_type' => 'vps',
-            'token' => ''
+            'token' => $this->whmTestServerToken
         ]);
 
         $api = WHM::create($server);
@@ -132,10 +132,10 @@ class WHMIntegrationTest extends TestCase
     public function it_can_fetch_server_backup_information()
     {
         $server = create('App\Server', [
-            'address' => '50.116.77.25',
+            'address' => $this->whmTestServerAddress,
             'port' => '2087',
             'server_type' => 'vps',
-            'token' => ''
+            'token' => $this->whmTestServerToken
         ]);
 
         $api = WHM::create($server);
@@ -150,10 +150,10 @@ class WHMIntegrationTest extends TestCase
     public function it_can_fetch_server_account_list()
     {
         $server = create('App\Server', [
-            'address' => '50.116.77.25',
+            'address' => $this->whmTestServerAddress,
             'port' => '2087',
             'server_type' => 'vps',
-            'token' => ''
+            'token' => $this->whmTestServerToken
         ]);
 
         $api = WHM::create($server);
@@ -166,10 +166,10 @@ class WHMIntegrationTest extends TestCase
     public function it_can_fetch_server_system_load_average()
     {
         $server = create('App\Server', [
-            'address' => '50.116.77.25',
+            'address' => $this->whmTestServerAddress,
             'port' => '2087',
             'server_type' => 'vps',
-            'token' => ''
+            'token' => $this->whmTestServerToken
         ]);
 
         $api = WHM::create($server);
