@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\RemoteServer\WHM;
+use App\Connectors\WHMServerConnector;
 use Illuminate\Database\Eloquent\Model;
 
 class Server extends Model
@@ -24,7 +24,7 @@ class Server extends Model
     public function fetchDiskUsageDetails()
     {
         try {
-            $api = WHM::create($this);
+            $api = WHMServerConnector::create($this);
 
             $diskUsage = $api->getDiskUsage();
 
@@ -50,7 +50,7 @@ class Server extends Model
     public function fetchBackupDetails()
     {
         try {
-            $api = WHM::create($this);
+            $api = WHMServerConnector::create($this);
 
             $backups = $api->getBackups();
 

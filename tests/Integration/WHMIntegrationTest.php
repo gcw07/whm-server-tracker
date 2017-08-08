@@ -2,11 +2,11 @@
 
 namespace Tests\Integration;
 
+use App\Connectors\WHMServerConnector;
 use App\Exceptions\Server\ForbiddenAccessException;
 use App\Exceptions\Server\ServerConnectionException;
 use App\Exceptions\Server\InvalidServerTypeException;
 use App\Exceptions\Server\MissingTokenException;
-use App\RemoteServer\WHM;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -37,7 +37,7 @@ class WHMIntegrationTest extends TestCase
         ]);
 
         try {
-            $api = WHM::create($server);
+            $api = WHMServerConnector::create($server);
         } catch (InvalidServerTypeException $e) {
             $this->assertEquals('reseller', $server->server_type);
             return;
@@ -55,7 +55,7 @@ class WHMIntegrationTest extends TestCase
         ]);
 
         try {
-            $api = WHM::create($server);
+            $api = WHMServerConnector::create($server);
         } catch (MissingTokenException $e) {
             $this->assertEquals('vps', $server->server_type);
             $this->assertNull($server->token);
@@ -76,7 +76,7 @@ class WHMIntegrationTest extends TestCase
         ]);
 
         try {
-            $api = WHM::create($server);
+            $api = WHMServerConnector::create($server);
             $api->setTimeout(3);
             $diskUsage = $api->getDiskUsage();
         } catch (ServerConnectionException $e) {
@@ -98,7 +98,7 @@ class WHMIntegrationTest extends TestCase
         ]);
 
         try {
-            $api = WHM::create($server);
+            $api = WHMServerConnector::create($server);
             $api->setTimeout(3);
             $diskUsage = $api->getDiskUsage();
         } catch (ForbiddenAccessException $e) {
@@ -119,7 +119,7 @@ class WHMIntegrationTest extends TestCase
             'token' => $this->whmTestServerToken
         ]);
 
-        $api = WHM::create($server);
+        $api = WHMServerConnector::create($server);
         $diskUsage = $api->getDiskUsage();
 
         $this->assertNotEmpty($diskUsage['used']);
@@ -138,7 +138,7 @@ class WHMIntegrationTest extends TestCase
             'token' => $this->whmTestServerToken
         ]);
 
-        $api = WHM::create($server);
+        $api = WHMServerConnector::create($server);
         $backups = $api->getBackups();
 
         $this->assertNotEmpty($backups['backupenable']);
@@ -156,7 +156,7 @@ class WHMIntegrationTest extends TestCase
             'token' => $this->whmTestServerToken
         ]);
 
-        $api = WHM::create($server);
+        $api = WHMServerConnector::create($server);
         $accounts = $api->getAccounts();
 
         $this->assertGreaterThan(0, sizeof($accounts));
@@ -172,7 +172,7 @@ class WHMIntegrationTest extends TestCase
             'token' => $this->whmTestServerToken
         ]);
 
-        $api = WHM::create($server);
+        $api = WHMServerConnector::create($server);
         $load = $api->getSystemLoadAvg();
 
         $this->assertNotEmpty($load['one']);
