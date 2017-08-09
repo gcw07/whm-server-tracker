@@ -46,15 +46,55 @@ class FakeServerConnector implements ServerConnector
     public function getBackups()
     {
         return [
-            'backupenable' => 1,
-            'backupdays' => '0,2,4,6',
+            'backupenable'           => 1,
+            'backupdays'             => '0,2,4,6',
             'backup_daily_retention' => 10,
         ];
     }
 
     public function getAccounts()
     {
-
+        return [
+            [
+                'domain'        => 'my-site.com',
+                'user'          => 'mysite',
+                'ip'            => '1.1.1.1',
+                'backup'        => 1,
+                'suspended'     => 0,
+                'suspendreason' => 'not suspended',
+                'suspendtime'   => 0,
+                'startdate'     => '17 Jan 1 10:35',
+                'diskused'      => '300M',
+                'disklimit'     => '2000M',
+                'plan'          => '2 Gig',
+            ],
+            [
+                'domain'        => 'suspended-site.com',
+                'user'          => 'suspended',
+                'ip'            => '1.1.1.1',
+                'backup'        => 1,
+                'suspended'     => 1,
+                'suspendreason' => 'Unpaid account',
+                'suspendtime'   => 1501734198,
+                'startdate'     => '16 Jun 13 10:53',
+                'diskused'      => '500M',
+                'disklimit'     => '4000M',
+                'plan'          => '4 Gig',
+            ],
+            [
+                'domain'        => 'gwscripts.com',
+                'user'          => 'gwscripts',
+                'ip'            => '1.1.1.1',
+                'backup'        => 1,
+                'suspended'     => 1,
+                'suspendreason' => 'Unknown',
+                'suspendtime'   => 1501734198,
+                'startdate'     => '17 May 19 10:45',
+                'diskused'      => '300M',
+                'disklimit'     => '2000M',
+                'plan'          => '2 Gig',
+            ]
+        ];
     }
 
     public function getSystemLoadAvg()
