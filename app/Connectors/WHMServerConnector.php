@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 
-class WHMServerConnector
+class WHMServerConnector implements ServerConnector
 {
     protected $authHeader;
     protected $baseUrl;
