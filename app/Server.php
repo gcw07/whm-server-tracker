@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Connectors\WHMServerConnector;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Server extends Model
@@ -31,6 +32,7 @@ class Server extends Model
                 'disk_available' => $diskUsage['available'],
                 'disk_total' => $diskUsage['total'],
                 'disk_percentage' => $diskUsage['percentage'],
+                'disk_last_updated' => Carbon::now()
             ]);
         } catch (InvalidServerTypeException $e) {
 
@@ -54,6 +56,7 @@ class Server extends Model
                 'backup_enabled' => $backups['backupenable'],
                 'backup_days' => $backups['backupdays'],
                 'backup_retention' => $backups['backup_daily_retention'],
+                'backup_last_updated' => Carbon::now()
             ]);
         } catch (InvalidServerTypeException $e) {
 
