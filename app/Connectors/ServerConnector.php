@@ -4,9 +4,7 @@ namespace App\Connectors;
 
 interface ServerConnector
 {
-    public function __construct($server);
-    public static function create($server);
-
+    public function setServer($server);
     public function setTimeout($seconds);
 
     public function getDiskUsage();

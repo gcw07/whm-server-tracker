@@ -17,7 +17,7 @@ class WHMServerConnector implements ServerConnector
     protected $server;
     protected $timeout;
 
-    public function __construct($server)
+    public function setServer($server)
     {
         $this->server = $server;
 
@@ -30,11 +30,6 @@ class WHMServerConnector implements ServerConnector
         }
 
         $this->setupConnection();
-    }
-
-    public static function create($server)
-    {
-        return new static($server);
     }
 
     public function setTimeout($seconds)
