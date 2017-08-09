@@ -22,8 +22,10 @@ class FetchDetailsController extends Controller
      */
     public function update(Server $server)
     {
-        $server->fetchDiskUsageDetails();
-        $server->fetchBackupDetails();
+        $this->serverConnector->setServer($server);
+
+        $server->fetchDiskUsageDetails($this->serverConnector);
+        $server->fetchBackupDetails($this->serverConnector);
 
         return response()->json($server);
     }
