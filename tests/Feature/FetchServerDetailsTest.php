@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Connectors\FakeServerConnector;
+use App\Connectors\ServerConnector;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -27,10 +29,10 @@ class FetchServerDetailsTest extends TestCase
 
         $server = create('App\Server', [
             'name'             => 'my-server-name',
-//            'address'          => '1.1.1.1',
-//            'port'             => 1000,
-//            'server_type'      => 'vps',
-//            'token'            => 'server-api-token',
+            'address'          => '1.1.1.1',
+            'port'             => 1000,
+            'server_type'      => 'vps',
+            'token'            => 'valid-server-api-token',
             'disk_used'        => null,
             'disk_available'   => null,
             'disk_total'       => null,
@@ -40,11 +42,14 @@ class FetchServerDetailsTest extends TestCase
             'backup_retention' => null
         ]);
 
+        $fake = new FakeServerConnector;
+        $this->app->instance(ServerConnector::class, $fake);
+
         $response = $this->get("/servers/{$server->id}/fetch-details");
 
         $response->assertStatus(200);
 
-        $response->assertJson(['address' => '50.116.77.25']);
+        $response->assertJson(['address' => '1.1.1.1']);
 
         tap($server->fresh(), function ($server) {
             $this->assertNotNull($server->disk_used);
