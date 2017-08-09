@@ -35,12 +35,21 @@ class FakeServerConnector implements ServerConnector
 
     public function getDiskUsage()
     {
-        return ['fake' => 'disk usage'];
+        return [
+            'used'       => 100000000,
+            'available'  => 200000000,
+            'total'      => 300000000,
+            'percentage' => 33
+        ];
     }
 
     public function getBackups()
     {
-
+        return [
+            'backupenable' => 1,
+            'backupdays' => '0,2,4,6',
+            'backup_daily_retention' => 10,
+        ];
     }
 
     public function getAccounts()
