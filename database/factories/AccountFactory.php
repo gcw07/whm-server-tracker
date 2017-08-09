@@ -12,6 +12,7 @@ $factory->define(App\Account::class, function (Faker $faker) {
         },
         'domain' => $domain,
         'user' => $user,
+        'ip' => $faker->ipv4,
         'backup' => $faker->boolean(90),
         'suspended' => $faker->boolean(5),
         'suspend_reason' => 'not suspended',

@@ -18,6 +18,7 @@ class CreateAccountsTable extends Migration
             $table->unsignedInteger('server_id');
             $table->string('domain');
             $table->string('user');
+            $table->string('ip');
             $table->boolean('backup');
             $table->boolean('suspended');
             $table->string('suspend_reason');
