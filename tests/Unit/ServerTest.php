@@ -33,6 +33,7 @@ class ServerTest extends TestCase
         $this->server->addAccount([
             'domain'         => 'my-server-name.com',
             'user'           => 'my-server',
+            'ip'             => '1.1.1.1',
             'backup'         => true,
             'suspended'      => false,
             'suspend_reason' => 'not suspended',
