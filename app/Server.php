@@ -21,12 +21,10 @@ class Server extends Model
         return $this->accounts()->create($account);
     }
 
-    public function fetchDiskUsageDetails()
+    public function fetchDiskUsageDetails($serverConnector)
     {
         try {
-            $api = WHMServerConnector::create($this);
-
-            $diskUsage = $api->getDiskUsage();
+            $diskUsage = $serverConnector->getDiskUsage();
 
             $this->update([
                 'disk_used' => $diskUsage['used'],
@@ -47,12 +45,10 @@ class Server extends Model
         return false;
     }
 
-    public function fetchBackupDetails()
+    public function fetchBackupDetails($serverConnector)
     {
         try {
-            $api = WHMServerConnector::create($this);
-
-            $backups = $api->getBackups();
+            $backups = $serverConnector->getBackups();
 
             $this->update([
                 'backup_enabled' => $backups['backupenable'],
