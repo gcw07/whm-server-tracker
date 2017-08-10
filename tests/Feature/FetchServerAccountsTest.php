@@ -11,6 +11,48 @@ class FetchServerAccountsTest extends TestCase
 {
     use RefreshDatabase;
 
+    private function validAccounts($times = 1, $extraAccounts = [])
+    {
+        $accounts = make('App\Account', [], $times);
+
+        if (sizeof($extraAccounts) > 0) {
+            return $accounts
+                ->push($extraAccounts)
+                ->map(function ($item) {
+                    return [
+                        'domain'        => $item->domain,
+                        'user'          => $item->user,
+                        'ip'            => $item->ip,
+                        'backup'        => $item->backup,
+                        'suspended'     => $item->suspended,
+                        'suspendreason' => $item->suspend_reason,
+                        'suspendtime'   => $item->suspend_time === null ? 0 : $item->suspend_time->timestamp,
+                        'startdate'     => $item->setup_date->format('y M d G:i'),
+                        'diskused'      => $item->disk_used,
+                        'disklimit'     => $item->disk_limit,
+                        'plan'          => $item->plan,
+                    ];
+                });
+        }
+
+        return $accounts
+            ->map(function ($item) {
+                return [
+                    'domain'        => $item->domain,
+                    'user'          => $item->user,
+                    'ip'            => $item->ip,
+                    'backup'        => $item->backup,
+                    'suspended'     => $item->suspended,
+                    'suspendreason' => $item->suspend_reason,
+                    'suspendtime'   => $item->suspend_time === null ? 0 : $item->suspend_time->timestamp,
+                    'startdate'     => $item->setup_date->format('y M d G:i'),
+                    'diskused'      => $item->disk_used,
+                    'disklimit'     => $item->disk_limit,
+                    'plan'          => $item->plan,
+                ];
+        });
+    }
+
     /** @test */
     public function guests_can_not_fetch_server_accounts()
     {
@@ -29,38 +71,23 @@ class FetchServerAccountsTest extends TestCase
 
         $server = create('App\Server', [
             'name'             => 'my-server-name',
-            'address'          => '50.116.77.25',
+            'address'          => '1.1.1.1',
             'port'             => 2087,
             'server_type'      => 'vps',
-            'token'            => 'XAT5VTR67T56U28XKGXF8J21OAOYIRFF',
-            'disk_used'        => null,
-            'disk_available'   => null,
-            'disk_total'       => null,
-            'disk_percentage'  => null,
-            'backup_enabled'   => null,
-            'backup_days'      => null,
-            'backup_retention' => null
+            'token'            => 'valid-api-token',
         ]);
 
         $fake = new FakeServerConnector;
+        $fake->setAccounts($this->validAccounts(2));
+
         $this->app->instance(ServerConnector::class, $fake);
 
         $response = $this->get("/servers/{$server->id}/fetch-accounts");
 
         $response->assertStatus(200);
 
-        $response->assertJson(['address' => '1.1.1.1']);
-
         tap($server->fresh(), function ($server) {
-            $this->assertNotNull($server->disk_used);
-            $this->assertNotNull($server->disk_available);
-            $this->assertNotNull($server->disk_total);
-            $this->assertNotNull($server->disk_percentage);
-            $this->assertNotNull($server->disk_last_updated);
-            $this->assertNotNull($server->backup_enabled);
-            $this->assertNotNull($server->backup_days);
-            $this->assertNotNull($server->backup_retention);
-            $this->assertNotNull($server->backup_last_updated);
+            $this->assertCount(2, $server->accounts);
         });
     }
 }
