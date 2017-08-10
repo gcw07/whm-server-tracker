@@ -95,6 +95,8 @@ class Server extends Model
 
     public function processAccounts($accounts)
     {
+        $config = config('server-tracker');
+
         return collect($accounts)
             ->map(function ($item) {
                 return [
@@ -110,6 +112,8 @@ class Server extends Model
                     'disk_limit'     => $item['disklimit'],
                     'plan'           => $item['plan']
                 ];
+            })->reject(function ($item) use ($config) {
+                return in_array($item['user'], $config['ignore_usernames']);
             })->each(function ($item) {
                 $this->addOrUpdateAccount($item);
             });

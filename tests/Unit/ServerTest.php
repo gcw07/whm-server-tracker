@@ -105,5 +105,44 @@ class ServerTest extends TestCase
         });
     }
 
+    /** @test */
+    public function it_will_skip_over_ignored_usernames()
+    {
+        $validAccount = [
+            'domain'        => 'my-site.com',
+            'user'          => 'mysite',
+            'ip'            => '1.1.1.1',
+            'backup'        => 1,
+            'suspended'     => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime'   => 0,
+            'startdate'     => '17 Jan 1 10:35',
+            'diskused'      => '300M',
+            'disklimit'     => '2000M',
+            'plan'          => '2 Gig',
+        ];
+
+        $skipAccount = [
+            'domain'        => 'gwscripts.com',
+            'user'          => 'gwscripts',
+            'ip'            => '1.1.1.1',
+            'backup'        => 1,
+            'suspended'     => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime'   => 0,
+            'startdate'     => '17 Jan 20 9:35',
+            'diskused'      => '300M',
+            'disklimit'     => '2000M',
+            'plan'          => '2 Gig',
+        ];
+
+        $accounts = [$validAccount, $skipAccount];
+
+        $this->server->processAccounts($accounts);
+
+        tap($this->server->fresh(), function ($server) {
+            $this->assertCount(1, $server->accounts);
+        });
+    }
 
 }

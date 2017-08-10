@@ -24,6 +24,17 @@ return [
     'remote' => [
         'username' => 'root',
         'timeout' => 10
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Ignore Usernames
+    |--------------------------------------------------------------------------
+    | Skip over usernames that are ignored.
+    */
+
+    'ignore_usernames' => [
+        'gwscripts'
     ]
 
 ];
