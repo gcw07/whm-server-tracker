@@ -14,6 +14,26 @@ class FakeServerConnector implements ServerConnector
 {
     protected $server;
     protected $timeout;
+    protected $accounts;
+
+    public function __construct()
+    {
+        $this->accounts = [
+            [
+                'domain'        => 'my-site.com',
+                'user'          => 'mysite',
+                'ip'            => '1.1.1.1',
+                'backup'        => 1,
+                'suspended'     => 0,
+                'suspendreason' => 'not suspended',
+                'suspendtime'   => 0,
+                'startdate'     => '17 Jan 1 10:35',
+                'diskused'      => '300M',
+                'disklimit'     => '2000M',
+                'plan'          => '2 Gig',
+            ]
+        ];
+    }
 
     public function setServer($server)
     {
@@ -31,6 +51,11 @@ class FakeServerConnector implements ServerConnector
     public function setTimeout($seconds)
     {
         $this->timeout = $seconds;
+    }
+
+    public function setAccounts($accounts)
+    {
+        $this->accounts = $accounts;
     }
 
     public function getDiskUsage()
@@ -54,47 +79,7 @@ class FakeServerConnector implements ServerConnector
 
     public function getAccounts()
     {
-        return [
-            [
-                'domain'        => 'my-site.com',
-                'user'          => 'mysite',
-                'ip'            => '1.1.1.1',
-                'backup'        => 1,
-                'suspended'     => 0,
-                'suspendreason' => 'not suspended',
-                'suspendtime'   => 0,
-                'startdate'     => '17 Jan 1 10:35',
-                'diskused'      => '300M',
-                'disklimit'     => '2000M',
-                'plan'          => '2 Gig',
-            ],
-            [
-                'domain'        => 'suspended-site.com',
-                'user'          => 'suspended',
-                'ip'            => '1.1.1.1',
-                'backup'        => 1,
-                'suspended'     => 1,
-                'suspendreason' => 'Unpaid account',
-                'suspendtime'   => 1501734198,
-                'startdate'     => '16 Jun 13 10:53',
-                'diskused'      => '500M',
-                'disklimit'     => '4000M',
-                'plan'          => '4 Gig',
-            ],
-            [
-                'domain'        => 'gwscripts.com',
-                'user'          => 'gwscripts',
-                'ip'            => '1.1.1.1',
-                'backup'        => 1,
-                'suspended'     => 1,
-                'suspendreason' => 'Unknown',
-                'suspendtime'   => 1501734198,
-                'startdate'     => '17 May 19 10:45',
-                'diskused'      => '300M',
-                'disklimit'     => '2000M',
-                'plan'          => '2 Gig',
-            ]
-        ];
+        return $this->accounts;
     }
 
     public function getSystemLoadAvg()
