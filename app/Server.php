@@ -26,6 +26,11 @@ class Server extends Model
         return $account->delete();
     }
 
+    public function findAccount($username)
+    {
+        return $this->fresh()->accounts()->where('user', $username)->first();
+    }
+
     public function fetchDiskUsageDetails($serverConnector)
     {
         try {
@@ -128,7 +133,7 @@ class Server extends Model
 
     public function addOrUpdateAccount($account)
     {
-        if ($foundAccount = $this->fresh()->accounts()->where('user', $account['user'])->first()) {
+        if ($foundAccount = $this->findAccount($account['user'])) {
             return $foundAccount->update($account);
         }
 
