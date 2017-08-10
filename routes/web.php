@@ -41,3 +41,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
     Route::get('/{server}/fetch-details', 'FetchDetailsController@update')->name('servers.fetch-details');
     Route::get('/{server}/fetch-accounts', 'FetchAccountsController@update')->name('servers.fetch-accounts');
 });
+
+Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
+    Route::get('/servers', 'Api\ServersListingsController@index')->name('servers.listing');
+});
