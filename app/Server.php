@@ -102,7 +102,7 @@ class Server extends Model
     {
         $config = config('server-tracker');
 
-        return collect($accounts)
+        collect($accounts)
             ->map(function ($item) {
                 return [
                     'domain'         => $item['domain'],
@@ -122,6 +122,8 @@ class Server extends Model
             })->each(function ($item) {
                 $this->addOrUpdateAccount($item);
             });
+
+        $this->removeStaleAccounts($accounts);
     }
 
     public function addOrUpdateAccount($account)
@@ -131,5 +133,18 @@ class Server extends Model
         }
 
         return $this->addAccount($account);
+    }
+
+    public function removeStaleAccounts($accounts)
+    {
+        $this->fresh()->accounts->filter(function ($item) use ($accounts) {
+            if (collect($accounts)->where('user', $item['user'])->first()) {
+                return false;
+            }
+
+            return true;
+        })->each(function ($item) {
+            $this->removeAccount($item);
+        });
     }
 }
