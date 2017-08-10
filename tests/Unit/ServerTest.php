@@ -48,6 +48,18 @@ class ServerTest extends TestCase
     }
 
     /** @test */
+    public function a_server_can_remove_an_account()
+    {
+        $account = create('App\Account', [
+            'server_id' => $this->server->id
+        ]);
+
+        $this->server->removeAccount($account);
+
+        $this->assertCount(0, $this->server->accounts);
+    }
+
+    /** @test */
     public function it_will_add_an_account_if_it_does_not_exist()
     {
         $accounts = [
