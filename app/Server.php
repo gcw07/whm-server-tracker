@@ -69,4 +69,58 @@ class Server extends Model
 
         return false;
     }
+
+    public function fetchAccounts($serverConnector)
+    {
+        try {
+            $accounts = $serverConnector->getAccounts();
+
+            $this->processAccounts($accounts);
+
+            $this->update([
+                'accounts_last_updated' => Carbon::now()
+            ]);
+        } catch (InvalidServerTypeException $e) {
+
+        } catch (MissingTokenException $e) {
+
+        } catch (ServerConnectionException $e) {
+
+        } catch (ForbiddenAccessException $e) {
+
+        }
+
+        return false;
+    }
+
+    public function processAccounts($accounts)
+    {
+        return collect($accounts)
+            ->map(function ($item) {
+                return [
+                    'domain'         => $item['domain'],
+                    'user'           => $item['user'],
+                    'ip'             => $item['ip'],
+                    'backup'         => $item['backup'],
+                    'suspended'      => $item['suspended'],
+                    'suspend_reason' => $item['suspendreason'],
+                    'suspend_time'   => ($item['suspendtime'] != 0 ? Carbon::createFromTimestamp($item['suspendtime']) : null),
+                    'setup_date'     => Carbon::parse($item['startdate']),
+                    'disk_used'      => $item['diskused'],
+                    'disk_limit'     => $item['disklimit'],
+                    'plan'           => $item['plan']
+                ];
+            })->each(function ($item) {
+                $this->addOrUpdateAccount($item);
+            });
+    }
+
+    public function addOrUpdateAccount($account)
+    {
+        if ($foundAccount = $this->fresh()->accounts()->where('user', $account['user'])->first()) {
+            return $foundAccount->update($account);
+        }
+
+        return $this->addAccount($account);
+    }
 }
