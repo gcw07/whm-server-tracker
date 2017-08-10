@@ -21,6 +21,11 @@ class Server extends Model
         return $this->accounts()->create($account);
     }
 
+    public function removeAccount($account)
+    {
+        return $account->delete();
+    }
+
     public function fetchDiskUsageDetails($serverConnector)
     {
         try {
