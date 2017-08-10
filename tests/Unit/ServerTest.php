@@ -46,4 +46,64 @@ class ServerTest extends TestCase
 
         $this->assertCount(1, $this->server->accounts);
     }
+
+    /** @test */
+    public function it_will_add_an_account_if_it_does_not_exist()
+    {
+        $accounts = [
+            [
+                'domain'        => 'my-site.com',
+                'user'          => 'mysite',
+                'ip'            => '1.1.1.1',
+                'backup'        => 1,
+                'suspended'     => 0,
+                'suspendreason' => 'not suspended',
+                'suspendtime'   => 0,
+                'startdate'     => '17 Jan 1 10:35',
+                'diskused'      => '300M',
+                'disklimit'     => '2000M',
+                'plan'          => '2 Gig',
+            ]
+        ];
+
+        $this->server->processAccounts($accounts);
+
+        $this->assertCount(1, $this->server->fresh()->accounts);
+    }
+
+    /** @test */
+    public function it_will_update_an_account_if_it_exists()
+    {
+        $account = create('App\Account', [
+            'server_id' => $this->server->id,
+            'domain'    => 'my-site.com',
+            'user'      => 'mysite'
+        ]);
+
+        $accounts = [
+            [
+                'domain'        => 'my-site.com',
+                'user'          => 'mysite',
+                'ip'            => '1.1.1.1',
+                'backup'        => 1,
+                'suspended'     => 0,
+                'suspendreason' => 'not suspended',
+                'suspendtime'   => 0,
+                'startdate'     => '17 Jan 1 10:35',
+                'diskused'      => '300M',
+                'disklimit'     => '2000M',
+                'plan'          => '2 Gig',
+            ]
+        ];
+
+        $this->server->processAccounts($accounts);
+
+        tap($this->server->fresh(), function ($server) {
+            $this->assertCount(1, $server->accounts);
+            $this->assertEquals('my-site.com', $server->accounts->first()->domain);
+            $this->assertEquals('mysite', $server->accounts->first()->user);
+        });
+    }
+
+
 }
