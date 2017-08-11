@@ -40,12 +40,9 @@
                     </div>
 
                     <div class="field">
-                        <p class="control">
-                            <label class="checkbox">
-                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                                Remember Me
-                            </label>
-                        </p>
+                        <div class="control">
+                            <b-checkbox name="remember">Remember Me</b-checkbox>
+                        </div>
                     </div>
 
                     <div class="field is-grouped">
