@@ -28,6 +28,11 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
+// Dashboard Routes...
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+});
+
 // Server Routes...
 Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
     Route::post('/', 'ServersController@store')->name('servers.store');
