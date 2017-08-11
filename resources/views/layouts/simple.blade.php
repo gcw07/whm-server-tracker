@@ -24,7 +24,7 @@
 
     </div>
 
-    <footer class="footer">
+    <footer class="footer" style="background-color: inherit;">
         <div class="container">
             <div class="content has-text-centered">
                 &copy; 2017 Grant Williams
