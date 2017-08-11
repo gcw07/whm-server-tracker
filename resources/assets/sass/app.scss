@@ -1,9 +1,17 @@
 
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import "~font-awesome/scss/font-awesome";
 
 // Variables
 @import "variables";
 
-// Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+// Bulma and Buefy
+@import "~bulma/bulma";
+@import "~buefy/lib/buefy";
+
+// Custom Styles
+@import "custom";
+
+// Helper Styles
+@import "helpers";
