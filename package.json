@@ -11,7 +11,6 @@
   },
   "devDependencies": {
     "axios": "^0.16.2",
-    "bootstrap-sass": "^3.3.7",
     "buefy": "^0.5.0",
     "bulma": "^0.5.1",
     "cross-env": "^5.0.1",
