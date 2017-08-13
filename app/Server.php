@@ -152,4 +152,24 @@ class Server extends Model
             $this->removeAccount($item);
         });
     }
+
+    public function getFormattedServerTypeAttribute()
+    {
+        if ($this->server_type == 'vps') {
+            return 'VPS';
+        } elseif ($this->server_type == 'dedicated') {
+            return 'Dedicated';
+        }
+
+        return 'Reseller';
+    }
+
+    public function getMissingTokenAttribute()
+    {
+        if ($this->server_type != 'reseller' && $this->token === null) {
+            return true;
+        }
+
+        return false;
+    }
 }
