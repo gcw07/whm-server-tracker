@@ -80,20 +80,59 @@
                         <span class="tag is-success is-rounded" v-if="item.backup_enabled">Yes</span>
                         <span class="tag is-danger is-rounded" v-if="! item.backup_enabled">No</span>
                     </td>
-                    <td>13%</td>
+                    <td>
+                        <span v-if="item.server_type != 'reseller'">{{ item.disk_percentage }}%</span>
+                        <span v-else>n/a</span>
+                    </td>
                     <td>
                         <div class="field is-grouped is-pulled-right">
                             <p class="control">
-                                <a href="#" class="button">
-                                    <span class="icon"><i class="fa fa-external-link"></i></span>
-                                </a>
+                                <b-tooltip label="WHM Link">
+                                    <a :href="item.whm_url" class="button" target="_blank">
+                                        <span class="icon"><i class="fa fa-external-link"></i></span>
+                                    </a>
+                                </b-tooltip>
                             </p>
                             <p class="control">
-                                <a class="button">
-                                                <span class="icon">
-                                                  <i class="fa fa-ellipsis-h"></i>
-                                                </span>
-                                </a>
+                                <b-dropdown position="is-bottom-left">
+                                    <button class="button" slot="trigger">
+                                        <span class="icon">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </span>
+                                    </button>
+
+                                    <b-dropdown-item>
+                                        <span class="icon is-small">
+                                            <i class="fa fa-refresh"></i>
+                                        </span>
+                                        <span>Refresh Details</span>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item>
+                                        <span class="icon is-small">
+                                            <i class="fa fa-refresh"></i>
+                                        </span>
+                                        <span>Refresh Accounts</span>
+                                    </b-dropdown-item>
+                                    <hr class="dropdown-divider">
+                                    <b-dropdown-item>
+                                        <span class="icon is-small">
+                                            <i class="fa fa-eye"></i>
+                                        </span>
+                                        <span>View</span>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item>
+                                        <span class="icon is-small">
+                                            <i class="fa fa-pencil"></i>
+                                        </span>
+                                        <span>Edit</span>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item>
+                                        <span class="icon is-small">
+                                            <i class="fa fa-trash"></i>
+                                        </span>
+                                        <span>Remove</span>
+                                    </b-dropdown-item>
+                                </b-dropdown>
                             </p>
                         </div>
                     </td>
