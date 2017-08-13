@@ -10,7 +10,7 @@ class Server extends Model
     protected $guarded = [];
     protected $casts = ['backup_enabled' => 'boolean'];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
-    protected $appends = ['formatted_server_type', 'missing_token', 'whm_url'];
+    protected $appends = ['formatted_server_type', 'missing_token', 'can_refresh_data', 'whm_url'];
     protected $hidden = ['token'];
 
     public function accounts()
@@ -169,6 +169,15 @@ class Server extends Model
     public function getMissingTokenAttribute()
     {
         if ($this->server_type != 'reseller' && $this->token === null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getCanRefreshDataAttribute()
+    {
+        if ($this->server_type == 'reseller' || ($this->server_type != 'reseller' && $this->token === null)) {
             return true;
         }
 
