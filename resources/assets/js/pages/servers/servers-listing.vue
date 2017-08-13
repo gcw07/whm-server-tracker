@@ -101,13 +101,13 @@
                                         </span>
                                     </button>
 
-                                    <b-dropdown-item>
+                                    <b-dropdown-item :disabled="!item.can_refresh_data">
                                         <span class="icon is-small">
                                             <i class="fa fa-refresh"></i>
                                         </span>
                                         <span>Refresh Details</span>
                                     </b-dropdown-item>
-                                    <b-dropdown-item>
+                                    <b-dropdown-item :disabled="!item.can_refresh_data">
                                         <span class="icon is-small">
                                             <i class="fa fa-refresh"></i>
                                         </span>
