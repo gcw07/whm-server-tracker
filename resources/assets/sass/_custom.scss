@@ -7,3 +7,7 @@ html {
 [v-cloak] {
   display: none;
 }
+
+table.is-aligned-center tbody td {
+  vertical-align: middle !important;
+}
