@@ -1,4 +1,6 @@
-
+/**
+ * We will load up lodash
+ */
 window._ = require('lodash');
 
 // try {
@@ -11,11 +13,12 @@ window._ = require('lodash');
  * and simple, leaving you to focus on building your next great project.
  */
 
-// window.Vue = require('vue');
-import Vue from 'vue'
-import Buefy from 'buefy'
+window.Vue = require('vue');
 
-Vue.use(Buefy)
+/**
+ * We'll load Buefy and it's components.
+ */
+Vue.use(require('buefy'))
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
