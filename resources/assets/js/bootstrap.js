@@ -1,7 +1,9 @@
 /**
- * We will load up lodash
+ * We will load up lodash, moment and promise
  */
 window._ = require('lodash');
+window.moment = require('moment');
+window.Promise = require('promise');
 
 // try {
 //     window.$ = window.jQuery = require('jquery');
