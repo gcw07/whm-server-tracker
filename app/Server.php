@@ -177,7 +177,7 @@ class Server extends Model
 
     public function getCanRefreshDataAttribute()
     {
-        if ($this->server_type == 'reseller' || ($this->server_type != 'reseller' && $this->token === null)) {
+        if ($this->server_type == 'reseller' || $this->missing_token) {
             return true;
         }
 
