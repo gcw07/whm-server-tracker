@@ -20,7 +20,8 @@ window.Vue = require('vue');
 /**
  * We'll load Buefy and it's components.
  */
-Vue.use(require('buefy'))
+import Buefy from 'buefy';
+Vue.use(Buefy)
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
