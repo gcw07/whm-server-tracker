@@ -15,7 +15,7 @@ class ServersListingsController extends Controller
      */
     public function index()
     {
-        $servers = Server::all();
+        $servers = Server::withCount('accounts')->get();
 
         return response()->json($servers);
     }
