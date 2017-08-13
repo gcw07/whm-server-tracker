@@ -8,72 +8,134 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Server Tracker') }} - @yield('title')</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+        <div class="container">
+            <nav class="navbar is-transparent" style="background-color: transparent;">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="{{ url('/') }}">
+                        <!--<img src="/logo.png" alt="Heritage Funeral Home" width="200" height="40">-->
+                        Server Tracker
                     </a>
+
+                    <div class="navbar-burger burger" data-target="navMainMenu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div id="navMainMenu" class="navbar-menu">
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div class="field">
+                                <p class="control has-icons-left is-expanded">
+                                    <input class="input" type="text" placeholder="Search...">
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <a class="navbar-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- End Top Nav -->
+
+        <section class="section">
+            <div class="container">
+
+                <div class="columns">
+                    <div class="column is-2">
+
+                        <!-- Main Menu -->
+                        <aside class="menu">
+                            <p class="menu-label">
+                                Menu
+                            </p>
+                            <ul class="menu-list">
+                                <li>
+                                    <a class="{{ $menu == 'dashboard' ? ' is-active' : '' }}" href="#">
+                                        <span class="icon is-small">
+                                            <i class="fa fa-dashboard"></i>
+                                        </span>
+                                        <span>
+                                            Dashboard
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="{{ $menu == 'servers' ? ' is-active' : '' }}" href="#">
+                                        <span class="icon is-small">
+                                            <i class="fa fa-server"></i>
+                                        </span>
+                                        <span>
+                                            Servers
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="{{ $menu == 'accounts' ? ' is-active' : '' }}" href="#">
+                                        <span class="icon is-small">
+                                            <i class="fa fa-globe"></i>
+                                        </span>
+                                        <span>
+                                            Accounts
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="{{ $menu == 'users' ? ' is-active' : '' }}" href="#">
+                                        <span class="icon is-small">
+                                            <i class="fa fa-users"></i>
+                                        </span>
+                                        <span>
+                                            Users
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </aside>
+                        <!-- End Main Menu -->
+
+                    </div>
+                    <div class="column">
+
+                        <!-- Main Content  -->
+                        @yield('content')
+
+                    </div>
                 </div>
 
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
             </div>
-        </nav>
+        </section>
 
-        @yield('content')
     </div>
 
+    <footer class="footer" style="background-color: inherit;">
+        <div class="container">
+            <div class="content has-text-centered">
+                &copy; 2017 Grant Williams
+            </div>
+        </div>
+    </footer>
+
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ mix('js/manifest.js') }}"></script>
+    <script src="{{ mix('js/vendor.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
