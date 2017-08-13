@@ -65,9 +65,17 @@
             </tfoot>
             <tbody>
                 <tr v-for="item in items">
-                    <td><a href="#">{{ item.name }}</a></td>
-                    <td>{{ item.server_type }}</td>
-                    <td>8</td>
+                    <td>
+                        <a href="#">{{ item.name }}</a>
+                        <span class="tag is-warning" v-if="item.missing_token">
+                            <span class="icon is-small">
+                                <i class="fa fa-exclamation"></i>
+                            </span>
+                            <span>No Token</span>
+                        </span>
+                    </td>
+                    <td>{{ item.formatted_server_type }}</td>
+                    <td>{{ item.accounts_count }}</td>
                     <td>
                         <span class="tag is-success is-rounded" v-if="item.backup_enabled">Yes</span>
                         <span class="tag is-danger is-rounded" v-if="! item.backup_enabled">No</span>
