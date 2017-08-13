@@ -67,7 +67,7 @@
                             </p>
                             <ul class="menu-list">
                                 <li>
-                                    <a class="{{ $menu == 'dashboard' ? ' is-active' : '' }}" href="#">
+                                    <a class="{{ $menu == 'dashboard' ? ' is-active' : '' }}" href="{{ route('dashboard') }}">
                                         <span class="icon is-small">
                                             <i class="fa fa-dashboard"></i>
                                         </span>
@@ -77,7 +77,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="{{ $menu == 'servers' ? ' is-active' : '' }}" href="#">
+                                    <a class="{{ $menu == 'servers' ? ' is-active' : '' }}" href="{{ route('servers.index') }}">
                                         <span class="icon is-small">
                                             <i class="fa fa-server"></i>
                                         </span>
