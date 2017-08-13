@@ -10,6 +10,8 @@ class Server extends Model
     protected $guarded = [];
     protected $casts = ['backup_enabled' => 'boolean'];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
+    protected $appends = ['formatted_server_type', 'missing_token'];
+    protected $hidden = ['token'];
 
     public function accounts()
     {
