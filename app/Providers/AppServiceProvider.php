@@ -27,5 +27,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ServerConnector::class, WHMServerConnector::class);
+
+        if ($this->app->isLocal()) {
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+        }
     }
 }
