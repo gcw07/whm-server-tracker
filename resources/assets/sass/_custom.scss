@@ -11,3 +11,16 @@ html {
 table.is-aligned-center tbody td {
   vertical-align: middle !important;
 }
+
+// Fix pagination from buefy
+.pagination {
+  .pagination-next,
+  .pagination-previous {
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+  }
+}
+
+.table tr.no-hover:hover {
+  background-color: inherit;
+}
