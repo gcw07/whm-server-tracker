@@ -64,135 +64,55 @@
                 </tr>
             </tfoot>
             <tbody>
-            <tr>
-                <td><a href="#">WebDesignsOkc.com</a></td>
-                <td>VPS</td>
-                <td>8</td>
-                <td><span class="tag is-success is-rounded">Yes</span></td>
-                <td>13%</td>
-                <td>
-                    <div class="field is-grouped is-pulled-right">
-                        <p class="control">
-                            <a href="#" class="button">
-                                <span class="icon"><i class="fa fa-external-link"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button">
-                                            <span class="icon">
-                                              <i class="fa fa-ellipsis-h"></i>
-                                            </span>
-                            </a>
-                        </p>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><a href="#">WebDesignerTulsa.com</a></td>
-                <td>Dedicated</td>
-                <td>18</td>
-                <td><span class="tag is-danger is-rounded">No</span></td>
-                <td>50%</td>
-                <td>
-                    <div class="field is-grouped is-pulled-right">
-                        <p class="control">
-                            <a href="#" class="button">
-                                <span class="icon"><i class="fa fa-external-link"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button">
-                                            <span class="icon">
-                                              <i class="fa fa-ellipsis-h"></i>
-                                            </span>
-                            </a>
-                        </p>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><a href="#">HostOklahoma.com</a></td>
-                <td>VPS</td>
-                <td>3</td>
-                <td><span class="tag is-success is-rounded">Yes</span></td>
-                <td>8%</td>
-                <td>
-                    <div class="field is-grouped is-pulled-right">
-                        <p class="control">
-                            <a href="#" class="button">
-                                <span class="icon"><i class="fa fa-external-link"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button">
-                                            <span class="icon">
-                                              <i class="fa fa-ellipsis-h"></i>
-                                            </span>
-                            </a>
-                        </p>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><a href="#">WebDesignerMoore.com</a></td>
-                <td>Reseller</td>
-                <td>n/a</td>
-                <td><span class="tag is-danger is-rounded">No</span></td>
-                <td>n/a</td>
-                <td>
-                    <div class="field is-grouped is-pulled-right">
-                        <p class="control">
-                            <a href="#" class="button">
-                                <span class="icon"><i class="fa fa-external-link"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button">
-                                            <span class="icon">
-                                              <i class="fa fa-ellipsis-h"></i>
-                                            </span>
-                            </a>
-                        </p>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="#">OkcHost.com</a>
-                    <span class="tag is-warning">
-                                    <span class="icon is-small">
-                                        <i class="fa fa-exclamation"></i>
-                                    </span>
-                                    <span>No Token</span>
-                                </span>
-                </td>
-                <td>Dedicated</td>
-                <td>18</td>
-                <td><span class="tag is-success is-rounded">Yes</span></td>
-                <td>70%</td>
-                <td>
-                    <div class="field is-grouped is-pulled-right">
-                        <p class="control">
-                            <a href="#" class="button">
-                                <span class="icon"><i class="fa fa-external-link"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button">
-                                            <span class="icon">
-                                              <i class="fa fa-ellipsis-h"></i>
-                                            </span>
-                            </a>
-                        </p>
-                    </div>
-                </td>
-            </tr>
+                <tr v-for="item in items">
+                    <td><a href="#">{{ item.name }}</a></td>
+                    <td>{{ item.server_type }}</td>
+                    <td>8</td>
+                    <td>
+                        <span class="tag is-success is-rounded" v-if="item.backup_enabled">Yes</span>
+                        <span class="tag is-danger is-rounded" v-if="! item.backup_enabled">No</span>
+                    </td>
+                    <td>13%</td>
+                    <td>
+                        <div class="field is-grouped is-pulled-right">
+                            <p class="control">
+                                <a href="#" class="button">
+                                    <span class="icon"><i class="fa fa-external-link"></i></span>
+                                </a>
+                            </p>
+                            <p class="control">
+                                <a class="button">
+                                                <span class="icon">
+                                                  <i class="fa fa-ellipsis-h"></i>
+                                                </span>
+                                </a>
+                            </p>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
 </template>
 <script>
+    export default {
 
+        data() {
+            return {
+                items: false
+            };
+        },
 
+        created() {
+            this.fetch();
+        },
 
+        methods: {
+            fetch() {
+                axios.get('/api/servers')
+                    .then(response => this.items = response.data);
+            }
+        }
+
+    }
 </script>
