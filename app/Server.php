@@ -10,7 +10,7 @@ class Server extends Model
     protected $guarded = [];
     protected $casts = ['backup_enabled' => 'boolean'];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
-    protected $appends = ['formatted_server_type', 'missing_token'];
+    protected $appends = ['formatted_server_type', 'missing_token', 'whm_url'];
     protected $hidden = ['token'];
 
     public function accounts()
@@ -173,5 +173,14 @@ class Server extends Model
         }
 
         return false;
+    }
+
+    public function getWhmUrlAttribute()
+    {
+        if ($this->port == 2087) {
+            return "https://{$this->address}:{$this->port}";
+        }
+
+        return "http://{$this->address}:{$this->port}";
     }
 }
