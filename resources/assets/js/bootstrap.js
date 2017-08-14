@@ -5,9 +5,9 @@ window._ = require('lodash');
 window.moment = require('moment');
 window.Promise = require('promise');
 
-// try {
-//     window.$ = window.jQuery = require('jquery');
-// } catch (e) {}
+try {
+    window.$ = window.jQuery = require('jquery');
+} catch (e) {}
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -48,6 +48,7 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
 
 /**
  * Load the Laravel form utilities.

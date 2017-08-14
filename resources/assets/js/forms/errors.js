@@ -15,6 +15,7 @@ window.LaravelFormErrors = function () {
      * Determine if the collection has errors for a given field.
      */
     this.has = function (field) {
+        console.log(_.indexOf(_.keys(this.errors), field));
         return _.indexOf(_.keys(this.errors), field) > -1;
     };
 
