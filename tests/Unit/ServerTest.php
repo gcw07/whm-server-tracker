@@ -194,4 +194,58 @@ class ServerTest extends TestCase
             $this->assertCount(1, $server->accounts);
         });
     }
+
+    /** @test */
+    public function can_get_formatted_server_types()
+    {
+        $serverA = make('App\Server', ['server_type' => 'vps']);
+        $serverB = make('App\Server', ['server_type' => 'dedicated']);
+        $serverC = make('App\Server', ['server_type' => 'reseller']);
+
+        $this->assertEquals('VPS', $serverA->formatted_server_type);
+        $this->assertEquals('Dedicated', $serverB->formatted_server_type);
+        $this->assertEquals('Reseller', $serverC->formatted_server_type);
+    }
+
+    /** @test */
+    public function can_determine_a_missing_api_token()
+    {
+        $serverValidToken = make('App\Server', ['server_type' => 'vps', 'token' => 'valid-token']);
+        $serverNoToken = make('App\Server', ['server_type' => 'vps']);
+        $serverTypeNeedsNoToken = make('App\Server', ['server_type' => 'reseller']);
+
+        $this->assertFalse($serverValidToken->missing_token);
+        $this->assertTrue($serverNoToken->missing_token);
+        $this->assertFalse($serverTypeNeedsNoToken->missing_token);
+    }
+
+    /** @test */
+    public function can_determine_if_it_can_refresh_external_data()
+    {
+        $serverValidToken = make('App\Server', ['server_type' => 'vps', 'token' => 'valid-token']);
+        $serverNoToken = make('App\Server', ['server_type' => 'vps']);
+        $serverTypeNeedsNoToken = make('App\Server', ['server_type' => 'reseller']);
+
+        $this->assertTrue($serverValidToken->can_refresh_data);
+        $this->assertFalse($serverNoToken->can_refresh_data);
+        $this->assertFalse($serverTypeNeedsNoToken->can_refresh_data);
+    }
+
+    /** @test */
+    public function can_get_whm_external_url()
+    {
+        $serverA = make('App\Server', ['address' => '1.1.1.1', 'port' => 2087]);
+        $serverB = make('App\Server', ['address' => '3.3.3.3', 'port' => 2086]);
+
+        $this->assertEquals('https://1.1.1.1:2087', $serverA->whm_url);
+        $this->assertEquals('http://3.3.3.3:2086', $serverB->whm_url);
+    }
+
+    /** @test */
+    public function the_api_token_should_not_be_included_in_returned_data()
+    {
+        $server = make('App\Server', ['server_type' => 'vps', 'token' => 'valid-token']);
+
+        $this->assertArrayNotHasKey('token', $server->toArray());
+    }
 }
