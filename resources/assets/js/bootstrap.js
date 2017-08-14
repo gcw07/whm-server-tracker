@@ -21,7 +21,9 @@ window.Vue = require('vue');
  * We'll load Buefy and it's components.
  */
 import Buefy from 'buefy';
-Vue.use(Buefy)
+Vue.use(Buefy, {
+    defaultIconPack: 'fa'
+});
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
