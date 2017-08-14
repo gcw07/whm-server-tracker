@@ -17,4 +17,4 @@ require('./errors');
 /**
  * Add additional HTTP / form helpers to the Laravel object.
  */
-$.extend(Laravel, require('./http'));
+Object.assign(Laravel, require('./http'));
