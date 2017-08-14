@@ -53,7 +53,7 @@ if (token) {
 /**
  * Load the Laravel form utilities.
  */
-require('./forms/bootstrap');
+// require('./forms/bootstrap');
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
