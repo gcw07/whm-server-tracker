@@ -4,8 +4,8 @@
 window.LaravelForm = function (data) {
     var form = this;
 
-    // Object.assign(this, data);
-    $.extend(this, data);
+    Object.assign(this, data);
+    // $.extend(this, data);
 
     /**
      * Create the form error helper instance.
