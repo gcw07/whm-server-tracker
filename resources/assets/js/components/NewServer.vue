@@ -5,9 +5,6 @@
                 <p class="modal-card-title">New Server</p>
             </header>
             <section class="modal-card-body">
-                {{ form }}<br>
-                {{ form.errors.hasErrors() }}<br>
-                {{ form.errors.has('name') }}
                 <div class="field">
                     <label class="label" for="name">Name</label>
                     <p class="control">
