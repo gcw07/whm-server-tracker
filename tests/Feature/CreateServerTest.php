@@ -83,7 +83,6 @@ class CreateServerTest extends TestCase
         $response->assertJson(['port' => 1111]);
         $response->assertJson(['server_type' => 'dedicated']);
         $response->assertJson(['notes' => 'some server note']);
-        $response->assertJson(['token' => 'new-server-api-token']);
         $response->assertJson(['disk_used' => 10000000]);
         $response->assertJson(['disk_available' => 115000000]);
         $response->assertJson(['disk_total' => 125000000]);
