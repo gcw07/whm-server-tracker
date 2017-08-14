@@ -17,14 +17,14 @@
                     <p class="level-item"><a>Reseller</a></p>
                     <p class="level-item"><a>VPS</a></p>
                     <p class="level-item ml-2">
-                        <a class="button">
+                        <button class="button" @click="isNewServerModalActive = true">
                             <span class="icon is-small">
                                 <i class="fa fa-plus"></i>
                             </span>
                             <span>
                                 New
                             </span>
-                        </a>
+                        </button>
                     </p>
                 </div>
             </nav>
@@ -139,14 +139,25 @@
                 </tr>
             </tbody>
         </table>
+
+        <b-modal :active.sync="isNewServerModalActive" has-modal-card>
+            <new-server></new-server>
+        </b-modal>
     </div>
 </template>
 <script>
+    import NewServer from '../../components/NewServer'
+
     export default {
+
+        components: {
+            NewServer
+        },
 
         data() {
             return {
-                items: false
+                items: false,
+                isNewServerModalActive: false,
             };
         },
 
