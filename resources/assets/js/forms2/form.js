@@ -139,6 +139,6 @@ export default class Form {
      */
     onFail(errors) {
         this.busy = false;
-        this.errors.set(errors);
+        this.errors.set(errors.errors);
     }
 }
