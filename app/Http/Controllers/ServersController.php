@@ -91,7 +91,7 @@ class ServersController extends Controller
             'name'             => ['required', 'max:191'],
             'address'          => ['required', 'max:191'],
             'port'             => ['required', 'numeric'],
-            'server_type'      => ['required'],
+            'server_type'      => ['required', 'in:dedicated,reseller,vps'],
             'notes'            => ['nullable'],
             'token'            => ['nullable'],
             'disk_used'        => ['nullable'],

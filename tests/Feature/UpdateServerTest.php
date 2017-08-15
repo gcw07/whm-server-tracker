@@ -242,6 +242,28 @@ class UpdateServerTest extends TestCase
     }
 
     /** @test */
+    public function server_type_must_be_a_valid_option()
+    {
+        $this->signIn();
+
+        $server = create('App\Server', [
+            'server_type' => 'vps',
+        ]);
+
+        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
+            'server_type' => 'invalid-option',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonHasErrors('server_type');
+
+        tap($server->fresh(), function ($server) {
+            $this->assertEquals('vps', $server->server_type);
+        });
+    }
+
+
+    /** @test */
     public function server_notes_is_optional()
     {
         $this->signIn();
