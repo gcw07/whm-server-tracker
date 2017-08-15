@@ -163,6 +163,20 @@ class CreateServerTest extends TestCase
     }
 
     /** @test */
+    public function server_type_must_be_a_valid_option()
+    {
+        $this->signIn();
+
+        $response = $this->postJson('/servers', $this->validParams([
+            'server_type' => 'invalid-option',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonHasErrors('server_type');
+        $this->assertEquals(0, Server::count());
+    }
+
+    /** @test */
     public function server_notes_is_optional()
     {
         $this->signIn();
