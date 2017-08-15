@@ -18,6 +18,10 @@ abstract class TestCase extends BaseTestCase
             return $this->original->getData()[$key];
         });
 
+        TestResponse::macro('jsonData', function () {
+            return $this->original;
+        });
+
         TestResponse::macro('assertViewIs', function ($name) {
             Assert::assertEquals($name, $this->original->name());
         });
