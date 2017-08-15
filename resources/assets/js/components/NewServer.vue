@@ -105,7 +105,8 @@
             save() {
                 this.form.post('/servers')
                     .then(response => {
-                        console.log('complete');
+                        this.$parent.close();
+                        window.location.href = `/servers/${response.id}/edit`;
                     });
             },
 
