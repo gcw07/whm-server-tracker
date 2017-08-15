@@ -30,25 +30,6 @@ class CreateServerTest extends TestCase
     }
 
     /** @test */
-    public function guests_cannot_view_the_add_server_form()
-    {
-        $response = $this->get('/servers/create');
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
-
-    /** @test */
-    public function an_authorized_user_can_view_the_add_server_form()
-    {
-        $this->signIn();
-
-        $response = $this->get('/servers/create');
-
-        $response->assertStatus(200);
-    }
-
-    /** @test */
     public function guests_cannot_add_new_servers()
     {
         $response = $this->postJson('/servers', $this->validParams());
