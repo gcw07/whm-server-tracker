@@ -91,4 +91,24 @@ class ViewServerListingTest extends TestCase
             $this->assertEquals('dedicated', $servers[0]['server_type']);
         });
     }
+
+    /** @test */
+    public function the_server_listings_are_in_alphabetical_order()
+    {
+        $this->signIn();
+
+        $serverA = create('App\Server', ['name' => 'Some Server']);
+        $serverB = create('App\Server', ['name' => 'Another Server']);
+        $serverC = create('App\Server', ['name' => 'The Last Server']);
+
+        $response = $this->get("/api/servers");
+
+        $response->assertStatus(200);
+
+        $response->jsonData()->assertEquals([
+            $serverB,
+            $serverA,
+            $serverC
+        ]);
+    }
 }
