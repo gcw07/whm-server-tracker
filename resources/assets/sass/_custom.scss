@@ -24,3 +24,11 @@ table.is-aligned-center tbody td {
 .table tr.no-hover:hover {
   background-color: inherit;
 }
+
+.modal-card-foot-center {
+  justify-content: space-around;
+}
+
+.modal-card-foot-right {
+  justify-content: flex-end;
+}
