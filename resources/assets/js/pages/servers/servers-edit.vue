@@ -7,7 +7,7 @@
         <hr>
 
         <b-notification type="is-warning" :active="showTokenError" :closable="false" has-icon>
-            This server is missing an API token. Please set an API token to properly fetch data.
+            This server is missing an API token. Please set an API token to fetch the server's data.
             <p class="mt-1">
                 <button class="button" @click="isTokenModalActive = true">
                     Set API Token
