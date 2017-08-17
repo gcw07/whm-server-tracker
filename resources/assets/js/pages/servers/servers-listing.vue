@@ -101,32 +101,34 @@
                                         </span>
                                     </button>
 
-                                    <b-dropdown-item :disabled="!item.can_refresh_data">
+                                    <b-dropdown-item :disabled="!item.can_refresh_data"
+                                                     @click="menuAction('refresh.details', item)">
                                         <span class="icon is-small">
                                             <i class="fa fa-refresh"></i>
                                         </span>
                                         <span>Refresh Details</span>
                                     </b-dropdown-item>
-                                    <b-dropdown-item :disabled="!item.can_refresh_data">
+                                    <b-dropdown-item :disabled="!item.can_refresh_data"
+                                                     @click="menuAction('refresh.accounts', item)">
                                         <span class="icon is-small">
                                             <i class="fa fa-refresh"></i>
                                         </span>
                                         <span>Refresh Accounts</span>
                                     </b-dropdown-item>
                                     <hr class="dropdown-divider">
-                                    <b-dropdown-item>
+                                    <b-dropdown-item @click="menuAction('view', item)">
                                         <span class="icon is-small">
                                             <i class="fa fa-eye"></i>
                                         </span>
                                         <span>View</span>
                                     </b-dropdown-item>
-                                    <b-dropdown-item>
+                                    <b-dropdown-item @click="menuAction('edit', item)">
                                         <span class="icon is-small">
                                             <i class="fa fa-pencil"></i>
                                         </span>
                                         <span>Edit</span>
                                     </b-dropdown-item>
-                                    <b-dropdown-item>
+                                    <b-dropdown-item @click="menuAction('remove', item)">
                                         <span class="icon is-small">
                                             <i class="fa fa-trash"></i>
                                         </span>
@@ -169,6 +171,31 @@
             fetch() {
                 axios.get('/api/servers')
                     .then(response => this.items = response.data);
+            },
+
+            menuAction(action, item) {
+                switch (action) {
+                    case 'refresh.details':
+                        alert('refresh details')
+                        break;
+
+                    case 'refresh.accounts':
+                        break;
+
+                    case 'view':
+                        window.location.href = `/servers/${item.id}`;
+                        break;
+
+                    case 'edit':
+                        window.location.href = `/servers/${item.id}/edit`;
+                        break;
+
+                    case 'remove':
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
