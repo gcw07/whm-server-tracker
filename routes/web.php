@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
 //    Route::get('/{server}', 'ServersController@show')->name('servers.show');
     Route::get('/{server}/edit', 'ServersController@edit')->name('servers.edit');
 
+    Route::put('/{server}/token', 'ServersTokenController@update')->name('servers.token');
+
     Route::get('/{server}/fetch-details', 'FetchDetailsController@update')->name('servers.fetch-details');
     Route::get('/{server}/fetch-accounts', 'FetchAccountsController@update')->name('servers.fetch-accounts');
 });
