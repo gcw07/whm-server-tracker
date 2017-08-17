@@ -127,9 +127,13 @@
 
         methods: {
             save() {
-                this.form.put(`/servers/${this.serverId}`)
+                this.form.preserveForm().put(`/servers/${this.serverId}`)
                     .then(response => {
-//                        window.location.href = `/servers/${response.id}/edit`;
+                        this.$toast.open({
+                            message: 'Changes saved',
+                            type: 'is-success',
+                            duration: 5000
+                        });
                     });
             },
         }
