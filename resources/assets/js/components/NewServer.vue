@@ -109,7 +109,6 @@
                         window.location.href = `/servers/${response.id}/edit`;
                     });
             },
-
         },
     }
 </script>
