@@ -37,6 +37,11 @@ export default class Form {
         this.successful = true;
     }
 
+    /**
+     * Preserve the form upon successful save
+     *
+     * @returns {Form}
+     */
     preserveForm() {
         this.preserve = true;
         return this;
