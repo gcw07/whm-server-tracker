@@ -128,14 +128,27 @@
                 }),
 
                 serverId: this.data.id,
-                serverName: this.data.name
+                serverName: this.data.name,
+                serverMissingToken: this.data.missing_token
             };
+        },
+
+        computed: {
+            showTokenError() {
+                if (this.serverMissingToken) {
+                    return true;
+                }
+
+                return false;
+            }
         },
 
         methods: {
             save() {
                 this.form.preserveForm().put(`/servers/${this.serverId}`)
                     .then(response => {
+                        this.serverMissingToken = response.missing_token;
+                        
                         this.$toast.open({
                             message: 'Changes saved',
                             type: 'is-success',
