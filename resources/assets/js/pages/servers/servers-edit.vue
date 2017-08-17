@@ -6,7 +6,7 @@
 
         <hr>
 
-        <b-notification type="is-warning" :active="showTokenError" :closable="false" has-icon>
+        <b-notification type="is-warning" :active="missingToken" :closable="false" has-icon>
             This server is missing an API token. Please set an API token to fetch the server's data.
             <p class="mt-1">
                 <button class="button" @click="isTokenModalActive = true">
@@ -84,6 +84,13 @@
                             {{ form.errors.get('server_type') }}
                         </p>
                     </div>
+                    <div class="field" v-show="!missingToken">
+                        <label class="label">API Token</label>
+                        <div class="control">
+                            <span style="line-height: 27px;">Token Set</span>
+                            <button class="button is-small is-warning ml-1">Clear Token</button>
+                        </div>
+                    </div>
                     <div class="field">
                         <label class="label" for="notes">Notes</label>
                         <div class="control">
@@ -142,13 +149,13 @@
 
                 serverId: this.data.id,
                 serverName: this.data.name,
-                serverMissingToken: this.data.missing_token
+                missingToken: this.data.missing_token
             };
         },
 
         computed: {
             showTokenError() {
-                if (this.serverMissingToken) {
+                if (this.missingToken) {
                     return true;
                 }
 
@@ -160,7 +167,7 @@
             save() {
                 this.form.preserveForm().put(`/servers/${this.serverId}`)
                     .then(response => {
-                        this.serverMissingToken = response.missing_token;
+                        this.missingToken = response.missing_token;
 
                         this.$toast.open({
                             message: 'Changes saved',
@@ -171,7 +178,7 @@
             },
 
             savedToken() {
-                this.serverMissingToken = false;
+                this.missingToken = false;
             }
         }
 
