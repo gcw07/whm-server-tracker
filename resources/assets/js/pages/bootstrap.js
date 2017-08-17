@@ -11,5 +11,5 @@
  * Server Components ...
  */
 Vue.component('servers-listing', require('./servers/servers-listing.vue'));
-// Vue.component('bookkeeper-create-client', require('./clients/create-client.vue'));
+Vue.component('servers-edit-server', require('./servers/servers-edit.vue'));
 // Vue.component('bookkeeper-edit-client', require('./clients/edit-client.vue'));
