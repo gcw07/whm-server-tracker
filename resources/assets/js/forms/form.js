@@ -17,6 +17,7 @@ export default class Form {
 
         this.busy = false;
         this.successful = false;
+        this.preserve = false;
     }
 
     /**
@@ -36,12 +37,19 @@ export default class Form {
         this.successful = true;
     }
 
+    preserveForm() {
+        this.preserve = true;
+        return this;
+    }
+
     /**
      * Reset the form fields.
      */
     reset() {
-        for (let field in this.originalData) {
-            this[field] = '';
+        if (this.preserve === false) {
+            for (let field in this.originalData) {
+                this[field] = '';
+            }
         }
 
         this.errors.clear();
