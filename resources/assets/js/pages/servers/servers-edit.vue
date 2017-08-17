@@ -10,7 +10,6 @@
             <div class="column is-two-thirds">
 
                 <form>
-
                     <div class="field">
                         <label class="label" for="name">Name</label>
                         <div class="control">
@@ -91,9 +90,13 @@
                             {{ form.errors.get('notes') }}
                         </p>
                     </div>
-
-
-
+                    <div class="field is-grouped is-grouped-right mt-2">
+                        <div class="control">
+                            <button type="submit" class="button is-primary" :class="{'is-loading': form.busy}" @click.prevent="save" :disabled="form.busy">
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
                 </form>
 
             </div>
@@ -114,22 +117,20 @@
                     address: this.data.address,
                     port: this.data.port,
                     server_type: this.data.server_type,
-                    token: '',
                     notes: this.data.notes
                 }),
 
+                serverId: this.data.id,
                 serverName: this.data.name
             };
         },
 
-        created() {
-//            this.fetch();
-        },
-
         methods: {
-            fetch() {
-                axios.get(`/servers${this.id}`)
-                    .then(response => this.items = response.data);
+            save() {
+                this.form.put(`/servers/${this.serverId}`)
+                    .then(response => {
+//                        window.location.href = `/servers/${response.id}/edit`;
+                    });
             },
         }
 
