@@ -6,6 +6,13 @@
 
         <hr>
 
+        <b-notification type="is-warning" :active="showTokenError" :closable="false" has-icon>
+            This server is missing an API token. Please set an API token to properly fetch data.
+            <p class="mt-1">
+                <button class="button">Set API Token</button>
+            </p>
+        </b-notification>
+
         <div class="columns">
             <div class="column is-two-thirds">
 
