@@ -92,6 +92,10 @@ class ServersController extends Controller
             'backup_retention' => ['nullable'],
         ]);
 
+        if ($this->checkServerTypeChanged($request, $server)) {
+            $data['token'] = null;
+        }
+
         $server->update($data);
 
         return response()->json($server);
@@ -106,5 +110,17 @@ class ServersController extends Controller
     public function destroy(Server $server)
     {
         //
+    }
+
+    /**
+     * Check if server type has changed to reseller
+     *
+     * @param Request $request
+     * @param Server $server
+     * @return bool
+     */
+    private function checkServerTypeChanged(Request $request, Server $server)
+    {
+        return ($server->server_type !== 'reseller') && $request->get('server_type') === 'reseller';
     }
 }

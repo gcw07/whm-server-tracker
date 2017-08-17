@@ -132,6 +132,26 @@ class UpdateServerTest extends TestCase
     }
 
     /** @test */
+    public function the_api_token_is_cleared_when_reseller_server_type_is_selected()
+    {
+        $this->signIn();
+
+        $server = create('App\Server', [
+            'server_type' => 'dedicated',
+            'token'       => 'old-api-token',
+        ]);
+
+        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
+            'server_type' => 'reseller'
+        ]));
+
+        tap($server->fresh(), function ($server) {
+            $this->assertEquals('reseller', $server->server_type);
+            $this->assertNull($server->token);
+        });
+    }
+
+    /** @test */
     public function server_name_is_required()
     {
         $this->signIn();
