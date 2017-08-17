@@ -70,6 +70,20 @@
                         {{ form.errors.get('server_type') }}
                     </p>
                 </div>
+                <div class="field" v-show="showTokenField">
+                    <label class="label" for="token">API Token</label>
+                    <div class="control">
+                        <input id="token"
+                               type="text"
+                               class="input"
+                               name="token"
+                               v-model="form.token"
+                               required>
+                    </div>
+                    <p class="help">
+                       This is a WHM API Token. Once set this will not be visible again.
+                    </p>
+                </div>
             </section>
             <footer class="modal-card-foot modal-card-foot-right">
                 <div class="field is-grouped">
@@ -96,9 +110,20 @@
                     name: '',
                     address: '',
                     port: '',
-                    server_type: ''
+                    server_type: '',
+                    token: ''
                 })
             };
+        },
+
+        computed: {
+            showTokenField() {
+                if (this.form.server_type == 'dedicated' || this.form.server_type == 'vps') {
+                    return true;
+                }
+
+                return false;
+            }
         },
 
         methods: {
