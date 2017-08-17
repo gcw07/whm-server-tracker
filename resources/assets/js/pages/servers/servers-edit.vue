@@ -9,7 +9,9 @@
         <b-notification type="is-warning" :active="showTokenError" :closable="false" has-icon>
             This server is missing an API token. Please set an API token to properly fetch data.
             <p class="mt-1">
-                <button class="button">Set API Token</button>
+                <button class="button" @click="isTokenModalActive = true">
+                    Set API Token
+                </button>
             </p>
         </b-notification>
 
@@ -109,13 +111,22 @@
             </div>
         </div>
 
+        <b-modal :active.sync="isTokenModalActive" has-modal-card>
+            <api-token :id="serverId" @updated="savedToken"></api-token>
+        </b-modal>
+
     </div>
 </template>
 <script>
     import Form from '../../forms/form';
+    import ApiToken from '../../components/ApiToken'
 
     export default {
         props: ['data'],
+
+        components: {
+            ApiToken
+        },
 
         data() {
             return {
@@ -126,6 +137,8 @@
                     server_type: this.data.server_type,
                     notes: this.data.notes
                 }),
+
+                isTokenModalActive: false,
 
                 serverId: this.data.id,
                 serverName: this.data.name,
@@ -148,7 +161,7 @@
                 this.form.preserveForm().put(`/servers/${this.serverId}`)
                     .then(response => {
                         this.serverMissingToken = response.missing_token;
-                        
+
                         this.$toast.open({
                             message: 'Changes saved',
                             type: 'is-success',
@@ -156,6 +169,10 @@
                         });
                     });
             },
+
+            savedToken() {
+                this.serverMissingToken = false;
+            }
         }
 
     }
