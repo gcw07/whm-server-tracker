@@ -83,7 +83,6 @@ class ServersController extends Controller
             'port'             => ['required', 'numeric'],
             'server_type'      => ['required', 'in:dedicated,reseller,vps'],
             'notes'            => ['nullable'],
-            'token'            => ['nullable'],
             'disk_used'        => ['nullable'],
             'disk_available'   => ['nullable'],
             'disk_total'       => ['nullable'],
