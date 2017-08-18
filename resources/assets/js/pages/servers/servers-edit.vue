@@ -100,8 +100,7 @@
                                       class="textarea"
                                       :class="{'is-danger': form.errors.has('notes')}"
                                       name="notes"
-                                      v-model="form.notes"
-                                      required>
+                                      v-model="form.notes">
                               </textarea>
                         </div>
                         <p class="help is-danger" v-show="form.errors.has('notes')">
