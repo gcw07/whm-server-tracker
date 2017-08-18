@@ -2,11 +2,11 @@
     <div class="box">
         <!-- Main container -->
 
-        <h1 class="title is-5">{{ serverName }}</h1>
+        <h1 class="title is-5">{{ serverData.name }}</h1>
 
         <hr>
 
-        <b-notification type="is-warning" :active="missingToken" :closable="false" has-icon>
+        <b-notification type="is-warning" :active="serverData.missing_token" :closable="false" has-icon>
             This server is missing an API token. Please set an API token to fetch the server's data.
             <p class="mt-1">
                 <button class="button" @click="isTokenModalActive = true">
@@ -84,7 +84,7 @@
                             {{ form.errors.get('server_type') }}
                         </p>
                     </div>
-                    <div class="field" v-show="!missingToken">
+                    <div class="field" v-show="tokenHasBeenSet">
                         <label class="label">API Token</label>
                         <div class="control">
                             <span style="line-height: 27px;">Token Set</span>
@@ -119,7 +119,7 @@
         </div>
 
         <b-modal :active.sync="isTokenModalActive" has-modal-card>
-            <api-token :id="serverId" @updated="savedToken"></api-token>
+            <api-token :id="serverData.id" @updated="savedToken"></api-token>
         </b-modal>
 
     </div>
@@ -144,18 +144,14 @@
                     server_type: this.data.server_type,
                     notes: this.data.notes
                 }),
-
                 isTokenModalActive: false,
-
-                serverId: this.data.id,
-                serverName: this.data.name,
-                missingToken: this.data.missing_token
+                serverData: this.data,
             };
         },
 
         computed: {
-            showTokenError() {
-                if (this.missingToken) {
+            tokenHasBeenSet() {
+                if (! this.serverData.missing_token && this.serverData.server_type != 'reseller') {
                     return true;
                 }
 
@@ -165,9 +161,9 @@
 
         methods: {
             save() {
-                this.form.preserveForm().put(`/servers/${this.serverId}`)
+                this.form.preserveForm().put(`/servers/${this.serverData.id}`)
                     .then(response => {
-                        this.missingToken = response.missing_token;
+                        this.serverData = response;
 
                         this.$toast.open({
                             message: 'Changes saved',
@@ -178,7 +174,13 @@
             },
 
             savedToken() {
-                this.missingToken = false;
+                this.serverData.missing_token = false;
+
+                this.$toast.open({
+                    message: 'Token saved',
+                    type: 'is-success',
+                    duration: 5000
+                });
             }
         }
 
