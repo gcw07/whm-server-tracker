@@ -37,6 +37,8 @@ class UpdateServerTokenTest extends TestCase
             'token' => 'new-server-api-token',
         ]);
 
+        $response->assertStatus(200);
+
         tap($server->fresh(), function ($server) {
             $this->assertEquals('new-server-api-token', $server->token);
         });
