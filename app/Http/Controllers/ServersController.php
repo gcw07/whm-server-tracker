@@ -92,7 +92,7 @@ class ServersController extends Controller
             'backup_retention' => ['nullable'],
         ]);
 
-        if ($this->hasServerTypeChanged($request, $server)) {
+        if ($this->hasServerTypeChangedToReseller($request, $server)) {
             $data = $this->clearRemoteServerDetails($data);
         }
 
@@ -119,7 +119,7 @@ class ServersController extends Controller
      * @param Server $server
      * @return bool
      */
-    private function hasServerTypeChanged(Request $request, Server $server)
+    private function hasServerTypeChangedToReseller(Request $request, Server $server)
     {
         return ($server->server_type !== 'reseller') && $request->get('server_type') === 'reseller';
     }
