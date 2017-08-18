@@ -172,7 +172,7 @@
                         this.$toast.open({
                             message: 'Changes saved',
                             type: 'is-success',
-                            duration: 5000
+                            duration: 4000
                         });
                     });
             },
@@ -183,7 +183,7 @@
                 this.$toast.open({
                     message: 'Token saved',
                     type: 'is-success',
-                    duration: 5000
+                    duration: 4000
                 });
             },
 
@@ -200,7 +200,7 @@
                                 this.$toast.open({
                                     message: 'Token cleared',
                                     type: 'is-success',
-                                    duration: 5000
+                                    duration: 4000
                                 });
                             });
                     }
