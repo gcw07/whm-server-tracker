@@ -119,7 +119,7 @@
         </div>
 
         <b-modal :active.sync="isTokenModalActive" has-modal-card>
-            <api-token :id="serverData.id" @updated="savedToken"></api-token>
+            <api-token :id="serverData.id" @updated="tokenHasBeenSaved"></api-token>
         </b-modal>
 
     </div>
@@ -173,7 +173,7 @@
                     });
             },
 
-            savedToken() {
+            tokenHasBeenSaved() {
                 this.serverData.missing_token = false;
 
                 this.$toast.open({
