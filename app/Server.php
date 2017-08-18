@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Filters\ServerFilters;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -153,6 +154,11 @@ class Server extends Model
         })->each(function ($item) {
             $this->removeAccount($item);
         });
+    }
+
+    public function scopeFilter($query, ServerFilters $filters)
+    {
+        return $filters->apply($query);
     }
 
     public function getFormattedServerTypeAttribute()

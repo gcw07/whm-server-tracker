@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Filters\ServerFilters;
 use App\Http\Controllers\Controller;
 use App\Server;
-use Illuminate\Http\Request;
 
 class ServersListingsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param ServerFilters $filters
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ServerFilters $filters)
     {
-        $servers = Server::withCount('accounts')->orderBy('name')->get();
+        $servers = Server::withCount('accounts')->filter($filters)->orderBy('name')->get();
 
         return response()->json($servers);
     }

@@ -111,4 +111,27 @@ class ViewServerListingTest extends TestCase
             $serverC
         ]);
     }
+
+    /** @test */
+    public function the_server_listings_can_be_filtered_by_server_type()
+    {
+        $this->withoutExceptionHandling();
+        $this->signIn();
+
+        $serverA = create('App\Server', [
+            'server_type' => 'vps'
+        ]);
+        $serverB = create('App\Server', [
+            'server_type' => 'dedicated'
+        ]);
+
+        $response = $this->get("/api/servers?type=vps");
+
+        $response->assertStatus(200);
+
+        tap($response->json(), function ($servers) {
+            $this->assertCount(1, $servers);
+            $this->assertEquals('vps', $servers[0]['server_type']);
+        });
+    }
 }
