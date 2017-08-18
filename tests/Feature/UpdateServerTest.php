@@ -137,8 +137,8 @@ class UpdateServerTest extends TestCase
         $this->signIn();
 
         $server = create('App\Server', [
-            'server_type' => 'dedicated',
-            'token'       => 'old-api-token',
+            'server_type'      => 'dedicated',
+            'token'            => 'old-api-token',
             'disk_used'        => 10000000,
             'disk_available'   => 115000000,
             'disk_total'       => 125000000,
