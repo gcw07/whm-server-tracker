@@ -92,8 +92,8 @@ class ServersController extends Controller
             'backup_retention' => ['nullable'],
         ]);
 
-        if ($this->checkServerTypeChanged($request, $server)) {
-            $data['token'] = null;
+        if ($this->hasServerTypeChanged($request, $server)) {
+            $data = $this->clearRemoteServerDetails($data);
         }
 
         $server->update($data);
@@ -113,14 +113,34 @@ class ServersController extends Controller
     }
 
     /**
-     * Check if server type has changed to reseller
+     * Has the  server type changed from dedicated or vps to reseller
      *
      * @param Request $request
      * @param Server $server
      * @return bool
      */
-    private function checkServerTypeChanged(Request $request, Server $server)
+    private function hasServerTypeChanged(Request $request, Server $server)
     {
         return ($server->server_type !== 'reseller') && $request->get('server_type') === 'reseller';
+    }
+
+    /**
+     * Clear remote server details when server type changes to a reseller
+     *
+     * @param $data
+     * @return mixed
+     */
+    private function clearRemoteServerDetails($data)
+    {
+        $data['token'] = null;
+        $data['disk_used'] = null;
+        $data['disk_available'] = null;
+        $data['disk_total'] = null;
+        $data['disk_percentage'] = null;
+        $data['backup_enabled'] = null;
+        $data['backup_days'] = null;
+        $data['backup_retention'] = null;
+
+        return $data;
     }
 }
