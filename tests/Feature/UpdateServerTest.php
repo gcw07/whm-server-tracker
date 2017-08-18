@@ -132,13 +132,20 @@ class UpdateServerTest extends TestCase
     }
 
     /** @test */
-    public function the_api_token_is_cleared_when_reseller_server_type_is_selected()
+    public function the_api_token_disk_and_backup_details_are_cleared_when_reseller_server_type_is_selected()
     {
         $this->signIn();
 
         $server = create('App\Server', [
             'server_type' => 'dedicated',
             'token'       => 'old-api-token',
+            'disk_used'        => 10000000,
+            'disk_available'   => 115000000,
+            'disk_total'       => 125000000,
+            'disk_percentage'  => 8,
+            'backup_enabled'   => false,
+            'backup_days'      => '1,2',
+            'backup_retention' => 10
         ]);
 
         $response = $this->putJson("/servers/{$server->id}", $this->validParams([
@@ -148,6 +155,13 @@ class UpdateServerTest extends TestCase
         tap($server->fresh(), function ($server) {
             $this->assertEquals('reseller', $server->server_type);
             $this->assertNull($server->token);
+            $this->assertNull($server->disk_used);
+            $this->assertNull($server->disk_available);
+            $this->assertNull($server->disk_total);
+            $this->assertNull($server->disk_percentage);
+            $this->assertNull($server->backup_enabled);
+            $this->assertNull($server->backup_days);
+            $this->assertNull($server->backup_retention);
         });
     }
 
