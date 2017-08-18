@@ -90,7 +90,9 @@
                             <span style="line-height: 27px;">
                                 &bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;
                             </span>
-                            <button class="button is-small is-warning ml-1">Clear Token</button>
+                            <button class="button is-small is-warning ml-1" @click.prevent="clearToken">
+                                Clear Token
+                            </button>
                         </div>
                     </div>
                     <div class="field">
@@ -138,6 +140,7 @@
 
         data() {
             return {
+                clearTokenForm: new Form({}),
                 form: new Form({
                     name: this.data.name,
                     address: this.data.address,
@@ -182,6 +185,26 @@
                     type: 'is-success',
                     duration: 5000
                 });
+            },
+
+            clearToken() {
+                this.$dialog.confirm({
+                    message: 'Are you sure you want to <strong>clear</strong> the api token? This action can not be undone.',
+                    confirmText: 'Clear Token',
+                    type: 'is-danger',
+                    onConfirm: () => {
+                        this.clearTokenForm.delete(`/servers/${this.serverData.id}/token`)
+                            .then(response => {
+                                this.serverData.missing_token = true;
+
+                                this.$toast.open({
+                                    message: 'Token cleared',
+                                    type: 'is-success',
+                                    duration: 5000
+                                });
+                            });
+                    }
+                })
             }
         }
 
