@@ -87,7 +87,9 @@
                     <div class="field" v-show="tokenHasBeenSet">
                         <label class="label">API Token</label>
                         <div class="control">
-                            <span style="line-height: 27px;">Token Set</span>
+                            <span style="line-height: 27px;">
+                                &bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;
+                            </span>
                             <button class="button is-small is-warning ml-1">Clear Token</button>
                         </div>
                     </div>
