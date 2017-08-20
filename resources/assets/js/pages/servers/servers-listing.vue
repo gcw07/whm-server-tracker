@@ -12,10 +12,10 @@
 
                 <!-- Right side -->
                 <div class="level-right">
-                    <p class="level-item"><strong>All</strong></p>
-                    <p class="level-item"><a>Dedicated</a></p>
-                    <p class="level-item"><a>Reseller</a></p>
-                    <p class="level-item"><a>VPS</a></p>
+                    <p class="level-item" v-html="filterText('all')" @click="filterBy('all')"></p>
+                    <p class="level-item" v-html="filterText('dedicated')" @click="filterBy('dedicated')"></p>
+                    <p class="level-item" v-html="filterText('reseller')" @click="filterBy('reseller')"></p>
+                    <p class="level-item" v-html="filterText('vps')" @click="filterBy('vps')"></p>
                     <p class="level-item ml-2">
                         <button class="button" @click="isNewServerModalActive = true">
                             <span class="icon is-small">
@@ -158,8 +158,10 @@
 
         data() {
             return {
+                filterSelected: 'all',
                 items: false,
                 isNewServerModalActive: false,
+                filters: null,
             };
         },
 
@@ -169,8 +171,37 @@
 
         methods: {
             fetch() {
-                axios.get('/api/servers')
+                if (this.filterSelected != 'all') {
+                    this.filters = {type: this.filterSelected};
+                } else {
+                    this.filters = null;
+                }
+
+                axios.get('/api/servers', {params: this.filters})
                     .then(response => this.items = response.data);
+            },
+
+            getFilterText(filter) {
+                if (filter == 'all') return 'All';
+                if (filter == 'dedicated') return 'Dedicated';
+                if (filter == 'reseller') return 'Reseller';
+                if (filter == 'vps') return 'VPS';
+            },
+
+            filterBy(filter) {
+                if (filter == this.filterSelected) return;
+
+                this.filterSelected = filter;
+                this.fetch();
+            },
+
+            filterText(filter) {
+                let text = this.getFilterText(filter);
+                if (this.filterSelected == filter) {
+                    return `<strong>${text}</strong>`;
+                }
+
+                return `<a>${text}</a>`;
             },
 
             menuAction(action, item) {
