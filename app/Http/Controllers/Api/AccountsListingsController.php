@@ -14,7 +14,7 @@ class AccountsListingsController extends Controller
      */
     public function index()
     {
-        $accounts = Account::all();
+        $accounts = Account::orderBy('domain')->get();
 
         return response()->json($accounts);
     }
