@@ -36,6 +36,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
     Route::get('/{server}/fetch-accounts', 'FetchAccountsController@update')->name('servers.fetch-accounts');
 });
 
+// Account Routes...
+Route::group(['middleware' => 'auth', 'prefix' => 'accounts'], function () {
+    Route::get('/', 'AccountsController@index')->name('accounts.index');
+//    Route::get('/{account}', 'AccountsController@show')->name('accounts.show');
+});
+
 Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
     Route::get('/servers', 'Api\ServersListingsController@index')->name('servers.listing');
+    Route::get('/accounts', 'Api\AccountsListingsController@index')->name('accounts.listing');
 });
