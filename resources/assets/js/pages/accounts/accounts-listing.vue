@@ -136,9 +136,19 @@
 
         methods: {
             fetch() {
-                axios.get('/api/accounts')
+                axios.get(this.accountUrl())
                     .then(response => this.items = response.data);
             },
+
+            accountUrl() {
+                let url = '/api/accounts';
+
+                if (this.serverId) {
+                    url = url + `/${this.serverId}`;
+                }
+
+                return url;
+            }
         }
 
     }
