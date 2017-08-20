@@ -14,6 +14,6 @@
         </div>
     </div>
 
-
+    <accounts-listing></accounts-listing>
 
 @endsection

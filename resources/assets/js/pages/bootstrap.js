@@ -12,4 +12,8 @@
  */
 Vue.component('servers-listing', require('./servers/servers-listing.vue'));
 Vue.component('servers-edit-server', require('./servers/servers-edit.vue'));
-// Vue.component('bookkeeper-edit-client', require('./clients/edit-client.vue'));
+
+/**
+ * Account Components ...
+ */
+Vue.component('accounts-listing', require('./accounts/accounts-listing.vue'));
