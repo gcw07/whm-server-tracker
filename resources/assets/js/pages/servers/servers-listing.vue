@@ -98,7 +98,7 @@
                                         <span class="icon is-small">
                                             <i class="fa fa-eye"></i>
                                         </span>
-                                        <span>View</span>
+                                        <span>View Details</span>
                                     </b-dropdown-item>
                                     <b-dropdown-item @click="menuAction('edit', item)">
                                         <span class="icon is-small">
