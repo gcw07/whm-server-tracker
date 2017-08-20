@@ -24,7 +24,7 @@
     </div>
 
     @if ($server)
-        <accounts-listing :id="{{ $server->id }}"></accounts-listing>
+        <accounts-listing :data="{{ $server }}"></accounts-listing>
     @else
         <accounts-listing></accounts-listing>
     @endif
