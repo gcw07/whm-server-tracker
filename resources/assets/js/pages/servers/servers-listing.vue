@@ -41,28 +41,6 @@
                     <th></th>
                 </tr>
             </thead>
-            <tfoot>
-                <tr class="no-hover">
-                    <td colspan="6">
-                        <!-- Pagination -->
-                        <nav class="pagination mt-1">
-                            <a class="pagination-previous" title="This is the first page" disabled>Previous</a>
-                            <a class="pagination-next">Next page</a>
-                            <ul class="pagination-list">
-                                <li>
-                                    <a class="pagination-link is-current">1</a>
-                                </li>
-                                <li>
-                                    <a class="pagination-link">2</a>
-                                </li>
-                                <li>
-                                    <a class="pagination-link">3</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </td>
-                </tr>
-            </tfoot>
             <tbody>
                 <tr v-for="item in items">
                     <td>
