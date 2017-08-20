@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Filters\AccountFilters;
 use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
@@ -14,6 +15,11 @@ class Account extends Model
     public function server()
     {
         return $this->belongsTo(Server::class);
+    }
+
+    public function scopeFilter($query, AccountFilters $filters)
+    {
+        return $filters->apply($query);
     }
 
     public function getDiskUsageAttribute()

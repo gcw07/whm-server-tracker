@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
 // Account Routes...
 Route::group(['middleware' => 'auth', 'prefix' => 'accounts'], function () {
     Route::get('/', 'AccountsController@index')->name('accounts.index');
+    Route::get('/{server}', 'AccountsController@index')->name('accounts.server-index');
 //    Route::get('/{account}', 'AccountsController@show')->name('accounts.show');
 });
 
@@ -46,4 +47,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'accounts'], function () {
 Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
     Route::get('/servers', 'Api\ServersListingsController@index')->name('servers.listing');
     Route::get('/accounts', 'Api\AccountsListingsController@index')->name('accounts.listing');
+    Route::get('/accounts/{server}', 'Api\AccountsListingsController@index')->name('accounts.server-listing');
 });

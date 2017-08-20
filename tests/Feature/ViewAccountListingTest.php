@@ -99,4 +99,37 @@ class ViewAccountListingTest extends TestCase
             $accountC
         ]);
     }
+
+    /** @test */
+    public function the_account_listings_can_be_filtered_by_server()
+    {
+        $this->withoutExceptionHandling();
+        $this->signIn();
+
+        $serverA = create('App\Server', [
+            'server_type' => 'vps'
+        ]);
+        $serverB = create('App\Server', [
+            'server_type' => 'dedicated'
+        ]);
+
+        $accountA = create('App\Account', [
+            'server_id' => $serverA->id,
+            'domain' => 'somedomain.com'
+        ]);
+        $accountB = create('App\Account', [
+            'server_id' => $serverB->id,
+            'domain' => 'anotherdomain.com'
+        ]);
+
+
+        $response = $this->get("/api/accounts/{$serverA->id}");
+
+        $response->assertStatus(200);
+
+        tap($response->json(), function ($accounts) {
+            $this->assertCount(1, $accounts);
+            $this->assertEquals('somedomain.com', $accounts[0]['domain']);
+        });
+    }
 }
