@@ -44,7 +44,7 @@
             <tbody>
                 <tr v-for="item in items">
                     <td>
-                        <a :href="serverAccounts(item)">{{ item.name }}</a>
+                        <a :href="serverAccountsUrl(item)">{{ item.name }}</a>
                         <span class="tag is-warning" v-if="item.missing_token">
                             <span class="icon is-small">
                                 <i class="fa fa-exclamation"></i>
@@ -182,7 +182,7 @@
                 return `<a>${text}</a>`;
             },
 
-            serverAccounts(item) {
+            serverAccountsUrl(item) {
                 return `/accounts/${item.id}`;
             },
 
