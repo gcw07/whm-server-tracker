@@ -1,6 +1,13 @@
 <template>
     <div class="box">
         <!-- Main container -->
+
+        <div v-if="serverId">
+            <h1 class="title is-5">{{ server.name }}</h1>
+
+            <hr>
+        </div>
+
         <div>
             <nav class="level mb-3">
                 <!-- Left side -->
@@ -121,13 +128,23 @@
 </template>
 <script>
     export default {
-        props: ['id'],
+        props: ['data'],
 
         data() {
             return {
                 items: false,
-                serverId: this.id,
+                server: this.data,
             };
+        },
+
+        computed: {
+            serverId() {
+                if (this.server) {
+                    return this.server.id;
+                }
+
+                return false;
+            }
         },
 
         created() {
