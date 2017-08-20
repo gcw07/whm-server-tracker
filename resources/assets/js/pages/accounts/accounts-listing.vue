@@ -121,10 +121,12 @@
 </template>
 <script>
     export default {
+        props: ['id'],
 
         data() {
             return {
                 items: false,
+                serverId: this.id,
             };
         },
 
