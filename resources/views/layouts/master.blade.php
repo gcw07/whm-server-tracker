@@ -87,7 +87,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="{{ $menu == 'accounts' ? ' is-active' : '' }}" href="#">
+                                    <a class="{{ $menu == 'accounts' ? ' is-active' : '' }}" href="{{ route('accounts.index') }}">
                                         <span class="icon is-small">
                                             <i class="fa fa-globe"></i>
                                         </span>
