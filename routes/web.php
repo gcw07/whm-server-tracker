@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'accounts'], function () {
 //    Route::get('/{account}', 'AccountsController@show')->name('accounts.show');
 });
 
+// API Routes...
 Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
     Route::get('/servers', 'Api\ServersListingsController@index')->name('servers.listing');
     Route::get('/accounts', 'Api\AccountsListingsController@index')->name('accounts.listing');
