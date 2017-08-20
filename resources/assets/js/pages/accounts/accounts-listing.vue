@@ -61,7 +61,7 @@
                         <a href="#">{{ item.domain }}</a>
                     </td>
                     <td v-if="!serverId">
-                        {{ item.server.name }}
+                        <a :href="serverAccountsUrl(item)">{{ item.server.name }}</a>
                     </td>
                     <td>{{ item.user }}</td>
                     <td>
@@ -138,6 +138,10 @@
             fetch() {
                 axios.get(this.accountUrl())
                     .then(response => this.items = response.data);
+            },
+
+            serverAccountsUrl(item) {
+                return `/accounts/${item.server_id}`;
             },
 
             accountUrl() {
