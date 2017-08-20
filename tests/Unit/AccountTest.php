@@ -35,6 +35,14 @@ class AccountTest extends TestCase
     }
 
     /** @test */
+    public function can_get_domain_external_url()
+    {
+        $account = make('App\Account', ['domain' => 'mydomain.com']);
+
+        $this->assertEquals('http://mydomain.com', $account->domain_url);
+    }
+
+    /** @test */
     public function can_get_disk_usage()
     {
         $accountA = make('App\Account', ['disk_used' => '300M', 'disk_limit' => '2000M']);

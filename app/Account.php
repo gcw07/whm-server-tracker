@@ -9,7 +9,7 @@ class Account extends Model
     protected $guarded = [];
     protected $casts = ['backup' => 'boolean', 'suspended' => 'boolean'];
     protected $dates = ['suspend_time', 'setup_date'];
-    protected $appends = ['disk_usage', 'cpanel_url', 'whm_url'];
+    protected $appends = ['disk_usage', 'cpanel_url', 'whm_url', 'domain_url'];
 
     public function server()
     {
@@ -36,5 +36,10 @@ class Account extends Model
         }
 
         return "http://{$this->server->address}:{$this->server->port}";
+    }
+
+    public function getDomainUrlAttribute()
+    {
+        return "http://{$this->domain}";
     }
 }
