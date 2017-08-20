@@ -139,25 +139,6 @@
                 axios.get('/api/accounts')
                     .then(response => this.items = response.data);
             },
-
-            menuAction(action, item) {
-                switch (action) {
-                    case 'site':
-                        window.location.href = `/servers/${item.id}`;
-                        break;
-
-                    case 'cpanel':
-                        window.location.href = `/servers/${item.id}/edit`;
-                        break;
-
-                    case 'whm':
-                        window.location.href = `/servers/${item.id}/edit`;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
         }
 
     }
