@@ -141,13 +141,11 @@
             },
 
             accountUrl() {
-                let url = '/api/accounts';
-
                 if (this.serverId) {
-                    url = url + `/${this.serverId}`;
+                    return `/api/accounts/${this.serverId}`;
                 }
 
-                return url;
+                return '/api/accounts';
             }
         }
 
