@@ -24,10 +24,10 @@
             <thead>
             <tr class="no-hover">
                 <th>Domain</th>
-                <th>Server</th>
+                <th v-if="!serverId">Server</th>
                 <th>Username</th>
                 <th>Backups</th>
-                <th>Plan</th>
+                <th v-if="serverId">Plan</th>
                 <th><abbr title="Disk Used">Used</abbr> / <abbr title="Disk Limit">Limit</abbr></th>
                 <th><abbr title="Disk Usage">Usage</abbr></th>
                 <th></th>
@@ -35,7 +35,7 @@
             </thead>
             <tfoot>
             <tr class="no-hover">
-                <td colspan="7">
+                <td colspan="8">
                     <!-- Pagination -->
                     <nav class="pagination mt-1">
                         <a class="pagination-previous" title="This is the first page" disabled>Previous</a>
@@ -60,7 +60,7 @@
                 <td>
                     <a href="#">{{ item.domain }}</a>
                 </td>
-                <td>
+                <td v-if="!serverId">
                     {{ item.server.name }}
                 </td>
                 <td>{{ item.user }}</td>
@@ -68,7 +68,7 @@
                     <span class="tag is-success is-rounded" v-if="item.backup">Yes</span>
                     <span class="tag is-danger is-rounded" v-if="! item.backup">No</span>
                 </td>
-                <td>{{ item.plan }}</td>
+                <td v-if="serverId">{{ item.plan }}</td>
                 <td>{{ item.disk_used }} / {{ item.disk_limit }}</td>
                 <td>{{ item.disk_usage }}</td>
                 <td>
