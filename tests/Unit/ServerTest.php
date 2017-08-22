@@ -248,4 +248,18 @@ class ServerTest extends TestCase
 
         $this->assertArrayNotHasKey('token', $server->toArray());
     }
+
+    /** @test */
+    public function can_get_formatted_backup_days()
+    {
+        $serverA = make('App\Server', ['backup_days' => '0,1,2']);
+        $serverB = make('App\Server', ['backup_days' => '3,4,5,6']);
+        $serverC = make('App\Server', ['backup_days' => '0,2,4,6']);
+        $serverD = make('App\Server', ['backup_days' => null]);
+
+        $this->assertEquals('Sun,Mon,Tue', $serverA->formatted_backup_days);
+        $this->assertEquals('Wed,Thu,Fri,Sat', $serverB->formatted_backup_days);
+        $this->assertEquals('Sun,Tue,Thu,Sat', $serverC->formatted_backup_days);
+        $this->assertEquals('None', $serverD->formatted_backup_days);
+    }
 }

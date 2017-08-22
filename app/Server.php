@@ -11,7 +11,13 @@ class Server extends Model
     protected $guarded = [];
     protected $casts = ['backup_enabled' => 'boolean'];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
-    protected $appends = ['formatted_server_type', 'missing_token', 'can_refresh_data', 'whm_url'];
+    protected $appends = [
+        'formatted_server_type',
+        'formatted_backup_days',
+        'missing_token',
+        'can_refresh_data',
+        'whm_url'
+    ];
     protected $hidden = ['token'];
 
     public function accounts()
@@ -170,6 +176,15 @@ class Server extends Model
         }
 
         return 'Reseller';
+    }
+
+    public function getFormattedBackupDaysAttribute()
+    {
+        if (! $this->backup_days) {
+            return 'None';
+        }
+
+        return str_replace([0,1,2,3,4,5,6], ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], $this->backup_days);
     }
 
     public function getMissingTokenAttribute()
