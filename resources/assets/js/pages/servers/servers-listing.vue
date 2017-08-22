@@ -159,6 +159,33 @@
                     .then(response => this.items = response.data);
             },
 
+            refreshDetails(item) {
+                axios.get(`/servers/${item.id}/fetch-details`)
+                    .then(response => {
+                        item.disk_percentage = response.data.disk_percentage;
+                        item.backup_enabled = response.data.backup_enabled;
+
+                        this.$toast.open({
+                            message: 'Server Details Refreshed',
+                            type: 'is-success',
+                            duration: 4000
+                        });
+                    });
+            },
+
+            refreshAccounts(item) {
+                axios.get(`/servers/${item.id}/fetch-accounts`)
+                    .then(response => {
+                        item.accounts_count = response.data.accounts_count;
+
+                        this.$toast.open({
+                            message: 'Server Accounts Refreshed',
+                            type: 'is-success',
+                            duration: 4000
+                        });
+                    });
+            },
+
             getFilterText(filter) {
                 if (filter == 'all') return 'All';
                 if (filter == 'dedicated') return 'Dedicated';
@@ -189,10 +216,11 @@
             menuAction(action, item) {
                 switch (action) {
                     case 'refresh.details':
-                        alert('refresh details')
+                        this.refreshDetails(item);
                         break;
 
                     case 'refresh.accounts':
+                        this.refreshAccounts(item);
                         break;
 
                     case 'view':
