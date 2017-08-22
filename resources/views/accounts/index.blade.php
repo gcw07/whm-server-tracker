@@ -7,7 +7,7 @@
     <div>
         <div class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
             <ul>
-            @if ($server)
+            @isset ($server)
                 <li>
                     <a href="{{ route('accounts.index') }}">Accounts</a>
                 </li>
@@ -18,14 +18,14 @@
                 <li class="is-active">
                     <a href="{{ route('accounts.index') }}">Accounts</a>
                 </li>
-            @endif
+            @endisset
             </ul>
         </div>
     </div>
 
-    @if ($server)
+    @isset ($server)
         <accounts-listing :data="{{ $server }}"></accounts-listing>
     @else
         <accounts-listing></accounts-listing>
-    @endif
+    @endisset
 @endsection

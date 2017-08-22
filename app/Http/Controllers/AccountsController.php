@@ -16,11 +16,11 @@ class AccountsController extends Controller
      */
     public function index(Server $server)
     {
-        if (! $server->exists) {
-            $server = null;
+        if ($server->exists) {
+            return view('accounts.index', compact('server'));
         }
 
-        return view('accounts.index', compact('server'));
+        return view('accounts.index');
     }
 
     /**
