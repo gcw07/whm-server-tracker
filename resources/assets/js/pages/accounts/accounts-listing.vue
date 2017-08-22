@@ -2,7 +2,7 @@
     <div class="box">
         <!-- Main container -->
 
-        <div v-if="serverId">
+        <div v-if="server">
             <h1 class="title is-5">{{ server.name }}</h1>
 
             <hr>
@@ -31,10 +31,10 @@
             <thead>
                 <tr class="no-hover">
                     <th>Domain</th>
-                    <th v-if="!serverId">Server</th>
+                    <th v-if="!server">Server</th>
                     <th>Username</th>
                     <th>Backups</th>
-                    <th v-if="serverId">Plan</th>
+                    <th v-if="server">Plan</th>
                     <th><abbr title="Disk Used">Used</abbr> / <abbr title="Disk Limit">Limit</abbr></th>
                     <th><abbr title="Disk Usage">Usage</abbr></th>
                     <th></th>
@@ -67,7 +67,7 @@
                     <td>
                         <a href="#">{{ item.domain }}</a>
                     </td>
-                    <td v-if="!serverId">
+                    <td v-if="!server">
                         <a :href="serverAccountsUrl(item)">{{ item.server.name }}</a>
                     </td>
                     <td>{{ item.user }}</td>
@@ -75,7 +75,7 @@
                         <span class="tag is-success is-rounded" v-if="item.backup">Yes</span>
                         <span class="tag is-danger is-rounded" v-if="! item.backup">No</span>
                     </td>
-                    <td v-if="serverId">{{ item.plan }}</td>
+                    <td v-if="server">{{ item.plan }}</td>
                     <td>{{ item.disk_used }} / {{ item.disk_limit }}</td>
                     <td>{{ item.disk_usage }}</td>
                     <td>
@@ -138,13 +138,6 @@
         },
 
         computed: {
-            serverId() {
-                if (this.server) {
-                    return this.server.id;
-                }
-
-                return false;
-            }
         },
 
         created() {
@@ -162,8 +155,8 @@
             },
 
             accountUrl() {
-                if (this.serverId) {
-                    return `/api/accounts/${this.serverId}`;
+                if (this.server) {
+                    return `/api/accounts/${this.server.id}`;
                 }
 
                 return '/api/accounts';
