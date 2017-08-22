@@ -26,6 +26,6 @@ class FetchAccountsController extends Controller
 
         $server->fetchAccounts($this->serverConnector);
 
-        return response()->json($server);
+        return response()->json($server->fresh());
     }
 }
