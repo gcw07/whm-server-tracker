@@ -52,60 +52,42 @@ class Server extends Model
 
     public function fetchDiskUsageDetails($serverConnector)
     {
-        try {
-            $diskUsage = $serverConnector->getDiskUsage();
+        $diskUsage = $serverConnector->getDiskUsage();
 
-            $this->update([
-                'disk_used' => $diskUsage['used'],
-                'disk_available' => $diskUsage['available'],
-                'disk_total' => $diskUsage['total'],
-                'disk_percentage' => $diskUsage['percentage'],
-                'disk_last_updated' => Carbon::now()
-            ]);
-        } catch (ServerConnectionException $e) {
-
-        } catch (ForbiddenAccessException $e) {
-
-        }
+        $this->update([
+            'disk_used' => $diskUsage['used'],
+            'disk_available' => $diskUsage['available'],
+            'disk_total' => $diskUsage['total'],
+            'disk_percentage' => $diskUsage['percentage'],
+            'disk_last_updated' => Carbon::now()
+        ]);
 
         return false;
     }
 
     public function fetchBackupDetails($serverConnector)
     {
-        try {
-            $backups = $serverConnector->getBackups();
+        $backups = $serverConnector->getBackups();
 
-            $this->update([
-                'backup_enabled' => $backups['backupenable'],
-                'backup_days' => $backups['backupdays'],
-                'backup_retention' => $backups['backup_daily_retention'],
-                'backup_last_updated' => Carbon::now()
-            ]);
-        } catch (ServerConnectionException $e) {
-
-        } catch (ForbiddenAccessException $e) {
-
-        }
+        $this->update([
+            'backup_enabled' => $backups['backupenable'],
+            'backup_days' => $backups['backupdays'],
+            'backup_retention' => $backups['backup_daily_retention'],
+            'backup_last_updated' => Carbon::now()
+        ]);
 
         return false;
     }
 
     public function fetchAccounts($serverConnector)
     {
-        try {
-            $accounts = $serverConnector->getAccounts();
+        $accounts = $serverConnector->getAccounts();
 
-            $this->processAccounts($accounts);
+        $this->processAccounts($accounts);
 
-            $this->update([
-                'accounts_last_updated' => Carbon::now()
-            ]);
-        } catch (ServerConnectionException $e) {
-
-        } catch (ForbiddenAccessException $e) {
-
-        }
+        $this->update([
+            'accounts_last_updated' => Carbon::now()
+        ]);
 
         return false;
     }
