@@ -78,7 +78,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in items">
+                    <tr v-for="item in items" :class="{'suspended': item.suspended}">
                         <td>
                             <a href="#">{{ item.domain }}</a>
                         </td>

@@ -25,6 +25,10 @@ table.is-aligned-center tbody td {
   background-color: inherit;
 }
 
+.table tr.suspended {
+  background-color: #f4c6cb;
+}
+
 .modal-card-foot-center {
   justify-content: space-around;
 }
