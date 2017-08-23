@@ -163,6 +163,13 @@
 
             refreshDetails(item) {
                 axios.get(`/servers/${item.id}/fetch-details`)
+                    .catch(error => {
+                        this.$toast.open({
+                            message: error.response.data.message,
+                            type: 'is-danger',
+                            duration: 6000
+                        });
+                    })
                     .then(response => {
                         item.disk_percentage = response.data.disk_percentage;
                         item.backup_enabled = response.data.backup_enabled;
