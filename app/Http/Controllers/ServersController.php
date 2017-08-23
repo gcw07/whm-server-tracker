@@ -109,7 +109,9 @@ class ServersController extends Controller
      */
     public function destroy(Server $server)
     {
-        //
+        $server->delete();
+
+        return response([], 204);
     }
 
     /**
