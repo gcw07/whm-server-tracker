@@ -62,10 +62,6 @@ class Server extends Model
                 'disk_percentage' => $diskUsage['percentage'],
                 'disk_last_updated' => Carbon::now()
             ]);
-        } catch (InvalidServerTypeException $e) {
-
-        } catch (MissingTokenException $e) {
-
         } catch (ServerConnectionException $e) {
 
         } catch (ForbiddenAccessException $e) {
@@ -86,10 +82,6 @@ class Server extends Model
                 'backup_retention' => $backups['backup_daily_retention'],
                 'backup_last_updated' => Carbon::now()
             ]);
-        } catch (InvalidServerTypeException $e) {
-
-        } catch (MissingTokenException $e) {
-
         } catch (ServerConnectionException $e) {
 
         } catch (ForbiddenAccessException $e) {
@@ -109,10 +101,6 @@ class Server extends Model
             $this->update([
                 'accounts_last_updated' => Carbon::now()
             ]);
-        } catch (InvalidServerTypeException $e) {
-
-        } catch (MissingTokenException $e) {
-
         } catch (ServerConnectionException $e) {
 
         } catch (ForbiddenAccessException $e) {
