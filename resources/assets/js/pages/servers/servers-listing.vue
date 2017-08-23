@@ -127,6 +127,7 @@
 </template>
 <script>
     import NewServer from '../../components/NewServer'
+    import Form from '../../forms/form';
 
     export default {
 
@@ -136,6 +137,7 @@
 
         data() {
             return {
+                deleteForm: new Form({}),
                 filterSelected: 'all',
                 items: false,
                 isNewServerModalActive: false,
@@ -186,6 +188,27 @@
                     });
             },
 
+            deleteServer(item) {
+                this.$dialog.confirm({
+                    message: 'Are you sure you want to <strong>remove</strong> this server? All accounts associated will also be removed. This action can not be undone.',
+                    title: item.name,
+                    confirmText: 'Remove Server',
+                    type: 'is-danger',
+                    onConfirm: () => {
+                        this.deleteForm.delete(`/servers/${item.id}`)
+                            .then(response => {
+                                this.items.splice(this.items.indexOf(item), 1);
+
+                                this.$toast.open({
+                                    message: 'Server Removed Successfully',
+                                    type: 'is-success',
+                                    duration: 4000
+                                });
+                            });
+                    }
+                })
+            },
+
             getFilterText(filter) {
                 if (filter == 'all') return 'All';
                 if (filter == 'dedicated') return 'Dedicated';
@@ -232,6 +255,7 @@
                         break;
 
                     case 'remove':
+                        this.deleteServer(item);
                         break;
 
                     default:
