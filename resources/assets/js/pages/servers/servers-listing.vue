@@ -184,6 +184,13 @@
 
             refreshAccounts(item) {
                 axios.get(`/servers/${item.id}/fetch-accounts`)
+                    .catch(error => {
+                        this.$toast.open({
+                            message: error.response.data.message,
+                            type: 'is-danger',
+                            duration: 6000
+                        });
+                    })
                     .then(response => {
                         item.accounts_count = response.data.accounts_count;
 
