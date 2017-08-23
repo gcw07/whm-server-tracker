@@ -21,6 +21,15 @@ class Server extends Model
     ];
     protected $hidden = ['token'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($server) {
+            $server->accounts->each->delete();
+        });
+    }
+
     public function accounts()
     {
         return $this->hasMany(Account::class);
