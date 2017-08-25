@@ -13,12 +13,12 @@ class CreateServerTest extends TestCase
     private function validParams($overrides = [])
     {
         return array_merge([
-            'name'             => 'my-server-name',
-            'address'          => '127.0.0.1',
-            'port'             => 2087,
-            'server_type'      => 'vps',
-            'notes'            => 'a server note',
-            'token'            => 'server-api-token'
+            'name'        => 'my-server-name',
+            'address'     => '127.0.0.1',
+            'port'        => 2087,
+            'server_type' => 'vps',
+            'notes'       => 'a server note',
+            'token'       => 'server-api-token'
         ], $overrides);
     }
 
@@ -37,12 +37,12 @@ class CreateServerTest extends TestCase
         $this->signIn();
 
         $response = $this->postJson('/servers', $this->validParams([
-            'name'             => 'My Test Server',
-            'address'          => '255.1.1.100',
-            'port'             => 1111,
-            'server_type'      => 'dedicated',
-            'notes'            => 'some server note',
-            'token'            => 'new-server-api-token'
+            'name'        => 'My Test Server',
+            'address'     => '255.1.1.100',
+            'port'        => 1111,
+            'server_type' => 'dedicated',
+            'notes'       => 'some server note',
+            'token'       => 'new-server-api-token'
         ]));
 
         $response->assertJson(['name' => 'My Test Server']);

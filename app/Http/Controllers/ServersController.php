@@ -26,12 +26,12 @@ class ServersController extends Controller
     public function store(Request $request)
     {
         $data = $this->validate($request, [
-            'name'             => ['required', 'max:191'],
-            'address'          => ['required', 'max:191'],
-            'port'             => ['required', 'numeric'],
-            'server_type'      => ['required', 'in:dedicated,reseller,vps'],
-            'notes'            => ['nullable'],
-            'token'            => ['nullable']
+            'name'        => ['required', 'max:191'],
+            'address'     => ['required', 'max:191'],
+            'port'        => ['required', 'numeric'],
+            'server_type' => ['required', 'in:dedicated,reseller,vps'],
+            'notes'       => ['nullable'],
+            'token'       => ['nullable']
         ]);
 
         $server = Server::create($data);
@@ -71,11 +71,11 @@ class ServersController extends Controller
     public function update(Request $request, Server $server)
     {
         $data = $this->validate($request, [
-            'name'             => ['required', 'max:191'],
-            'address'          => ['required', 'max:191'],
-            'port'             => ['required', 'numeric'],
-            'server_type'      => ['required', 'in:dedicated,reseller,vps'],
-            'notes'            => ['nullable']
+            'name'        => ['required', 'max:191'],
+            'address'     => ['required', 'max:191'],
+            'port'        => ['required', 'numeric'],
+            'server_type' => ['required', 'in:dedicated,reseller,vps'],
+            'notes'       => ['nullable']
         ]);
 
         if ($this->hasServerTypeChangedToReseller($request, $server)) {

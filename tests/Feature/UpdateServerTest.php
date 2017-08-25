@@ -13,22 +13,22 @@ class UpdateServerTest extends TestCase
     private function oldAttributes($overrides = [])
     {
         return array_merge([
-            'name'             => 'old-my-server-name',
-            'address'          => '1.1.1.1',
-            'port'             => 1000,
-            'server_type'      => 'dedicated',
-            'notes'            => 'old server note'
+            'name'        => 'old-my-server-name',
+            'address'     => '1.1.1.1',
+            'port'        => 1000,
+            'server_type' => 'dedicated',
+            'notes'       => 'old server note'
         ], $overrides);
     }
 
     private function validParams($overrides = [])
     {
         return array_merge([
-            'name'             => 'new-my-server-name',
-            'address'          => '192.1.1.1',
-            'port'             => 2000,
-            'server_type'      => 'vps',
-            'notes'            => 'new server note'
+            'name'        => 'new-my-server-name',
+            'address'     => '192.1.1.1',
+            'port'        => 2000,
+            'server_type' => 'vps',
+            'notes'       => 'new server note'
         ], $overrides);
     }
 
@@ -72,19 +72,19 @@ class UpdateServerTest extends TestCase
         $this->signIn();
 
         $server = create('App\Server', [
-            'name'             => 'old-my-server-name',
-            'address'          => '1.1.1.1',
-            'port'             => 1000,
-            'server_type'      => 'dedicated',
-            'notes'            => 'old server note'
+            'name'        => 'old-my-server-name',
+            'address'     => '1.1.1.1',
+            'port'        => 1000,
+            'server_type' => 'dedicated',
+            'notes'       => 'old server note'
         ]);
 
         $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'name'             => 'new-my-server-name',
-            'address'          => '192.1.1.1',
-            'port'             => 2000,
-            'server_type'      => 'vps',
-            'notes'            => 'new server note'
+            'name'        => 'new-my-server-name',
+            'address'     => '192.1.1.1',
+            'port'        => 2000,
+            'server_type' => 'vps',
+            'notes'       => 'new server note'
         ]));
 
         tap($server->fresh(), function ($server) {
@@ -255,7 +255,6 @@ class UpdateServerTest extends TestCase
             $this->assertEquals('vps', $server->server_type);
         });
     }
-
 
     /** @test */
     public function server_notes_is_optional()
