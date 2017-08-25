@@ -31,14 +31,7 @@ class ServersController extends Controller
             'port'             => ['required', 'numeric'],
             'server_type'      => ['required', 'in:dedicated,reseller,vps'],
             'notes'            => ['nullable'],
-            'token'            => ['nullable'],
-            'disk_used'        => ['nullable'],
-            'disk_available'   => ['nullable'],
-            'disk_total'       => ['nullable'],
-            'disk_percentage'  => ['nullable'],
-            'backup_enabled'   => ['nullable'],
-            'backup_days'      => ['nullable'],
-            'backup_retention' => ['nullable'],
+            'token'            => ['nullable']
         ]);
 
         $server = Server::create($data);
@@ -82,14 +75,7 @@ class ServersController extends Controller
             'address'          => ['required', 'max:191'],
             'port'             => ['required', 'numeric'],
             'server_type'      => ['required', 'in:dedicated,reseller,vps'],
-            'notes'            => ['nullable'],
-            'disk_used'        => ['nullable'],
-            'disk_available'   => ['nullable'],
-            'disk_total'       => ['nullable'],
-            'disk_percentage'  => ['nullable'],
-            'backup_enabled'   => ['nullable'],
-            'backup_days'      => ['nullable'],
-            'backup_retention' => ['nullable'],
+            'notes'            => ['nullable']
         ]);
 
         if ($this->hasServerTypeChangedToReseller($request, $server)) {

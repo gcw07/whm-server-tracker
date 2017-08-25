@@ -18,14 +18,7 @@ class CreateServerTest extends TestCase
             'port'             => 2087,
             'server_type'      => 'vps',
             'notes'            => 'a server note',
-            'token'            => 'server-api-token',
-            'disk_used'        => 10000000,
-            'disk_available'   => 115000000,
-            'disk_total'       => 125000000,
-            'disk_percentage'  => 8,
-            'backup_enabled'   => true,
-            'backup_days'      => '0',
-            'backup_retention' => 1
+            'token'            => 'server-api-token'
         ], $overrides);
     }
 
@@ -49,14 +42,7 @@ class CreateServerTest extends TestCase
             'port'             => 1111,
             'server_type'      => 'dedicated',
             'notes'            => 'some server note',
-            'token'            => 'new-server-api-token',
-            'disk_used'        => 10000000,
-            'disk_available'   => 115000000,
-            'disk_total'       => 125000000,
-            'disk_percentage'  => 8,
-            'backup_enabled'   => false,
-            'backup_days'      => '0,1',
-            'backup_retention' => 5
+            'token'            => 'new-server-api-token'
         ]));
 
         $response->assertJson(['name' => 'My Test Server']);
@@ -64,13 +50,6 @@ class CreateServerTest extends TestCase
         $response->assertJson(['port' => 1111]);
         $response->assertJson(['server_type' => 'dedicated']);
         $response->assertJson(['notes' => 'some server note']);
-        $response->assertJson(['disk_used' => 10000000]);
-        $response->assertJson(['disk_available' => 115000000]);
-        $response->assertJson(['disk_total' => 125000000]);
-        $response->assertJson(['disk_percentage' => 8]);
-        $response->assertJson(['backup_enabled' => false]);
-        $response->assertJson(['backup_days' => '0,1']);
-        $response->assertJson(['backup_retention' => 5]);
     }
 
     /** @test */
@@ -182,104 +161,6 @@ class CreateServerTest extends TestCase
 
         tap(Server::first(), function ($server) {
             $this->assertNull($server->token);
-        });
-    }
-
-    /** @test */
-    public function server_disk_used_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'disk_used' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->disk_used);
-        });
-    }
-
-    /** @test */
-    public function server_disk_available_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'disk_available' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->disk_available);
-        });
-    }
-
-    /** @test */
-    public function server_disk_total_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'disk_total' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->disk_total);
-        });
-    }
-
-    /** @test */
-    public function server_disk_percentage_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'disk_percentage' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->disk_percentage);
-        });
-    }
-
-    /** @test */
-    public function server_backup_enabled_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'backup_enabled' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->backup_enabled);
-        });
-    }
-
-    /** @test */
-    public function server_backup_days_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'backup_days' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->backup_days);
-        });
-    }
-
-    /** @test */
-    public function server_backup_retention_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'backup_retention' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->backup_retention);
         });
     }
 }

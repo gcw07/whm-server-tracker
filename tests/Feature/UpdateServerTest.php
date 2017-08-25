@@ -17,14 +17,7 @@ class UpdateServerTest extends TestCase
             'address'          => '1.1.1.1',
             'port'             => 1000,
             'server_type'      => 'dedicated',
-            'notes'            => 'old server note',
-            'disk_used'        => 10000000,
-            'disk_available'   => 115000000,
-            'disk_total'       => 125000000,
-            'disk_percentage'  => 8,
-            'backup_enabled'   => false,
-            'backup_days'      => '1,2',
-            'backup_retention' => 10
+            'notes'            => 'old server note'
         ], $overrides);
     }
 
@@ -35,14 +28,7 @@ class UpdateServerTest extends TestCase
             'address'          => '192.1.1.1',
             'port'             => 2000,
             'server_type'      => 'vps',
-            'notes'            => 'new server note',
-            'disk_used'        => 5000000,
-            'disk_available'   => 145000000,
-            'disk_total'       => 150000000,
-            'disk_percentage'  => 3,
-            'backup_enabled'   => true,
-            'backup_days'      => '0,1',
-            'backup_retention' => 5
+            'notes'            => 'new server note'
         ], $overrides);
     }
 
@@ -90,14 +76,7 @@ class UpdateServerTest extends TestCase
             'address'          => '1.1.1.1',
             'port'             => 1000,
             'server_type'      => 'dedicated',
-            'notes'            => 'old server note',
-            'disk_used'        => 10000000,
-            'disk_available'   => 115000000,
-            'disk_total'       => 125000000,
-            'disk_percentage'  => 8,
-            'backup_enabled'   => false,
-            'backup_days'      => '1,2',
-            'backup_retention' => 10
+            'notes'            => 'old server note'
         ]);
 
         $response = $this->putJson("/servers/{$server->id}", $this->validParams([
@@ -105,14 +84,7 @@ class UpdateServerTest extends TestCase
             'address'          => '192.1.1.1',
             'port'             => 2000,
             'server_type'      => 'vps',
-            'notes'            => 'new server note',
-            'disk_used'        => 5000000,
-            'disk_available'   => 145000000,
-            'disk_total'       => 150000000,
-            'disk_percentage'  => 3,
-            'backup_enabled'   => true,
-            'backup_days'      => '0,1',
-            'backup_retention' => 5
+            'notes'            => 'new server note'
         ]));
 
         tap($server->fresh(), function ($server) {
@@ -121,13 +93,6 @@ class UpdateServerTest extends TestCase
             $this->assertEquals(2000, $server->port);
             $this->assertEquals('vps', $server->server_type);
             $this->assertEquals('new server note', $server->notes);
-            $this->assertEquals(5000000, $server->disk_used);
-            $this->assertEquals(145000000, $server->disk_available);
-            $this->assertEquals(150000000, $server->disk_total);
-            $this->assertEquals(3, $server->disk_percentage);
-            $this->assertTrue($server->backup_enabled);
-            $this->assertEquals('0,1', $server->backup_days);
-            $this->assertEquals(5, $server->backup_retention);
         });
     }
 
@@ -307,132 +272,6 @@ class UpdateServerTest extends TestCase
 
         tap($server->fresh(), function ($server) {
             $this->assertNull($server->notes);
-        });
-    }
-
-    /** @test */
-    public function server_disk_used_is_optional()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'disk_used' => 10000,
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'disk_used' => '',
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNull($server->disk_used);
-        });
-    }
-
-    /** @test */
-    public function server_disk_available_is_optional()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'disk_available' => 15000,
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'disk_available' => '',
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNull($server->disk_available);
-        });
-    }
-
-    /** @test */
-    public function server_disk_total_is_optional()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'disk_total' => 150000,
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'disk_total' => '',
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNull($server->disk_total);
-        });
-    }
-
-    /** @test */
-    public function server_disk_percentage_is_optional()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'disk_percentage' => 10,
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'disk_percentage' => '',
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNull($server->disk_percentage);
-        });
-    }
-
-    /** @test */
-    public function server_backup_enabled_is_optional()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'backup_enabled' => true,
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'backup_enabled' => '',
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNull($server->backup_enabled);
-        });
-    }
-
-    /** @test */
-    public function server_backup_days_is_optional()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'backup_days' => '0,5',
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'backup_days' => '',
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNull($server->backup_days);
-        });
-    }
-
-    /** @test */
-    public function server_backup_retention_is_optional()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'backup_retention' => 7,
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'backup_retention' => '',
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNull($server->backup_retention);
         });
     }
 }
