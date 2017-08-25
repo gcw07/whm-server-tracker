@@ -56,6 +56,18 @@ class ServerTest extends TestCase
     }
 
     /** @test */
+    public function a_server_can_update_multiple_settings_at_once()
+    {
+        $this->server->setMultipleSettings([
+            'disk_used' => 10000,
+            'disk_available' => 200000
+        ]);
+
+        $this->assertEquals('10000', $this->server->getSetting('disk_used'));
+        $this->assertEquals('200000', $this->server->getSetting('disk_available'));
+    }
+
+    /** @test */
     public function a_server_can_remove_a_setting()
     {
         $this->server->setSetting('disk_available', 200000);

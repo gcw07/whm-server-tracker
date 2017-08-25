@@ -66,6 +66,15 @@ class Server extends Model
         ]);
     }
 
+    public function setMultipleSettings($settings)
+    {
+        foreach ($settings as $name => $value) {
+            $this->setSetting($name, $value);
+        }
+
+        return true;
+    }
+
     public function removeSetting($name)
     {
         return $this->settings()->where('name', $name)->delete();
