@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Server extends Model
 {
     protected $guarded = [];
+    protected $with = ['settings'];
     protected $withCount = ['accounts'];
     protected $casts = ['backup_enabled' => 'boolean'];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
@@ -17,7 +18,8 @@ class Server extends Model
         'formatted_backup_days',
         'missing_token',
         'can_refresh_data',
-        'whm_url'
+        'whm_url',
+        'settings'
     ];
     protected $hidden = ['token'];
 
@@ -30,9 +32,48 @@ class Server extends Model
         });
     }
 
+    public function settings()
+    {
+        return $this->hasMany(Setting::class);
+    }
+
     public function accounts()
     {
         return $this->hasMany(Account::class);
+    }
+
+    public function getSetting($name)
+    {
+        if (array_key_exists($name, $this->settings)) {
+            return $this->settings[$name];
+        }
+
+        return null;
+    }
+
+    public function setSetting($name, $value)
+    {
+        if ($this->settings()->where('name', $name)->exists()) {
+            return $this->settings()->where('name', $name)->update([
+                'value' => $value
+            ]);
+        }
+
+        return $this->settings()->create([
+            'server_id' => $this->id,
+            'name' => $name,
+            'value' => $value
+        ]);
+    }
+
+    public function removeSetting($name)
+    {
+        return $this->settings()->where('name', $name)->delete();
+    }
+
+    public function removeAllSettings()
+    {
+        return $this->settings()->delete();
     }
 
     public function addAccount($account)
@@ -145,6 +186,11 @@ class Server extends Model
     public function scopeFilter($query, ServerFilters $filters)
     {
         return $filters->apply($query);
+    }
+
+    public function getSettingsAttribute()
+    {
+        return $this->settings()->pluck('value','name')->all();
     }
 
     public function getFormattedServerTypeAttribute()
