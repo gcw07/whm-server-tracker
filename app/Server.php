@@ -66,17 +66,8 @@ class Server extends Model
             'disk_used' => $diskUsage['used'],
             'disk_available' => $diskUsage['available'],
             'disk_total' => $diskUsage['total'],
-            'disk_percentage' => $diskUsage['percentage'],
-            'disk_last_updated' => Carbon::now()
+            'disk_percentage' => $diskUsage['percentage']
         ]);
-
-//        $this->update([
-//            'disk_used' => $diskUsage['used'],
-//            'disk_available' => $diskUsage['available'],
-//            'disk_total' => $diskUsage['total'],
-//            'disk_percentage' => $diskUsage['percentage'],
-//            'disk_last_updated' => Carbon::now()
-//        ]);
 
         return false;
     }
@@ -88,16 +79,8 @@ class Server extends Model
         $this->settings()->merge([
             'backup_enabled' => $backups['backupenable'],
             'backup_days' => $backups['backupdays'],
-            'backup_retention' => $backups['backup_daily_retention'],
-            'backup_last_updated' => Carbon::now()
+            'backup_retention' => $backups['backup_daily_retention']
         ]);
-
-//        $this->update([
-//            'backup_enabled' => $backups['backupenable'],
-//            'backup_days' => $backups['backupdays'],
-//            'backup_retention' => $backups['backup_daily_retention'],
-//            'backup_last_updated' => Carbon::now()
-//        ]);
 
         return false;
     }

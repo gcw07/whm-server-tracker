@@ -65,19 +65,12 @@ class ViewServerListingTest extends TestCase
         $this->signIn();
 
         $server = create('App\Server', [
-            'name'             => 'My Test Server',
-            'address'          => '255.1.1.100',
-            'port'             => 1111,
-            'server_type'      => 'dedicated',
-            'notes'            => 'some server note',
-            'token'            => 'new-server-api-token',
-            'disk_used'        => 10000000,
-            'disk_available'   => 115000000,
-            'disk_total'       => 125000000,
-            'disk_percentage'  => 8,
-            'backup_enabled'   => false,
-            'backup_days'      => '0,1',
-            'backup_retention' => 5
+            'name'        => 'My Test Server',
+            'address'     => '255.1.1.100',
+            'port'        => 1111,
+            'server_type' => 'dedicated',
+            'notes'       => 'some server note',
+            'token'       => 'new-server-api-token',
         ]);
 
         $response = $this->get("/api/servers");

@@ -123,13 +123,7 @@ class ServersController extends Controller
     private function clearRemoteServerDetails($data)
     {
         $data['token'] = null;
-        $data['disk_used'] = null;
-        $data['disk_available'] = null;
-        $data['disk_total'] = null;
-        $data['disk_percentage'] = null;
-        $data['backup_enabled'] = null;
-        $data['backup_days'] = null;
-        $data['backup_retention'] = null;
+        $data['settings'] = [];
 
         return $data;
     }

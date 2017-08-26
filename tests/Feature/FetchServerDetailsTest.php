@@ -49,11 +49,9 @@ class FetchServerDetailsTest extends TestCase
             $this->assertNotNull($server->settings()->get('disk_available'));
             $this->assertNotNull($server->settings()->get('disk_total'));
             $this->assertNotNull($server->settings()->get('disk_percentage'));
-            $this->assertNotNull($server->settings()->get('disk_last_updated'));
             $this->assertNotNull($server->settings()->get('backup_enabled'));
             $this->assertNotNull($server->settings()->get('backup_days'));
             $this->assertNotNull($server->settings()->get('backup_retention'));
-            $this->assertNotNull($server->settings()->get('backup_last_updated'));
         });
     }
 }

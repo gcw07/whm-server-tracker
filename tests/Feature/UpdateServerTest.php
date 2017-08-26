@@ -104,6 +104,9 @@ class UpdateServerTest extends TestCase
         $server = create('App\Server', [
             'server_type'      => 'dedicated',
             'token'            => 'old-api-token',
+        ]);
+
+        $server->settings()->merge([
             'disk_used'        => 10000000,
             'disk_available'   => 115000000,
             'disk_total'       => 125000000,
@@ -120,13 +123,13 @@ class UpdateServerTest extends TestCase
         tap($server->fresh(), function ($server) {
             $this->assertEquals('reseller', $server->server_type);
             $this->assertNull($server->token);
-            $this->assertNull($server->disk_used);
-            $this->assertNull($server->disk_available);
-            $this->assertNull($server->disk_total);
-            $this->assertNull($server->disk_percentage);
-            $this->assertNull($server->backup_enabled);
-            $this->assertNull($server->backup_days);
-            $this->assertNull($server->backup_retention);
+            $this->assertNull($server->settings()->disk_used);
+            $this->assertNull($server->settings()->disk_available);
+            $this->assertNull($server->settings()->disk_total);
+            $this->assertNull($server->settings()->disk_percentage);
+            $this->assertNull($server->settings()->backup_enabled);
+            $this->assertNull($server->settings()->backup_days);
+            $this->assertNull($server->settings()->backup_retention);
         });
     }
 

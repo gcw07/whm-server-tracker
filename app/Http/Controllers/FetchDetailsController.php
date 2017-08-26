@@ -8,6 +8,7 @@ use App\Exceptions\Server\InvalidServerTypeException;
 use App\Exceptions\Server\MissingTokenException;
 use App\Exceptions\Server\ServerConnectionException;
 use App\Server;
+use Carbon\Carbon;
 
 class FetchDetailsController extends Controller
 {
@@ -31,6 +32,10 @@ class FetchDetailsController extends Controller
 
             $server->fetchDiskUsageDetails($this->serverConnector);
             $server->fetchBackupDetails($this->serverConnector);
+
+            $server->update([
+                'details_last_updated' => Carbon::now()
+            ]);
         } catch (InvalidServerTypeException $e) {
             return response()->json(['message' => 'Server type must be a vps or dedicated server.'], 422);
         } catch (MissingTokenException $e) {
