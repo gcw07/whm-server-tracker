@@ -34,15 +34,6 @@ export default class Errors {
     }
 
     /**
-     * Get all of the errors for the collection in a flat array.
-     *
-     * @returns {Array}
-     */
-    flatten() {
-        return _.flattenDeep(_.toArray(this.errors));
-    }
-
-    /**
      * Retrieve the error message for a field.
      *
      * @param {string} field
