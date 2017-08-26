@@ -41,7 +41,6 @@
                     </div>
                 </div>
             </nav>
-
         </div>
         <div class="box">
             <!-- Main container -->
