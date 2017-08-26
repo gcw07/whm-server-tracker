@@ -120,7 +120,7 @@
             </tbody>
         </table>
 
-        <b-modal :active.sync="isNewServerModalActive" has-modal-card>
+        <b-modal :active.sync="isNewServerModalActive" :canCancel="false" has-modal-card>
             <new-server></new-server>
         </b-modal>
     </div>
