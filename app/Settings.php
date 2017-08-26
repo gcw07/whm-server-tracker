@@ -143,9 +143,8 @@ class Settings
     /**
      * Magic property access for settings.
      *
-     * @param  string $key
-     * @return string
-     * @throws Exception
+     * @param string $key
+     * @return null|string
      */
     public function __get($key)
     {
@@ -153,6 +152,6 @@ class Settings
             return $this->get($key);
         }
 
-        throw new Exception("The {$key} setting does not exist.");
+        return null;
     }
 }
