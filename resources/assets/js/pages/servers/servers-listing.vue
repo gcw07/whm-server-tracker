@@ -171,8 +171,15 @@
                         });
                     })
                     .then(response => {
-                        item.disk_percentage = response.data.disk_percentage;
-                        item.backup_enabled = response.data.backup_enabled;
+                        if (item.settings.length === 0) {
+                            item.settings = {
+                                disk_percentage: response.data.settings.disk_percentage,
+                                backup_enabled: response.data.settings.backup_enabled,
+                            };
+                        } else {
+                            item.settings.disk_percentage = response.data.settings.disk_percentage;
+                            item.settings.backup_enabled = response.data.settings.backup_enabled;
+                        }
 
                         this.$toast.open({
                             message: 'Server Details Refreshed',
