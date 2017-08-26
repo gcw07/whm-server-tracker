@@ -27,8 +27,7 @@ class Settings
      */
     protected $allowed = [
         'disk_used', 'disk_available', 'disk_total', 'disk_percentage',
-        'backup_enabled', 'backup_days', 'backup_retention',
-        'disk_last_updated', 'backup_last_updated', 'accounts_last_updated'
+        'backup_enabled', 'backup_days', 'backup_retention'
     ];
 
     /**
