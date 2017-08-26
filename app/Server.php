@@ -166,11 +166,11 @@ class Server extends Model
 
     public function getFormattedBackupDaysAttribute()
     {
-        if (! $this->backup_days) {
+        if (! $this->settings()->backup_days) {
             return 'None';
         }
 
-        return str_replace([0,1,2,3,4,5,6], ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], $this->backup_days);
+        return str_replace([0,1,2,3,4,5,6], ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], $this->settings()->backup_days);
     }
 
     public function getMissingTokenAttribute()

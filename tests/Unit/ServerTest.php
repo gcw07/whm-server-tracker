@@ -315,10 +315,16 @@ class ServerTest extends TestCase
     /** @test */
     public function can_get_formatted_backup_days()
     {
-        $serverA = make('App\Server', ['backup_days' => '0,1,2']);
-        $serverB = make('App\Server', ['backup_days' => '3,4,5,6']);
-        $serverC = make('App\Server', ['backup_days' => '0,2,4,6']);
-        $serverD = make('App\Server', ['backup_days' => null]);
+        $serverA = create('App\Server');
+        $serverA->settings()->set('backup_days', '0,1,2');
+
+        $serverB = create('App\Server');
+        $serverB->settings()->set('backup_days', '3,4,5,6');
+
+        $serverC = create('App\Server');
+        $serverC->settings()->set('backup_days', '0,2,4,6');
+
+        $serverD = create('App\Server');
 
         $this->assertEquals('Sun,Mon,Tue', $serverA->formatted_backup_days);
         $this->assertEquals('Wed,Thu,Fri,Sat', $serverB->formatted_backup_days);
