@@ -130,7 +130,6 @@
     import Form from '../../forms/form';
 
     export default {
-
         components: {
             NewServer
         },
