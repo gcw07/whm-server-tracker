@@ -33,13 +33,6 @@ class FetchServerDetailsTest extends TestCase
             'port'             => 1000,
             'server_type'      => 'vps',
             'token'            => 'valid-server-api-token',
-            'disk_used'        => null,
-            'disk_available'   => null,
-            'disk_total'       => null,
-            'disk_percentage'  => null,
-            'backup_enabled'   => null,
-            'backup_days'      => null,
-            'backup_retention' => null
         ]);
 
         $fake = new FakeServerConnector;
@@ -52,15 +45,15 @@ class FetchServerDetailsTest extends TestCase
         $response->assertJson(['address' => '1.1.1.1']);
 
         tap($server->fresh(), function ($server) {
-            $this->assertNotNull($server->disk_used);
-            $this->assertNotNull($server->disk_available);
-            $this->assertNotNull($server->disk_total);
-            $this->assertNotNull($server->disk_percentage);
-            $this->assertNotNull($server->disk_last_updated);
-            $this->assertNotNull($server->backup_enabled);
-            $this->assertNotNull($server->backup_days);
-            $this->assertNotNull($server->backup_retention);
-            $this->assertNotNull($server->backup_last_updated);
+            $this->assertNotNull($server->getSetting('disk_used'));
+            $this->assertNotNull($server->getSetting('disk_available'));
+            $this->assertNotNull($server->getSetting('disk_total'));
+            $this->assertNotNull($server->getSetting('disk_percentage'));
+            $this->assertNotNull($server->getSetting('disk_last_updated'));
+            $this->assertNotNull($server->getSetting('backup_enabled'));
+            $this->assertNotNull($server->getSetting('backup_days'));
+            $this->assertNotNull($server->getSetting('backup_retention'));
+            $this->assertNotNull($server->getSetting('backup_last_updated'));
         });
     }
 }

@@ -104,13 +104,21 @@ class Server extends Model
     {
         $diskUsage = $serverConnector->getDiskUsage();
 
-        $this->update([
+        $this->setMultipleSettings([
             'disk_used' => $diskUsage['used'],
             'disk_available' => $diskUsage['available'],
             'disk_total' => $diskUsage['total'],
             'disk_percentage' => $diskUsage['percentage'],
             'disk_last_updated' => Carbon::now()
         ]);
+
+//        $this->update([
+//            'disk_used' => $diskUsage['used'],
+//            'disk_available' => $diskUsage['available'],
+//            'disk_total' => $diskUsage['total'],
+//            'disk_percentage' => $diskUsage['percentage'],
+//            'disk_last_updated' => Carbon::now()
+//        ]);
 
         return false;
     }
@@ -119,12 +127,19 @@ class Server extends Model
     {
         $backups = $serverConnector->getBackups();
 
-        $this->update([
+        $this->setMultipleSettings([
             'backup_enabled' => $backups['backupenable'],
             'backup_days' => $backups['backupdays'],
             'backup_retention' => $backups['backup_daily_retention'],
             'backup_last_updated' => Carbon::now()
         ]);
+
+//        $this->update([
+//            'backup_enabled' => $backups['backupenable'],
+//            'backup_days' => $backups['backupdays'],
+//            'backup_retention' => $backups['backup_daily_retention'],
+//            'backup_last_updated' => Carbon::now()
+//        ]);
 
         return false;
     }
