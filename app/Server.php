@@ -9,17 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 class Server extends Model
 {
     protected $guarded = [];
-    protected $with = ['settings'];
     protected $withCount = ['accounts'];
-    protected $casts = ['backup_enabled' => 'boolean'];
+    protected $casts = [
+        'backup_enabled' => 'boolean',
+        'settings' => 'json'
+    ];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
     protected $appends = [
         'formatted_server_type',
         'formatted_backup_days',
         'missing_token',
         'can_refresh_data',
-        'whm_url',
-        'settings'
+        'whm_url'
     ];
     protected $hidden = ['token'];
 
@@ -34,55 +35,12 @@ class Server extends Model
 
     public function settings()
     {
-        return $this->hasMany(Setting::class);
+        return new Settings($this->settings, $this);
     }
 
     public function accounts()
     {
         return $this->hasMany(Account::class);
-    }
-
-    public function getSetting($name)
-    {
-        if (array_key_exists($name, $this->settings)) {
-            return $this->settings[$name];
-        }
-
-        return null;
-    }
-
-    public function setSetting($name, $value)
-    {
-        if ($this->settings()->where('name', $name)->exists()) {
-            return $this->settings()->where('name', $name)->update([
-                'value' => $value
-            ]);
-        }
-
-        return $this->settings()->create([
-            'server_id' => $this->id,
-            'name' => $name,
-            'value' => $value
-        ]);
-    }
-
-    public function setMultipleSettings($settings)
-    {
-        foreach ($settings as $name => $value) {
-            $this->setSetting($name, $value);
-        }
-
-        return true;
-    }
-
-    public function removeSetting($name)
-    {
-        return $this->settings()->where('name', $name)->delete();
-    }
-
-    public function removeAllSettings()
-    {
-        return $this->settings()->delete();
     }
 
     public function addAccount($account)
@@ -104,7 +62,7 @@ class Server extends Model
     {
         $diskUsage = $serverConnector->getDiskUsage();
 
-        $this->setMultipleSettings([
+        $this->settings()->merge([
             'disk_used' => $diskUsage['used'],
             'disk_available' => $diskUsage['available'],
             'disk_total' => $diskUsage['total'],
@@ -127,7 +85,7 @@ class Server extends Model
     {
         $backups = $serverConnector->getBackups();
 
-        $this->setMultipleSettings([
+        $this->settings()->merge([
             'backup_enabled' => $backups['backupenable'],
             'backup_days' => $backups['backupdays'],
             'backup_retention' => $backups['backup_daily_retention'],
@@ -210,11 +168,6 @@ class Server extends Model
     public function scopeFilter($query, ServerFilters $filters)
     {
         return $filters->apply($query);
-    }
-
-    public function getSettingsAttribute()
-    {
-        return $this->settings()->pluck('value','name')->all();
     }
 
     public function getFormattedServerTypeAttribute()

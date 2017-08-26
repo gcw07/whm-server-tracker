@@ -7,6 +7,7 @@ $factory->define(App\Server::class, function (Faker $faker) {
         'name' => $faker->domainName,
         'address' => $faker->ipv4,
         'port' => '2087',
-        'server_type' => $faker->randomElement(['vps', 'dedicated', 'reseller'])
+        'server_type' => $faker->randomElement(['vps', 'dedicated', 'reseller']),
+        'settings' => []
     ];
 });

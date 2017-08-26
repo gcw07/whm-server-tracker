@@ -34,6 +34,8 @@ class ServersController extends Controller
             'token'       => ['nullable']
         ]);
 
+        $data['settings'] = [];
+
         $server = Server::create($data);
 
         return response()->json($server);

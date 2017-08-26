@@ -30,62 +30,62 @@ class ServerTest extends TestCase
     /** @test */
     public function a_server_can_add_a_setting()
     {
-        $this->server->setSetting('disk_used', 100000);
-        $this->server->setSetting('disk_available', 200000);
+        $this->server->settings()->set('disk_used', 100000);
+        $this->server->settings()->set('disk_available', 200000);
 
         $this->assertCount(2, $this->server->settings);
-        $this->assertEquals('100000', $this->server->getSetting('disk_used'));
+        $this->assertEquals('100000', $this->server->settings()->get('disk_used'));
     }
 
     /** @test */
     public function a_server_can_get_a_setting()
     {
-        $this->server->setSetting('disk_available', 200000);
+        $this->server->settings()->set('disk_available', 200000);
 
-        $this->assertEquals('200000', $this->server->getSetting('disk_available'));
+        $this->assertEquals('200000', $this->server->settings()->get('disk_available'));
     }
 
     /** @test */
     public function a_server_can_update_a_setting()
     {
-        $this->server->setSetting('disk_available', 200000);
-        $this->assertEquals('200000', $this->server->getSetting('disk_available'));
+        $this->server->settings()->set('disk_available', 200000);
+        $this->assertEquals('200000', $this->server->settings()->get('disk_available'));
 
-        $this->server->setSetting('disk_available', 500000);
-        $this->assertEquals('500000', $this->server->getSetting('disk_available'));
+        $this->server->settings()->set('disk_available', 500000);
+        $this->assertEquals('500000', $this->server->settings()->get('disk_available'));
     }
 
     /** @test */
     public function a_server_can_update_multiple_settings_at_once()
     {
-        $this->server->setMultipleSettings([
+        $this->server->settings()->merge([
             'disk_used' => 10000,
             'disk_available' => 200000
         ]);
 
-        $this->assertEquals('10000', $this->server->getSetting('disk_used'));
-        $this->assertEquals('200000', $this->server->getSetting('disk_available'));
+        $this->assertEquals('10000', $this->server->settings()->get('disk_used'));
+        $this->assertEquals('200000', $this->server->settings()->get('disk_available'));
     }
 
     /** @test */
     public function a_server_can_remove_a_setting()
     {
-        $this->server->setSetting('disk_available', 200000);
+        $this->server->settings()->set('disk_available', 200000);
         $this->assertCount(1, $this->server->settings);
 
-        $this->server->removeSetting('disk_available');
+        $this->server->settings()->forget('disk_available');
         $this->assertCount(0, $this->server->settings);
     }
 
     /** @test */
     public function a_server_can_remove_all_settings()
     {
-        $this->server->setSetting('disk_used', 10000);
-        $this->server->setSetting('disk_available', 200000);
+        $this->server->settings()->set('disk_used', 10000);
+        $this->server->settings()->set('disk_available', 200000);
 
         $this->assertCount(2, $this->server->settings);
 
-        $this->server->removeAllSettings();
+        $this->server->settings()->forgetAll();
 
         $this->assertCount(0, $this->server->settings);
     }

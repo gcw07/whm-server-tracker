@@ -21,6 +21,7 @@ class CreateServersTable extends Migration
             $table->string('server_type');
             $table->string('token')->nullable();
             $table->text('notes')->nullable();
+            $table->json('settings');
             $table->integer('disk_used')->nullable(); // in kilobytes
             $table->integer('disk_available')->nullable(); // in kilobytes
             $table->integer('disk_total')->nullable(); // in kilobytes

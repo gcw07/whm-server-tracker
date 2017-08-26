@@ -45,15 +45,15 @@ class FetchServerDetailsTest extends TestCase
         $response->assertJson(['address' => '1.1.1.1']);
 
         tap($server->fresh(), function ($server) {
-            $this->assertNotNull($server->getSetting('disk_used'));
-            $this->assertNotNull($server->getSetting('disk_available'));
-            $this->assertNotNull($server->getSetting('disk_total'));
-            $this->assertNotNull($server->getSetting('disk_percentage'));
-            $this->assertNotNull($server->getSetting('disk_last_updated'));
-            $this->assertNotNull($server->getSetting('backup_enabled'));
-            $this->assertNotNull($server->getSetting('backup_days'));
-            $this->assertNotNull($server->getSetting('backup_retention'));
-            $this->assertNotNull($server->getSetting('backup_last_updated'));
+            $this->assertNotNull($server->settings()->get('disk_used'));
+            $this->assertNotNull($server->settings()->get('disk_available'));
+            $this->assertNotNull($server->settings()->get('disk_total'));
+            $this->assertNotNull($server->settings()->get('disk_percentage'));
+            $this->assertNotNull($server->settings()->get('disk_last_updated'));
+            $this->assertNotNull($server->settings()->get('backup_enabled'));
+            $this->assertNotNull($server->settings()->get('backup_days'));
+            $this->assertNotNull($server->settings()->get('backup_retention'));
+            $this->assertNotNull($server->settings()->get('backup_last_updated'));
         });
     }
 }
