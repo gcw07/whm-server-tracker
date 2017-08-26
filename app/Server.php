@@ -10,10 +10,7 @@ class Server extends Model
 {
     protected $guarded = [];
     protected $withCount = ['accounts'];
-    protected $casts = [
-        'backup_enabled' => 'boolean',
-        'settings' => 'json'
-    ];
+    protected $casts = ['settings' => 'json'];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
     protected $appends = [
         'formatted_server_type',
