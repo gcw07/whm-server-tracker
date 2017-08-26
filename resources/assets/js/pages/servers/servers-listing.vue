@@ -55,12 +55,12 @@
                     <td>{{ item.formatted_server_type }}</td>
                     <td>{{ item.accounts_count }}</td>
                     <td>
-                        <span class="tag is-success is-rounded" v-if="item.backup_enabled">Yes</span>
-                        <span class="tag is-danger is-rounded" v-if="! item.backup_enabled">No</span>
+                        <span v-if="item.settings.backup_enabled" class="tag is-success is-rounded">Yes</span>
+                        <span v-else="" class="tag is-danger is-rounded">No</span>
                     </td>
                     <td>
-                        <span v-if="item.server_type != 'reseller'">{{ item.disk_percentage }}%</span>
-                        <span v-else>n/a</span>
+                        <span v-if="item.server_type != 'reseller'">{{ item.settings.disk_percentage }}%</span>
+                        <span v-else="">n/a</span>
                     </td>
                     <td>
                         <div class="field is-grouped is-pulled-right">
