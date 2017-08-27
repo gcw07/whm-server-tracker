@@ -1,7 +1,6 @@
 /**
- * We will load up lodash, moment and promise
+ * We will load up moment and promise
  */
-window._ = require('lodash');
 window.moment = require('moment');
 window.Promise = require('promise');
 
