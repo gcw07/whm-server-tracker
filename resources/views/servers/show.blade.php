@@ -18,7 +18,50 @@
     <div class="box">
         <!-- Main container -->
 
-        <h1 class="title is-4">{{ $server->name }}</h1>
+        <nav class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title is-4">{{ $server->name }}</h1>
+                </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <b-dropdown position="is-bottom-left">
+                        <button class="button" slot="trigger">
+                            <span class="icon">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </span>
+                        </button>
+
+                        <b-dropdown-item>
+                            <span class="icon is-small">
+                                <i class="fa fa-refresh"></i>
+                            </span>
+                            <span>Refresh Details</span>
+                        </b-dropdown-item>
+                        <b-dropdown-item>
+                            <span class="icon is-small">
+                                <i class="fa fa-refresh"></i>
+                            </span>
+                            <span>Refresh Accounts</span>
+                        </b-dropdown-item>
+                        <hr class="dropdown-divider">
+                        <b-dropdown-item>
+                            <span class="icon is-small">
+                                <i class="fa fa-pencil"></i>
+                            </span>
+                            <span>Edit</span>
+                        </b-dropdown-item>
+                        <b-dropdown-item>
+                            <span class="icon is-small">
+                                <i class="fa fa-trash"></i>
+                            </span>
+                            <span>Remove</span>
+                        </b-dropdown-item>
+                    </b-dropdown>
+                </div>
+            </div>
+        </nav>
 
         <hr>
 
@@ -49,9 +92,7 @@
             </div>
         </nav>
 
-        <h3 class="title is-5 has-text-centered mt-5 is-uppercase" style="color: #656565;">Disk Details</h3>
-
-        <hr class="mb-2">
+        <h3 class="title section-title has-text-centered mt-5 is-uppercase">Disk Details</h3>
 
         <nav class="level">
             <div class="level-item has-text-centered">
@@ -84,9 +125,7 @@
             </div>
         </nav>
 
-        <h3 class="title is-5 has-text-centered mt-5 is-uppercase" style="color: #656565;">Backup Details</h3>
-
-        <hr class="mb-2">
+        <h3 class="title section-title has-text-centered mt-5 is-uppercase">Backup Details</h3>
 
         <nav class="level">
             <div class="level-item has-text-centered">
@@ -117,30 +156,19 @@
             </div>
         </nav>
     </div>
+    @if ($server->notes)
     <div class="box">
-        <!-- Main container -->
         <div class="columns">
             <div class="column is-two-thirds">
-                <form>
-                    <div class="field" v-show="tokenHasBeenSet">
-                        <label class="label">API Token</label>
-                        <div class="control">
-                            <span style="line-height: 27px;">
-                                &bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;
-                            </span>
-                        </div>
+                <div class="field">
+                    <label class="label" for="notes">Notes</label>
+                    <div class="control">
+                        {{ $server->notes }}
                     </div>
-                    <div class="field">
-                        <label class="label" for="notes">Notes</label>
-                        <div class="control">
-                            {{ $server->notes }}
-                        </div>
-                    </div>
-                </form>
-
+                </div>
             </div>
         </div>
-
     </div>
+    @endif
 
 @endsection
