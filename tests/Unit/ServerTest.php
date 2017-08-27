@@ -269,6 +269,47 @@ class ServerTest extends TestCase
         $this->assertEquals('Dedicated', $serverB->formatted_server_type);
         $this->assertEquals('Reseller', $serverC->formatted_server_type);
     }
+    
+    /** @test */
+    public function can_get_formatted_disk_used()
+    {
+        $serverA = create('App\Server');
+        $serverA->settings()->set('disk_used', '16305616');
+
+        $serverB = create('App\Server');
+        $serverB->settings()->set('disk_used', '204800');
+
+        $serverC = create('App\Server');
+        $serverC->settings()->set('disk_used', '570');
+
+        $this->assertEquals('15.55 GB', $serverA->formatted_disk_used);
+        $this->assertEquals('200 MB', $serverB->formatted_disk_used);
+        $this->assertEquals('570 KB', $serverC->formatted_disk_used);
+    }
+
+    /** @test */
+    public function can_get_formatted_disk_available()
+    {
+        $serverA = create('App\Server');
+        $serverA->settings()->set('disk_available', '109523504');
+
+        $serverB = create('App\Server');
+
+        $this->assertEquals('104.45 GB', $serverA->formatted_disk_available);
+        $this->assertEquals('None', $serverB->formatted_disk_available);
+    }
+
+    /** @test */
+    public function can_get_formatted_disk_total()
+    {
+        $serverA = create('App\Server');
+        $serverA->settings()->set('disk_total', '125829120');
+
+        $serverB = create('App\Server');
+
+        $this->assertEquals('120 GB', $serverA->formatted_disk_total);
+        $this->assertEquals('None', $serverB->formatted_disk_total);
+    }
 
     /** @test */
     public function can_determine_a_missing_api_token()

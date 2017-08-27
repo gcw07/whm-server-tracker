@@ -15,6 +15,9 @@ class Server extends Model
     protected $appends = [
         'formatted_server_type',
         'formatted_backup_days',
+        'formatted_disk_used',
+        'formatted_disk_available',
+        'formatted_disk_total',
         'missing_token',
         'can_refresh_data',
         'whm_url'
@@ -167,7 +170,34 @@ class Server extends Model
             return 'None';
         }
 
-        return str_replace([0,1,2,3,4,5,6], ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], $this->settings()->backup_days);
+        return str_replace([0, 1, 2, 3, 4, 5, 6], ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], $this->settings()->backup_days);
+    }
+
+    public function getFormattedDiskUsedAttribute()
+    {
+        if (! $this->settings()->disk_used) {
+            return 'None';
+        }
+
+        return $this->formatFileSize($this->settings()->disk_used);
+    }
+
+    public function getFormattedDiskAvailableAttribute()
+    {
+        if (! $this->settings()->disk_available) {
+            return 'None';
+        }
+
+        return $this->formatFileSize($this->settings()->disk_available);
+    }
+
+    public function getFormattedDiskTotalAttribute()
+    {
+        if (! $this->settings()->disk_total) {
+            return 'None';
+        }
+
+        return $this->formatFileSize($this->settings()->disk_total);
     }
 
     public function getMissingTokenAttribute()
@@ -195,5 +225,29 @@ class Server extends Model
         }
 
         return "http://{$this->address}:{$this->port}";
+    }
+
+    private function formatFileSize($bytes)
+    {
+        if ($bytes >= 1073741824) {
+            $bytes = $this->trimTrailingZeroes(number_format($bytes / 1073741824, 2)) . ' TB';
+        } elseif ($bytes >= 1048576) {
+            $bytes = $this->trimTrailingZeroes(number_format($bytes / 1048576, 2)) . ' GB';
+        } elseif ($bytes >= 1024) {
+            $bytes = $this->trimTrailingZeroes(number_format($bytes / 1024, 2)) . ' MB';
+        } else {
+            $bytes = $bytes . ' KB';
+        }
+
+        return $bytes;
+    }
+
+    private function trimTrailingZeroes($number)
+    {
+        if (strpos($number, '.') !== false) {
+            $number = rtrim($number, '0');
+        }
+
+        return rtrim($number, '.');
     }
 }
