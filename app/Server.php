@@ -176,7 +176,7 @@ class Server extends Model
     public function getFormattedDiskUsedAttribute()
     {
         if (! $this->settings()->disk_used) {
-            return 'None';
+            return 'Unknown';
         }
 
         return $this->formatFileSize($this->settings()->disk_used);
@@ -185,7 +185,7 @@ class Server extends Model
     public function getFormattedDiskAvailableAttribute()
     {
         if (! $this->settings()->disk_available) {
-            return 'None';
+            return 'Unknown';
         }
 
         return $this->formatFileSize($this->settings()->disk_available);
@@ -194,7 +194,7 @@ class Server extends Model
     public function getFormattedDiskTotalAttribute()
     {
         if (! $this->settings()->disk_total) {
-            return 'None';
+            return 'Unknown';
         }
 
         return $this->formatFileSize($this->settings()->disk_total);
