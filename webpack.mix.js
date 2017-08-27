@@ -12,7 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['axios', 'buefy', 'lodash', 'moment', 'promise', 'vue'])
+    .extract(['axios', 'buefy', 'moment', 'promise', 'vue'])
     .sass('resources/assets/sass/app.scss', 'public/css');
 
 if (mix.config.inProduction) {
