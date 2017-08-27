@@ -60,9 +60,9 @@ class Server extends Model
         $diskUsage = $serverConnector->getDiskUsage();
 
         $this->settings()->merge([
-            'disk_used' => $diskUsage['used'],
-            'disk_available' => $diskUsage['available'],
-            'disk_total' => $diskUsage['total'],
+            'disk_used'       => $diskUsage['used'],
+            'disk_available'  => $diskUsage['available'],
+            'disk_total'      => $diskUsage['total'],
             'disk_percentage' => $diskUsage['percentage']
         ]);
 
@@ -74,8 +74,8 @@ class Server extends Model
         $backups = $serverConnector->getBackups();
 
         $this->settings()->merge([
-            'backup_enabled' => $backups['backupenable'],
-            'backup_days' => $backups['backupdays'],
+            'backup_enabled'   => $backups['backupenable'],
+            'backup_days'      => $backups['backupdays'],
             'backup_retention' => $backups['backup_daily_retention']
         ]);
 
