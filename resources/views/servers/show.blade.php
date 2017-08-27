@@ -57,31 +57,19 @@
             <div class="level-item has-text-centered">
                 <div>
                     <p class="heading">Disk Used</p>
-                    @if ($server->settings()->disk_used)
-                        <p class="title is-4">{{ $server->settings()->disk_used }}</p>
-                    @else
-                        <p class="title is-4">Unknown</p>
-                    @endif
+                    <p class="title is-4">{{ $server->formatted_disk_used }}</p>
                 </div>
             </div>
             <div class="level-item has-text-centered">
                 <div>
                     <p class="heading">Disk Available</p>
-                    @if ($server->settings()->disk_available)
-                        <p class="title is-4">{{ $server->settings()->disk_available }}</p>
-                    @else
-                        <p class="title is-4">Unknown</p>
-                    @endif
+                    <p class="title is-4">{{ $server->formatted_disk_available }}</p>
                 </div>
             </div>
             <div class="level-item has-text-centered">
                 <div>
                     <p class="heading">Disk Total</p>
-                    @if ($server->settings()->disk_total)
-                        <p class="title is-4">{{ $server->settings()->disk_total }}</p>
-                    @else
-                        <p class="title is-4">Unknown</p>
-                    @endif
+                    <p class="title is-4">{{ $server->formatted_disk_total }}</p>
                 </div>
             </div>
             <div class="level-item has-text-centered">
