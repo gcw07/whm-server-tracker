@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
     Route::get('/', 'ServersController@index')->name('servers.index');
     Route::delete('/{server}', 'ServersController@destroy')->name('servers.destroy');
     Route::put('/{server}', 'ServersController@update')->name('servers.update');
-//    Route::get('/{server}', 'ServersController@show')->name('servers.show');
+    Route::get('/{server}', 'ServersController@show')->name('servers.show');
     Route::get('/{server}/edit', 'ServersController@edit')->name('servers.edit');
 
     Route::put('/{server}/token', 'ServersTokenController@update')->name('servers.token');
