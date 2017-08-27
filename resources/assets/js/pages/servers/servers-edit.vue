@@ -2,7 +2,7 @@
     <div class="box">
         <!-- Main container -->
 
-        <h1 class="title is-5">{{ serverData.name }}</h1>
+        <h1 class="title is-4">{{ serverData.name }}</h1>
 
         <hr>
 
