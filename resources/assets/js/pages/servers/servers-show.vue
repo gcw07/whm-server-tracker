@@ -140,6 +140,29 @@
                     </div>
                 </div>
             </nav>
+
+            <h3 class="title section-title has-text-centered mt-5 is-uppercase">Updated On</h3>
+
+            <nav class="level">
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Details Last Updated</p>
+                        <p v-if="serverData.details_last_updated" class="title is-4">
+                            {{ serverData.details_last_updated | relative }}
+                        </p>
+                        <p v-else="" class="title is-4">Unknown</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Accounts Last Updated</p>
+                        <p v-if="serverData.accounts_last_updated" class="title is-4">
+                            {{ serverData.accounts_last_updated | relative }}
+                        </p>
+                        <p v-else="" class="title is-4">Unknown</p>
+                    </div>
+                </div>
+            </nav>
         </div>
         <div class="box" v-if="serverData.notes">
             <div class="columns">
@@ -200,6 +223,7 @@
                     })
                     .then(response => {
                         this.serverData.accounts_count = response.data.accounts_count;
+                        this.serverData.accounts_last_updated = response.data.accounts_last_updated;
 
                         this.$toast.open({
                             message: 'Server Accounts Refreshed',
@@ -226,6 +250,9 @@
                 this.serverData.formatted_disk_available = data.formatted_disk_available;
                 this.serverData.formatted_disk_total = data.formatted_disk_total;
                 this.serverData.formatted_backup_days = data.formatted_backup_days;
+
+                this.serverData.details_last_updated = data.details_last_updated;
+                this.serverData.accounts_last_updated = data.accounts_last_updated;
             },
 
             deleteServer() {
