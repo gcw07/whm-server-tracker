@@ -179,7 +179,7 @@
                     if (this.items) {
                         this.fetch();
                     }
-                    
+
                     this.saveState();
                 },
                 deep: true
