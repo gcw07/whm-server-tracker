@@ -37,6 +37,16 @@ table.is-aligned-center tbody td {
   justify-content: flex-end;
 }
 
+.level-filter {
+  color: #205081;
+  cursor: pointer;
+}
+
+.level-active {
+  color: #363636;
+  font-weight: 700;
+}
+
 .section-title {
   color: #656565;
   border-bottom: dashed 1px #656565;
