@@ -179,22 +179,7 @@
                         });
                     })
                     .then(response => {
-                        if (this.serverData.settings.length === 0) {
-                            this.serverData.settings = {
-                                disk_percentage: response.data.settings.disk_percentage,
-                                backup_enabled: response.data.settings.backup_enabled,
-                                backup_retention: response.data.settings.backup_retention,
-                            };
-                        } else {
-                            this.serverData.settings.disk_percentage = response.data.settings.disk_percentage;
-                            this.serverData.settings.backup_enabled = response.data.settings.backup_enabled;
-                            this.serverData.settings.backup_retention = response.data.settings.backup_retention;
-                        }
-
-                        this.serverData.formatted_disk_used = response.data.formatted_disk_used;
-                        this.serverData.formatted_disk_available = response.data.formatted_disk_available;
-                        this.serverData.formatted_disk_total = response.data.formatted_disk_total;
-                        this.serverData.formatted_backup_days = response.data.formatted_backup_days;
+                        this.updatePageData(response.data);
 
                         this.$toast.open({
                             message: 'Server Details Refreshed',
@@ -222,6 +207,25 @@
                             duration: 4000
                         });
                     });
+            },
+
+            updatePageData(data) {
+                if (this.serverData.settings.length === 0) {
+                    this.serverData.settings = {
+                        disk_percentage: data.settings.disk_percentage,
+                        backup_enabled: data.settings.backup_enabled,
+                        backup_retention: data.settings.backup_retention,
+                    };
+                } else {
+                    this.serverData.settings.disk_percentage = data.settings.disk_percentage;
+                    this.serverData.settings.backup_enabled = data.settings.backup_enabled;
+                    this.serverData.settings.backup_retention = data.settings.backup_retention;
+                }
+
+                this.serverData.formatted_disk_used = data.formatted_disk_used;
+                this.serverData.formatted_disk_available = data.formatted_disk_available;
+                this.serverData.formatted_disk_total = data.formatted_disk_total;
+                this.serverData.formatted_backup_days = data.formatted_backup_days;
             },
 
             deleteServer() {
