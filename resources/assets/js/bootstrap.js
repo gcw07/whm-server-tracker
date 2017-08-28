@@ -45,6 +45,11 @@ if (token) {
 }
 
 /**
+ * Define the Vue directives.
+ */
+require('./utilities/directives');
+
+/**
  * Define the Vue filters.
  */
 require('./utilities/filters');
