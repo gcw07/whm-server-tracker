@@ -12,10 +12,26 @@
 
                 <!-- Right side -->
                 <div class="level-right">
-                    <p class="level-item" v-html="filterText('all')" @click="filterBy('all')"></p>
-                    <p class="level-item" v-html="filterText('dedicated')" @click="filterBy('dedicated')"></p>
-                    <p class="level-item" v-html="filterText('reseller')" @click="filterBy('reseller')"></p>
-                    <p class="level-item" v-html="filterText('vps')" @click="filterBy('vps')"></p>
+                    <p class="level-item level-filter"
+                       :class="{'level-active': filters.type == 'all'}"
+                       @click="filterBy('all')">
+                        All
+                    </p>
+                    <p class="level-item level-filter"
+                       :class="{'level-active': filters.type == 'dedicated'}"
+                       @click="filterBy('dedicated')">
+                        Dedicated
+                    </p>
+                    <p class="level-item level-filter"
+                       :class="{'level-active': filters.type == 'reseller'}"
+                       @click="filterBy('reseller')">
+                        Reseller
+                    </p>
+                    <p class="level-item level-filter"
+                       :class="{'level-active': filters.type == 'vps'}"
+                       @click="filterBy('vps')">
+                        VPS
+                    </p>
                     <p class="level-item ml-2">
                         <button class="button" @click="isNewServerModalActive = true">
                             <span class="icon is-small">
@@ -128,6 +144,8 @@
 <script>
     import NewServer from '../../components/NewServer'
     import Form from '../../forms/form';
+    import ExpiringStorage from '../../utilities/expiring-storage';
+    import pick from 'lodash/pick';
 
     export default {
         components: {
@@ -136,27 +154,44 @@
 
         data() {
             return {
-                deleteForm: new Form({}),
-                filterSelected: 'all',
                 items: false,
                 isNewServerModalActive: false,
-                filters: null,
+                deleteForm: new Form({}),
+
+                filters: {type: 'all'},
+
+                cacheLifetime: 5,
+                storageKey: 'servers-listing'
             };
         },
 
         created() {
+            this.restoreState();
+        },
+
+        mounted() {
             this.fetch();
+        },
+
+        watch: {
+            filters: {
+                handler() {
+                    this.fetch();
+                    this.saveState();
+                },
+                deep: true
+            }
         },
 
         methods: {
             fetch() {
-                if (this.filterSelected != 'all') {
-                    this.filters = {type: this.filterSelected};
-                } else {
-                    this.filters = null;
+                let filters = this.filters;
+
+                if (this.filters.type == 'all') {
+                    filters = null;
                 }
 
-                axios.get('/api/servers', {params: this.filters})
+                axios.get('/api/servers', {params: filters})
                     .then(response => this.items = response.data);
             },
 
@@ -229,27 +264,9 @@
                 })
             },
 
-            getFilterText(filter) {
-                if (filter == 'all') return 'All';
-                if (filter == 'dedicated') return 'Dedicated';
-                if (filter == 'reseller') return 'Reseller';
-                if (filter == 'vps') return 'VPS';
-            },
-
-            filterBy(filter) {
-                if (filter == this.filterSelected) return;
-
-                this.filterSelected = filter;
-                this.fetch();
-            },
-
-            filterText(filter) {
-                let text = this.getFilterText(filter);
-                if (this.filterSelected == filter) {
-                    return `<strong>${text}</strong>`;
-                }
-
-                return `<a>${text}</a>`;
+            filterBy(type) {
+                if (this.filters.type == type) return;
+                this.filters.type = type;
             },
 
             serverAccountsUrl(item) {
@@ -281,7 +298,21 @@
                     default:
                         break;
                 }
-            }
+            },
+
+            saveState() {
+                ExpiringStorage.set(this.storageKey, pick(this.$data, ['filters']), this.cacheLifetime);
+            },
+
+            restoreState() {
+                const previousState = ExpiringStorage.get(this.storageKey);
+                if (previousState === null) {
+                    return;
+                }
+
+                this.filters = previousState.filters;
+                this.saveState();
+            },
         }
 
     }
