@@ -15,6 +15,7 @@
                                name="name"
                                placeholder="Server Name"
                                v-model="form.name"
+                               v-focus
                                required>
                     </div>
                     <p class="help is-danger" v-show="form.errors.has('name')">

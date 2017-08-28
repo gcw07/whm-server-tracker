@@ -13,6 +13,7 @@
                                class="input"
                                name="token"
                                v-model="form.token"
+                               v-focus
                                required>
                     </div>
                     <p class="help">
