@@ -14,34 +14,38 @@
                     <div class="level-item">
                         <b-dropdown position="is-bottom-left">
                             <button class="button" slot="trigger">
-                            <span class="icon">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </span>
+                                <span class="icon">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </span>
                             </button>
 
-                            <b-dropdown-item>
-                            <span class="icon is-small">
-                                <i class="fa fa-refresh"></i>
-                            </span>
+                            <b-dropdown-item :disabled="!serverData.can_refresh_data"
+                                             @click="menuAction('refresh.details')">
+                                <span class="icon is-small">
+                                    <i class="fa fa-refresh"></i>
+                                </span>
                                 <span>Refresh Details</span>
                             </b-dropdown-item>
-                            <b-dropdown-item>
-                            <span class="icon is-small">
-                                <i class="fa fa-refresh"></i>
-                            </span>
+                            <b-dropdown-item :disabled="!serverData.can_refresh_data"
+                                             @click="menuAction('refresh.accounts')">
+                                <span class="icon is-small">
+                                    <i class="fa fa-refresh"></i>
+                                </span>
                                 <span>Refresh Accounts</span>
                             </b-dropdown-item>
+
                             <hr class="dropdown-divider">
-                            <b-dropdown-item>
-                            <span class="icon is-small">
-                                <i class="fa fa-pencil"></i>
-                            </span>
+
+                            <b-dropdown-item @click="menuAction('edit')">
+                                <span class="icon is-small">
+                                    <i class="fa fa-pencil"></i>
+                                </span>
                                 <span>Edit</span>
                             </b-dropdown-item>
-                            <b-dropdown-item>
-                            <span class="icon is-small">
-                                <i class="fa fa-trash"></i>
-                            </span>
+                            <b-dropdown-item @click="menuAction('remove')">
+                                <span class="icon is-small">
+                                    <i class="fa fa-trash"></i>
+                                </span>
                                 <span>Remove</span>
                             </b-dropdown-item>
                         </b-dropdown>
@@ -159,71 +163,102 @@
 
         data() {
             return {
-                clearTokenForm: new Form({}),
-                form: new Form({
-                    name: this.data.name,
-                    address: this.data.address,
-                    port: this.data.port,
-                    server_type: this.data.server_type,
-                    notes: this.data.notes
-                }),
-                isTokenModalActive: false,
+                deleteForm: new Form({}),
                 serverData: this.data,
             };
         },
 
-        computed: {
-            tokenHasBeenSet() {
-                if (! this.serverData.missing_token && this.serverData.server_type != 'reseller') {
-                    return true;
-                }
-
-                return false;
-            }
-        },
-
         methods: {
-            save() {
-                this.form.preserveForm().put(`/servers/${this.serverData.id}`)
+            refreshDetails() {
+                axios.get(`/servers/${this.serverData.id}/fetch-details`)
+                    .catch(error => {
+                        this.$toast.open({
+                            message: error.response.data.message,
+                            type: 'is-danger',
+                            duration: 6000
+                        });
+                    })
                     .then(response => {
-                        this.serverData = response;
+                        if (this.serverData.settings.length === 0) {
+                            this.serverData.settings = {
+                                disk_percentage: response.data.settings.disk_percentage,
+                                backup_enabled: response.data.settings.backup_enabled,
+                            };
+                        } else {
+                            this.serverData.settings.disk_percentage = response.data.settings.disk_percentage;
+                            this.serverData.settings.backup_enabled = response.data.settings.backup_enabled;
+                        }
 
                         this.$toast.open({
-                            message: 'Changes saved',
+                            message: 'Server Details Refreshed',
                             type: 'is-success',
                             duration: 4000
                         });
                     });
             },
 
-            tokenHasBeenSaved() {
-                this.serverData.missing_token = false;
+            refreshAccounts() {
+                axios.get(`/servers/${this.serverData.id}/fetch-accounts`)
+                    .catch(error => {
+                        this.$toast.open({
+                            message: error.response.data.message,
+                            type: 'is-danger',
+                            duration: 6000
+                        });
+                    })
+                    .then(response => {
+                        this.serverData.accounts_count = response.data.accounts_count;
 
-                this.$toast.open({
-                    message: 'Token saved',
-                    type: 'is-success',
-                    duration: 4000
-                });
+                        this.$toast.open({
+                            message: 'Server Accounts Refreshed',
+                            type: 'is-success',
+                            duration: 4000
+                        });
+                    });
             },
 
-            clearToken() {
+            deleteServer() {
                 this.$dialog.confirm({
-                    message: 'Are you sure you want to <strong>clear</strong> the api token? This action can not be undone.',
-                    confirmText: 'Clear Token',
+                    message: 'Are you sure you want to <strong>remove</strong> this server? All accounts associated will also be removed. This action can not be undone.',
+                    title: this.serverData.name,
+                    confirmText: 'Remove Server',
                     type: 'is-danger',
                     onConfirm: () => {
-                        this.clearTokenForm.delete(`/servers/${this.serverData.id}/token`)
+                        this.deleteForm.delete(`/servers/${this.serverData.id}`)
                             .then(response => {
-                                this.serverData.missing_token = true;
-
                                 this.$toast.open({
-                                    message: 'Token cleared',
+                                    message: 'Server Removed Successfully',
                                     type: 'is-success',
                                     duration: 4000
                                 });
+
+                                window.location.href = '/servers';
                             });
                     }
                 })
+            },
+
+            menuAction(action) {
+                switch (action) {
+                    case 'refresh.details':
+                        this.refreshDetails();
+                        break;
+
+                    case 'refresh.accounts':
+                        this.refreshAccounts();
+                        break;
+
+                    case 'edit':
+                        window.location.href = `/servers/${this.serverData.id}/edit`;
+                        break;
+
+                    case 'remove':
+                        this.deleteServer();
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
