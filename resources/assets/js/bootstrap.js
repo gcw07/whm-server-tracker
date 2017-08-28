@@ -44,9 +44,7 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-
 /**
- * Load the Laravel form utilities.
+ * Define the Vue filters.
  */
-// require('./forms/bootstrap');
-
+require('./utilities/filters');
