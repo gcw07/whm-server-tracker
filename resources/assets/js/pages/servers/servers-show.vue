@@ -183,11 +183,18 @@
                             this.serverData.settings = {
                                 disk_percentage: response.data.settings.disk_percentage,
                                 backup_enabled: response.data.settings.backup_enabled,
+                                backup_retention: response.data.settings.backup_retention,
                             };
                         } else {
                             this.serverData.settings.disk_percentage = response.data.settings.disk_percentage;
                             this.serverData.settings.backup_enabled = response.data.settings.backup_enabled;
+                            this.serverData.settings.backup_retention = response.data.settings.backup_retention;
                         }
+
+                        this.serverData.formatted_disk_used = response.data.formatted_disk_used;
+                        this.serverData.formatted_disk_available = response.data.formatted_disk_available;
+                        this.serverData.formatted_disk_total = response.data.formatted_disk_total;
+                        this.serverData.formatted_backup_days = response.data.formatted_backup_days;
 
                         this.$toast.open({
                             message: 'Server Details Refreshed',
