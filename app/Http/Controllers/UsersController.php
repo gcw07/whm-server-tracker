@@ -86,6 +86,10 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
+        if ($user->id === auth()->user()->id) {
+            return response(['message' => 'You may not delete yourself.'], 422);
+        }
+
         $user->delete();
 
         return response([], 204);

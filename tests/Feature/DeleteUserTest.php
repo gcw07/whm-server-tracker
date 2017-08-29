@@ -37,4 +37,19 @@ class DeleteUserTest extends TestCase
         $response->assertStatus(204);
         $this->assertEquals(1, User::count());
     }
+
+    /** @test */
+    public function an_authorized_user_cannot_delete_themselves()
+    {
+        $user = create('App\User', [
+            'name' => 'John Doe'
+        ]);
+
+        $this->signIn($user);
+
+        $response = $this->deleteJson("/users/{$user->id}");
+
+        $response->assertStatus(422);
+        $this->assertEquals(1, User::count());
+    }
 }
