@@ -80,4 +80,87 @@ class UpdateUserTest extends TestCase
             $this->assertEquals('jane@example.com', $user->email);
         });
     }
+
+    /** @test */
+    public function name_is_required()
+    {
+        $this->signIn();
+
+        $user = create('App\User', [
+            'name' => 'John Doe',
+        ]);
+
+        $response = $this->putJson("/users/{$user->id}", $this->validParams([
+            'name' => '',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonHasErrors('name');
+
+        tap($user->fresh(), function ($user) {
+            $this->assertEquals('John Doe', $user->name);
+        });
+    }
+
+    /** @test */
+    public function email_is_required()
+    {
+        $this->signIn();
+
+        $user = create('App\User', [
+            'email' => 'john@example.com',
+        ]);
+
+        $response = $this->putJson("/users/{$user->id}", $this->validParams([
+            'email' => '',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonHasErrors('email');
+
+        tap($user->fresh(), function ($user) {
+            $this->assertEquals('john@example.com', $user->email);
+        });
+    }
+
+    /** @test */
+    public function email_must_be_a_valid_email()
+    {
+        $this->signIn();
+
+        $user = create('App\User', [
+            'email' => 'john@example.com',
+        ]);
+
+        $response = $this->putJson("/users/{$user->id}", $this->validParams([
+            'email' => 'johnexample.com',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonHasErrors('email');
+
+        tap($user->fresh(), function ($user) {
+            $this->assertEquals('john@example.com', $user->email);
+        });
+    }
+
+    /** @test */
+    public function email_must_be_unique()
+    {
+        $this->signIn();
+
+        $userA = create('App\User', ['email' => 'grant@example.com']);
+        $userB = create('App\User', ['email' => 'john@example.com']);
+
+        $response = $this->putJson("/users/{$userA->id}", $this->validParams([
+            'email' => 'john@example.com',
+        ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonHasErrors('email');
+
+        tap($userA->fresh(), function ($user) {
+            $this->assertEquals('grant@example.com', $user->email);
+        });
+    }
 }
