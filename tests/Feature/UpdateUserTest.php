@@ -163,4 +163,22 @@ class UpdateUserTest extends TestCase
             $this->assertEquals('grant@example.com', $user->email);
         });
     }
+
+    /** @test */
+    public function email_can_be_the_same_for_the_same_user()
+    {
+        $this->signIn();
+
+        $userA = create('App\User', ['email' => 'grant@example.com']);
+
+        $response = $this->putJson("/users/{$userA->id}", $this->validParams([
+            'email' => 'grant@example.com',
+        ]));
+
+        $response->assertStatus(200);
+
+        tap($userA->fresh(), function ($user) {
+            $this->assertEquals('grant@example.com', $user->email);
+        });
+    }
 }

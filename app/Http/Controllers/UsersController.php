@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -69,7 +70,7 @@ class UsersController extends Controller
     {
         $data = $this->validate($request, [
             'name'  => ['required', 'string', 'max:191'],
-            'email' => ['required', 'string', 'email', 'max:191', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:191', Rule::unique('users')->ignore($user->id)],
         ]);
 
         $user->update($data);
