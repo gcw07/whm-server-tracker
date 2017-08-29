@@ -14,4 +14,6 @@
         </div>
     </div>
 
+    <users-listing></users-listing>
+
 @endsection
