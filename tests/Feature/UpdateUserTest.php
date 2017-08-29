@@ -75,6 +75,8 @@ class UpdateUserTest extends TestCase
             'email' => 'jane@example.com'
         ]));
 
+        $response->assertStatus(200);
+
         tap($user->fresh(), function ($user) {
             $this->assertEquals('Jane Doe', $user->name);
             $this->assertEquals('jane@example.com', $user->email);
