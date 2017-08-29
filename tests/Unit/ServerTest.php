@@ -296,7 +296,7 @@ class ServerTest extends TestCase
         $serverB = create('App\Server');
 
         $this->assertEquals('104.45 GB', $serverA->formatted_disk_available);
-        $this->assertEquals('None', $serverB->formatted_disk_available);
+        $this->assertEquals('Unknown', $serverB->formatted_disk_available);
     }
 
     /** @test */
@@ -308,7 +308,7 @@ class ServerTest extends TestCase
         $serverB = create('App\Server');
 
         $this->assertEquals('120 GB', $serverA->formatted_disk_total);
-        $this->assertEquals('None', $serverB->formatted_disk_total);
+        $this->assertEquals('Unknown', $serverB->formatted_disk_total);
     }
 
     /** @test */
