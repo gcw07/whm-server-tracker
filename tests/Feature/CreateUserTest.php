@@ -13,10 +13,9 @@ class CreateUserTest extends TestCase
     private function validParams($overrides = [])
     {
         return array_merge([
-            'name'             => 'Grant Williams',
-            'email'            => 'grant@example.com',
-            'password'         => 'secret',
-            'confirm_password' => 'secret'
+            'name'     => 'Grant Williams',
+            'email'    => 'grant@example.com',
+            'password' => 'secret',
         ], $overrides);
     }
 
