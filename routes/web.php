@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'accounts'], function () {
 // User Routes...
 Route::group(['middleware' => 'auth', 'prefix' => 'users'], function () {
     Route::post('/', 'UsersController@store')->name('users.store');
-//    Route::get('/', 'UsersController@index')->name('users.index');
+    Route::get('/', 'UsersController@index')->name('users.index');
 //    Route::delete('/{user}', 'UsersController@destroy')->name('users.destroy');
     Route::put('/{user}', 'UsersController@update')->name('users.update');
 //    Route::get('/{user}', 'UsersController@show')->name('users.show');
@@ -58,4 +58,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
     Route::get('/servers', 'Api\ServersListingsController@index')->name('servers.listing');
     Route::get('/accounts', 'Api\AccountsListingsController@index')->name('accounts.listing');
     Route::get('/accounts/{server}', 'Api\AccountsListingsController@index')->name('accounts.server-listing');
+    Route::get('/users', 'Api\UsersListingsController@index')->name('users.listing');
 });
