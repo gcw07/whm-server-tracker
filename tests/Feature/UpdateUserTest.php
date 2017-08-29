@@ -13,18 +13,16 @@ class UpdateUserTest extends TestCase
     private function oldAttributes($overrides = [])
     {
         return array_merge([
-            'name'     => 'Old Name',
-            'email'    => 'old@example.com',
-            'password' => 'old-password',
+            'name'  => 'Old Name',
+            'email' => 'old@example.com',
         ], $overrides);
     }
 
     private function validParams($overrides = [])
     {
         return array_merge([
-            'name'     => 'New Name',
-            'email'    => 'new@example.com',
-            'password' => 'new-password',
+            'name'  => 'New Name',
+            'email' => 'new@example.com',
         ], $overrides);
     }
 
