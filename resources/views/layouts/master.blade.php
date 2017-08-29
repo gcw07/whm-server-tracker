@@ -97,7 +97,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="{{ $menu == 'users' ? ' is-active' : '' }}" href="#">
+                                    <a class="{{ $menu == 'users' ? ' is-active' : '' }}" href="{{ route('users.index') }}">
                                         <span class="icon is-small">
                                             <i class="fa fa-users"></i>
                                         </span>
