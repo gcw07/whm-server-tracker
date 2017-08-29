@@ -55,7 +55,7 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('users.edit', compact('user'));
     }
 
     /**
@@ -67,7 +67,14 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $data = $this->validate($request, [
+            'name'  => ['required', 'string', 'max:191'],
+            'email' => ['required', 'string', 'email', 'max:191', 'unique:users'],
+        ]);
+
+        $user->update($data);
+
+        return response()->json($user);
     }
 
     /**
