@@ -20,6 +20,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 });
 
+// Account Routes...
+Route::group(['middleware' => 'auth', 'prefix' => 'accounts'], function () {
+    Route::get('/', 'AccountsController@index')->name('accounts.index');
+    Route::get('/{server}', 'AccountsController@index')->name('accounts.server-index');
+//    Route::get('/{account}', 'AccountsController@show')->name('accounts.show');
+});
+
 // Server Routes...
 Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
     Route::post('/', 'ServersController@store')->name('servers.store');
@@ -36,13 +43,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
     Route::get('/{server}/fetch-accounts', 'FetchAccountsController@update')->name('servers.fetch-accounts');
 });
 
-// Account Routes...
-Route::group(['middleware' => 'auth', 'prefix' => 'accounts'], function () {
-    Route::get('/', 'AccountsController@index')->name('accounts.index');
-    Route::get('/{server}', 'AccountsController@index')->name('accounts.server-index');
-//    Route::get('/{account}', 'AccountsController@show')->name('accounts.show');
-});
-
 // User Routes...
 Route::group(['middleware' => 'auth', 'prefix' => 'users'], function () {
     Route::post('/', 'UsersController@store')->name('users.store');
@@ -55,8 +55,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'users'], function () {
 
 // API Routes...
 Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
-    Route::get('/servers', 'Api\ServersListingsController@index')->name('servers.listing');
     Route::get('/accounts', 'Api\AccountsListingsController@index')->name('accounts.listing');
     Route::get('/accounts/{server}', 'Api\AccountsListingsController@index')->name('accounts.server-listing');
+    Route::get('/servers', 'Api\ServersListingsController@index')->name('servers.listing');
     Route::get('/users', 'Api\UsersListingsController@index')->name('users.listing');
 });
