@@ -89,9 +89,9 @@ class CreateUserTest extends TestCase
     /** @test */
     public function email_must_be_unique()
     {
-        $this->signIn();
+        $user = create('App\User', ['email' => 'grant@example.com']);
 
-        $userA = create('App\User', ['email' => 'grant@example.com']);
+        $this->signIn($user);
 
         $response = $this->postJson('/users', $this->validParams([
             'email' => 'grant@example.com',
@@ -99,7 +99,7 @@ class CreateUserTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonHasErrors('email');
-        $this->assertEquals(2, User::count());
+        $this->assertEquals(1, User::count());
     }
 
     /** @test */
