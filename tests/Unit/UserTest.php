@@ -25,7 +25,7 @@ class UserTest extends TestCase
     {
         $user = make('App\User', [
             'name'     => 'John Doe',
-            'password' => 'secret'
+            'password' => bcrypt('secret')
         ]);
 
         $this->assertNotEquals('secret', $user->password);

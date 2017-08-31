@@ -36,14 +36,4 @@ class User extends Authenticatable
     {
         $this->attributes['email'] = strtolower($value);
     }
-
-    /**
-     * Set the user's password to be encrypted.
-     *
-     * @param $value
-     */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
 }
