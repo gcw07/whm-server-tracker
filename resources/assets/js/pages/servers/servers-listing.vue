@@ -200,13 +200,6 @@
 
             refreshDetails(item) {
                 axios.get(`/servers/${item.id}/fetch-details`)
-                    .catch(error => {
-                        this.$toast.open({
-                            message: error.response.data.message,
-                            type: 'is-danger',
-                            duration: 6000
-                        });
-                    })
                     .then(response => {
                         if (item.settings.length === 0) {
                             item.settings = {
@@ -223,18 +216,18 @@
                             type: 'is-success',
                             duration: 4000
                         });
-                    });
-            },
-
-            refreshAccounts(item) {
-                axios.get(`/servers/${item.id}/fetch-accounts`)
+                    })
                     .catch(error => {
                         this.$toast.open({
                             message: error.response.data.message,
                             type: 'is-danger',
                             duration: 6000
                         });
-                    })
+                    });
+            },
+
+            refreshAccounts(item) {
+                axios.get(`/servers/${item.id}/fetch-accounts`)
                     .then(response => {
                         item.accounts_count = response.data.accounts_count;
 
@@ -242,6 +235,13 @@
                             message: 'Server Accounts Refreshed',
                             type: 'is-success',
                             duration: 4000
+                        });
+                    })
+                    .catch(error => {
+                        this.$toast.open({
+                            message: error.response.data.message,
+                            type: 'is-danger',
+                            duration: 6000
                         });
                     });
             },
