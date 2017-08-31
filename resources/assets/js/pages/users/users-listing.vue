@@ -50,6 +50,12 @@
                                         </span>
                                     </button>
 
+                                    <b-dropdown-item @click="menuAction('password', item)">
+                                        <span class="icon is-small">
+                                            <i class="fa fa-lock"></i>
+                                        </span>
+                                        <span>Change Password</span>
+                                    </b-dropdown-item>
                                     <b-dropdown-item @click="menuAction('edit', item)">
                                         <span class="icon is-small">
                                             <i class="fa fa-pencil"></i>
@@ -136,6 +142,10 @@
 
             menuAction(action, item) {
                 switch (action) {
+                    case 'password':
+                        window.location.href = `/users/${item.id}/change-password`;
+                        break;
+
                     case 'edit':
                         window.location.href = `/users/${item.id}/edit`;
                         break;
