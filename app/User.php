@@ -28,6 +28,16 @@ class User extends Authenticatable
     ];
 
     /**
+     * Set the user's email to be lowercase.
+     *
+     * @param $value
+     */
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
+
+    /**
      * Set the user's password to be encrypted.
      *
      * @param $value

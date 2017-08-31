@@ -10,6 +10,17 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function email_address_should_be_lowercase()
+    {
+        $user = make('App\User', [
+            'name'  => 'John Doe',
+            'email' => 'JOHN@example.COM'
+        ]);
+
+        $this->assertEquals('john@example.com', $user->email);
+    }
+
+    /** @test */
     public function the_password_should_be_encrypted()
     {
         $user = make('App\User', [
