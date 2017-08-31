@@ -15,7 +15,7 @@ class LoginTest extends TestCase
     {
         $user = create('App\User', [
             'email' => 'john@example.com',
-            'password' => bcrypt('super-secret-password'),
+            'password' => 'super-secret-password',
         ]);
 
         $response = $this->post('/login', [
@@ -34,7 +34,7 @@ class LoginTest extends TestCase
     {
         $user = create('App\User', [
             'email' => 'john@example.com',
-            'password' => bcrypt('super-secret-password'),
+            'password' => 'super-secret-password',
         ]);
 
         $response = $this->post('/login', [
