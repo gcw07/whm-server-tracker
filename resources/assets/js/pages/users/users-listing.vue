@@ -122,6 +122,13 @@
                                     type: 'is-success',
                                     duration: 4000
                                 });
+                            })
+                            .catch(error => {
+                                this.$toast.open({
+                                    message: error.message,
+                                    type: 'is-danger',
+                                    duration: 6000
+                                });
                             });
                     }
                 })
