@@ -93,6 +93,6 @@ class LoginTest extends TestCase
         $this->assertTrue(Auth::check());
         $this->assertTrue(Auth::user()->is($user));
         $this->assertNotNull(Auth::user()->last_login_at);
-        $this->assertNotNull(Auth::user()->last_ip_address);
+        $this->assertNotNull(Auth::user()->last_login_ip_address);
     }
 }

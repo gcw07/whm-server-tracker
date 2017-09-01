@@ -48,8 +48,8 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         $user->update([
-            'last_login_at'   => $user->freshTimestamp(),
-            'last_ip_address' => $request->getClientIp()
+            'last_login_at'         => $user->freshTimestamp(),
+            'last_login_ip_address' => $request->getClientIp()
         ]);
     }
 }
