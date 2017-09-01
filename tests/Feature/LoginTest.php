@@ -76,4 +76,23 @@ class LoginTest extends TestCase
         $response->assertRedirect('/');
         $this->assertFalse(Auth::check());
     }
+
+    /** @test */
+    function logging_in_updates_last_login_at_and_last_ip_address()
+    {
+        $user = create('App\User', [
+            'email' => 'jane@example.com',
+            'password' => bcrypt('secret-password'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'jane@example.com',
+            'password' => 'secret-password',
+        ]);
+
+        $this->assertTrue(Auth::check());
+        $this->assertTrue(Auth::user()->is($user));
+        $this->assertNotNull(Auth::user()->last_login_at);
+        $this->assertNotNull(Auth::user()->last_ip_address);
+    }
 }
