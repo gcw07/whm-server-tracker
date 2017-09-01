@@ -38,3 +38,13 @@ Vue.filter('capitalize', value => {
     return value.toString().charAt(0).toUpperCase()
         + value.slice(1);
 });
+
+
+/**
+ * Allow for placeholder text if the input value is empty.
+ *
+ * Source: https://github.com/freearhey/vue2-filters
+ */
+Vue.filter('placeholder', (value, text) => {
+    return (value === undefined || value === '' || value === null) ? text : value;
+});
