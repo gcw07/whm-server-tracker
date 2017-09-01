@@ -2,6 +2,7 @@
  * Format the given date.
  */
 Vue.filter('date', value => {
+    if (value === null) return;
     return moment.utc(value).local().format('MMMM Do, YYYY')
 });
 
@@ -10,6 +11,7 @@ Vue.filter('date', value => {
  * Format the given date as a timestamp.
  */
 Vue.filter('datetime', value => {
+    if (value === null) return;
     return moment.utc(value).local().format('MMMM Do, YYYY h:mm A');
 });
 
@@ -18,6 +20,7 @@ Vue.filter('datetime', value => {
  * Format the given date into a relative time.
  */
 Vue.filter('relative', value => {
+    if (value === null) return;
     return moment.utc(value).local().locale('en-short').fromNow();
 });
 
