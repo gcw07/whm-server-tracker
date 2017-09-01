@@ -31,7 +31,8 @@
                 <tr class="no-hover">
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Last Updated</th>
+                    <th>Last Login</th>
+                    <th>Last IP Address</th>
                     <th></th>
                 </tr>
             </thead>
@@ -39,7 +40,8 @@
                 <tr v-for="item in items">
                     <td>{{ item.name }}</td>
                     <td>{{ item.email }}</td>
-                    <td>{{ item.updated_at | date }}</td>
+                    <td>{{ item.last_login_at | relative | placeholder('Never') }}</td>
+                    <td>{{ item.last_login_ip_address }}</td>
                     <td>
                         <div class="field is-grouped is-pulled-right">
                             <p class="control">
