@@ -15,6 +15,6 @@
         </div>
     </div>
 
-    <servers-show-server :data="{{$server}}"></servers-show-server>
+    <servers-show :data="{{$server}}"></servers-show>
 
 @endsection

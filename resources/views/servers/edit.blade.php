@@ -15,6 +15,6 @@
         </div>
     </div>
 
-    <servers-edit-server :data="{{$server}}"></servers-edit-server>
+    <servers-edit :data="{{$server}}"></servers-edit>
 
 @endsection

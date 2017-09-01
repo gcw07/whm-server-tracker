@@ -11,8 +11,8 @@
  * Server Components ...
  */
 Vue.component('servers-listing', require('./servers/servers-listing.vue'));
-Vue.component('servers-edit-server', require('./servers/servers-edit.vue'));
-Vue.component('servers-show-server', require('./servers/servers-show.vue'));
+Vue.component('servers-edit', require('./servers/servers-edit.vue'));
+Vue.component('servers-show', require('./servers/servers-show.vue'));
 
 /**
  * Account Components ...
