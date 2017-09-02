@@ -50,6 +50,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'users'], function () {
     Route::delete('/{user}', 'UsersController@destroy')->name('users.destroy');
     Route::put('/{user}', 'UsersController@update')->name('users.update');
     Route::get('/{user}/edit', 'UsersController@edit')->name('users.edit');
+
+    Route::put('/{user}/change-password', 'UsersChangePasswordController@update')->name('users.change-password');
 });
 
 // API Routes...
