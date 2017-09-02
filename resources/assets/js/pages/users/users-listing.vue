@@ -81,21 +81,29 @@
         <b-modal :active.sync="isNewUserModalActive" :canCancel="false" has-modal-card>
             <new-user @added="addUser"></new-user>
         </b-modal>
+
+        <b-modal :active.sync="isPasswordModalActive" :canCancel="false" @close="closePasswordModal" has-modal-card>
+            <change-password :data="currentUser" @updated="passwordSaved"></change-password>
+        </b-modal>
     </div>
 </template>
 <script>
     import NewUser from '../../components/NewUser'
+    import ChangePassword from '../../components/ChangePassword'
     import Form from '../../forms/form';
 
     export default {
         components: {
-            NewUser
+            NewUser,
+            ChangePassword
         },
 
         data() {
             return {
                 items: false,
                 isNewUserModalActive: false,
+                isPasswordModalActive: false,
+                currentUser: null,
                 deleteForm: new Form({}),
             };
         },
@@ -112,6 +120,23 @@
 
             addUser(item) {
                 this.items.push(item);
+            },
+
+            changePassword(item) {
+                this.currentUser = item;
+                this.isPasswordModalActive = true;
+            },
+
+            closePasswordModal() {
+                this.currentUser = null;
+            },
+
+            passwordSaved() {
+                this.$toast.open({
+                    message: 'Password Changed',
+                    type: 'is-success',
+                    duration: 4000
+                });
             },
 
             deleteUser(item) {
@@ -145,7 +170,7 @@
             menuAction(action, item) {
                 switch (action) {
                     case 'password':
-                        window.location.href = `/users/${item.id}/change-password`;
+                        this.changePassword(item);
                         break;
 
                     case 'edit':
