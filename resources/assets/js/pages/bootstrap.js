@@ -23,3 +23,4 @@ Vue.component('accounts-listing', require('./accounts/accounts-listing.vue'));
  * User Components ...
  */
 Vue.component('users-listing', require('./users/users-listing.vue'));
+Vue.component('users-edit', require('./users/users-edit.vue'));

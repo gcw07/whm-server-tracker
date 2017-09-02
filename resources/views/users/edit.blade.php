@@ -15,4 +15,6 @@
         </div>
     </div>
 
+    <users-edit :data="{{$user}}"></users-edit>
+
 @endsection
