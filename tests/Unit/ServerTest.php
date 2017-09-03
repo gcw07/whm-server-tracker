@@ -372,4 +372,32 @@ class ServerTest extends TestCase
         $this->assertEquals('Sun,Tue,Thu,Sat', $serverC->formatted_backup_days);
         $this->assertEquals('None', $serverD->formatted_backup_days);
     }
+
+    /** @test */
+    public function can_get_formatted_php_version()
+    {
+        $serverA = create('App\Server');
+        $serverA->settings()->set('php_version', 'ea-php54');
+
+        $serverB = create('App\Server');
+        $serverB->settings()->set('php_version', 'ea-php55');
+
+        $serverC = create('App\Server');
+        $serverC->settings()->set('php_version', 'ea-php56');
+
+        $serverD = create('App\Server');
+        $serverD->settings()->set('php_version', 'ea-php70');
+
+        $serverE = create('App\Server');
+        $serverE->settings()->set('php_version', 'ea-php71');
+
+        $serverF = create('App\Server');
+
+        $this->assertEquals('php 5.4', $serverA->formatted_php_version);
+        $this->assertEquals('php 5.5', $serverB->formatted_php_version);
+        $this->assertEquals('php 5.6', $serverC->formatted_php_version);
+        $this->assertEquals('php 7.0', $serverD->formatted_php_version);
+        $this->assertEquals('php 7.1', $serverE->formatted_php_version);
+        $this->assertEquals('Unknown', $serverF->formatted_php_version);
+    }
 }

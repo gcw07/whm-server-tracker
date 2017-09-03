@@ -209,6 +209,23 @@ class Server extends Model
         return $this->formatFileSize($this->settings()->disk_total);
     }
 
+    public function getFormattedPhpVersionAttribute()
+    {
+        if (! $this->settings()->php_version) {
+            return 'Unknown';
+        }
+
+        $versions = [
+            'ea-php54' => 'php 5.4',
+            'ea-php55' => 'php 5.5',
+            'ea-php56' => 'php 5.6',
+            'ea-php70' => 'php 7.0',
+            'ea-php71' => 'php 7.1',
+        ];
+
+        return array_get($versions, $this->settings()->php_version, 'Unknown');
+    }
+
     public function getMissingTokenAttribute()
     {
         if ($this->server_type != 'reseller' && $this->token === null) {
