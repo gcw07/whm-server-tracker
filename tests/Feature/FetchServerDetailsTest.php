@@ -52,6 +52,7 @@ class FetchServerDetailsTest extends TestCase
             $this->assertNotNull($server->settings()->get('backup_enabled'));
             $this->assertNotNull($server->settings()->get('backup_days'));
             $this->assertNotNull($server->settings()->get('backup_retention'));
+            $this->assertNotNull($server->settings()->get('php_version'));
         });
     }
 }

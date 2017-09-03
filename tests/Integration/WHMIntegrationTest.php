@@ -150,6 +150,22 @@ class WHMIntegrationTest extends TestCase
     }
 
     /** @test */
+    public function it_can_fetch_server_default_php_version()
+    {
+        $server = create('App\Server', [
+            'address' => $this->whmTestServerAddress,
+            'port' => '2087',
+            'server_type' => 'vps',
+            'token' => $this->whmTestServerToken
+        ]);
+
+        $this->connector->setServer($server);
+        $phpVersion = $this->connector->getPhpVersion();
+
+        $this->assertNotEmpty($phpVersion);
+    }
+
+    /** @test */
     public function it_can_fetch_server_account_list()
     {
         $server = create('App\Server', [

@@ -32,6 +32,7 @@ class FetchDetailsController extends Controller
 
             $server->fetchDiskUsageDetails($this->serverConnector);
             $server->fetchBackupDetails($this->serverConnector);
+            $server->fetchPhpVersion($this->serverConnector);
 
             $server->update([
                 'details_last_updated' => Carbon::now()

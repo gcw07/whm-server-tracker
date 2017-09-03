@@ -9,6 +9,7 @@ interface ServerConnector
 
     public function getDiskUsage();
     public function getBackups();
+    public function getPhpVersion();
     public function getAccounts();
     public function getSystemLoadAvg();
 }

@@ -85,6 +85,15 @@ class Server extends Model
         return false;
     }
 
+    public function fetchPhpVersion($serverConnector)
+    {
+        $version = $serverConnector->getPhpVersion();
+
+        $this->settings()->set('php_version', $version);
+
+        return false;
+    }
+
     public function fetchAccounts($serverConnector)
     {
         $accounts = $serverConnector->getAccounts();

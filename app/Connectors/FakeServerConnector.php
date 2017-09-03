@@ -77,6 +77,11 @@ class FakeServerConnector implements ServerConnector
         ];
     }
 
+    public function getPhpVersion()
+    {
+        return 'ea-php70';
+    }
+
     public function getAccounts()
     {
         return $this->accounts;

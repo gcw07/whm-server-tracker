@@ -49,6 +49,12 @@ class WHMServerConnector implements ServerConnector
         return $data['data']['backup_config'];
     }
 
+    public function getPhpVersion()
+    {
+        $data = $this->fetch("{$this->baseUrl}/php_get_system_default_version?api.version=1");
+        return $data['data']['version'];
+    }
+
     public function getAccounts()
     {
         $data = $this->fetch("{$this->baseUrl}/listaccts?api.version=1");
