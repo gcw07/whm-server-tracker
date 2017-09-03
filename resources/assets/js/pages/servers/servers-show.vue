@@ -74,6 +74,12 @@
                 </div>
                 <div class="level-item has-text-centered">
                     <div>
+                        <p class="heading">PHP Version</p>
+                        <p class="title is-4">{{ serverData.formatted_php_version }}</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
                         <p class="heading">Address</p>
                         <p class="title is-4">{{ serverData.address }}</p>
                     </div>
