@@ -393,11 +393,11 @@ class ServerTest extends TestCase
 
         $serverF = create('App\Server');
 
-        $this->assertEquals('php 5.4', $serverA->formatted_php_version);
-        $this->assertEquals('php 5.5', $serverB->formatted_php_version);
-        $this->assertEquals('php 5.6', $serverC->formatted_php_version);
-        $this->assertEquals('php 7.0', $serverD->formatted_php_version);
-        $this->assertEquals('php 7.1', $serverE->formatted_php_version);
+        $this->assertEquals('PHP 5.4', $serverA->formatted_php_version);
+        $this->assertEquals('PHP 5.5', $serverB->formatted_php_version);
+        $this->assertEquals('PHP 5.6', $serverC->formatted_php_version);
+        $this->assertEquals('PHP 7.0', $serverD->formatted_php_version);
+        $this->assertEquals('PHP 7.1', $serverE->formatted_php_version);
         $this->assertEquals('Unknown', $serverF->formatted_php_version);
     }
 }

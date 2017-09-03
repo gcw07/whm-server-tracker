@@ -217,11 +217,11 @@ class Server extends Model
         }
 
         $versions = [
-            'ea-php54' => 'php 5.4',
-            'ea-php55' => 'php 5.5',
-            'ea-php56' => 'php 5.6',
-            'ea-php70' => 'php 7.0',
-            'ea-php71' => 'php 7.1',
+            'ea-php54' => 'PHP 5.4',
+            'ea-php55' => 'PHP 5.5',
+            'ea-php56' => 'PHP 5.6',
+            'ea-php70' => 'PHP 7.0',
+            'ea-php71' => 'PHP 7.1',
         ];
 
         return array_get($versions, $this->settings()->php_version, 'Unknown');
