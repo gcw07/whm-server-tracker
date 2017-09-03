@@ -18,6 +18,7 @@ class Server extends Model
         'formatted_disk_used',
         'formatted_disk_available',
         'formatted_disk_total',
+        'formatted_php_version',
         'missing_token',
         'can_refresh_data',
         'whm_url'
