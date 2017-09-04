@@ -8,8 +8,14 @@ html {
   display: none;
 }
 
-.menu-list svg {
-  margin-bottom: 4px;
+.menu-list {
+  svg {
+    margin-bottom: 4px;
+  }
+
+  .icon {
+    margin-right: 5px;
+  }
 }
 
 table.is-aligned-center tbody td {
