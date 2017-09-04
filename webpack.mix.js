@@ -13,6 +13,11 @@ let mix = require('laravel-mix');
 
 mix.js('resources/assets/js/app.js', 'public/js')
     .extract(['axios', 'buefy', 'moment', 'promise', 'vue'])
+    .copy('resources/assets/js/fontawesome/fontawesome.js', 'public/js/fontawesome.js')
+    .copy('resources/assets/js/fontawesome/packs/brands.js', 'public/js/fontawesome-brands.js')
+    .copy('resources/assets/js/fontawesome/packs/light.js', 'public/js/fontawesome-light.js')
+    .copy('resources/assets/js/fontawesome/packs/regular.js', 'public/js/fontawesome-regular.js')
+    .copy('resources/assets/js/fontawesome/packs/solid.js', 'public/js/fontawesome-solid.js')
     .sass('resources/assets/sass/app.scss', 'public/css');
 
 if (mix.config.inProduction) {
