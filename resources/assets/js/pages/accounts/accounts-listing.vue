@@ -137,6 +137,10 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div v-if="items.length === 0" class="has-text-centered">
+                There are no matching entries
+            </div>
         </div>
     </div>
 </template>

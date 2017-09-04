@@ -136,6 +136,10 @@
             </tbody>
         </table>
 
+        <div v-if="items.length === 0" class="has-text-centered">
+            There are no matching entries
+        </div>
+
         <b-modal :active.sync="isNewServerModalActive" :canCancel="false" has-modal-card>
             <new-server></new-server>
         </b-modal>
