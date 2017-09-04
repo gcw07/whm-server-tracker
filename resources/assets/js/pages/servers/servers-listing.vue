@@ -164,7 +164,7 @@
 
                 filters: {type: 'all'},
 
-                cacheLifetime: 5,
+                cacheLifetime: 15,
                 storageKey: 'servers-listing'
             };
         },
