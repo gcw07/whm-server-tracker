@@ -12,7 +12,9 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-</head>
+
+    <script defer src="{{ mix('js/fontawesome-solid.js') }}"></script>
+    <script defer src="{{ mix('js/fontawesome.js') }}"></script></head>
 <body>
     <div id="app">
         <div class="container">
@@ -69,7 +71,7 @@
                                 <li>
                                     <a class="{{ $menu == 'dashboard' ? ' is-active' : '' }}" href="{{ route('dashboard') }}">
                                         <span class="icon is-small">
-                                            <i class="fa fa-dashboard"></i>
+                                            <i class="fa fa-tachometer"></i>
                                         </span>
                                         <span>
                                             Dashboard

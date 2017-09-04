@@ -12,6 +12,9 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    <script defer src="{{ mix('js/fontawesome-solid.js') }}"></script>
+    <script defer src="{{ mix('js/fontawesome.js') }}"></script>
 </head>
 <body>
     <div id="app">

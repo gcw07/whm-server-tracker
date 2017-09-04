@@ -22,14 +22,14 @@
                             <b-dropdown-item :disabled="!serverData.can_refresh_data"
                                              @click="menuAction('refresh.details')">
                                 <span class="icon is-small">
-                                    <i class="fa fa-refresh"></i>
+                                    <i class="fa fa-sync"></i>
                                 </span>
                                 <span>Refresh Details</span>
                             </b-dropdown-item>
                             <b-dropdown-item :disabled="!serverData.can_refresh_data"
                                              @click="menuAction('refresh.accounts')">
                                 <span class="icon is-small">
-                                    <i class="fa fa-refresh"></i>
+                                    <i class="fa fa-sync"></i>
                                 </span>
                                 <span>Refresh Accounts</span>
                             </b-dropdown-item>
