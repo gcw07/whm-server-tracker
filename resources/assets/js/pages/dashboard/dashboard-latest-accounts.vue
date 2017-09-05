@@ -5,28 +5,16 @@
 
             <table class="table is-fullwidth is-narrow">
                 <thead>
-                <tr>
-                    <th>Domain</th>
-                    <th>Date Added</th>
-                </tr>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Date Added</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>allnoneok.com</td>
-                    <td>2017-09-04</td>
-                </tr>
-                <tr>
-                    <td>cobblerockandstone.net</td>
-                    <td>2017-09-04</td>
-                </tr>
-                <tr>
-                    <td>allnoneok.com</td>
-                    <td>2017-09-04</td>
-                </tr>
-                <tr>
-                    <td>cobblerockandstone.net</td>
-                    <td>2017-09-04</td>
-                </tr>
+                    <tr v-for="item in items">
+                        <td>{{ item.domain }}</td>
+                        <td>{{ item.created_at | relative }}</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -34,5 +22,22 @@
     </div>
 </template>
 <script>
+    export default {
+        data() {
+            return {
+                items: false
+            };
+        },
 
+        mounted() {
+            this.fetch();
+        },
+
+        methods: {
+            fetch() {
+                axios.get('/api/dashboard/latest-accounts')
+                    .then(response => this.items = response.data);
+            }
+        }
+    }
 </script>
