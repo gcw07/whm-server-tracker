@@ -58,6 +58,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'users'], function () {
 Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
     Route::get('/accounts', 'Api\AccountsListingsController@index')->name('accounts.listing');
     Route::get('/accounts/{server}', 'Api\AccountsListingsController@index')->name('accounts.server-listing');
+    Route::get('/dashboard/stats', 'Api\DashboardStatsController@index')->name('dashboard.stats');
+    Route::get('/dashboard/servers', 'Api\DashboardServersController@index')->name('dashboard.servers');
+    Route::get('/dashboard/latest-accounts', 'Api\DashboardLatestAccountsController@index')->name('dashboard.latest-accounts');
     Route::get('/servers', 'Api\ServersListingsController@index')->name('servers.listing');
     Route::get('/users', 'Api\UsersListingsController@index')->name('users.listing');
 });
