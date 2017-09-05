@@ -14,7 +14,7 @@ class DashboardLatestAccountsController extends Controller
      */
     public function index()
     {
-        $accounts = Account::latest()->take(5)->get();
+        $accounts = Account::with('server')->latest()->take(5)->get();
 
         return response()->json($accounts);
     }
