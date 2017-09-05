@@ -10,7 +10,7 @@
                         </div>
                     </figure>
                     <div class="media-content">
-                        <p class="title is-5">16</p>
+                        <p class="title is-5">{{ stats.servers }}</p>
                         <p class="subtitle">Servers</p>
                     </div>
                 </article>
@@ -26,7 +26,7 @@
                         </div>
                     </figure>
                     <div class="media-content">
-                        <p class="title is-5">224</p>
+                        <p class="title is-5">{{ stats.accounts }}</p>
                         <p class="subtitle">Accounts</p>
                     </div>
                 </article>
@@ -42,7 +42,7 @@
                         </div>
                     </figure>
                     <div class="media-content">
-                        <p class="title is-5">2</p>
+                        <p class="title is-5">{{ stats.users }}</p>
                         <p class="subtitle">Users</p>
                     </div>
                 </article>
@@ -54,7 +54,7 @@
     export default {
         data() {
             return {
-                items: false
+                stats: false
             };
         },
 
@@ -64,8 +64,8 @@
 
         methods: {
             fetch() {
-//                axios.get('/api/servers')
-//                    .then(response => this.items = response.data);
+                axios.get('/api/dashboard/stats')
+                    .then(response => this.stats = response.data);
             }
         }
     }
