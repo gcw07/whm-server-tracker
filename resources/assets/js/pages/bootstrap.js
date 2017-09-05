@@ -13,6 +13,13 @@
 Vue.component('accounts-listing', require('./accounts/accounts-listing.vue'));
 
 /**
+ * Dashboard Components ...
+ */
+Vue.component('dashboard-stats', require('./dashboard/dashboard-stats.vue'));
+Vue.component('dashboard-servers', require('./dashboard/dashboard-servers.vue'));
+Vue.component('dashboard-latest-accounts', require('./dashboard/dashboard-latest-accounts.vue'));
+
+/**
  * Server Components ...
  */
 Vue.component('servers-listing', require('./servers/servers-listing.vue'));
