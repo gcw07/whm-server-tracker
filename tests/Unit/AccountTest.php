@@ -47,8 +47,10 @@ class AccountTest extends TestCase
     {
         $accountA = make('App\Account', ['disk_used' => '300M', 'disk_limit' => '2000M']);
         $accountB = make('App\Account', ['disk_used' => '350M', 'disk_limit' => '2000M']);
+        $accountC = make('App\Account', ['disk_used' => '400M', 'disk_limit' => 'unlimited']);
 
         $this->assertEquals('15%', $accountA->disk_usage);
         $this->assertEquals('17.5%', $accountB->disk_usage);
+        $this->assertEquals('n/a', $accountC->disk_usage);
     }
 }

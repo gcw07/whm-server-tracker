@@ -27,6 +27,10 @@ class Account extends Model
         $diskUsed = substr($this->disk_used, 0, -1);
         $diskLimit = substr($this->disk_limit, 0, -1);
 
+        if (! is_numeric($diskLimit)) {
+            return 'n/a';
+        }
+
         return round(($diskUsed / $diskLimit) * 100, 1) . '%';
     }
 
