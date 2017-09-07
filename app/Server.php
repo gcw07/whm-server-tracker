@@ -63,6 +63,10 @@ class Server extends Model
     {
         $diskUsage = $serverConnector->getDiskUsage();
 
+        if ($diskUsage === false) {
+            return false;
+        }
+
         $this->settings()->merge([
             'disk_used'       => $diskUsage['used'],
             'disk_available'  => $diskUsage['available'],
@@ -70,12 +74,16 @@ class Server extends Model
             'disk_percentage' => $diskUsage['percentage']
         ]);
 
-        return false;
+        return true;
     }
 
     public function fetchBackupDetails($serverConnector)
     {
         $backups = $serverConnector->getBackups();
+
+        if ($backups === false) {
+            return false;
+        }
 
         $this->settings()->merge([
             'backup_enabled'   => $backups['backupenable'],
@@ -83,21 +91,29 @@ class Server extends Model
             'backup_retention' => $backups['backup_daily_retention']
         ]);
 
-        return false;
+        return true;
     }
 
     public function fetchPhpVersion($serverConnector)
     {
         $version = $serverConnector->getPhpVersion();
 
+        if ($version === false) {
+            return false;
+        }
+
         $this->settings()->set('php_version', $version);
 
-        return false;
+        return true;
     }
 
     public function fetchAccounts($serverConnector)
     {
         $accounts = $serverConnector->getAccounts();
+
+        if ($accounts === false) {
+            return false;
+        }
 
         $this->processAccounts($accounts);
 
@@ -105,7 +121,7 @@ class Server extends Model
             'accounts_last_updated' => Carbon::now()
         ]);
 
-        return false;
+        return true;
     }
 
     public function processAccounts($accounts)

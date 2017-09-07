@@ -40,31 +40,56 @@ class WHMServerConnector implements ServerConnector
     public function getDiskUsage()
     {
         $data = $this->fetch("{$this->baseUrl}/getdiskusage?api.version=1");
-        return $data['data']['partition'][0];
+
+        if (array_key_exists('data', $data)) {
+            return $data['data']['partition'][0];
+        }
+
+        return false;
     }
 
     public function getBackups()
     {
         $data = $this->fetch("{$this->baseUrl}/backup_config_get?api.version=1");
-        return $data['data']['backup_config'];
+
+        if (array_key_exists('data', $data)) {
+            return $data['data']['backup_config'];
+        }
+
+        return false;
     }
 
     public function getPhpVersion()
     {
         $data = $this->fetch("{$this->baseUrl}/php_get_system_default_version?api.version=1");
-        return $data['data']['version'];
+
+        if (array_key_exists('data', $data)) {
+            return $data['data']['version'];
+        }
+
+        return false;
     }
 
     public function getAccounts()
     {
         $data = $this->fetch("{$this->baseUrl}/listaccts?api.version=1");
-        return $data['data']['acct'];
+
+        if (array_key_exists('data', $data)) {
+            return $data['data']['acct'];
+        }
+
+        return false;
     }
 
     public function getSystemLoadAvg()
     {
         $data = $this->fetch("{$this->baseUrl}/systemloadavg?api.version=1");
-        return $data['data'];
+
+        if (array_key_exists('data', $data)) {
+            return $data['data'];
+        }
+
+        return false;
     }
 
     private function setupConnection()
