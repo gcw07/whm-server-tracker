@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Account;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -256,6 +257,57 @@ class ServerTest extends TestCase
         tap($this->server->fresh(), function ($server) {
             $this->assertCount(1, $server->accounts);
         });
+    }
+
+    /** @test */
+    public function it_will_only_remove_accounts_that_no_longer_exists_on_the_server_that_is_being_processed()
+    {
+        $serverB = create('App\Server');
+
+        $accountToKeep = create('App\Account', [
+            'server_id' => $serverB->id,
+            'domain'    => 'site-to-remove.com',
+            'user'      => 'sitetoremove'
+        ]);
+
+        $account1 = create('App\Account', [
+            'server_id' => $this->server->id,
+            'domain'    => 'first-site.com',
+            'user'      => 'firstsite'
+        ]);
+
+        $account2 = create('App\Account', [
+            'server_id' => $this->server->id,
+            'domain'    => 'site-to-remove.com',
+            'user'      => 'sitetoremove'
+        ]);
+
+        $fetchedAccounts = [
+            [
+                'domain'        => 'first-site.com',
+                'user'          => 'firstsite',
+                'ip'            => '1.1.1.1',
+                'backup'        => 1,
+                'suspended'     => 0,
+                'suspendreason' => 'not suspended',
+                'suspendtime'   => 0,
+                'startdate'     => '17 Jan 1 10:35',
+                'diskused'      => '300M',
+                'disklimit'     => '2000M',
+                'plan'          => '2 Gig',
+            ]
+        ];
+
+        $this->assertEquals(3, Account::count());
+
+        $this->server->processAccounts($fetchedAccounts);
+
+        tap($this->server->fresh(), function ($server) {
+            $this->assertCount(1, $server->accounts);
+        });
+
+        $this->assertCount(1, $serverB->fresh()->accounts);
+        $this->assertEquals(2, Account::count());
     }
 
     /** @test */
