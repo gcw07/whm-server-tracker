@@ -42,7 +42,7 @@ class WHMServerConnector implements ServerConnector
         $data = $this->fetch("{$this->baseUrl}/getdiskusage?api.version=1");
 
         if (array_key_exists('data', $data)) {
-            return $data['data']['partition'][0];
+            return $this->findPrimaryPartition($data['data']['partition']);
         }
 
         return false;
@@ -90,6 +90,15 @@ class WHMServerConnector implements ServerConnector
         }
 
         return false;
+    }
+
+    private function findPrimaryPartition($partitions)
+    {
+        if (sizeof($partitions) > 1) {
+            return collect($partitions)->where('mount', '/')->first();
+        }
+
+        return $partitions[0];
     }
 
     private function setupConnection()
