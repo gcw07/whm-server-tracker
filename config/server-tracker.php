@@ -35,6 +35,17 @@ return [
 
     'ignore_usernames' => [
         'gwscripts'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Valid Horizon Administrator Email Addresses
+    |--------------------------------------------------------------------------
+    | These are valid email addresses who have access to the Horizon dashboard.
+    */
+
+    'horizon_admin_emails' => [
+        'grant@example.com'
     ]
 
 ];
