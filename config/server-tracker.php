@@ -15,7 +15,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Remove Server Defaults
+    | Remote Server Defaults
     |--------------------------------------------------------------------------
     | This is the server username and the number of seconds before timing out
     | on server requests. The timeout is in seconds.
