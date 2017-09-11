@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Connectors\FakeServerConnector;
 use App\Connectors\ServerConnector;
-use Tests\TestCase;
+use App\Jobs\FetchServerDetails;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class FetchServerDetailsTest extends TestCase
 {
@@ -28,12 +30,14 @@ class FetchServerDetailsTest extends TestCase
         $this->signIn();
 
         $server = create('App\Server', [
-            'name'             => 'my-server-name',
-            'address'          => '1.1.1.1',
-            'port'             => 1000,
-            'server_type'      => 'vps',
-            'token'            => 'valid-server-api-token',
+            'name'        => 'my-server-name',
+            'address'     => '1.1.1.1',
+            'port'        => 1000,
+            'server_type' => 'vps',
+            'token'       => 'valid-server-api-token',
         ]);
+
+        Queue::fake();
 
         $fake = new FakeServerConnector;
         $this->app->instance(ServerConnector::class, $fake);
@@ -42,17 +46,8 @@ class FetchServerDetailsTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertJson(['address' => '1.1.1.1']);
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNotNull($server->settings()->get('disk_used'));
-            $this->assertNotNull($server->settings()->get('disk_available'));
-            $this->assertNotNull($server->settings()->get('disk_total'));
-            $this->assertNotNull($server->settings()->get('disk_percentage'));
-            $this->assertNotNull($server->settings()->get('backup_enabled'));
-            $this->assertNotNull($server->settings()->get('backup_days'));
-            $this->assertNotNull($server->settings()->get('backup_retention'));
-            $this->assertNotNull($server->settings()->get('php_version'));
+        Queue::assertPushed(FetchServerDetails::class, function ($job) use ($server) {
+            return $job->server->is($server);
         });
     }
 }
