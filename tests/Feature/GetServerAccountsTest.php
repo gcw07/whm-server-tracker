@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class FetchServerAccountsTest extends TestCase
+class GetServerAccountsTest extends TestCase
 {
     use RefreshDatabase;
 
