@@ -7,6 +7,7 @@ use App\Exceptions\Server\ForbiddenAccessException;
 use App\Exceptions\Server\InvalidServerTypeException;
 use App\Exceptions\Server\MissingTokenException;
 use App\Exceptions\Server\ServerConnectionException;
+use App\Jobs\FetchServerAccounts;
 use App\Server;
 
 class FetchAccountsController extends Controller
@@ -26,20 +27,8 @@ class FetchAccountsController extends Controller
      */
     public function update(Server $server)
     {
-        try {
-            $this->serverConnector->setServer($server);
+        FetchServerAccounts::dispatch($server);
 
-            $server->fetchAccounts($this->serverConnector);
-        } catch (InvalidServerTypeException $e) {
-            return response()->json(['message' => 'Server type must be a vps or dedicated server.'], 422);
-        } catch (MissingTokenException $e) {
-            return response()->json(['message' => 'Server API token is missing.'], 422);
-        } catch (ServerConnectionException $e) {
-            return response()->json(['message' => 'Unable to connect to server. Try again later.'], 422);
-        } catch (ForbiddenAccessException $e) {
-            return response()->json(['message' => 'Access if forbidden on server. Check credentials.'], 422);
-        }
-
-        return response()->json($server->fresh());
+        return response()->json(['message' => 'Server accounts will be refreshed shortly.']);
     }
 }

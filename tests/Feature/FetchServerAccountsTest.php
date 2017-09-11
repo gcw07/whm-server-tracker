@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Connectors\FakeServerConnector;
 use App\Connectors\ServerConnector;
+use App\Jobs\FetchServerAccounts;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -77,6 +79,8 @@ class FetchServerAccountsTest extends TestCase
             'token'            => 'valid-api-token',
         ]);
 
+        Queue::fake();
+
         $fake = new FakeServerConnector;
         $fake->setAccounts($this->validAccounts(2));
 
@@ -86,8 +90,8 @@ class FetchServerAccountsTest extends TestCase
 
         $response->assertStatus(200);
 
-        tap($server->fresh(), function ($server) {
-            $this->assertCount(2, $server->accounts);
+        Queue::assertPushed(FetchServerAccounts::class, function ($job) use ($server) {
+            return $job->server->is($server);
         });
     }
 }
