@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Connectors\ServerConnector;
 use App\Server;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -61,19 +62,19 @@ class FetchServerDetails implements ShouldQueue
     /**
      * The job failed to process.
      *
-     * @param  Exception  $exception
+     * @param  \Exception  $exception
      * @return void
      */
     public function failed(Exception $exception)
     {
-//        catch (InvalidServerTypeException $exception) {
-//            return response()->json(['message' => 'Server type must be a vps or dedicated server.'], 422);
-//        } catch (MissingTokenException $exception) {
-//            return response()->json(['message' => 'Server API token is missing.'], 422);
-//        } catch (ServerConnectionException $exception) {
-//            return response()->json(['message' => 'Unable to connect to server. Try again later.'], 422);
-//        } catch (ForbiddenAccessException $exception) {
-//            return response()->json(['message' => 'Access if forbidden on server. Check credentials.'], 422);
-//        }
+        if ($exception instanceof InvalidServerTypeException) {
+//            Server type must be a vps or dedicated server.
+        } elseif ($exception instanceof MissingTokenException) {
+//            Server API token is missing.
+        } elseif ($exception instanceof ServerConnectionException) {
+//            Unable to connect to server. Try again later.
+        } elseif ($exception instanceof ForbiddenAccessException) {
+//            Access if forbidden on server. Check credentials.
+        }
     }
 }

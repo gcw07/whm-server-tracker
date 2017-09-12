@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Connectors\ServerConnector;
 use App\Server;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -54,19 +55,19 @@ class FetchServerAccounts implements ShouldQueue
     /**
      * The job failed to process.
      *
-     * @param  Exception  $exception
+     * @param  \Exception $exception
      * @return void
      */
     public function failed(Exception $exception)
     {
-//        } catch (InvalidServerTypeException $e) {
-//            return response()->json(['message' => 'Server type must be a vps or dedicated server.'], 422);
-//        } catch (MissingTokenException $e) {
-//            return response()->json(['message' => 'Server API token is missing.'], 422);
-//        } catch (ServerConnectionException $e) {
-//            return response()->json(['message' => 'Unable to connect to server. Try again later.'], 422);
-//        } catch (ForbiddenAccessException $e) {
-//            return response()->json(['message' => 'Access if forbidden on server. Check credentials.'], 422);
-//        }
+        if ($exception instanceof InvalidServerTypeException) {
+
+        } elseif ($exception instanceof MissingTokenException) {
+
+        } elseif ($exception instanceof ServerConnectionException) {
+
+        } elseif ($exception instanceof ForbiddenAccessException) {
+
+        }
     }
 }
