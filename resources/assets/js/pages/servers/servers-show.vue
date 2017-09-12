@@ -200,18 +200,9 @@
         methods: {
             refreshDetails() {
                 axios.get(`/servers/${this.serverData.id}/fetch-details`)
-                    .catch(error => {
-                        this.$toast.open({
-                            message: error.response.data.message,
-                            type: 'is-danger',
-                            duration: 6000
-                        });
-                    })
                     .then(response => {
-                        this.updatePageData(response.data);
-
                         this.$toast.open({
-                            message: 'Server Details Refreshed',
+                            message: response.data.message,
                             type: 'is-success',
                             duration: 4000
                         });
@@ -220,45 +211,13 @@
 
             refreshAccounts() {
                 axios.get(`/servers/${this.serverData.id}/fetch-accounts`)
-                    .catch(error => {
-                        this.$toast.open({
-                            message: error.response.data.message,
-                            type: 'is-danger',
-                            duration: 6000
-                        });
-                    })
                     .then(response => {
-                        this.serverData.accounts_count = response.data.accounts_count;
-                        this.serverData.accounts_last_updated = response.data.accounts_last_updated;
-
                         this.$toast.open({
-                            message: 'Server Accounts Refreshed',
+                            message: response.data.message,
                             type: 'is-success',
                             duration: 4000
                         });
                     });
-            },
-
-            updatePageData(data) {
-                if (this.serverData.settings.length === 0) {
-                    this.serverData.settings = {
-                        disk_percentage: data.settings.disk_percentage,
-                        backup_enabled: data.settings.backup_enabled,
-                        backup_retention: data.settings.backup_retention,
-                    };
-                } else {
-                    this.serverData.settings.disk_percentage = data.settings.disk_percentage;
-                    this.serverData.settings.backup_enabled = data.settings.backup_enabled;
-                    this.serverData.settings.backup_retention = data.settings.backup_retention;
-                }
-
-                this.serverData.formatted_disk_used = data.formatted_disk_used;
-                this.serverData.formatted_disk_available = data.formatted_disk_available;
-                this.serverData.formatted_disk_total = data.formatted_disk_total;
-                this.serverData.formatted_backup_days = data.formatted_backup_days;
-
-                this.serverData.details_last_updated = data.details_last_updated;
-                this.serverData.accounts_last_updated = data.accounts_last_updated;
             },
 
             deleteServer() {

@@ -205,27 +205,10 @@
             refreshDetails(item) {
                 axios.get(`/servers/${item.id}/fetch-details`)
                     .then(response => {
-                        if (item.settings.length === 0) {
-                            item.settings = {
-                                disk_percentage: response.data.settings.disk_percentage,
-                                backup_enabled: response.data.settings.backup_enabled,
-                            };
-                        } else {
-                            item.settings.disk_percentage = response.data.settings.disk_percentage;
-                            item.settings.backup_enabled = response.data.settings.backup_enabled;
-                        }
-
                         this.$toast.open({
-                            message: 'Server Details Refreshed',
+                            message: response.data.message,
                             type: 'is-success',
                             duration: 4000
-                        });
-                    })
-                    .catch(error => {
-                        this.$toast.open({
-                            message: error.response.data.message,
-                            type: 'is-danger',
-                            duration: 6000
                         });
                     });
             },
@@ -233,19 +216,10 @@
             refreshAccounts(item) {
                 axios.get(`/servers/${item.id}/fetch-accounts`)
                     .then(response => {
-                        item.accounts_count = response.data.accounts_count;
-
                         this.$toast.open({
-                            message: 'Server Accounts Refreshed',
+                            message: response.data.message,
                             type: 'is-success',
                             duration: 4000
-                        });
-                    })
-                    .catch(error => {
-                        this.$toast.open({
-                            message: error.response.data.message,
-                            type: 'is-danger',
-                            duration: 6000
                         });
                     });
             },
