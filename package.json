@@ -11,10 +11,10 @@
   },
   "devDependencies": {
     "axios": "^0.16.2",
-    "buefy": "^0.5.1",
-    "bulma": "^0.5.1",
+    "buefy": "^0.5.2",
+    "bulma": "^0.5.2",
     "cross-env": "^5.0.1",
-    "laravel-mix": "^1.0",
+    "laravel-mix": "^1.4.3",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "promise": "^8.0.1",
