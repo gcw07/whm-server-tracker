@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Filters\ServerFilters;
+use App\Jobs\FetchServerAccounts;
+use App\Jobs\FetchServerDetails;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +34,20 @@ class Server extends Model
         static::deleting(function ($server) {
             $server->accounts->each->delete();
         });
+    }
+
+    public static function refreshData()
+    {
+        $servers = static::where('server_type', '!=', 'reseller')
+            ->orderBy('name')
+            ->get();
+
+        $servers->each(function ($server) {
+            FetchServerDetails::dispatch($server);
+            FetchServerAccounts::dispatch($server);
+        });
+
+        return true;
     }
 
     public function settings()
