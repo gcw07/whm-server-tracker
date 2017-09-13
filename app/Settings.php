@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Exception;
-
 class Settings
 {
     /**
@@ -33,13 +31,13 @@ class Settings
     /**
      * Create a new settings instance.
      *
-     * @param $settings
      * @param Server $server
+     * @param $settings
      */
-    public function __construct(array $settings, Server $server)
+    public function __construct(Server $server, array $settings)
     {
-        $this->settings = $settings;
         $this->server = $server;
+        $this->settings = $settings;
     }
 
     /**
