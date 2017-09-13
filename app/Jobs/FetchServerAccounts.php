@@ -47,7 +47,7 @@ class FetchServerAccounts implements ShouldQueue
     {
         $serverConnector->setServer($this->server);
 
-        $this->server->fetchers()->fetchAccounts($serverConnector);
+        $this->server->fetchers()->accounts($serverConnector);
 
         return true;
     }

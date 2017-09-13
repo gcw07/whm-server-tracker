@@ -24,7 +24,7 @@ class Fetchers
         $this->server = $server;
     }
 
-    public function fetchDiskUsageDetails($serverConnector)
+    public function diskUsage($serverConnector)
     {
         $diskUsage = $serverConnector->getDiskUsage();
 
@@ -42,7 +42,7 @@ class Fetchers
         return true;
     }
 
-    public function fetchBackupDetails($serverConnector)
+    public function backup($serverConnector)
     {
         $backups = $serverConnector->getBackups();
 
@@ -59,7 +59,7 @@ class Fetchers
         return true;
     }
 
-    public function fetchPhpVersion($serverConnector)
+    public function phpVersion($serverConnector)
     {
         $version = $serverConnector->getPhpVersion();
 
@@ -72,7 +72,7 @@ class Fetchers
         return true;
     }
 
-    public function fetchAccounts($serverConnector)
+    public function accounts($serverConnector)
     {
         $accounts = $serverConnector->getAccounts();
 
