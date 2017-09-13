@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 use Carbon\Carbon;
 
 class Fetchers
