@@ -48,9 +48,11 @@ class FetchServerDetails implements ShouldQueue
     {
         $serverConnector->setServer($this->server);
 
-        $this->server->fetchers()->diskUsage($serverConnector);
-        $this->server->fetchers()->backup($serverConnector);
-        $this->server->fetchers()->phpVersion($serverConnector);
+        tap($this->server->fetchers(), function ($fetchers) use ($serverConnector) {
+            $fetchers->diskUsage($serverConnector);
+            $fetchers->backup($serverConnector);
+            $fetchers->phpVersion($serverConnector);
+        });
 
         $this->server->update([
             'details_last_updated' => Carbon::now()
