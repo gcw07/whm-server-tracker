@@ -5,7 +5,6 @@ namespace App;
 use App\Filters\ServerFilters;
 use App\Jobs\FetchServerAccounts;
 use App\Jobs\FetchServerDetails;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Server extends Model
