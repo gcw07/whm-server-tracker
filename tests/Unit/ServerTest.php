@@ -142,7 +142,7 @@ class ServerTest extends TestCase
             ]
         ];
 
-        $this->server->processAccounts($accounts);
+        $this->server->fetchers()->processAccounts($accounts);
 
         $this->assertCount(1, $this->server->fresh()->accounts);
     }
@@ -172,7 +172,7 @@ class ServerTest extends TestCase
             ]
         ];
 
-        $this->server->processAccounts($accounts);
+        $this->server->fetchers()->processAccounts($accounts);
 
         tap($this->server->fresh(), function ($server) {
             $this->assertCount(1, $server->accounts);
@@ -214,7 +214,7 @@ class ServerTest extends TestCase
 
         $accounts = [$validAccount, $skipAccount];
 
-        $this->server->processAccounts($accounts);
+        $this->server->fetchers()->processAccounts($accounts);
 
         tap($this->server->fresh(), function ($server) {
             $this->assertCount(1, $server->accounts);
@@ -252,7 +252,7 @@ class ServerTest extends TestCase
             ]
         ];
 
-        $this->server->processAccounts($accounts);
+        $this->server->fetchers()->processAccounts($accounts);
 
         tap($this->server->fresh(), function ($server) {
             $this->assertCount(1, $server->accounts);
@@ -300,7 +300,7 @@ class ServerTest extends TestCase
 
         $this->assertEquals(3, Account::count());
 
-        $this->server->processAccounts($fetchedAccounts);
+        $this->server->fetchers()->processAccounts($fetchedAccounts);
 
         tap($this->server->fresh(), function ($server) {
             $this->assertCount(1, $server->accounts);
