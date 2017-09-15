@@ -39,7 +39,7 @@ class RefreshCommand extends Command
     public function handle()
     {
         $this->info('Refreshing remote server data');
-//        $this->warn('Use a warn');
+
         Server::refreshData();
     }
 }
