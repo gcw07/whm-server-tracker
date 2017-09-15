@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Connectors\ServerConnector;
+use App\Events\FetchedServerAccounts;
 use App\Server;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -48,6 +49,8 @@ class FetchServerAccounts implements ShouldQueue
         $serverConnector->setServer($this->server);
 
         $this->server->fetchers()->accounts($serverConnector);
+
+        event(new FetchedServerAccounts($this->server));
 
         return true;
     }

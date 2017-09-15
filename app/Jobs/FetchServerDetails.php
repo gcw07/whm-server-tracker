@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Connectors\ServerConnector;
+use App\Events\FetchedServerDetails;
 use App\Server;
 use Carbon\Carbon;
 use Exception;
@@ -57,6 +58,8 @@ class FetchServerDetails implements ShouldQueue
         $this->server->update([
             'details_last_updated' => Carbon::now()
         ]);
+
+        event(new FetchedServerDetails($this->server));
 
         return true;
     }
