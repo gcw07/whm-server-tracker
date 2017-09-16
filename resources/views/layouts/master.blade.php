@@ -11,6 +11,7 @@
     <title>{{ config('app.name', 'Server Tracker') }} - @yield('title')</title>
 
     <!-- Styles -->
+    <link rel="icon" href="data:;base64,iVBORwOKGO=">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     <script defer src="{{ mix('js/fontawesome-solid.js') }}"></script>
