@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class FetchedServerDetails
+class FetchedServerDetails implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -38,6 +38,6 @@ class FetchedServerDetails
      */
     public function broadcastOn()
     {
-//        return new PrivateChannel('channel-name');
+        return new PrivateChannel('server-update');
     }
 }
