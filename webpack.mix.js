@@ -12,7 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['axios', 'buefy', 'moment', 'promise', 'vue'])
+    .extract(['axios', 'buefy', 'laravel-echo', 'moment', 'pusher-js', 'promise', 'vue'])
     .copy('resources/assets/js/fontawesome/fontawesome.js', 'public/js/fontawesome.js')
     .copy('resources/assets/js/fontawesome/packs/brands.js', 'public/js/fontawesome-brands.js')
     .copy('resources/assets/js/fontawesome/packs/light.js', 'public/js/fontawesome-light.js')
