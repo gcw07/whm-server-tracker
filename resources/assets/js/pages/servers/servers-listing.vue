@@ -174,6 +174,7 @@
         },
 
         mounted() {
+            this.listen();
             this.fetch();
         },
 
@@ -200,6 +201,16 @@
 
                 axios.get('/api/servers', {params: filters})
                     .then(response => this.items = response.data);
+            },
+
+            listen() {
+                Echo.private('server-update')
+                    .listen('FetchedServerDetails', (e) => {
+                        this.updateServerDetails(e.server);
+                    })
+                    .listen('FetchedServerAccounts', (e) => {
+                        this.updateServerAccounts(e.server);
+                    });
             },
 
             refreshDetails(item) {
@@ -278,6 +289,36 @@
 
                     default:
                         break;
+                }
+            },
+
+            updateServerAccounts(server) {
+                let i = this.items.map(item => item.id).indexOf(server.id);
+                let currentItem = this.items[i];
+
+                if (currentItem === undefined) {
+                    return;
+                }
+
+                currentItem.accounts_count = server.accounts_count;
+            },
+
+            updateServerDetails(server) {
+                let i = this.items.map(item => item.id).indexOf(server.id);
+                let currentItem = this.items[i];
+
+                if (currentItem === undefined) {
+                    return;
+                }
+
+                if (currentItem.settings.length === 0) {
+                    currentItem.settings = {
+                        disk_percentage: server.settings.disk_percentage,
+                        backup_enabled: server.settings.backup_enabled,
+                    };
+                } else {
+                    currentItem.settings.disk_percentage = server.settings.disk_percentage;
+                    currentItem.settings.backup_enabled = server.settings.backup_enabled;
                 }
             },
 
