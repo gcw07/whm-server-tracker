@@ -16,9 +16,7 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
-        $term = $request->get('q');
-
-        if ($term) {
+        if ($term = $request->get('q')) {
             $servers = Server::search($term)->orderBy('name')->get();
             $accounts = Account::search($term)->orderBy('domain')->get();
         } else {
