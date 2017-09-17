@@ -9,19 +9,6 @@ class ViewSearchResultsTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function createSearchData()
-    {
-        $server = create('App\Server', [
-            'name'        => 'My Test Server',
-            'address'     => '255.1.1.100',
-            'port'        => 1111,
-            'server_type' => 'dedicated',
-            'notes'       => 'some server note',
-            'token'       => 'new-server-api-token',
-        ]);
-
-    }
-
     /** @test */
     public function guests_can_not_view_search_results_page()
     {
