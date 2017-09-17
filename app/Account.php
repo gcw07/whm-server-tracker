@@ -22,6 +22,14 @@ class Account extends Model
         return $filters->apply($query);
     }
 
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('domain', 'LIKE', '%' . $search . '%')
+                ->orWhere('ip', 'LIKE', '%' . $search . '%');
+        });
+    }
+
     public function getDiskUsageAttribute()
     {
         $diskUsed = substr($this->disk_used, 0, -1);

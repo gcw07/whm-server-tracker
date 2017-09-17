@@ -84,6 +84,14 @@ class Server extends Model
         return $filters->apply($query);
     }
 
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('notes', 'LIKE', '%' . $search . '%');
+        });
+    }
+
     public function getFormattedServerTypeAttribute()
     {
         if ($this->server_type == 'vps') {

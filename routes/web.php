@@ -52,6 +52,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'users'], function () {
     Route::put('/{user}/change-password', 'UsersChangePasswordController@update')->name('users.change-password');
 });
 
+// Search Routes...
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/search', 'SearchController@index')->name('search');
+});
+
 // API Routes...
 Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
     Route::get('/accounts', 'Api\AccountsListingsController@index')->name('accounts.listing');
