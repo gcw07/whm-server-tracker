@@ -1,7 +1,8 @@
 /**
- * We will load up moment and promise
+ * We will load up date-fns and promise
  */
-window.moment = require('moment');
+import {format, distanceInWordsToNow} from 'date-fns';
+window.dateFns = { format, distanceInWordsToNow };
 window.Promise = require('promise');
 
 /**

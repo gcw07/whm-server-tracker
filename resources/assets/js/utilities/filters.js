@@ -3,7 +3,7 @@
  */
 Vue.filter('date', value => {
     if (value === null) return;
-    return moment.utc(value).local().format('MMMM Do, YYYY')
+    return dateFns.format(value, 'MMMM Do, YYYY');
 });
 
 
@@ -12,7 +12,7 @@ Vue.filter('date', value => {
  */
 Vue.filter('datetime', value => {
     if (value === null) return;
-    return moment.utc(value).local().format('MMMM Do, YYYY h:mm A');
+    return dateFns.format(value, 'MMMM Do, YYYY h:mm A');
 });
 
 
@@ -21,7 +21,7 @@ Vue.filter('datetime', value => {
  */
 Vue.filter('relative', value => {
     if (value === null) return;
-    return moment.utc(value).local().locale('en-short').fromNow();
+    return dateFns.distanceInWordsToNow(value, {addSuffix: true});
 });
 
 
