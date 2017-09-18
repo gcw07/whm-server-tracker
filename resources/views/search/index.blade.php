@@ -14,18 +14,8 @@
         </div>
     </div>
 
-    @forelse($servers as $server)
-        <p>{{ $server->name }}</p>
-    @empty
-        <p>no server results</p>
-    @endforelse
+    <search-servers :data="{{ $servers }}"></search-servers>
 
-    <hr>
-
-    @forelse($accounts as $account)
-        <p>{{ $account->domain }}</p>
-    @empty
-        <p>no account results</p>
-    @endforelse
+    <search-accounts :data="{{ $accounts }}"></search-accounts>
 
 @endsection

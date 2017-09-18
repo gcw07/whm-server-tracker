@@ -31,3 +31,9 @@ Vue.component('servers-show', require('./servers/servers-show.vue'));
  */
 Vue.component('users-listing', require('./users/users-listing.vue'));
 Vue.component('users-edit', require('./users/users-edit.vue'));
+
+/**
+ * Search Components ...
+ */
+Vue.component('search-servers', require('./search/search-servers.vue'));
+Vue.component('search-accounts', require('./search/search-accounts.vue'));
