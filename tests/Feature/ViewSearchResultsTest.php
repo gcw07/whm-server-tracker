@@ -23,6 +23,14 @@ class ViewSearchResultsTest extends TestCase
                 Assert::assertTrue($a->is($b));
             });
         });
+
+        Collection::macro('assertContains', function ($value) {
+            Assert::assertTrue($this->contains($value), "Failed asserting that the collection contains the specified value.");
+        });
+
+        Collection::macro('assertNotContains', function ($value) {
+            Assert::assertFalse($this->contains($value), "Failed asserting that the collection does not contain the specified value.");
+        });
     }
 
     /** @test */
@@ -71,8 +79,8 @@ class ViewSearchResultsTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSee($server->name)
-            ->assertDontSee($serverB->name);
+        $response->data('servers')->assertContains($server);
+        $response->data('servers')->assertNotContains($serverB);
     }
 
     /** @test */
@@ -98,8 +106,8 @@ class ViewSearchResultsTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSee($server->name)
-            ->assertDontSee($serverB->name);
+        $response->data('servers')->assertContains($server);
+        $response->data('servers')->assertNotContains($serverB);
     }
 
     /** @test */
@@ -121,8 +129,8 @@ class ViewSearchResultsTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSee($account->domain)
-            ->assertDontSee($accountB->domain);
+        $response->data('accounts')->assertContains($account);
+        $response->data('accounts')->assertNotContains($accountB);
     }
 
     /** @test */
@@ -144,8 +152,8 @@ class ViewSearchResultsTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSee($account->domain)
-            ->assertDontSee($accountB->domain);
+        $response->data('accounts')->assertContains($account);
+        $response->data('accounts')->assertNotContains($accountB);
     }
 
     /** @test */
@@ -167,8 +175,7 @@ class ViewSearchResultsTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->data('accounts')->assertEquals([
-            $account,
-        ]);
+        $response->data('accounts')->assertContains($account);
+        $response->data('accounts')->assertNotContains($accountB);
     }
 }
