@@ -14,8 +14,8 @@
         </div>
     </div>
 
-    <search-servers :data="{{ $servers }}"></search-servers>
+    <search-servers :data="{{ json_encode($servers) }}"></search-servers>
 
-    <search-accounts :data="{{ $accounts }}"></search-accounts>
+    <search-accounts :data="{{ json_encode($accounts) }}"></search-accounts>
 
 @endsection
