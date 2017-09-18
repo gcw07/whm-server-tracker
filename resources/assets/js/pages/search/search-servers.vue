@@ -1,6 +1,18 @@
 <template>
     <div class="box">
-        <h1 class="title is-4">Servers</h1>
+        <nav class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title is-4">Servers</h1>
+                </div>
+            </div>
+
+            <div class="level-right">
+                <div class="level-item">
+                    <h2 class="subtitle is-6" v-if="items.length > 0">{{ items.length }} results</h2>
+                </div>
+            </div>
+        </nav>
 
         <hr class="mb-2">
 
