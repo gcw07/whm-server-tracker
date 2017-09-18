@@ -18,7 +18,7 @@ class SearchController extends Controller
     {
         if ($term = $request->get('q')) {
             $servers = Server::search($term)->orderBy('name')->get();
-            $accounts = Account::search($term)->orderBy('domain')->get();
+            $accounts = Account::with('server')->search($term)->orderBy('domain')->get();
         } else {
             $servers = [];
             $accounts = [];
