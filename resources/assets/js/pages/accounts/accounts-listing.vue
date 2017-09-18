@@ -23,14 +23,18 @@
                 <div class="level-item has-text-centered">
                     <div>
                         <p class="heading">Disk Usage</p>
-                        <p v-if="server.settings.disk_percentage" class="title is-4">{{ server.settings.disk_percentage }}%</p>
+                        <p v-if="server.settings.disk_percentage" class="title is-4">
+                            {{ server.settings.disk_percentage }}%
+                        </p>
                         <p v-else="" class="title is-4">Unknown</p>
                     </div>
                 </div>
                 <div class="level-item has-text-centered">
                     <div>
                         <p class="heading">Backups Kept</p>
-                        <p v-if="server.settings.backup_retention" class="title is-4">{{ server.settings.backup_retention }}</p>
+                        <p v-if="server.settings.backup_retention" class="title is-4">
+                            {{ server.settings.backup_retention }}
+                        </p>
                         <p v-else="" class="title is-4">Unknown</p>
                     </div>
                 </div>
