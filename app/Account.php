@@ -26,6 +26,7 @@ class Account extends Model
     {
         return $query->where(function ($query) use ($search) {
             $query->where('domain', 'LIKE', '%' . $search . '%')
+                ->orWhere('user', 'LIKE', '%' . $search . '%')
                 ->orWhere('ip', 'LIKE', '%' . $search . '%');
         });
     }

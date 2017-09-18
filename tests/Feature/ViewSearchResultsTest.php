@@ -2,12 +2,28 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Database\Eloquent\Collection;
+use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ViewSearchResultsTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        Collection::macro('assertEquals', function ($items) {
+            Assert::assertEquals(count($this), count($items));
+
+            $this->zip($items)->each(function ($pair) {
+                list($a, $b) = $pair;
+                Assert::assertTrue($a->is($b));
+            });
+        });
+    }
 
     /** @test */
     public function guests_can_not_view_search_results_page()
@@ -130,5 +146,29 @@ class ViewSearchResultsTest extends TestCase
 
         $response->assertSee($account->domain)
             ->assertDontSee($accountB->domain);
+    }
+
+    /** @test */
+    public function the_account_username_can_be_searched()
+    {
+        $this->signIn();
+
+        $account = create('App\Account', [
+            'domain' => 'my-site.com',
+            'user'     => 'mysite',
+        ]);
+
+        $accountB = create('App\Account', [
+            'domain' => 'never-see.com',
+            'user'     => 'neversee',
+        ]);
+
+        $response = $this->get("/search?q=mysite");
+
+        $response->assertStatus(200);
+
+        $response->data('accounts')->assertEquals([
+            $account,
+        ]);
     }
 }
