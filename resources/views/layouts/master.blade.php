@@ -43,14 +43,16 @@
                 <div id="navMainMenu" class="navbar-menu">
                     <div class="navbar-end">
                         <div class="navbar-item">
+                            <form action="{{ route('search') }}">
                             <div class="field">
                                 <p class="control has-icons-left is-expanded">
-                                    <input class="input" type="text" placeholder="Search...">
+                                    <input type="text" class="input" name="q" value="{{ request()->input('q') }}" placeholder="Search...">
                                     <span class="icon is-small is-left">
                                         <i class="fa fa-search"></i>
                                     </span>
                                 </p>
                             </div>
+                            </form>
                         </div>
                         <a class="navbar-item" href="{{ route('logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
