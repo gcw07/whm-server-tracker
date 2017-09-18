@@ -2,36 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Database\Eloquent\Collection;
-use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ViewSearchResultsTest extends TestCase
 {
     use RefreshDatabase;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        Collection::macro('assertEquals', function ($items) {
-            Assert::assertEquals(count($this), count($items));
-
-            $this->zip($items)->each(function ($pair) {
-                list($a, $b) = $pair;
-                Assert::assertTrue($a->is($b));
-            });
-        });
-
-        Collection::macro('assertContains', function ($value) {
-            Assert::assertTrue($this->contains($value), "Failed asserting that the collection contains the specified value.");
-        });
-
-        Collection::macro('assertNotContains', function ($value) {
-            Assert::assertFalse($this->contains($value), "Failed asserting that the collection does not contain the specified value.");
-        });
-    }
 
     /** @test */
     public function guests_can_not_view_search_results_page()

@@ -2,28 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Database\Eloquent\Collection;
-use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ViewAccountListingTest extends TestCase
 {
     use RefreshDatabase;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        Collection::macro('assertEquals', function ($items) {
-            Assert::assertEquals(count($this), count($items));
-
-            $this->zip($items)->each(function ($pair) {
-                list($a, $b) = $pair;
-                Assert::assertTrue($a->is($b));
-            });
-        });
-    }
 
     /** @test */
     public function guests_can_not_view_account_listings_page()
