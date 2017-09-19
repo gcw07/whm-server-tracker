@@ -643,16 +643,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.5.3",
+            "version": "v5.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "779a98d3b2ebed2128db1a668dcc10a65c9b01be"
+                "reference": "7a7b7c92ac6feae474cfe036a06643f5052d2e40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/779a98d3b2ebed2128db1a668dcc10a65c9b01be",
-                "reference": "779a98d3b2ebed2128db1a668dcc10a65c9b01be",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/7a7b7c92ac6feae474cfe036a06643f5052d2e40",
+                "reference": "7a7b7c92ac6feae474cfe036a06643f5052d2e40",
                 "shasum": ""
             },
             "require": {
@@ -771,20 +771,20 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-09-07T13:50:21+00:00"
+            "time": "2017-09-19T17:46:51+00:00"
         },
         {
             "name": "laravel/horizon",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "ec52cd6c304eb9dfc3320e32d9e43c5ee55e7d7c"
+                "reference": "df65f5b3f5119cc5f0a6bfbd501f83580efd0842"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/ec52cd6c304eb9dfc3320e32d9e43c5ee55e7d7c",
-                "reference": "ec52cd6c304eb9dfc3320e32d9e43c5ee55e7d7c",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/df65f5b3f5119cc5f0a6bfbd501f83580efd0842",
+                "reference": "df65f5b3f5119cc5f0a6bfbd501f83580efd0842",
                 "shasum": ""
             },
             "require": {
@@ -839,7 +839,7 @@
                 "laravel",
                 "queue"
             ],
-            "time": "2017-09-08T16:30:09+00:00"
+            "time": "2017-09-12T12:50:19+00:00"
         },
         {
             "name": "laravel/tinker",
