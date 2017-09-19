@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Horizon Redis Prefix
+    |--------------------------------------------------------------------------
+    |
+    | This prefix will be used when storing all Horizon data in Redis. You
+    | may modify the prefix when you are running multiple installations
+    | of Horizon on the same server so that they don't have problems.
+    |
+    */
+
+    'prefix' => env('HORIZON_PREFIX', 'horizon:'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Queue Wait Time Thresholds
     |--------------------------------------------------------------------------
     |
