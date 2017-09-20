@@ -1,7 +1,8 @@
 <template>
     <div class="field">
-        <p class="control has-icons-left is-expanded">
+        <p class="control has-icons-left is-expanded" :class="{'has-icons-right': term}">
             <input type="text"
+                   ref="input"
                    class="input animated"
                    :class="{'search-input-focused': isFocused}"
                    name="q"
@@ -11,6 +12,9 @@
                    @focus="isFocused = true">
             <span class="icon is-small is-left">
                 <i class="fa fa-search"></i>
+            </span>
+            <span class="icon is-small is-right is-clickable" @click="close" v-if="term">
+                <i class="fa fa-times-circle"></i>
             </span>
         </p>
     </div>
@@ -24,6 +28,16 @@
                 isFocused: false,
                 term: this.data,
             };
+        },
+
+        methods: {
+            close() {
+                this.term = '';
+
+                this.$nextTick(() => {
+                    this.$refs.input.focus()
+                })
+            }
         }
     }
 </script>
