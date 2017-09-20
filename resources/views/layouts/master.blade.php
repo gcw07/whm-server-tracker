@@ -44,14 +44,7 @@
                     <div class="navbar-end">
                         <div class="navbar-item">
                             <form action="{{ route('search') }}">
-                            <div class="field">
-                                <p class="control has-icons-left is-expanded">
-                                    <input type="text" class="input" name="q" value="{{ request()->input('q') }}" placeholder="Search...">
-                                    <span class="icon is-small is-left">
-                                        <i class="fa fa-search"></i>
-                                    </span>
-                                </p>
-                            </div>
+                                <search-box :data="{{ json_encode(request()->input('q')) }}"></search-box>
                             </form>
                         </div>
                         <a class="navbar-item" href="{{ route('logout') }}"

@@ -8,6 +8,11 @@
  */
 
 /**
+ * Global Components ...
+ */
+Vue.component('search-box', require('./global/search-box.vue'));
+
+/**
  * Account Components ...
  */
 Vue.component('accounts-listing', require('./accounts/accounts-listing.vue'));
