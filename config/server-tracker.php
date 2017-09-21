@@ -45,7 +45,7 @@ return [
     */
 
     'horizon_admin_emails' => [
-        'grant@example.com'
+        'grant@gwscripts.com'
     ]
 
 ];
