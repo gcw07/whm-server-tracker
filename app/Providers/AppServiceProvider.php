@@ -40,9 +40,5 @@ class AppServiceProvider extends ServiceProvider
 
             return false;
         });
-
-        if ($this->app->isLocal()) {
-            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
-        }
     }
 }
