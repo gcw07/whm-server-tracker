@@ -20,6 +20,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .copy('resources/assets/js/fontawesome/packs/solid.js', 'public/js/fontawesome-solid.js')
     .sass('resources/assets/sass/app.scss', 'public/css');
 
-if (mix.config.inProduction) {
+if (mix.inProduction()) {
     mix.version();
 }
