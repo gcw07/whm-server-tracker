@@ -30,7 +30,7 @@
             <nav class="navbar is-transparent" style="background-color: transparent;">
                 <div class="navbar-brand">
                     <a class="navbar-item" href="{{ url('/') }}">
-                        <!--<img src="/logo.png" alt="Heritage Funeral Home" width="200" height="40">-->
+                        <!--<img src="/logo.png" alt="Logo" width="200" height="40">-->
                         Server Tracker
                     </a>
 
