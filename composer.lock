@@ -2119,16 +2119,16 @@
         },
         {
             "name": "spatie/laravel-backup",
-            "version": "5.0.3",
+            "version": "5.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-backup.git",
-                "reference": "fd2a85ed3a3efdda543a7b377c53b2dfc1621e4f"
+                "reference": "36aabc5edac3ea570d9f8b8ea44e656f3d629d0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/fd2a85ed3a3efdda543a7b377c53b2dfc1621e4f",
-                "reference": "fd2a85ed3a3efdda543a7b377c53b2dfc1621e4f",
+                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/36aabc5edac3ea570d9f8b8ea44e656f3d629d0c",
+                "reference": "36aabc5edac3ea570d9f8b8ea44e656f3d629d0c",
                 "shasum": ""
             },
             "require": {
@@ -2188,7 +2188,7 @@
                 "laravel-backup",
                 "spatie"
             ],
-            "time": "2017-09-29T11:43:15+00:00"
+            "time": "2017-10-01T21:48:19+00:00"
         },
         {
             "name": "spatie/temporary-directory",
