@@ -15,12 +15,6 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
-    <script>
-        window.App = {!! json_encode([
-            'pusherKey' => config('broadcasting.connections.pusher.key'),
-            'pusherCluster' => config('broadcasting.connections.pusher.options.cluster'),
-        ]) !!};
-    </script>
     <script defer src="{{ mix('js/fontawesome-solid.js') }}"></script>
     <script defer src="{{ mix('js/fontawesome.js') }}"></script>
 </head>
