@@ -315,6 +315,8 @@
                     return;
                 }
 
+                currentItem.formatted_php_version = server.formatted_php_version;
+
                 if (currentItem.settings.length === 0) {
                     currentItem.settings = {
                         disk_percentage: server.settings.disk_percentage,
