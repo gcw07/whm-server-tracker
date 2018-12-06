@@ -39,12 +39,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Valid Horizon Administrator Email Addresses
+    | Valid Administrator Email Addresses
     |--------------------------------------------------------------------------
-    | These are valid email addresses who have access to the Horizon dashboard.
+    | These are valid email addresses who have access to the Horizon and
+    | WebSockets dashboards.
     */
 
-    'horizon_admin_emails' => [
+    'admin_emails' => [
         'grant@gwscripts.com'
     ]
 
