@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e67400c106bf71da9c0b793823e2062",
+    "content-hash": "f6206b57e0e57f3c2e96d44e8c749a1c",
     "packages": [
         {
             "name": "beyondcode/laravel-websockets",
@@ -1305,16 +1305,16 @@
         },
         {
             "name": "laravel/horizon",
-            "version": "v1.4.3",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "b00da78d10158036cab2f45115ecc360f2014ed4"
+                "reference": "384c84512cdf929886343c2e498f8dc4180d8728"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/b00da78d10158036cab2f45115ecc360f2014ed4",
-                "reference": "b00da78d10158036cab2f45115ecc360f2014ed4",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/384c84512cdf929886343c2e498f8dc4180d8728",
+                "reference": "384c84512cdf929886343c2e498f8dc4180d8728",
                 "shasum": ""
             },
             "require": {
@@ -1338,7 +1338,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "2.0-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -1369,7 +1369,7 @@
                 "laravel",
                 "queue"
             ],
-            "time": "2018-11-01T14:03:51+00:00"
+            "time": "2018-11-14T14:14:22+00:00"
         },
         {
             "name": "laravel/nexmo-notification-channel",
