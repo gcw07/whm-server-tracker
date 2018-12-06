@@ -53,6 +53,7 @@
                     <th>Type</th>
                     <th>Accounts</th>
                     <th>Backups</th>
+                    <th>PHP</th>
                     <th><abbr title="Disk Usage">Usage</abbr></th>
                     <th></th>
                 </tr>
@@ -73,6 +74,9 @@
                     <td>
                         <span v-if="item.settings.backup_enabled" class="tag is-success is-rounded">Yes</span>
                         <span v-else="" class="tag is-danger is-rounded">No</span>
+                    </td>
+                    <td>
+                        {{ item.formatted_php_version }}
                     </td>
                     <td>
                         <span v-if="item.server_type != 'reseller'">{{ item.settings.disk_percentage }}%</span>
