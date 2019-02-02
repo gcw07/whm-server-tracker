@@ -19,6 +19,7 @@ set('deployment_user', getenv('DEPLOY_USER'));
 set('deployment_path', getenv('DEPLOY_PATH'));
 set('deployment_repository', getenv('DEPLOY_REPOSITORY'));
 set('deployment_horizon', getenv('DEPLOY_HORIZON'));
+set('deployment_websockets', getenv('DEPLOY_WEBSOCKETS'));
 
 checkEnvVariablesAreSet();
 
@@ -89,6 +90,13 @@ desc('Execute artisan horizon:terminate');
 task('artisan:horizon:terminate', function () {
     if (get('deployment_horizon') === true) {
         run('{{bin/php}} {{release_path}}/artisan horizon:terminate');
+    }
+});
+
+desc('Execute artisan websockets:serve');
+task('artisan:websockets:serve', function () {
+    if (get('deployment_websockets') === true) {
+        run('{{bin/php}} {{release_path}}/artisan websockets:serve');
     }
 });
 
