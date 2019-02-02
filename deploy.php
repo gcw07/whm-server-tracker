@@ -150,7 +150,7 @@ after('artisan:view:clear', 'artisan_clear_caches');
 after('artisan:optimize', 'artisan_backup_and_migrate');
 
 // [Optional] Uncomment to run horizon:terminate
-before('deploy:symlink', 'artisan:horizon:terminate');
+after('deploy:symlink', 'artisan:horizon:terminate');
 
 // [Optional] if deploy fails automatically unlock.
 fail('deploy', 'deploy:failed');
