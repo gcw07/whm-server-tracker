@@ -29,9 +29,6 @@ class Kernel extends ConsoleKernel
 
         // Schedule Server Tracker
         $schedule->command('server-tracker:refresh')->hourly();
-
-        // Schedule WebSockets Clean Up
-        $schedule->command('websockets:clean')->daily();
     }
 
     /**
