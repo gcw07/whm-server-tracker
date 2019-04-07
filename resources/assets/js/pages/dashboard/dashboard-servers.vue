@@ -13,15 +13,15 @@
                 <tbody>
                     <tr>
                         <td>Dedicated</td>
-                        <td>{{ servers.dedicated }}</td>
+                        <td>{{ servers.dedicated || '0' }}</td>
                     </tr>
                     <tr>
                         <td>Reseller</td>
-                        <td>{{ servers.reseller }}</td>
+                        <td>{{ servers.reseller || '0' }}</td>
                     </tr>
                     <tr>
                         <td>VPS</td>
-                        <td>{{ servers.vps }}</td>
+                        <td>{{ servers.vps || '0' }}</td>
                     </tr>
                 </tbody>
             </table>
