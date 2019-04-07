@@ -18,7 +18,7 @@ class WHMIntegrationTest extends TestCase
     protected $whmTestServerToken;
     protected $connector;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

@@ -13,7 +13,7 @@ class ServerTest extends TestCase
 
     protected $server;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
