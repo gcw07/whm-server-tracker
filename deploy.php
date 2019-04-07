@@ -12,7 +12,7 @@ require 'recipe/npm.php';
  | It will then make sure that all required variables are set in
  | order to run the deployment.
  */
-with(new \Dotenv\Dotenv(__DIR__))->load();
+with(\Dotenv\Dotenv::create(__DIR__))->load();
 
 set('deployment_host', getenv('DEPLOY_HOST'));
 set('deployment_user', getenv('DEPLOY_USER'));
