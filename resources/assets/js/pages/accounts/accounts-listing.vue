@@ -87,7 +87,7 @@
                             'disk-limit': (item.disk_usage_raw > 90 && ! item.suspended)
                             }">
                         <td>
-                            <a href="#">{{ item.domain }}</a>
+                            <a :href="item.domain_url" target="_blank">{{ item.domain }}</a>
                         </td>
                         <td v-if="!server">
                             <a :href="serverAccountsUrl(item)">{{ item.server.name }}</a>
