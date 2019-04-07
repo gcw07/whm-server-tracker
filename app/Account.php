@@ -10,7 +10,7 @@ class Account extends Model
     protected $guarded = [];
     protected $casts = ['backup' => 'boolean', 'suspended' => 'boolean'];
     protected $dates = ['suspend_time', 'setup_date'];
-    protected $appends = ['disk_usage', 'cpanel_url', 'whm_url', 'domain_url'];
+    protected $appends = ['disk_usage', 'disk_usage_raw', 'cpanel_url', 'whm_url', 'domain_url'];
 
     public function server()
     {
@@ -33,14 +33,23 @@ class Account extends Model
 
     public function getDiskUsageAttribute()
     {
+        if (is_null($this->disk_usage_raw)) {
+            return 'n/a';
+        }
+
+        return $this->disk_usage_raw . '%';
+    }
+
+    public function getDiskUsageRawAttribute()
+    {
         $diskUsed = substr($this->disk_used, 0, -1);
         $diskLimit = substr($this->disk_limit, 0, -1);
 
         if (! is_numeric($diskLimit)) {
-            return 'n/a';
+            return null;
         }
 
-        return round(($diskUsed / $diskLimit) * 100, 1) . '%';
+        return round(($diskUsed / $diskLimit) * 100, 1);
     }
 
     public function getCpanelUrlAttribute()

@@ -81,7 +81,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in items" :class="{'suspended': item.suspended}">
+                    <tr v-for="item in items"
+                        :class="{
+                            'suspended': item.suspended,
+                            'disk-limit': (item.disk_usage_raw > 90 && ! item.suspended)
+                            }">
                         <td>
                             <a href="#">{{ item.domain }}</a>
                         </td>
