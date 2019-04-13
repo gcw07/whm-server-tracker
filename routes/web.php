@@ -33,18 +33,18 @@ Route::get('password/reset/{token}', [ResetPasswordController::class, 'showReset
 Route::post('password/reset', [ResetPasswordController::class, 'reset']);
 
 // Dashboard Routes...
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 // Account Routes...
-Route::group(['middleware' => 'auth', 'prefix' => 'accounts'], function () {
+Route::prefix('accounts')->middleware('auth')->group(function () {
     Route::get('/', [AccountsController::class, 'index'])->name('accounts.index');
     Route::get('/{server}', [AccountsController::class, 'index'])->name('accounts.server-index');
 });
 
 // Server Routes...
-Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
+Route::prefix('servers')->middleware('auth')->group(function () {
     Route::post('/', [ServersController::class, 'store'])->name('servers.store');
     Route::get('/', [ServersController::class, 'index'])->name('servers.index');
     Route::delete('/{server}', [ServersController::class, 'destroy'])->name('servers.destroy');
@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'servers'], function () {
 });
 
 // User Routes...
-Route::group(['middleware' => 'auth', 'prefix' => 'users'], function () {
+Route::prefix('users')->middleware('auth')->group(function () {
     Route::post('/', [UsersController::class, 'store'])->name('users.store');
     Route::get('/', [UsersController::class, 'index'])->name('users.index');
     Route::delete('/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
@@ -71,12 +71,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'users'], function () {
 });
 
 // Search Routes...
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware('auth')->group(function () {
     Route::get('/search', [SearchController::class, 'index'])->name('search');
 });
 
 // API Routes...
-Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
+Route::prefix('api')->middleware('auth')->group(function () {
     Route::get('/accounts', [AccountsListingsController::class, 'index'])->name('accounts.listing');
     Route::get('/accounts/{server}', [AccountsListingsController::class, 'index'])->name('accounts.server-listing');
     Route::get('/dashboard/stats', [DashboardStatsController::class, 'index'])->name('dashboard.stats');
