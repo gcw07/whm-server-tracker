@@ -18,6 +18,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",
+        "barryvdh/laravel-ide-helper": "^2.6",
         "beyondcode/laravel-dump-server": "^1.0",
         "deployer/deployer": "^6.3",
         "deployer/recipes": "^6.1",
