@@ -88,14 +88,14 @@ task('artisan:migrate', function () {
 
 desc('Execute artisan horizon:terminate');
 task('artisan:horizon:terminate', function () {
-    if (get('deployment_horizon') === true) {
+    if (strtolower(get('deployment_horizon')) === 'true') {
         run('{{bin/php}} {{release_path}}/artisan horizon:terminate');
     }
 });
 
 desc('Execute artisan websockets:serve');
 task('artisan:websockets:serve', function () {
-    if (get('deployment_websockets') === true) {
+    if (strtolower(get('deployment_websockets')) === 'true') {
         run('{{bin/php}} {{release_path}}/artisan websockets:serve');
     }
 });
