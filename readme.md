@@ -27,7 +27,7 @@ Install this package by cloning this repository and install like you normally in
 
 - Run `composer install` and `npm install`
 - Run `npm` and `npm run dev` to generate assets
-- Copy `.env.example` to `.env` and fill your values (`php artisan key:generate, database, pusher values etc)
+- Copy `.env.example` to `.env` and fill your values (`php artisan key:generate`, database, pusher values etc)
 - Run `php artisan migrate`
 - Start your queue listener and setup the Laravel scheduler.
 - Run installer `php artisan server-tracker:install` to setup default user.
