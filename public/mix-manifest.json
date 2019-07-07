@@ -1,8 +1,8 @@
 {
-    "/js/vendor.js": "/js/vendor.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/js/manifest.js": "/js/manifest.js",
+    "/js/vendor.js": "/js/vendor.js",
     "/js/fontawesome.js": "/js/fontawesome.js",
     "/js/fontawesome-brands.js": "/js/fontawesome-brands.js",
     "/js/fontawesome-light.js": "/js/fontawesome-light.js",
