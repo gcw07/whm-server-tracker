@@ -15,6 +15,7 @@ require 'recipe/npm.php';
 with(\Dotenv\Dotenv::create(__DIR__))->load();
 
 set('deployment_host', getenv('DEPLOY_HOST'));
+set('deployment_port', getenv('DEPLOY_PORT'));
 set('deployment_user', getenv('DEPLOY_USER'));
 set('deployment_path', getenv('DEPLOY_PATH'));
 set('deployment_repository', getenv('DEPLOY_REPOSITORY'));
@@ -35,11 +36,11 @@ set('ssh_multiplexing', true);
 // Write Mode needs to be chmod.
 set('writable_mode', 'chmod');
 
-// Shared files/dirs between deploys 
+// Shared files/dirs between deploys
 add('shared_files', []);
 add('shared_dirs', []);
 
-// Writable dirs by web server 
+// Writable dirs by web server
 add('writable_dirs', [
     'storage/app/backups',
 ]);
@@ -48,6 +49,7 @@ add('writable_dirs', [
 // Hosts
 
 host(get('deployment_host'))
+    ->port(get('deployment_port', 22))
     ->user(get('deployment_user'))
     ->set('deploy_path', get('deployment_path'));
 
