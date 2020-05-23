@@ -14,7 +14,7 @@ class CreateAccountsTable extends Migration
     public function up()
     {
         Schema::create('accounts', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->unsignedInteger('server_id');
             $table->string('domain');
             $table->string('user');
@@ -29,15 +29,5 @@ class CreateAccountsTable extends Migration
             $table->string('plan');
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('accounts');
     }
 }
