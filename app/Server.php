@@ -6,6 +6,7 @@ use App\Filters\ServerFilters;
 use App\Jobs\FetchServerAccounts;
 use App\Jobs\FetchServerDetails;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Server extends Model
 {
@@ -155,7 +156,7 @@ class Server extends Model
             'ea-php73' => 'PHP 7.3',
         ];
 
-        return array_get($versions, $this->settings()->php_version, 'Unknown');
+        return Arr::get($versions, $this->settings()->php_version, 'Unknown');
     }
 
     public function getMissingTokenAttribute()

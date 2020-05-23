@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Arr;
+
 class Settings
 {
     /**
@@ -48,7 +50,7 @@ class Settings
      */
     public function get($key)
     {
-        return array_get($this->settings, $key);
+        return Arr::get($this->settings, $key);
     }
 
     /**
@@ -72,7 +74,7 @@ class Settings
      */
     public function forget($key)
     {
-        array_forget($this->settings, $key);
+        Arr::forget($this->settings, $key);
 
         return $this->persist();
     }
@@ -121,7 +123,7 @@ class Settings
     {
         $this->settings = array_merge(
             $this->settings,
-            array_only($attributes, $this->allowed)
+            Arr::only($attributes, $this->allowed)
         );
 
         return $this->persist();
