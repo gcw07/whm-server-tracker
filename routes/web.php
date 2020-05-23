@@ -18,6 +18,7 @@ use App\Http\Controllers\ServersController;
 use App\Http\Controllers\ServersTokenController;
 use App\Http\Controllers\UsersChangePasswordController;
 use App\Http\Controllers\UsersController;
+use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
 
