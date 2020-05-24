@@ -1,13 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Filters\AccountFilters;
+use App\Models\Concerns\Unguarded;
 use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
-    protected $guarded = [];
+    use Unguarded;
+
     protected $casts = ['backup' => 'boolean', 'suspended' => 'boolean'];
     protected $dates = ['suspend_time', 'setup_date'];
     protected $appends = ['disk_usage', 'disk_usage_raw', 'cpanel_url', 'whm_url', 'domain_url'];

@@ -1,16 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Filters\ServerFilters;
 use App\Jobs\FetchServerAccounts;
 use App\Jobs\FetchServerDetails;
+use App\Models\Concerns\Unguarded;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 class Server extends Model
 {
-    protected $guarded = [];
+    use Unguarded;
+
     protected $withCount = ['accounts'];
     protected $casts = ['settings' => 'json'];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
