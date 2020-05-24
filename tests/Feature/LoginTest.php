@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Login;
 use Illuminate\Support\Facades\Auth;
+use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -13,17 +15,17 @@ class LoginTest extends TestCase
     /** @test */
     function logging_in_with_valid_credentials()
     {
-        $user = create('App\User', [
+        $user = UserFactory::new()->create([
             'email' => 'john@example.com',
             'password' => bcrypt('super-secret-password'),
         ]);
 
-        $response = $this->post('/login', [
+        $response = $this->post(route('login'), [
             'email' => 'john@example.com',
             'password' => 'super-secret-password',
         ]);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect(route('dashboard'));
 
         $this->assertTrue(Auth::check());
         $this->assertTrue(Auth::user()->is($user));
@@ -32,12 +34,12 @@ class LoginTest extends TestCase
     /** @test */
     function logging_in_with_invalid_credentials()
     {
-        $user = create('App\User', [
+        UserFactory::new()->create([
             'email' => 'john@example.com',
             'password' => bcrypt('super-secret-password'),
         ]);
 
-        $response = $this->post('/login', [
+        $response = $this->post(route('login'), [
             'email' => 'john@example.com',
             'password' => 'not-the-right-password',
         ]);
@@ -53,7 +55,7 @@ class LoginTest extends TestCase
     /** @test */
     function logging_in_with_an_account_that_does_not_exist()
     {
-        $response = $this->post('/login', [
+        $response = $this->post(route('login'), [
             'email' => 'nobody@example.com',
             'password' => 'not-the-right-password',
         ]);
@@ -69,9 +71,9 @@ class LoginTest extends TestCase
     /** @test */
     function logging_out_the_current_user()
     {
-        $this->signIn();
+        $user = UserFactory::new()->create();
 
-        $response = $this->post('/logout');
+        $response = $this->actingAs($user)->post('/logout');
 
         $response->assertRedirect('/');
         $this->assertFalse(Auth::check());
@@ -80,19 +82,25 @@ class LoginTest extends TestCase
     /** @test */
     function logging_in_updates_last_login_at_and_last_ip_address()
     {
-        $user = create('App\User', [
+        $user = UserFactory::new()->create([
             'email' => 'jane@example.com',
             'password' => bcrypt('secret-password'),
         ]);
 
-        $response = $this->post('/login', [
+        $response = $this->post(route('login'), [
             'email' => 'jane@example.com',
             'password' => 'secret-password',
         ]);
 
+        $response->assertRedirect(route('dashboard'));
+
         $this->assertTrue(Auth::check());
         $this->assertTrue(Auth::user()->is($user));
-        $this->assertNotNull(Auth::user()->last_login_at);
-        $this->assertNotNull(Auth::user()->last_login_ip_address);
+
+        tap(Login::first(), function ($login) use ($user) {
+            $this->assertEquals($user->id, $login->user_id);
+            $this->assertNotNull($login->ip_address);
+            $this->assertNotNull($login->created_at);
+        });
     }
 }
