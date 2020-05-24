@@ -2,9 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Models\Server;
 use Faker\Generator as Faker;
 
-$factory->define(App\Server::class, function (Faker $faker) {
+$factory->define(Server::class, function (Faker $faker) {
     return [
         'name' => $faker->domainName,
         'address' => $faker->ipv4,

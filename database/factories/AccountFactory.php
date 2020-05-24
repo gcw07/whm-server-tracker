@@ -2,17 +2,19 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Models\Account;
+use App\Models\Server;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
 
-$factory->define(App\Account::class, function (Faker $faker) {
+$factory->define(Account::class, function (Faker $faker) {
     $domain = $faker->domainName;
     $user = explode('.', $domain)[0];
     $suspended = $faker->boolean(10);
 
     return [
         'server_id' => function () {
-            return factory(App\Server::class)->create()->id;
+            return factory(Server::class)->create()->id;
         },
         'domain' => $domain,
         'user' => $user,
