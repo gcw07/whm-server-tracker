@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class UsersChangePasswordController extends Controller
+class UserChangePasswordController extends Controller
 {
     /**
      * Update the specified resource in storage.

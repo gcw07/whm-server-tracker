@@ -16,8 +16,8 @@ use App\Http\Controllers\FetchDetailsController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServersController;
 use App\Http\Controllers\ServersTokenController;
-use App\Http\Controllers\UsersChangePasswordController;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserChangePasswordController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -62,13 +62,14 @@ Route::prefix('servers')->middleware('auth')->group(function () {
 
 // User Routes...
 Route::prefix('users')->middleware('auth')->group(function () {
-    Route::post('/', [UsersController::class, 'store'])->name('users.store');
-    Route::get('/', [UsersController::class, 'index'])->name('users.index');
-    Route::delete('/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
-    Route::put('/{user}', [UsersController::class, 'update'])->name('users.update');
-    Route::get('/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
+    Route::post('/', [UserController::class, 'store'])->name('users.store');
+    Route::get('/', [UserController::class, 'index'])->name('users.index');
+    Route::get('/create', [UserController::class, 'create'])->name('users.create');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::put('/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 
-    Route::put('/{user}/change-password', [UsersChangePasswordController::class, 'update'])->name('users.change-password');
+    Route::put('/{user}/change-password', [UserChangePasswordController::class, 'update'])->name('users.change-password');
 });
 
 // Search Routes...
