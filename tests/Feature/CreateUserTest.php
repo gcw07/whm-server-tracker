@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\User;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -20,128 +22,111 @@ class CreateUserTest extends TestCase
     }
 
     /** @test */
+    public function guests_cannot_view_the_add_user_form()
+    {
+        $this->get(route('users.create'))
+            ->assertRedirect(route('login'));
+    }
+
+    /** @test */
+    public function an_authorized_user_can_view_the_add_user_form()
+    {
+        $user = UserFactory::new()->create();
+
+        $this->actingAs($user)
+            ->get(route('users.create'))
+            ->assertSuccessful();
+    }
+
+    /** @test */
     public function guests_cannot_add_new_users()
     {
-        $response = $this->postJson('/users', $this->validParams());
+        $this->postJson(route('users.store'), $this->validParams())
+            ->assertUnauthorized();
 
-        $response->assertStatus(401);
         $this->assertEquals(0, User::count());
     }
 
     /** @test */
     public function an_authorized_user_can_add_a_valid_user()
     {
-        $this->signIn();
+        $user = UserFactory::new()->create();
 
-        $response = $this->postJson('/users', $this->validParams([
-            'name'                  => 'Grant Williams',
+        $response = $this->actingAs($user)
+            ->postJson(route('users.store'), $this->validParams([
+                'name'                  => 'Grant Williams',
             'email'                 => 'grant@example.com',
             'password'              => 'secret',
             'password_confirmation' => 'secret'
-        ]));
+            ]));
 
-        $response->assertJson(['name' => 'Grant Williams']);
-        $response->assertJson(['email' => 'grant@example.com']);
-    }
+        $response->assertRedirect(route('users.index'));
 
-    /** @test */
-    public function name_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/users', $this->validParams([
-            'name' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('name');
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function email_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/users', $this->validParams([
-            'email' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function email_must_be_a_valid_email()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/users', $this->validParams([
-            'email' => 'not-a-valid-email.com',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function email_must_be_unique()
-    {
-        $user = create('App\User', ['email' => 'grant@example.com']);
-
-        $this->signIn($user);
-
-        $response = $this->postJson('/users', $this->validParams([
+        $this->assertDatabaseHas('users', [
+            'name' => 'Grant Williams',
             'email' => 'grant@example.com',
-        ]));
+        ]);
+    }
+
+    /**
+     * @dataProvider validationDataProvider
+     * @test
+     * @param $field
+     * @param $value
+     * @param $errorMessage
+     */
+    public function validate_rules_for_user_create($field, $value, $errorMessage)
+    {
+        $user = UserFactory::new()->create();
+
+        $response = $this->actingAs($user)
+            ->postJson(route('users.store'), $this->validParams([
+                $field => $value,
+            ]));
 
         $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
+        $response->assertJsonValidationErrors([$field => $errorMessage]);
+        $this->assertEquals(1, User::count());
+    }
+
+    public function validationDataProvider()
+    {
+        return [
+            'name is required' => ['name', '', 'field is required'],
+            'email is required' => ['email', '', 'field is required'],
+            'email must be valid' => ['email', 'not-valid-email', 'must be a valid email address'],
+            'password is required' => ['password', '', 'field is required'],
+            'password must be at least 6 characters' => ['password', Str::random(5), 'must be at least 6 characters'],
+        ];
+    }
+
+    /** @test */
+    public function email_must_be_unique_for_user_create()
+    {
+        $user = UserFactory::new()->create(['email' => 'grant@example.com']);
+
+        $response = $this->actingAs($user)
+            ->postJson(route('users.store'), $this->validParams([
+                'email' => 'grant@example.com',
+            ]));
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['email' => 'has already been taken']);
         $this->assertEquals(1, User::count());
     }
 
     /** @test */
-    public function password_is_required()
+    public function password_confirmation_is_required_for_user_create()
     {
-        $this->signIn();
+        $user = UserFactory::new()->create();
 
-        $response = $this->postJson('/users', $this->validParams([
-            'password' => '',
-        ]));
+        $response = $this->actingAs($user)
+            ->postJson(route('users.store'), $this->validParams([
+                'password_confirmation' => '',
+            ]));
 
         $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function password_confirmation_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/users', $this->validParams([
-            'password_confirmation' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function password_must_be_at_least_6_characters()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/users', $this->validParams([
-            'password'              => 'four',
-            'password_confirmation' => 'four',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
+        $response->assertJsonValidationErrors(['password' => 'confirmation does not match']);
         $this->assertEquals(1, User::count());
     }
 }

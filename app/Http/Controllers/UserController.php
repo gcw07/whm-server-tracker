@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -15,28 +16,23 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users.index');
+//        return view('users.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function create()
     {
-        $data = $this->validate($request, [
-            'name'     => ['required', 'string', 'max:191'],
-            'email'    => ['required', 'string', 'email', 'max:191', Rule::unique('users')],
-            'password' => ['required', 'string', 'min:6', 'confirmed']
-        ]);
 
-        $data['password'] = bcrypt($data['password']);
+    }
 
-        $user = User::create($data);
+    public function store(CreateUserRequest $request)
+    {
+        $data = collect($request->validated())->merge([
+            'password' => bcrypt($request->get('password'))
+        ])->toArray();
 
-        return response()->json($user);
+        User::create($data);
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -66,7 +62,9 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return response()->json($user);
+        return redirect()->route('users.index');
+
+//        return response()->json($user);
     }
 
     /**
