@@ -22,6 +22,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.3",
         "barryvdh/laravel-ide-helper": "^2.7",
+        "christophrumpel/laravel-factories-reloaded": "^1.0",
         "deployer/deployer": "^6.8",
         "deployer/recipes": "^6.2",
         "facade/ignition": "^2.0",
