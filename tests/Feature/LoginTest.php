@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
