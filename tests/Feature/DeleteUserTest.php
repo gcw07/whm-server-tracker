@@ -2,7 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\User;
+use App\Models\User;
+use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -10,46 +11,44 @@ class DeleteUserTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+    }
+
     /** @test */
     public function guests_cannot_delete_a_user()
     {
-        $user = create('App\User', [
-            'name' => 'John Doe'
-        ]);
+        $this->deleteJson(route('users.destroy', $this->user->id))
+            ->assertUnauthorized();
 
-        $response = $this->deleteJson("/users/{$user->id}");
-
-        $response->assertStatus(401);
-        $this->assertEquals('John Doe', $user->fresh()->name);
+        $this->assertEquals(1, User::count());
     }
 
     /** @test */
     function an_authorized_user_can_delete_a_user()
     {
-        $this->signIn();
+        $user = UserFactory::new()->create();
 
-        $user = create('App\User', [
-            'name' => 'John Doe'
-        ]);
+        $this->actingAs($user)
+            ->deleteJson((route('users.destroy', $this->user->id)))
+            ->assertSuccessful();
 
-        $response = $this->deleteJson("/users/{$user->id}");
-
-        $response->assertStatus(204);
         $this->assertEquals(1, User::count());
     }
 
     /** @test */
     public function an_authorized_user_cannot_delete_themselves()
     {
-        $user = create('App\User', [
-            'name' => 'John Doe'
-        ]);
-
-        $this->signIn($user);
-
-        $response = $this->deleteJson("/users/{$user->id}");
+        $response = $this->actingAs($this->user)
+            ->deleteJson((route('users.destroy', $this->user->id)));
 
         $response->assertStatus(422);
+
         $this->assertEquals(1, User::count());
     }
 }
