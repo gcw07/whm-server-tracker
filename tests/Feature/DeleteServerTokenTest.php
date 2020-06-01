@@ -2,40 +2,47 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use App\Models\Server;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Factories\ServerFactory;
+use Tests\Factories\UserFactory;
+use Tests\TestCase;
 
 class DeleteServerTokenTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function guests_cannot_delete_a_server_token()
+    private User $user;
+    private Server $server;
+
+    protected function setUp(): void
     {
-        $server = create('App\Server', [
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->server = ServerFactory::new()->create([
             'token' => 'valid-api-token'
         ]);
-
-        $response = $this->deleteJson("/servers/{$server->id}/token");
-
-        $response->assertStatus(401);
-        $this->assertEquals('valid-api-token', $server->fresh()->token);
     }
 
     /** @test */
-    function an_authorized_user_can_delete_a_server_token()
+    public function guests_cannot_delete_a_server_token()
     {
-        $this->signIn();
+        $this->deleteJson(route('servers.token-destroy', $this->server->id))
+            ->assertUnauthorized();
 
-        $server = create('App\Server', [
-            'token' => 'server-api-token',
-        ]);
+        $this->assertEquals('valid-api-token', $this->server->fresh()->token);
+    }
 
-        $response = $this->deleteJson("/servers/{$server->id}/token");
+    /** @test */
+    public function an_authorized_user_can_delete_a_server_token()
+    {
+        $this->actingAs($this->user)
+            ->deleteJson((route('servers.token-destroy', $this->server->id)))
+            ->assertSuccessful();
 
-        $response->assertStatus(200);
-
-        tap($server->fresh(), function ($server) {
+        tap($this->server->fresh(), function (Server $server) {
             $this->assertNull($server->token);
         });
     }
