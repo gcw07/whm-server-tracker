@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Server;
+use App\Http\Requests\CreateServerRequest;
+use App\Models\Server;
 use Illuminate\Http\Request;
 
 class ServersController extends Controller
@@ -22,28 +23,15 @@ class ServersController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(CreateServerRequest $request)
     {
-        $data = $this->validate($request, [
-            'name'        => ['required', 'max:191'],
-            'address'     => ['required', 'max:191'],
-            'port'        => ['required', 'numeric'],
-            'server_type' => ['required', 'in:dedicated,reseller,vps'],
-            'notes'       => ['nullable'],
-            'token'       => ['nullable']
-        ]);
-
-        $data['settings'] = [];
+        $data = collect($request->validated())->merge([
+            'settings' => []
+        ])->toArray();
 
         $server = Server::create($data);
 
-        return response()->json($server);
+        return redirect()->route('servers.index');
     }
 
     /**
