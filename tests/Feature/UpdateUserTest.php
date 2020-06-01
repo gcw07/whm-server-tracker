@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Factories\UserFactory;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UpdateUserTest extends TestCase
 {
@@ -59,7 +59,7 @@ class UpdateUserTest extends TestCase
     }
 
     /** @test */
-    function an_authorized_user_can_edit_a_user()
+    public function an_authorized_user_can_edit_a_user()
     {
         $user = UserFactory::new()->create();
 
