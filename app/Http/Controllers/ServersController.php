@@ -17,6 +17,11 @@ class ServersController extends Controller
         return view('servers.index');
     }
 
+    public function create()
+    {
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
