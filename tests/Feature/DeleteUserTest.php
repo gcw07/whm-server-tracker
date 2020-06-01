@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Factories\UserFactory;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DeleteUserTest extends TestCase
 {
@@ -30,7 +30,7 @@ class DeleteUserTest extends TestCase
     }
 
     /** @test */
-    function an_authorized_user_can_delete_a_user()
+    public function an_authorized_user_can_delete_a_user()
     {
         $user = UserFactory::new()->create();
 
