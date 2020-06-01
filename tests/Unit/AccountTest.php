@@ -15,7 +15,8 @@ class AccountTest extends TestCase
     /** @test */
     public function it_has_a_server()
     {
-        $account = AccountFactory::new()->create();
+        $server = ServerFactory::new()->create();
+        $account = AccountFactory::new()->create(['server_id' => $server->id]);
 
         $this->assertInstanceOf(Server::class, $account->server);
     }
