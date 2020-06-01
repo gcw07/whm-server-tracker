@@ -2,65 +2,69 @@
 
 namespace Tests\Feature;
 
-use App\Account;
-use App\Server;
-use Tests\TestCase;
+use App\Models\Account;
+use App\Models\Server;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Factories\ServerFactory;
+use Tests\Factories\UserFactory;
+use Tests\TestCase;
 
 class DeleteServerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function guests_cannot_delete_a_server()
+    private User $user;
+    private Server $server;
+
+    protected function setUp(): void
     {
-        $server = create('App\Server', [
-            'name' => 'my-server-name'
-        ]);
+        parent::setUp();
 
-        $response = $this->deleteJson("/servers/{$server->id}");
-
-        $response->assertStatus(401);
-        $this->assertEquals('my-server-name', $server->fresh()->name);
+        $this->user = UserFactory::new()->create();
+        $this->server = ServerFactory::new()->create();
     }
 
     /** @test */
-    function an_authorized_user_can_delete_a_server()
+    public function guests_cannot_delete_a_server()
     {
-        $this->signIn();
+        $this->deleteJson(route('servers.destroy', $this->server->id))
+            ->assertUnauthorized();
 
-        $server = create('App\Server', [
-            'name' => 'my-server-name',
-        ]);
+        $this->assertEquals(1, Server::count());
+    }
 
-        $response = $this->deleteJson("/servers/{$server->id}");
+    /** @test */
+    public function an_authorized_user_can_delete_a_server()
+    {
+        $this->actingAs($this->user)
+            ->deleteJson((route('servers.destroy', $this->server->id)))
+            ->assertSuccessful();
 
-        $response->assertStatus(204);
         $this->assertEquals(0, Server::count());
     }
 
     /** @test */
     public function accounts_are_deleted_when_a_server_is_deleted()
     {
-        $this->signIn();
+        $server = ServerFactory::new()
+            ->with(Account::class, 'accounts', 5)
+            ->create(['name' => 'my-server-name']);
+        $otherServer = ServerFactory::new()
+            ->with(Account::class, 'accounts', 1)
+            ->create(['name' => 'other-server-name']);
 
-        $server = create('App\Server', ['name' => 'my-server-name']);
-        $otherServer = create('App\Server', ['name' => 'other-server-name']);
+        $this->assertEquals(3, Server::count());
 
-        $accounts = create('App\Account', ['server_id' => $server->id], 2);
-        $otherAccount = create('App\Account', ['server_id' => $otherServer->id]);
-
-        $this->assertEquals(2, Server::count());
-
-        tap(Server::first(), function ($server) {
-            $this->assertCount(2, $server->accounts);
+        tap($server->fresh(), function (Server $server) {
+            $this->assertCount(5, $server->accounts);
         });
 
-        $response = $this->deleteJson("/servers/{$server->id}");
+        $this->actingAs($this->user)
+            ->deleteJson((route('servers.destroy', $server->id)))
+            ->assertSuccessful();
 
-        $response->assertStatus(204);
-
-        $this->assertEquals(1, Server::count());
+        $this->assertEquals(2, Server::count());
         $this->assertEquals(1, Account::count());
     }
 }
