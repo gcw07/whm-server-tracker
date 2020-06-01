@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use App\Enums\ServerTypeEnum;
 use App\Filters\ServerFilters;
 use App\Jobs\FetchServerAccounts;
 use App\Jobs\FetchServerDetails;
 use App\Models\Concerns\Unguarded;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Spatie\Enum\Laravel\HasEnums;
 
 class Server extends Model
 {
-    use Unguarded;
+    use HasEnums, Unguarded;
 
     protected $withCount = ['accounts'];
     protected $casts = ['settings' => 'json'];
+    protected $enums = ['server_type' => ServerTypeEnum::class];
     protected $dates = ['details_last_updated', 'accounts_last_updated'];
     protected $appends = [
         'formatted_server_type',
