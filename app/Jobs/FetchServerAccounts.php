@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Connectors\ServerConnector;
 use App\Events\FetchedServerAccounts;
-use App\Server;
+use App\Models\Server;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;

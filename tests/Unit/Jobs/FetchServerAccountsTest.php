@@ -5,7 +5,10 @@ namespace Tests\Unit\Jobs;
 use App\Connectors\FakeServerConnector;
 use App\Connectors\ServerConnector;
 use App\Jobs\FetchServerAccounts;
+use App\Models\Server;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Factories\AccountFactory;
+use Tests\Factories\ServerFactory;
 use Tests\TestCase;
 
 class FetchServerAccountsTest extends TestCase
@@ -14,7 +17,7 @@ class FetchServerAccountsTest extends TestCase
 
     private function validAccounts($times = 1, $extraAccounts = [])
     {
-        $accounts = make('App\Account', [], $times);
+        $accounts = AccountFactory::new()->times($times)->make();
 
         if (sizeof($extraAccounts) > 0) {
             return $accounts
@@ -57,7 +60,7 @@ class FetchServerAccountsTest extends TestCase
     /** @test */
     public function it_fetches_server_accounts()
     {
-        $server = create('App\Server', [
+        $server = ServerFactory::new()->create([
             'name'        => 'my-server-name',
             'address'     => '1.1.1.1',
             'port'        => 1000,
@@ -71,7 +74,7 @@ class FetchServerAccountsTest extends TestCase
 
         FetchServerAccounts::dispatch($server);
 
-        tap($server->fresh(), function ($server) {
+        tap($server->fresh(), function (Server $server) {
             $this->assertEquals('my-server-name', $server->name);
 
             $this->assertCount(2, $server->accounts);
