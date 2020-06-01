@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -50,13 +49,7 @@ class UserController extends Controller
 //        return response()->json($user);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
+    public function destroy(User $user): Response
     {
         if ($user->id === auth()->user()->id) {
             return response(['message' => 'You may not delete yourself.'], 422);
