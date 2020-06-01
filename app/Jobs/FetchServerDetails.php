@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Connectors\ServerConnector;
 use App\Events\FetchedServerDetails;
-use App\Server;
+use App\Models\Server;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
