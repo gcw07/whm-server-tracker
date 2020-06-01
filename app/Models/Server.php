@@ -159,6 +159,7 @@ class Server extends Model
             'ea-php71' => 'PHP 7.1',
             'ea-php72' => 'PHP 7.2',
             'ea-php73' => 'PHP 7.3',
+            'ea-php74' => 'PHP 7.4',
         ];
 
         return Arr::get($versions, $this->settings()->php_version, 'Unknown');
