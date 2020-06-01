@@ -48,6 +48,7 @@ Route::prefix('accounts')->middleware('auth')->group(function () {
 Route::prefix('servers')->middleware('auth')->group(function () {
     Route::post('/', [ServersController::class, 'store'])->name('servers.store');
     Route::get('/', [ServersController::class, 'index'])->name('servers.index');
+    Route::get('/create', [ServersController::class, 'create'])->name('servers.create');
     Route::delete('/{server}', [ServersController::class, 'destroy'])->name('servers.destroy');
     Route::put('/{server}', [ServersController::class, 'update'])->name('servers.update');
     Route::get('/{server}', [ServersController::class, 'show'])->name('servers.show');
