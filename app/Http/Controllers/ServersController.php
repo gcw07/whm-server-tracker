@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateServerRequest;
+use App\Http\Requests\UpdateServerRequest;
 use App\Models\Server;
 use Illuminate\Http\Request;
 
@@ -45,41 +46,22 @@ class ServersController extends Controller
         return view('servers.show', compact('server'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Server $server
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Server $server)
     {
-        return view('servers.edit', compact('server'));
+//        return view('servers.edit', compact('server'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Server $server
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Server $server)
+    public function update(UpdateServerRequest $request, Server $server)
     {
-        $data = $this->validate($request, [
-            'name'        => ['required', 'max:191'],
-            'address'     => ['required', 'max:191'],
-            'port'        => ['required', 'numeric'],
-            'server_type' => ['required', 'in:dedicated,reseller,vps'],
-            'notes'       => ['nullable']
-        ]);
+        $data = $request->validated();
 
-        if ($this->hasServerTypeChangedToReseller($request, $server)) {
-            $data = $this->clearRemoteServerDetails($data);
-        }
+//        if ($this->hasServerTypeChangedToReseller($request, $server)) {
+//            $data = $this->clearRemoteServerDetails($data);
+//        }
 
         $server->update($data);
 
-        return response()->json($server);
+        return redirect()->route('servers.index');
     }
 
     /**
