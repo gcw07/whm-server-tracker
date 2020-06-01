@@ -30,9 +30,7 @@ class AccountFactory extends BaseFactory
         $suspended = $faker->boolean(10);
 
         return [
-            'server_id' => function () {
-                return factory(Server::class)->create()->id;
-            },
+            'server_id' => factory(Server::class),
             'domain' => $domain,
             'user' => $user,
             'ip' => $faker->ipv4,
@@ -45,7 +43,6 @@ class AccountFactory extends BaseFactory
             'disk_limit' => $faker->randomElement(['1000M', '3000M', '5000M', '10000M']),
             'plan' => $faker->randomElement(['1 Gig', '3 Gig', '5 Gig', '10 Gig']),
         ];
-
     }
 
 }
