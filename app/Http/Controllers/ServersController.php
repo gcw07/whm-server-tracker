@@ -43,7 +43,7 @@ class ServersController extends Controller
      */
     public function show(Server $server)
     {
-        return view('servers.show', compact('server'));
+//        return view('servers.show', compact('server'));
     }
 
     public function edit(Server $server)
