@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\FetchServerDetails;
-use App\Server;
+use App\Models\Server;
 
 class FetchDetailsController extends Controller
 {

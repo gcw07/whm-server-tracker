@@ -7,6 +7,8 @@ use App\Connectors\ServerConnector;
 use App\Jobs\FetchServerDetails;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
+use Tests\Factories\ServerFactory;
+use Tests\Factories\UserFactory;
 use Tests\TestCase;
 
 class GetServerDetailsTest extends TestCase
@@ -16,20 +18,17 @@ class GetServerDetailsTest extends TestCase
     /** @test */
     public function guests_can_not_fetch_server_details()
     {
-        $server = create('App\Server');
+        $server = ServerFactory::new()->create();
 
-        $response = $this->get("/servers/{$server->id}/fetch-details");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('servers.fetch-details', $server->id))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_fetch_server_details()
     {
-        $this->signIn();
-
-        $server = create('App\Server', [
+        $user = UserFactory::new()->create();
+        $server = ServerFactory::new()->create([
             'name'        => 'my-server-name',
             'address'     => '1.1.1.1',
             'port'        => 1000,
@@ -42,9 +41,9 @@ class GetServerDetailsTest extends TestCase
         $fake = new FakeServerConnector;
         $this->app->instance(ServerConnector::class, $fake);
 
-        $response = $this->get("/servers/{$server->id}/fetch-details");
-
-        $response->assertStatus(200);
+        $this->actingAs($user)
+            ->get(route('servers.fetch-details', $server->id))
+            ->assertSuccessful();
 
         Queue::assertPushed(FetchServerDetails::class, function ($job) use ($server) {
             return $job->server->is($server);
