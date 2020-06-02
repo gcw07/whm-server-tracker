@@ -6,6 +6,8 @@ use App\Connectors\FakeServerConnector;
 use App\Connectors\ServerConnector;
 use App\Jobs\FetchServerAccounts;
 use Illuminate\Support\Facades\Queue;
+use Tests\Factories\ServerFactory;
+use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -16,25 +18,22 @@ class GetServerAccountsTest extends TestCase
     /** @test */
     public function guests_can_not_fetch_server_accounts()
     {
-        $server = create('App\Server');
+        $server = ServerFactory::new()->create();
 
-        $response = $this->get("/servers/{$server->id}/fetch-accounts");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('servers.fetch-accounts', $server->id))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_fetch_server_accounts()
     {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'name'             => 'my-server-name',
-            'address'          => '1.1.1.1',
-            'port'             => 2087,
-            'server_type'      => 'vps',
-            'token'            => 'valid-api-token',
+        $user = UserFactory::new()->create();
+        $server = ServerFactory::new()->create([
+            'name'        => 'my-server-name',
+            'address'     => '1.1.1.1',
+            'port'        => 2087,
+            'server_type' => 'vps',
+            'token'       => 'valid-api-token',
         ]);
 
         Queue::fake();
@@ -42,9 +41,9 @@ class GetServerAccountsTest extends TestCase
         $fake = new FakeServerConnector;
         $this->app->instance(ServerConnector::class, $fake);
 
-        $response = $this->get("/servers/{$server->id}/fetch-accounts");
-
-        $response->assertStatus(200);
+        $this->actingAs($user)
+            ->get(route('servers.fetch-accounts', $server->id))
+            ->assertSuccessful();
 
         Queue::assertPushed(FetchServerAccounts::class, function ($job) use ($server) {
             return $job->server->is($server);
