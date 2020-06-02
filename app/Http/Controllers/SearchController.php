@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
-use App\Server;
+use App\Models\Account;
+use App\Models\Server;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -24,9 +24,9 @@ class SearchController extends Controller
             $accounts = [];
         }
 
-        return view('search.index', [
-            'servers'  => $servers,
-            'accounts' => $accounts,
-        ]);
+//        return view('search.index', [
+//            'servers'  => $servers,
+//            'accounts' => $accounts,
+//        ]);
     }
 }
