@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Account;
 use App\Http\Controllers\Controller;
-use App\Server;
-use App\User;
+use App\Models\Account;
+use App\Models\Server;
+use App\Models\User;
 
 class DashboardStatsController extends Controller
 {
