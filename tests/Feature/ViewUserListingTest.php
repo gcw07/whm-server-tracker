@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -12,50 +13,38 @@ class ViewUserListingTest extends TestCase
     /** @test */
     public function guests_can_not_view_user_listings_page()
     {
-        $user = create('App\User');
-
-        $response = $this->get("/users");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('users.index'))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_view_user_listings_page()
     {
-        $this->signIn();
+        $user = UserFactory::new()->create();
 
-        $user = create('App\User');
-
-        $response = $this->get("/users");
-
-        $response->assertStatus(200);
+        $this->actingAs($user)
+            ->get(route('users.index'))
+            ->assertSuccessful();
     }
 
     /** @test */
     public function guests_can_not_view_user_api_listings()
     {
-        $user = create('App\User');
-
-        $response = $this->get("/api/users");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('users.listing'))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_view_user_api_listings()
     {
-        $user = create('App\User', [
+        $user = UserFactory::new()->create([
             'name'        => 'John Doe',
             'email'     => 'john@example.com',
         ]);
 
-        $this->signIn($user);
-
-        $response = $this->get("/api/users");
-
-        $response->assertStatus(200);
+        $response = $this->actingAs($user)
+            ->get(route('users.listing'))
+            ->assertSuccessful();
 
         tap($response->json(), function ($users) {
             $this->assertCount(1, $users);
@@ -67,15 +56,13 @@ class ViewUserListingTest extends TestCase
     /** @test */
     public function the_user_listings_are_in_alphabetical_order()
     {
-        $userA = create('App\User', ['name' => 'John Doe']);
-        $userB = create('App\User', ['name' => 'Amy Smith']);
-        $userC = create('App\User', ['name' => 'Zach Williams']);
+        $userA = UserFactory::new()->create(['name' => 'John Doe']);
+        $userB = UserFactory::new()->create(['name' => 'Amy Smith']);
+        $userC = UserFactory::new()->create(['name' => 'Zach Williams']);
 
-        $this->signIn($userA);
-
-        $response = $this->get("/api/users");
-
-        $response->assertStatus(200);
+        $response = $this->actingAs($userA)
+            ->get(route('users.listing'))
+            ->assertSuccessful();
 
         $response->jsonData()->assertEquals([
             $userB,
