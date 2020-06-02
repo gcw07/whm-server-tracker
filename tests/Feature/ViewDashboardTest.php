@@ -2,6 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Enums\ServerTypeEnum;
+use App\Models\Account;
+use Tests\Factories\AccountFactory;
+use Tests\Factories\ServerFactory;
 use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,26 +34,22 @@ class ViewDashboardTest extends TestCase
     /** @test */
     public function guests_can_not_view_dashboard_api_stats()
     {
-        $response = $this->get("/api/dashboard/stats");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('dashboard.stats'))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_view_dashboard_api_stats()
     {
-        $user = create('App\User');
-        $this->signIn($user);
+        $user = UserFactory::new()->create();
+        ServerFactory::new()
+            ->with(Account::class, 'accounts', 5)
+            ->times(3)
+            ->create();
 
-        $servers = create('App\Server', [], 3);
-        $servers->each(function ($item) {
-            create('App\Account', ['server_id' => $item->id], 5);
-        });
-
-        $response = $this->get("/api/dashboard/stats");
-
-        $response->assertStatus(200);
+        $response = $this->actingAs($user)
+            ->get(route('dashboard.stats'))
+            ->assertSuccessful();
 
         tap($response->json(), function ($data) {
             $this->assertEquals(1, $data['users']);
@@ -61,23 +61,22 @@ class ViewDashboardTest extends TestCase
     /** @test */
     public function guests_can_not_view_dashboard_api_servers()
     {
-        $response = $this->get("/api/dashboard/servers");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('dashboard.servers'))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_view_dashboard_api_servers()
     {
-        $this->signIn();
-        $serversA = create('App\Server', ['server_type' => 'dedicated'], 2);
-        $serversB = create('App\Server', ['server_type' => 'vps'], 3);
-        $serversC = create('App\Server', ['server_type' => 'reseller']);
+        $user = UserFactory::new()->create();
 
-        $response = $this->get("/api/dashboard/servers");
+        ServerFactory::new()->times(2)->create(['server_type' => ServerTypeEnum::DEDICATED()]);
+        ServerFactory::new()->times(3)->create(['server_type' => ServerTypeEnum::VPS()]);
+        ServerFactory::new()->create(['server_type' => ServerTypeEnum::RESELLER()]);
 
-        $response->assertStatus(200);
+        $response = $this->actingAs($user)
+            ->get(route('dashboard.servers'))
+            ->assertSuccessful();
 
         tap($response->json(), function ($data) {
             $this->assertEquals(2, $data['dedicated']);
@@ -89,21 +88,21 @@ class ViewDashboardTest extends TestCase
     /** @test */
     public function guests_can_not_view_dashboard_api_latest_accounts()
     {
-        $response = $this->get("/api/dashboard/latest-accounts");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('dashboard.latest-accounts'))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_view_dashboard_api_latest_accounts()
     {
-        $this->signIn();
-        $accounts = create('App\Account', [], 10);
+        $user = UserFactory::new()->create();
 
-        $response = $this->get("/api/dashboard/latest-accounts");
+        $server = ServerFactory::new()->create();
+        AccountFactory::new()->times(10)->create(['server_id' => $server->id]);
 
-        $response->assertStatus(200);
+        $response = $this->actingAs($user)
+            ->get(route('dashboard.latest-accounts'))
+            ->assertSuccessful();
 
         tap($response->json(), function ($latest) {
             $this->assertCount(5, $latest);

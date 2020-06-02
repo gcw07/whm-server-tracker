@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Account;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 
 class DashboardLatestAccountsController extends Controller
 {

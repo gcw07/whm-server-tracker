@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Server;
+use App\Models\Server;
 
 class DashboardServersController extends Controller
 {
@@ -14,7 +14,7 @@ class DashboardServersController extends Controller
      */
     public function index()
     {
-        $servers = Server::all();
+        $servers = collect(Server::all()->toArray());
 
         $counts = $servers->groupBy('server_type')->map->count();
 
