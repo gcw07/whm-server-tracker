@@ -2,44 +2,49 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use App\Models\Server;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Factories\ServerFactory;
+use Tests\Factories\UserFactory;
+use Tests\TestCase;
 
 class UpdateServerTokenTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+    }
+
     /** @test */
     public function guests_cannot_edit_a_server_token()
     {
-        $server = create('App\Server', [
-            'token' => 'old-valid-api-token'
-        ]);
+        $server = ServerFactory::new()->create(['token' => 'old-valid-api-token']);
 
-        $response = $this->putJson("/servers/{$server->id}/token", [
+        $this->putJson(route('servers.token', $server->id), [
             'token' => 'new-valid-api-token'
-        ]);
+        ])->assertUnauthorized();
 
-        $response->assertStatus(401);
         $this->assertEquals('old-valid-api-token', $server->fresh()->token);
     }
 
     /** @test */
-    function an_authorized_user_can_edit_a_server_token()
+    public function an_authorized_user_can_edit_a_server_token()
     {
-        $this->signIn();
+        $server = ServerFactory::new()->create(['token' => 'old-server-api-token']);
 
-        $server = create('App\Server', [
-            'token' => 'old-server-api-token',
-        ]);
+        $this->actingAs($this->user)
+            ->putJson(route('servers.token', $server->id), [
+                'token' => 'new-server-api-token',
+            ])->assertSuccessful();
 
-        $response = $this->putJson("/servers/{$server->id}/token", [
-            'token' => 'new-server-api-token',
-        ]);
-
-        $response->assertStatus(200);
-
-        tap($server->fresh(), function ($server) {
+        tap($server->fresh(), function (Server $server) {
             $this->assertEquals('new-server-api-token', $server->token);
         });
     }
@@ -47,21 +52,14 @@ class UpdateServerTokenTest extends TestCase
     /** @test */
     public function server_token_is_required()
     {
-        $this->signIn();
+        $server = ServerFactory::new()->create(['token' => 'old-server-api-token']);
 
-        $server = create('App\Server', [
-            'token' => 'old-server-api-token',
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}/token", [
-            'token' => '',
-        ]);
+        $response = $this->actingAs($this->user)
+            ->putJson(route('servers.token', $server->id), [
+                'token' => '',
+            ]);
 
         $response->assertStatus(422);
-        $response->assertJsonHasErrors('token');
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals('old-server-api-token', $server->token);
-        });
+        $response->assertJsonValidationErrors(['token' => 'field is required']);
     }
 }
