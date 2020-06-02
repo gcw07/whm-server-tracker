@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Filters\ServerFilters;
 use App\Http\Controllers\Controller;
-use App\Server;
+use App\Models\Server;
 
 class ServersListingsController extends Controller
 {

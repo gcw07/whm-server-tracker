@@ -2,6 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Enums\ServerTypeEnum;
+use App\Models\User;
+use Tests\Factories\ServerFactory;
+use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -9,46 +13,41 @@ class ViewServerListingTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+    }
+
     /** @test */
     public function guests_can_not_view_server_listings_page()
     {
-        $server = create('App\Server');
-
-        $response = $this->get("/servers");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('servers.index'))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_view_server_listings_page()
     {
-        $this->signIn();
-
-        $server = create('App\Server');
-
-        $response = $this->get("/servers");
-
-        $response->assertStatus(200);
+        $this->actingAs($this->user)
+            ->get(route('servers.index'))
+            ->assertSuccessful();
     }
 
     /** @test */
     public function guests_can_not_view_server_api_listings()
     {
-        $server = create('App\Server');
-
-        $response = $this->get("/api/servers");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('servers.listing'))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_view_server_api_listings()
     {
-        $this->signIn();
-
-        $server = create('App\Server', [
+        ServerFactory::new()->create([
             'name'        => 'My Test Server',
             'address'     => '255.1.1.100',
             'port'        => 1111,
@@ -57,9 +56,9 @@ class ViewServerListingTest extends TestCase
             'token'       => 'new-server-api-token',
         ]);
 
-        $response = $this->get("/api/servers");
-
-        $response->assertStatus(200);
+        $response = $this->actingAs($this->user)
+            ->get(route('servers.listing'))
+            ->assertSuccessful();
 
         tap($response->json(), function ($servers) {
             $this->assertCount(1, $servers);
@@ -72,15 +71,13 @@ class ViewServerListingTest extends TestCase
     /** @test */
     public function the_server_listings_are_in_alphabetical_order()
     {
-        $this->signIn();
+        $serverA = ServerFactory::new()->create(['name' => 'Some Server']);
+        $serverB = ServerFactory::new()->create(['name' => 'Another Server']);
+        $serverC = ServerFactory::new()->create(['name' => 'The Last Server']);
 
-        $serverA = create('App\Server', ['name' => 'Some Server']);
-        $serverB = create('App\Server', ['name' => 'Another Server']);
-        $serverC = create('App\Server', ['name' => 'The Last Server']);
-
-        $response = $this->get("/api/servers");
-
-        $response->assertStatus(200);
+        $response = $this->actingAs($this->user)
+            ->get(route('servers.listing'))
+            ->assertSuccessful();
 
         $response->jsonData()->assertEquals([
             $serverB,
@@ -92,19 +89,12 @@ class ViewServerListingTest extends TestCase
     /** @test */
     public function the_server_listings_can_be_filtered_by_server_type()
     {
-        $this->withoutExceptionHandling();
-        $this->signIn();
+        $serverA = ServerFactory::new()->create(['server_type' => ServerTypeEnum::VPS()]);
+        $serverB = ServerFactory::new()->create(['server_type' => ServerTypeEnum::DEDICATED()]);
 
-        $serverA = create('App\Server', [
-            'server_type' => 'vps'
-        ]);
-        $serverB = create('App\Server', [
-            'server_type' => 'dedicated'
-        ]);
-
-        $response = $this->get("/api/servers?type=vps");
-
-        $response->assertStatus(200);
+        $response = $this->actingAs($this->user)
+            ->get(route('servers.listing', ['type' => 'vps']))
+            ->assertSuccessful();
 
         tap($response->json(), function ($servers) {
             $this->assertCount(1, $servers);
