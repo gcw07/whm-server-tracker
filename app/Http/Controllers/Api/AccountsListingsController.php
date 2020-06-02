@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Filters\AccountFilters;
 use App\Http\Controllers\Controller;
-use App\Account;
-use App\Server;
+use App\Models\Account;
+use App\Models\Server;
 
 class AccountsListingsController extends Controller
 {

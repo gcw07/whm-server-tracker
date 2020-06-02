@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
-use App\Server;
+use App\Models\Account;
+use App\Models\Server;
 use Illuminate\Http\Request;
 
 class AccountsController extends Controller
@@ -17,10 +17,10 @@ class AccountsController extends Controller
     public function index(Server $server)
     {
         if ($server->exists) {
-            return view('accounts.index', compact('server'));
+//            return view('accounts.index', compact('server'));
         }
 
-        return view('accounts.index');
+//        return view('accounts.index');
     }
 
     /**
