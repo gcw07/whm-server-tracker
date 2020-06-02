@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -12,20 +13,18 @@ class ViewDashboardTest extends TestCase
     /** @test */
     public function guests_can_not_view_dashboard_page()
     {
-        $response = $this->get("/dashboard");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $this->get(route('dashboard'))
+            ->assertRedirect(route('login'));
     }
 
     /** @test */
     public function an_authorized_user_can_view_dashboard_page()
     {
-        $this->signIn();
+        $user = UserFactory::new()->create();
 
-        $response = $this->get("/dashboard");
-
-        $response->assertStatus(200);
+        $this->actingAs($user)
+            ->get(route('dashboard'))
+            ->assertSuccessful();
     }
 
     /** @test */
