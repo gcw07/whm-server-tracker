@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/custom-forms": "^0.2.1",
     "@tailwindcss/ui": "^0.3.0",
+    "alpinejs": "^2.3.5",
     "axios": "^0.19",
     "cross-env": "^7.0",
     "laravel-mix": "^5.0",
@@ -19,5 +20,8 @@
     "lodash": "^4.17",
     "resolve-url-loader": "^3.1",
     "tailwindcss": "^1.4"
+  },
+  "devDependencies": {
+    "vue-template-compiler": "^2.6.11"
   }
 }
