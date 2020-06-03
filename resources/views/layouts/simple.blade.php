@@ -1,45 +1,24 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Server Tracker') }}</title>
+  @isset($title)
+    <title>{{ $title }} - WHM Server Tracker</title>
+  @else
+    <title>WHM Server Tracker</title>
+  @endisset
 
-    <!-- Styles -->
-    <link rel="icon" href="data:;base64,iVBORwOKGO=">
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-
-    <!-- Scripts -->
-    <script defer src="{{ mix('js/fontawesome-solid.js') }}"></script>
-    <script defer src="{{ mix('js/fontawesome.js') }}"></script>
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-
-        <section class="section">
-            <div class="container">
-                @yield('content')
-            </div>
-        </section>
-
-    </div>
-
-    <footer class="footer" style="background-color: inherit;">
-        <div class="container">
-            <div class="content has-text-centered">
-                &copy; {{ date('Y') }} Grant Williams
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="{{ mix('js/manifest.js') }}"></script>
-    <script src="{{ mix('js/vendor.js') }}"></script>
-    <script src="{{ mix('js/app.js') }}"></script>
+  {{ $slot }}
 </body>
 </html>
