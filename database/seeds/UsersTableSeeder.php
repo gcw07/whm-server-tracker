@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = factory('App\User')->create([
+        $user = factory('App\Models\User')->create([
             'name' => 'Grant Williams',
             'email' => 'grant@example.com',
             'password' => bcrypt('secret')
