@@ -1,0 +1,20 @@
+.toasted.tailwind {
+  @apply rounded-full bg-gray-700 text-white font-semibold tracking-wide leading-tight px-6 py-4 shadow-xl;
+  min-height: 38px;
+}
+
+.toasted.tailwind.success {
+  @apply bg-green-600 text-white;
+}
+
+.toasted.tailwind.error {
+  @apply bg-red-600 text-white;
+}
+
+.toasted.tailwind.info {
+  @apply bg-blue-600 text-white;
+}
+
+.toasted.tailwind .action {
+  color: #8e2b0c;
+}

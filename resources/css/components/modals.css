@@ -1,0 +1,47 @@
+.v--modal-overlay {
+  /*@apply bg-gray-500 z-50;*/
+}
+
+.modal-enter-active {
+  @apply duration-300 ease-out;
+}
+
+.modal-enter {
+  @apply translate-y-4 opacity-0;
+}
+
+.modal-enter-to {
+  @apply translate-y-0 opacity-100;
+}
+
+@screen sm {
+  .modal-enter {
+    @apply translate-y-0 scale-95;
+  }
+
+  .modal-enter-to {
+    @apply scale-100;
+  }
+}
+
+.modal-leave-active {
+  @apply duration-200 ease-in;
+}
+
+.modal-leave {
+  @apply translate-y-0 opacity-100;
+}
+
+.modal-leave-to {
+  @apply translate-y-4 opacity-0;
+}
+
+@screen sm {
+  .modal-leave {
+    @apply scale-100;
+  }
+
+  .modal-leave-to {
+    @apply translate-y-0 scale-95;
+  }
+}
