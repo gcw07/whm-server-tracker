@@ -13,7 +13,7 @@
             </div>
             <div class="mt-3 pl-0">
               <form role="form" method="POST" action="{{ route('login') }}">
-                {{ csrf_field() }}
+                @csrf
                 <input type="hidden" name="remember" value="1">
                 <div>
                   <label for="email">

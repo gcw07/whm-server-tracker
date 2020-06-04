@@ -1,47 +1,53 @@
-@extends('layouts.simple')
-
-@section('content')
-    <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
-            <div class="box has-border-top">
-                <p class="title">
-                    Reset Password
-                </p>
-
-                <hr>
-
-                @if (session('status'))
-                    <div class="notification is-success">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
-                <form role="form" method="POST" action="{{ route('password.email') }}">
-                    {{ csrf_field() }}
-
-                    <div class="field">
-                        <label class="label" for="email">E-Mail Address</label>
-                        <p class="control has-icons-left">
-                            <input id="email" type="email" class="input{{ $errors->has('email') ? ' is-danger' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
-                            <span class="icon is-small is-left">
-                                <i class="fa fa-envelope"></i>
-                            </span>
-                            @if ($errors->has('email'))
-                                <p class="help is-danger">{{ $errors->first('email') }}</p>
-                            @endif
-                        </p>
-                    </div>
-
-                    <div class="field">
-                        <p class="control">
-                            <button class="button is-primary" type="submit">
-                                Send Password Reset Link
-                            </button>
-                        </p>
-                    </div>
-                </form>
-
-            </div>
-        </div>
+<x-simple-layout title="Reset Password">
+  <div class="relative bg-gray-200">
+    <div class="absolute inset-0 flex flex-col" aria-hidden="true">
+      <div class="flex-1 bg-gray-100"></div>
+      <div class="flex-1 bg-gray-200"></div>
     </div>
-@endsection
+    <div class="relative max-w-xl mx-auto">
+      <div class="flex flex-col min-h-screen sm:flex-row sm:items-center sm:p-8">
+        <div class="flex flex-col flex-grow bg-white sm:shadow-2xl sm:rounded-lg sm:overflow-hidden">
+          <div class="flex-grow flex flex-col sm:justify-center p-12">
+            <div>
+              <h1 class="text-gray-600 font-bold tracking-wide text-4xl text-center pb-5">Reset Password</h1>
+            </div>
+
+            @if (session('status'))
+              <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('status') }}</span>
+              </div>
+            @endif
+
+            <div class="mt-3 pl-0">
+              <form role="form" method="POST" action="{{ route('password.email') }}">
+                {{ csrf_field() }}
+                <div>
+                  <label for="email">
+                    <span class="form-label">
+                      E-Mail Address
+                    </span>
+                    <span class="form-input-group">
+                      <span class="form-input-icon">
+                        <x-heroicon-s-mail />
+                      </span>
+                      <input class="form-input w-full {{ $errors->has('email') ? 'is-invalid' : '' }}" id="email"
+                             type="email" name="email" value="{{ old('email') }}" required autofocus>
+                    </span>
+                    @if ($errors->has('email'))
+                      <p class="invalid-feedback">{{ $errors->first('email') }}</p>
+                    @endif
+                  </label>
+                </div>
+                <div class="mt-6 flex items-center justify-between">
+                  <button class="btn btn-blue w-full" type="submit">
+                    Send Password Reset Link
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-simple-layout>
