@@ -94,10 +94,10 @@
       -->
       <div :class="{'block': open, 'hidden': !open }" class="hidden md:hidden">
         <div class="px-2 pt-2 pb-3 sm:px-3">
-          <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-800 focus:outline-none focus:text-white focus:bg-gray-700">Dashboard</a>
-          <a href="#" class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-indigo-200 hover:text-white hover:bg-indigo-600 focus:outline-none focus:text-white focus:bg-indigo-600">Servers</a>
-          <a href="#" class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-indigo-200 hover:text-white hover:bg-indigo-600 focus:outline-none focus:text-white focus:bg-indigo-600">Accounts</a>
-          <a href="#" class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-indigo-200 hover:text-white hover:bg-indigo-600 focus:outline-none focus:text-white focus:bg-indigo-600">Users</a>
+          <x-navigation-item :href="route('dashboard')" mobile="true">Dashboard</x-navigation-item>
+          <x-navigation-item :href="route('servers.index')" mobile="true" class="mt-1">Servers</x-navigation-item>
+          <x-navigation-item :href="route('accounts.index')" mobile="true" class="mt-1">Accounts</x-navigation-item>
+          <x-navigation-item :href="route('users.index')" mobile="true" class="mt-1">Users</x-navigation-item>
         </div>
         <div class="pt-4 pb-3 border-t border-gray-700">
           <div class="flex items-center px-5">
