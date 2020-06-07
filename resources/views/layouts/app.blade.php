@@ -77,7 +77,7 @@
           </div>
           <div class="-mr-2 flex md:hidden">
             <!-- Mobile menu button -->
-            <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-indigo-300 hover:text-white hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 focus:text-white">
+            <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-blue-300 hover:text-white hover:bg-blue-600 focus:outline-none focus:bg-blue-600 focus:text-white">
               <svg :class="{'hidden': open, 'block': !open }" class="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
