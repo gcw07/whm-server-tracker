@@ -16,7 +16,7 @@ class ServersController extends Controller
      */
     public function index()
     {
-//        return view('servers.index');
+        return view('servers.index');
     }
 
     public function create()
