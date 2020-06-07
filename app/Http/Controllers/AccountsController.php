@@ -20,7 +20,7 @@ class AccountsController extends Controller
 //            return view('accounts.index', compact('server'));
         }
 
-//        return view('accounts.index');
+        return view('accounts.index');
     }
 
     /**
