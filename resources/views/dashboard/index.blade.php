@@ -1,3 +1,3 @@
-<x-app-layout title="Dashboard">
+<x-layouts.app title="Dashboard">
 
-</x-app-layout>
+</x-layouts.app>
