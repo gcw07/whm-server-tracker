@@ -23,10 +23,10 @@
 }
 
 .is-invalid {
-  @apply border-red-300 text-red-900; /* placeholder-red-500 */
+  @apply border-red-300 text-red-900 !important; /* placeholder-red-500 */
 }
 .is-invalid:focus {
-  @apply border-red-300 shadow-outline-red;
+  @apply border-red-300 shadow-outline-red !important;
 }
 
 .invalid-feedback {
