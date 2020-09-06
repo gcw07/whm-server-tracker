@@ -1,3 +1,3 @@
-<x-app-layout title="Users">
+<x-layouts.app title="Users">
 
-</x-app-layout>
+</x-layouts.app>
