@@ -1,3 +1,3 @@
-<x-app-layout title="Servers">
+<x-layouts.app title="Servers">
 
-</x-app-layout>
+</x-layouts.app>
