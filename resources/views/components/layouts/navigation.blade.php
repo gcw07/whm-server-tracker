@@ -21,13 +21,14 @@
           </button>
 
           <!-- Profile dropdown -->
-          <div x-data="{ open: false }" @click.away="open = false" class="ml-3 relative">
-            <div>
-              <button @click="open = !open" class="max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid" id="user-menu" aria-label="User menu" aria-haspopup="true">
-                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+          <x-dropdown class="ml-3 relative">
+            <x-slot name="trigger">
+              <button class="max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid" id="user-menu" aria-label="User menu" aria-haspopup="true">
+                <x-avatar search="gcw07" provider="twitter" class="h-8 w-8 rounded-full" />
               </button>
-            </div>
-            <div x-show="open"
+            </x-slot>
+
+            <div
                  x-transition:enter="transition ease-out duration-100 transform"
                  x-transition:enter-start="opacity-0 scale-95"
                  x-transition:enter-end="opacity-100 scale-100"
@@ -38,16 +39,12 @@
               <div class="py-1 rounded-md bg-white shadow-xs">
                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                <form method="post" action="{{ route('logout') }}">
-                  @csrf
-                  <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Sign out
-                  </button>
-                </form>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
+                <x-logout class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  Sign out
+                </x-logout>
               </div>
             </div>
-          </div>
+          </x-dropdown>
         </div>
       </div>
       <div class="-mr-2 flex md:hidden">
@@ -87,7 +84,9 @@
       <div class="mt-3 px-2" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
         <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-indigo-300 hover:text-white hover:bg-indigo-600 focus:outline-none focus:text-white focus:bg-indigo-600" role="menuitem">Your Profile</a>
         <a href="#" class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-indigo-300 hover:text-white hover:bg-indigo-600 focus:outline-none focus:text-white focus:bg-indigo-600" role="menuitem">Settings</a>
-        <a href="#" class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-indigo-300 hover:text-white hover:bg-indigo-600 focus:outline-none focus:text-white focus:bg-indigo-600" role="menuitem">Sign out</a>
+        <x-logout class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-indigo-300 hover:text-white hover:bg-indigo-600 focus:outline-none focus:text-white focus:bg-indigo-600">
+          Sign out
+        </x-logout>
       </div>
     </div>
   </div>
