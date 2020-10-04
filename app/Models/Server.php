@@ -11,6 +11,51 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
+/**
+ * App\Models\Server
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $address
+ * @property int $port
+ * @property ServerTypeEnum $server_type
+ * @property string|null $token
+ * @property string|null $notes
+ * @property array $settings
+ * @property \Illuminate\Support\Carbon|null $details_last_updated
+ * @property \Illuminate\Support\Carbon|null $accounts_last_updated
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Account[] $accounts
+ * @property-read int|null $accounts_count
+ * @property-read mixed $can_refresh_data
+ * @property-read mixed $formatted_backup_days
+ * @property-read mixed $formatted_disk_available
+ * @property-read mixed $formatted_disk_total
+ * @property-read mixed $formatted_disk_used
+ * @property-read mixed $formatted_php_version
+ * @property-read mixed $formatted_server_type
+ * @property-read mixed $missing_token
+ * @property-read mixed $whm_url
+ * @method static \Illuminate\Database\Eloquent\Builder|Server filter(\App\Filters\ServerFilters $filters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Server newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Server query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Server search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereAccountsLastUpdated($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereDetailsLastUpdated($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereNotes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server wherePort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereServerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereSettings($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Server extends Model
 {
     use HasFactory, Unguarded;
