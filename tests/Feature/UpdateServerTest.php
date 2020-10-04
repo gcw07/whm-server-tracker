@@ -6,8 +6,6 @@ use App\Enums\ServerTypeEnum;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 
 class UpdateServerTest extends TestCase
@@ -21,8 +19,8 @@ class UpdateServerTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
-        $this->server = ServerFactory::new()->create(['name' => 'old-my-server-name']);
+        $this->user = User::factory()->create();
+        $this->server = Server::factory()->create(['name' => 'old-my-server-name']);
     }
 
     private function validParams($overrides = [])
@@ -77,7 +75,7 @@ class UpdateServerTest extends TestCase
         });
     }
 
-    /** fix */
+    /** fix or remove */
     public function the_api_token_disk_and_backup_details_are_cleared_when_reseller_server_type_is_selected()
     {
         $this->signIn();
