@@ -14,9 +14,11 @@ class DashboardServersController extends Controller
      */
     public function index()
     {
-        $servers = collect(Server::all()->toArray());
-
-        $counts = $servers->groupBy('server_type')->map->count();
+        $counts = [
+            'dedicated' => Server::where('server_type', 'dedicated')->count(),
+            'reseller' => Server::where('server_type', 'reseller')->count(),
+            'vps' => Server::where('server_type', 'vps')->count(),
+        ];
 
         return response()->json($counts);
     }
