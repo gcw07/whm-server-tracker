@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "25718d02582b9023ed9b68c8b3bc8b14",
+    "content-hash": "b32b0bd0a382779bbfbd4cb833d3e275",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3010,24 +3010,26 @@
         },
         {
             "name": "spatie/enum",
-            "version": "2.3.8",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/enum.git",
-                "reference": "49bd478efff2552df50ef42b9d70c32178b953bd"
+                "reference": "5c6a0128923f2b51814c197af1a826e60c809362"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/enum/zipball/49bd478efff2552df50ef42b9d70c32178b953bd",
-                "reference": "49bd478efff2552df50ef42b9d70c32178b953bd",
+                "url": "https://api.github.com/repos/spatie/enum/zipball/5c6a0128923f2b51814c197af1a826e60c809362",
+                "reference": "5c6a0128923f2b51814c197af1a826e60c809362",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.2"
+                "php": "^7.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.0"
+                "larapack/dd": "^1.1",
+                "phpunit/phpunit": "^9.0",
+                "vimeo/psalm": "^3.12"
             },
             "type": "library",
             "autoload": {
@@ -3070,7 +3072,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-07-17T20:06:15+00:00"
+            "time": "2020-09-28T08:11:32+00:00"
         },
         {
             "name": "spatie/laravel-backup",
@@ -3160,33 +3162,40 @@
         },
         {
             "name": "spatie/laravel-enum",
-            "version": "1.6.1",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-enum.git",
-                "reference": "c57acb8f20d1442111ece17e35b9963d9f6d918b"
+                "reference": "e290a4b16931226148c925118f01ef35d7bccd68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-enum/zipball/c57acb8f20d1442111ece17e35b9963d9f6d918b",
-                "reference": "c57acb8f20d1442111ece17e35b9963d9f6d918b",
+                "url": "https://api.github.com/repos/spatie/laravel-enum/zipball/e290a4b16931226148c925118f01ef35d7bccd68",
+                "reference": "e290a4b16931226148c925118f01ef35d7bccd68",
                 "shasum": ""
             },
             "require": {
-                "illuminate/console": "^5.8.33 || ^6.0 || ^7.0 || ^8.0",
-                "illuminate/http": "^5.8.33 || ^6.0 || ^7.0 || ^8.0",
-                "illuminate/support": "^5.8.33 || ^6.0 || ^7.0 || ^8.0",
-                "php": "^7.2",
-                "spatie/enum": "^2.3",
-                "symfony/console": "^4.3.4 || ^5.0"
+                "ext-json": "*",
+                "illuminate/console": "^8.0",
+                "illuminate/contracts": "^8.0",
+                "illuminate/database": "^8.0",
+                "illuminate/http": "^8.0",
+                "illuminate/support": "^8.0",
+                "php": "^7.4",
+                "spatie/enum": "^3.1.1",
+                "symfony/console": "^5.0"
             },
             "conflict": {
                 "bensampo/laravel-enum": "*"
             },
             "require-dev": {
-                "ext-json": "*",
-                "orchestra/testbench": "^3.8 || ^4.0 || ^5.0 || ^6.0",
-                "phpunit/phpunit": "^8.0 || ^9.0"
+                "fzaninotto/faker": "^1.9.1",
+                "orchestra/testbench": "^5.0 || ^6.0",
+                "phpunit/phpunit": "^9.3",
+                "vimeo/psalm": "^3.12"
+            },
+            "suggest": {
+                "fzaninotto/faker": "^1.9.1"
             },
             "type": "library",
             "extra": {
@@ -3214,15 +3223,16 @@
                 },
                 {
                     "name": "Tom Witkowski",
-                    "email": "dev.gummibeer@gmail.com",
+                    "email": "dev@gummibeer.de",
                     "homepage": "https://gummibeer.de",
                     "role": "Developer"
                 }
             ],
-            "description": "Laravel enum support",
+            "description": "Laravel Enum support",
             "homepage": "https://github.com/spatie/laravel-enum",
             "keywords": [
                 "enum",
+                "laravel",
                 "laravel-enum",
                 "spatie"
             ],
@@ -3236,7 +3246,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-09-09T13:56:48+00:00"
+            "time": "2020-10-03T19:00:33+00:00"
         },
         {
             "name": "spatie/temporary-directory",

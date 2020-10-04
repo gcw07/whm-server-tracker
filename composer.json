@@ -21,7 +21,7 @@
         "laravel/ui": "^2.0",
         "livewire/livewire": "^2.0",
         "spatie/laravel-backup": "^6.10",
-        "spatie/laravel-enum": "^1.6"
+        "spatie/laravel-enum": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.3",
