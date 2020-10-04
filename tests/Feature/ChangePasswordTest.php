@@ -3,10 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Support\Str;
-use Tests\Factories\UserFactory;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class ChangePasswordTest extends TestCase
 {
@@ -18,7 +17,7 @@ class ChangePasswordTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */
@@ -31,9 +30,9 @@ class ChangePasswordTest extends TestCase
     }
 
     /** @test */
-    function an_authorized_user_can_change_a_password()
+    public function an_authorized_user_can_change_a_password()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user)
             ->putJson(route('users.change-password', $this->user->id), [
@@ -51,7 +50,7 @@ class ChangePasswordTest extends TestCase
      */
     public function validate_rules_for_user_change_password($field, $value, $errorMessage)
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->putJson(route('users.change-password', $this->user->id), [
@@ -73,7 +72,7 @@ class ChangePasswordTest extends TestCase
     /** @test */
     public function password_confirmation_is_required_for_user_change_password()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->putJson(route('users.change-password', $this->user->id), [

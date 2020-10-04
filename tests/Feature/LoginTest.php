@@ -3,19 +3,19 @@
 namespace Tests\Feature;
 
 use App\Models\Login;
-use Illuminate\Support\Facades\Auth;
-use Tests\Factories\UserFactory;
-use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
+use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    function logging_in_with_valid_credentials()
+    public function logging_in_with_valid_credentials()
     {
-        $user = UserFactory::new()->create([
+        $user = User::factory()->create([
             'email' => 'john@example.com',
             'password' => bcrypt('super-secret-password'),
         ]);
@@ -32,9 +32,9 @@ class LoginTest extends TestCase
     }
 
     /** @test */
-    function logging_in_with_invalid_credentials()
+    public function logging_in_with_invalid_credentials()
     {
-        UserFactory::new()->create([
+        User::factory()->create([
             'email' => 'john@example.com',
             'password' => bcrypt('super-secret-password'),
         ]);
@@ -53,7 +53,7 @@ class LoginTest extends TestCase
     }
 
     /** @test */
-    function logging_in_with_an_account_that_does_not_exist()
+    public function logging_in_with_an_account_that_does_not_exist()
     {
         $response = $this->post(route('login'), [
             'email' => 'nobody@example.com',
@@ -69,9 +69,9 @@ class LoginTest extends TestCase
     }
 
     /** @test */
-    function logging_out_the_current_user()
+    public function logging_out_the_current_user()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/logout');
 
@@ -80,9 +80,9 @@ class LoginTest extends TestCase
     }
 
     /** @test */
-    function logging_in_updates_last_login_at_and_last_ip_address()
+    public function logging_in_updates_last_login_at_and_last_ip_address()
     {
-        $user = UserFactory::new()->create([
+        $user = User::factory()->create([
             'email' => 'jane@example.com',
             'password' => bcrypt('secret-password'),
         ]);

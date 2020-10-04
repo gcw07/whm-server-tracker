@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Account;
+use App\Models\Server;
 use App\Models\User;
-use Tests\Factories\AccountFactory;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -19,7 +18,7 @@ class ViewSearchResultsTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */
@@ -40,11 +39,11 @@ class ViewSearchResultsTest extends TestCase
     /** @test */
     public function the_server_name_can_be_searched()
     {
-        $server = ServerFactory::new()->create([
+        $server = Server::factory()->create([
             'name'        => 'My Test Server',
         ]);
 
-        $serverB = ServerFactory::new()->create([
+        $serverB = Server::factory()->create([
             'name'        => 'No Results',
         ]);
 
@@ -59,11 +58,11 @@ class ViewSearchResultsTest extends TestCase
     /** @test */
     public function the_server_notes_can_be_searched()
     {
-        $server = ServerFactory::new()->create([
+        $server = Server::factory()->create([
             'notes'        => 'see this note',
         ]);
 
-        $serverB = ServerFactory::new()->create([
+        $serverB = Server::factory()->create([
             'notes'        => 'do not see me',
         ]);
 
@@ -78,13 +77,13 @@ class ViewSearchResultsTest extends TestCase
     /** @test */
     public function the_account_domain_can_be_searched()
     {
-        $server = ServerFactory::new()->create();
-        $account = AccountFactory::new()->create([
+        $server = Server::factory()->create();
+        $account = Account::factory()->create([
             'server_id' => $server->id,
             'domain' => 'mytestsite.com',
         ]);
 
-        $accountB = AccountFactory::new()->create([
+        $accountB = Account::factory()->create([
             'server_id' => $server->id,
             'domain' => 'never-see.com',
         ]);
@@ -100,13 +99,13 @@ class ViewSearchResultsTest extends TestCase
     /** @test */
     public function the_account_ip_can_be_searched()
     {
-        $server = ServerFactory::new()->create();
-        $account = AccountFactory::new()->create([
+        $server = Server::factory()->create();
+        $account = Account::factory()->create([
             'server_id' => $server->id,
             'ip' => '255.1.1.100',
         ]);
 
-        $accountB = AccountFactory::new()->create([
+        $accountB = Account::factory()->create([
             'server_id' => $server->id,
             'ip' => '192.1.1.100',
         ]);
@@ -122,13 +121,13 @@ class ViewSearchResultsTest extends TestCase
     /** @test */
     public function the_account_username_can_be_searched()
     {
-        $server = ServerFactory::new()->create();
-        $account = AccountFactory::new()->create([
+        $server = Server::factory()->create();
+        $account = Account::factory()->create([
             'server_id' => $server->id,
             'user' => 'mysite',
         ]);
 
-        $accountB = AccountFactory::new()->create([
+        $accountB = Account::factory()->create([
             'server_id' => $server->id,
             'user' => 'neversee',
         ]);

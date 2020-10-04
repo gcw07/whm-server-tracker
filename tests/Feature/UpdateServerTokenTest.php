@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 
 class UpdateServerTokenTest extends TestCase
@@ -19,13 +17,13 @@ class UpdateServerTokenTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */
     public function guests_cannot_edit_a_server_token()
     {
-        $server = ServerFactory::new()->create(['token' => 'old-valid-api-token']);
+        $server = Server::factory()->create(['token' => 'old-valid-api-token']);
 
         $this->putJson(route('servers.token', $server->id), [
             'token' => 'new-valid-api-token'
@@ -37,7 +35,7 @@ class UpdateServerTokenTest extends TestCase
     /** @test */
     public function an_authorized_user_can_edit_a_server_token()
     {
-        $server = ServerFactory::new()->create(['token' => 'old-server-api-token']);
+        $server = Server::factory()->create(['token' => 'old-server-api-token']);
 
         $this->actingAs($this->user)
             ->putJson(route('servers.token', $server->id), [
@@ -52,7 +50,7 @@ class UpdateServerTokenTest extends TestCase
     /** @test */
     public function server_token_is_required()
     {
-        $server = ServerFactory::new()->create(['token' => 'old-server-api-token']);
+        $server = Server::factory()->create(['token' => 'old-server-api-token']);
 
         $response = $this->actingAs($this->user)
             ->putJson(route('servers.token', $server->id), [

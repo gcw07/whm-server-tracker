@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 
 class DeleteServerTokenTest extends TestCase
@@ -20,8 +18,8 @@ class DeleteServerTokenTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
-        $this->server = ServerFactory::new()->create([
+        $this->user = User::factory()->create();
+        $this->server = Server::factory()->create([
             'token' => 'valid-api-token'
         ]);
     }

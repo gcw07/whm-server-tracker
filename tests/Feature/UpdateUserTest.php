@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 
 class UpdateUserTest extends TestCase
@@ -17,7 +16,7 @@ class UpdateUserTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
+        $this->user = User::factory()->create();
     }
 
     private function validParams($overrides = [])
@@ -38,7 +37,7 @@ class UpdateUserTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_the_edit_user_form()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get(route('users.edit', $this->user->id))
@@ -48,7 +47,7 @@ class UpdateUserTest extends TestCase
     /** @test */
     public function guests_cannot_edit_a_user()
     {
-        $user = UserFactory::new()->create(['name' => 'Grant Williams']);
+        $user = User::factory()->create(['name' => 'Grant Williams']);
 
         $this->putJson(route('users.update', $user->id), $this->validParams())
             ->assertUnauthorized();
@@ -61,7 +60,7 @@ class UpdateUserTest extends TestCase
     /** @test */
     public function an_authorized_user_can_edit_a_user()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->putJson(route('users.update', $this->user->id), $this->validParams([
@@ -86,7 +85,7 @@ class UpdateUserTest extends TestCase
      */
     public function validate_rules_for_user_edit($field, $value, $errorMessage)
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->putJson(route('users.update', $this->user->id), $this->validParams([
@@ -109,7 +108,7 @@ class UpdateUserTest extends TestCase
     /** @test */
     public function email_must_be_unique_for_user_edit()
     {
-        $user = UserFactory::new()->create(['email' => 'grant@example.com']);
+        $user = User::factory()->create(['email' => 'grant@example.com']);
 
         $response = $this->actingAs($user)
             ->putJson(route('users.update', $this->user->id), $this->validParams([
@@ -123,8 +122,8 @@ class UpdateUserTest extends TestCase
     /** @test */
     public function email_can_be_the_same_for_the_same_user_for_user_edit()
     {
-        $user = UserFactory::new()->create(['email' => 'grant@example.com']);
-        $userB = UserFactory::new()->create(['email' => 'mike@example.com']);
+        $user = User::factory()->create(['email' => 'grant@example.com']);
+        $userB = User::factory()->create(['email' => 'mike@example.com']);
 
         $response = $this->actingAs($user)
             ->putJson(route('users.update', $userB->id), $this->validParams([

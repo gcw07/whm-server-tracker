@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Tests\Factories\UserFactory;
+use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -13,7 +13,7 @@ class UserTest extends TestCase
     /** @test */
     public function email_address_should_be_lowercase()
     {
-        $user = UserFactory::new()->create([
+        $user = User::factory()->create([
             'email' => 'JOHN@example.COM'
         ]);
 

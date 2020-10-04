@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Tests\Factories\UserFactory;
+use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -20,7 +20,7 @@ class ViewUserListingTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_user_listings_page()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get(route('users.index'))
@@ -37,7 +37,7 @@ class ViewUserListingTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_user_api_listings()
     {
-        $user = UserFactory::new()->create([
+        $user = User::factory()->create([
             'name'        => 'John Doe',
             'email'     => 'john@example.com',
         ]);
@@ -56,9 +56,9 @@ class ViewUserListingTest extends TestCase
     /** @test */
     public function the_user_listings_are_in_alphabetical_order()
     {
-        $userA = UserFactory::new()->create(['name' => 'John Doe']);
-        $userB = UserFactory::new()->create(['name' => 'Amy Smith']);
-        $userC = UserFactory::new()->create(['name' => 'Zach Williams']);
+        $userA = User::factory()->create(['name' => 'John Doe']);
+        $userB = User::factory()->create(['name' => 'Amy Smith']);
+        $userC = User::factory()->create(['name' => 'Zach Williams']);
 
         $response = $this->actingAs($userA)
             ->get(route('users.listing'))

@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Enums\ServerTypeEnum;
 use App\Models\Server;
 use App\Models\User;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -19,18 +18,18 @@ class CreateServerTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
+        $this->user = User::factory()->create();
     }
 
     private function validParams($overrides = [])
     {
         return array_merge([
-            'name'        => 'my-server-name',
-            'address'     => '127.0.0.1',
-            'port'        => 2087,
+            'name' => 'my-server-name',
+            'address' => '127.0.0.1',
+            'port' => 2087,
             'server_type' => ServerTypeEnum::VPS(),
-            'notes'       => 'a server note',
-            'token'       => 'server-api-token'
+            'notes' => 'a server note',
+            'token' => 'server-api-token'
         ], $overrides);
     }
 
@@ -63,13 +62,13 @@ class CreateServerTest extends TestCase
     {
         $response = $this->actingAs($this->user)
             ->postJson(route('servers.store'), $this->validParams([
-            'name'        => 'My Test Server',
-            'address'     => '255.1.1.100',
-            'port'        => 1111,
-            'server_type' => ServerTypeEnum::DEDICATED(),
-            'notes'       => 'some server note',
-            'token'       => 'new-server-api-token'
-        ]));
+                'name' => 'My Test Server',
+                'address' => '255.1.1.100',
+                'port' => 1111,
+                'server_type' => ServerTypeEnum::DEDICATED(),
+                'notes' => 'some server note',
+                'token' => 'new-server-api-token'
+            ]));
 
         $response->assertRedirect(route('servers.index'));
 

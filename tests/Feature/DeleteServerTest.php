@@ -6,8 +6,6 @@ use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 
 class DeleteServerTest extends TestCase
@@ -21,8 +19,8 @@ class DeleteServerTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
-        $this->server = ServerFactory::new()->create();
+        $this->user = User::factory()->create();
+        $this->server = Server::factory()->create();
     }
 
     /** @test */
@@ -47,11 +45,11 @@ class DeleteServerTest extends TestCase
     /** @test */
     public function accounts_are_deleted_when_a_server_is_deleted()
     {
-        $server = ServerFactory::new()
-            ->with(Account::class, 'accounts', 5)
+        $server = Server::factory()
+            ->has(Account::factory()->count(5))
             ->create(['name' => 'my-server-name']);
-        $otherServer = ServerFactory::new()
-            ->with(Account::class, 'accounts', 1)
+        $otherServer = Server::factory()
+            ->has(Account::factory()->count(1))
             ->create(['name' => 'other-server-name']);
 
         $this->assertEquals(3, Server::count());

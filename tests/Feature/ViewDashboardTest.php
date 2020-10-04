@@ -4,9 +4,8 @@ namespace Tests\Feature;
 
 use App\Enums\ServerTypeEnum;
 use App\Models\Account;
-use Tests\Factories\AccountFactory;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
+use App\Models\Server;
+use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -24,7 +23,7 @@ class ViewDashboardTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_dashboard_page()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get(route('dashboard'))
@@ -41,10 +40,10 @@ class ViewDashboardTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_dashboard_api_stats()
     {
-        $user = UserFactory::new()->create();
-        ServerFactory::new()
-            ->with(Account::class, 'accounts', 5)
-            ->times(3)
+        $user = User::factory()->create();
+        Server::factory()
+            ->has(Account::factory()->count(5))
+            ->count(3)
             ->create();
 
         $response = $this->actingAs($user)
@@ -68,11 +67,11 @@ class ViewDashboardTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_dashboard_api_servers()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
-        ServerFactory::new()->times(2)->create(['server_type' => ServerTypeEnum::DEDICATED()]);
-        ServerFactory::new()->times(3)->create(['server_type' => ServerTypeEnum::VPS()]);
-        ServerFactory::new()->create(['server_type' => ServerTypeEnum::RESELLER()]);
+        Server::factory()->count(2)->create(['server_type' => ServerTypeEnum::dedicated()]);
+        Server::factory()->count(3)->create(['server_type' => ServerTypeEnum::vps()]);
+        Server::factory()->create(['server_type' => ServerTypeEnum::reseller()]);
 
         $response = $this->actingAs($user)
             ->get(route('dashboard.servers'))
@@ -95,10 +94,10 @@ class ViewDashboardTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_dashboard_api_latest_accounts()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
-        $server = ServerFactory::new()->create();
-        AccountFactory::new()->times(10)->create(['server_id' => $server->id]);
+        $server = Server::factory()->create();
+        Account::factory()->count(10)->create(['server_id' => $server->id]);
 
         $response = $this->actingAs($user)
             ->get(route('dashboard.latest-accounts'))

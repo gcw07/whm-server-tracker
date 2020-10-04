@@ -3,10 +3,9 @@
 namespace Tests\Feature;
 
 use App\Enums\ServerTypeEnum;
+use App\Models\Account;
+use App\Models\Server;
 use App\Models\User;
-use Tests\Factories\AccountFactory;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -20,7 +19,7 @@ class ViewAccountListingTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */
@@ -48,8 +47,8 @@ class ViewAccountListingTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_account_api_listings()
     {
-        $server = ServerFactory::new()->create();
-        AccountFactory::new()->create([
+        $server = Server::factory()->create();
+        Account::factory()->create([
             'server_id' => $server->id,
             'domain' => 'mytestsite.com',
             'ip'     => '255.1.1.100',
@@ -69,11 +68,11 @@ class ViewAccountListingTest extends TestCase
     /** @test */
     public function the_account_listings_are_in_alphabetical_order()
     {
-        $server = ServerFactory::new()->create();
+        $server = Server::factory()->create();
 
-        $accountA = AccountFactory::new()->create(['server_id' => $server->id, 'domain' => 'somesite.com']);
-        $accountB = AccountFactory::new()->create(['server_id' => $server->id, 'domain' => 'anothersite.com']);
-        $accountC = AccountFactory::new()->create(['server_id' => $server->id, 'domain' => 'thelastsite.com']);
+        $accountA = Account::factory()->create(['server_id' => $server->id, 'domain' => 'somesite.com']);
+        $accountB = Account::factory()->create(['server_id' => $server->id, 'domain' => 'anothersite.com']);
+        $accountC = Account::factory()->create(['server_id' => $server->id, 'domain' => 'thelastsite.com']);
 
         $response = $this->actingAs($this->user)
             ->get(route('accounts.listing'))
@@ -89,11 +88,11 @@ class ViewAccountListingTest extends TestCase
     /** @test */
     public function the_account_listings_can_be_filtered_by_server()
     {
-        $serverA = ServerFactory::new()->create(['server_type' => ServerTypeEnum::VPS()]);
-        $serverB = ServerFactory::new()->create(['server_type' => ServerTypeEnum::DEDICATED()]);
+        $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::vps()]);
+        $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::dedicated()]);
 
-        $accountA = AccountFactory::new()->create(['server_id' => $serverA->id, 'domain' => 'somedomain.com']);
-        $accountA = AccountFactory::new()->create(['server_id' => $serverB->id, 'domain' => 'anotherdomain.com']);
+        $accountA = Account::factory()->create(['server_id' => $serverA->id, 'domain' => 'somedomain.com']);
+        $accountA = Account::factory()->create(['server_id' => $serverB->id, 'domain' => 'anotherdomain.com']);
 
         $response = $this->actingAs($this->user)
             ->get(route('accounts.server-listing', $serverA->id))

@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Support\Str;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -31,7 +30,7 @@ class CreateUserTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_the_add_user_form()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get(route('users.create'))
@@ -50,7 +49,7 @@ class CreateUserTest extends TestCase
     /** @test */
     public function an_authorized_user_can_add_a_valid_user()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->postJson(route('users.store'), $this->validParams([
@@ -77,7 +76,7 @@ class CreateUserTest extends TestCase
      */
     public function validate_rules_for_user_create($field, $value, $errorMessage)
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->postJson(route('users.store'), $this->validParams([
@@ -103,7 +102,7 @@ class CreateUserTest extends TestCase
     /** @test */
     public function email_must_be_unique_for_user_create()
     {
-        $user = UserFactory::new()->create(['email' => 'grant@example.com']);
+        $user = User::factory()->create(['email' => 'grant@example.com']);
 
         $response = $this->actingAs($user)
             ->postJson(route('users.store'), $this->validParams([
@@ -118,7 +117,7 @@ class CreateUserTest extends TestCase
     /** @test */
     public function password_confirmation_is_required_for_user_create()
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->postJson(route('users.store'), $this->validParams([

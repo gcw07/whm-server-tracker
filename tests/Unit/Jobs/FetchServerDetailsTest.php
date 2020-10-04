@@ -7,7 +7,6 @@ use App\Connectors\ServerConnector;
 use App\Jobs\FetchServerDetails;
 use App\Models\Server;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Factories\ServerFactory;
 use Tests\TestCase;
 
 class FetchServerDetailsTest extends TestCase
@@ -17,7 +16,7 @@ class FetchServerDetailsTest extends TestCase
     /** @test */
     public function it_fetches_server_details()
     {
-        $server = ServerFactory::new()->create([
+        $server = Server::factory()->create([
             'name'        => 'my-server-name',
             'address'     => '1.1.1.1',
             'port'        => 1000,

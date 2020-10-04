@@ -7,8 +7,6 @@ use App\Models\Account;
 use App\Models\Server;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Factories\AccountFactory;
-use Tests\Factories\ServerFactory;
 use Tests\TestCase;
 
 class ServerTest extends TestCase
@@ -21,7 +19,7 @@ class ServerTest extends TestCase
     {
         parent::setUp();
 
-        $this->server = ServerFactory::new()->create();
+        $this->server = Server::factory()->create();
     }
 
     /** @test */
@@ -119,7 +117,7 @@ class ServerTest extends TestCase
     /** @test */
     public function a_server_can_remove_an_account()
     {
-        $account = AccountFactory::new()->create([
+        $account = Account::factory()->create([
             'server_id' => $this->server->id
         ]);
 
@@ -155,7 +153,7 @@ class ServerTest extends TestCase
     /** @test */
     public function it_will_update_an_account_if_it_exists()
     {
-        $account = AccountFactory::new()->create([
+        $account = Account::factory()->create([
             'server_id' => $this->server->id,
             'domain'    => 'my-site.com',
             'user'      => 'mysite'
@@ -229,13 +227,13 @@ class ServerTest extends TestCase
     /** @test */
     public function it_will_remove_accounts_that_no_longer_exists_on_server()
     {
-        $account1 = AccountFactory::new()->create([
+        $account1 = Account::factory()->create([
             'server_id' => $this->server->id,
             'domain'    => 'first-site.com',
             'user'      => 'firstsite'
         ]);
 
-        $account2 = AccountFactory::new()->create([
+        $account2 = Account::factory()->create([
             'server_id' => $this->server->id,
             'domain'    => 'site-to-remove.com',
             'user'      => 'sitetoremove'
@@ -267,21 +265,21 @@ class ServerTest extends TestCase
     /** @test */
     public function it_will_only_remove_accounts_that_no_longer_exists_on_the_server_that_is_being_processed()
     {
-        $serverB = ServerFactory::new()->create();
+        $serverB = Server::factory()->create();
 
-        $accountToKeep = AccountFactory::new()->create([
+        $accountToKeep = Account::factory()->create([
             'server_id' => $serverB->id,
             'domain'    => 'site-to-remove.com',
             'user'      => 'sitetoremove'
         ]);
 
-        $account1 = AccountFactory::new()->create([
+        $account1 = Account::factory()->create([
             'server_id' => $this->server->id,
             'domain'    => 'first-site.com',
             'user'      => 'firstsite'
         ]);
 
-        $account2 = AccountFactory::new()->create([
+        $account2 = Account::factory()->create([
             'server_id' => $this->server->id,
             'domain'    => 'site-to-remove.com',
             'user'      => 'sitetoremove'
@@ -318,9 +316,9 @@ class ServerTest extends TestCase
     /** @test */
     public function can_get_formatted_server_types()
     {
-        $serverA = ServerFactory::new()->make(['server_type' => ServerTypeEnum::VPS()]);
-        $serverB = ServerFactory::new()->make(['server_type' => ServerTypeEnum::DEDICATED()]);
-        $serverC = ServerFactory::new()->make(['server_type' => ServerTypeEnum::RESELLER()]);
+        $serverA = Server::factory()->make(['server_type' => ServerTypeEnum::VPS()]);
+        $serverB = Server::factory()->make(['server_type' => ServerTypeEnum::DEDICATED()]);
+        $serverC = Server::factory()->make(['server_type' => ServerTypeEnum::RESELLER()]);
 
         $this->assertEquals('VPS', $serverA->formatted_server_type);
         $this->assertEquals('Dedicated', $serverB->formatted_server_type);
@@ -330,13 +328,13 @@ class ServerTest extends TestCase
     /** @test */
     public function can_get_formatted_disk_used()
     {
-        $serverA = ServerFactory::new()->create();
+        $serverA = Server::factory()->create();
         $serverA->settings()->set('disk_used', '16305616');
 
-        $serverB = ServerFactory::new()->create();
+        $serverB = Server::factory()->create();
         $serverB->settings()->set('disk_used', '204800');
 
-        $serverC = ServerFactory::new()->create();
+        $serverC = Server::factory()->create();
         $serverC->settings()->set('disk_used', '570');
 
         $this->assertEquals('15.55 GB', $serverA->formatted_disk_used);
@@ -347,10 +345,10 @@ class ServerTest extends TestCase
     /** @test */
     public function can_get_formatted_disk_available()
     {
-        $serverA = ServerFactory::new()->create();
+        $serverA = Server::factory()->create();
         $serverA->settings()->set('disk_available', '109523504');
 
-        $serverB = ServerFactory::new()->create();
+        $serverB = Server::factory()->create();
 
         $this->assertEquals('104.45 GB', $serverA->formatted_disk_available);
         $this->assertEquals('Unknown', $serverB->formatted_disk_available);
@@ -359,10 +357,10 @@ class ServerTest extends TestCase
     /** @test */
     public function can_get_formatted_disk_total()
     {
-        $serverA = ServerFactory::new()->create();
+        $serverA = Server::factory()->create();
         $serverA->settings()->set('disk_total', '125829120');
 
-        $serverB = ServerFactory::new()->create();
+        $serverB = Server::factory()->create();
 
         $this->assertEquals('120 GB', $serverA->formatted_disk_total);
         $this->assertEquals('Unknown', $serverB->formatted_disk_total);
@@ -371,9 +369,9 @@ class ServerTest extends TestCase
     /** @test */
     public function can_determine_a_missing_api_token()
     {
-        $serverValidToken = ServerFactory::new()->make(['server_type' => ServerTypeEnum::VPS(), 'token' => 'valid-token']);
-        $serverNoToken = ServerFactory::new()->make(['server_type' => ServerTypeEnum::VPS()]);
-        $serverTypeNeedsNoToken = ServerFactory::new()->make(['server_type' => ServerTypeEnum::RESELLER()]);
+        $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::VPS(), 'token' => 'valid-token']);
+        $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::VPS()]);
+        $serverTypeNeedsNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::RESELLER()]);
 
         $this->assertFalse($serverValidToken->missing_token);
         $this->assertTrue($serverNoToken->missing_token);
@@ -383,9 +381,9 @@ class ServerTest extends TestCase
     /** @test */
     public function can_determine_if_it_can_refresh_external_data()
     {
-        $serverValidToken = ServerFactory::new()->make(['server_type' => ServerTypeEnum::VPS(), 'token' => 'valid-token']);
-        $serverNoToken = ServerFactory::new()->make(['server_type' => ServerTypeEnum::VPS()]);
-        $serverTypeNeedsNoToken = ServerFactory::new()->make(['server_type' => ServerTypeEnum::RESELLER()]);
+        $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::VPS(), 'token' => 'valid-token']);
+        $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::VPS()]);
+        $serverTypeNeedsNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::RESELLER()]);
 
         $this->assertTrue($serverValidToken->can_refresh_data);
         $this->assertFalse($serverNoToken->can_refresh_data);
@@ -395,8 +393,8 @@ class ServerTest extends TestCase
     /** @test */
     public function can_get_whm_external_url()
     {
-        $serverA = ServerFactory::new()->make(['address' => '1.1.1.1', 'port' => 2087]);
-        $serverB = ServerFactory::new()->make(['address' => '3.3.3.3', 'port' => 2086]);
+        $serverA = Server::factory()->make(['address' => '1.1.1.1', 'port' => 2087]);
+        $serverB = Server::factory()->make(['address' => '3.3.3.3', 'port' => 2086]);
 
         $this->assertEquals('https://1.1.1.1:2087', $serverA->whm_url);
         $this->assertEquals('http://3.3.3.3:2086', $serverB->whm_url);
@@ -405,7 +403,7 @@ class ServerTest extends TestCase
     /** @test */
     public function the_api_token_should_not_be_included_in_returned_data()
     {
-        $server = ServerFactory::new()->make(['server_type' => ServerTypeEnum::VPS(), 'token' => 'valid-token']);
+        $server = Server::factory()->make(['server_type' => ServerTypeEnum::VPS(), 'token' => 'valid-token']);
 
         $this->assertArrayNotHasKey('token', $server->toArray());
     }
@@ -413,16 +411,16 @@ class ServerTest extends TestCase
     /** @test */
     public function can_get_formatted_backup_days()
     {
-        $serverA = ServerFactory::new()->create();
+        $serverA = Server::factory()->create();
         $serverA->settings()->set('backup_days', '0,1,2');
 
-        $serverB = ServerFactory::new()->create();
+        $serverB = Server::factory()->create();
         $serverB->settings()->set('backup_days', '3,4,5,6');
 
-        $serverC = ServerFactory::new()->create();
+        $serverC = Server::factory()->create();
         $serverC->settings()->set('backup_days', '0,2,4,6');
 
-        $serverD = ServerFactory::new()->create();
+        $serverD = Server::factory()->create();
 
         $this->assertEquals('Sun,Mon,Tue', $serverA->formatted_backup_days);
         $this->assertEquals('Wed,Thu,Fri,Sat', $serverB->formatted_backup_days);
@@ -433,31 +431,31 @@ class ServerTest extends TestCase
     /** @test */
     public function can_get_formatted_php_version()
     {
-        $serverA = ServerFactory::new()->create();
+        $serverA = Server::factory()->create();
         $serverA->settings()->set('php_version', 'ea-php54');
 
-        $serverB = ServerFactory::new()->create();
+        $serverB = Server::factory()->create();
         $serverB->settings()->set('php_version', 'ea-php55');
 
-        $serverC = ServerFactory::new()->create();
+        $serverC = Server::factory()->create();
         $serverC->settings()->set('php_version', 'ea-php56');
 
-        $serverD = ServerFactory::new()->create();
+        $serverD = Server::factory()->create();
         $serverD->settings()->set('php_version', 'ea-php70');
 
-        $serverE = ServerFactory::new()->create();
+        $serverE = Server::factory()->create();
         $serverE->settings()->set('php_version', 'ea-php71');
 
-        $serverF = ServerFactory::new()->create();
+        $serverF = Server::factory()->create();
         $serverF->settings()->set('php_version', 'ea-php72');
 
-        $serverG = ServerFactory::new()->create();
+        $serverG = Server::factory()->create();
         $serverG->settings()->set('php_version', 'ea-php73');
 
-        $serverH = ServerFactory::new()->create();
+        $serverH = Server::factory()->create();
         $serverH->settings()->set('php_version', 'ea-php74');
 
-        $serverI = ServerFactory::new()->create();
+        $serverI = Server::factory()->create();
 
         $this->assertEquals('PHP 5.4', $serverA->formatted_php_version);
         $this->assertEquals('PHP 5.5', $serverB->formatted_php_version);

@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use App\Connectors\FakeServerConnector;
 use App\Connectors\ServerConnector;
 use App\Jobs\FetchServerAccounts;
+use App\Models\Server;
+use App\Models\User;
 use Illuminate\Support\Facades\Queue;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -18,7 +18,7 @@ class GetServerAccountsTest extends TestCase
     /** @test */
     public function guests_can_not_fetch_server_accounts()
     {
-        $server = ServerFactory::new()->create();
+        $server = Server::factory()->create();
 
         $this->get(route('servers.fetch-accounts', $server->id))
             ->assertRedirect(route('login'));
@@ -27,8 +27,8 @@ class GetServerAccountsTest extends TestCase
     /** @test */
     public function an_authorized_user_can_fetch_server_accounts()
     {
-        $user = UserFactory::new()->create();
-        $server = ServerFactory::new()->create([
+        $user = User::factory()->create();
+        $server = Server::factory()->create([
             'name'        => 'my-server-name',
             'address'     => '1.1.1.1',
             'port'        => 2087,

@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use App\Enums\ServerTypeEnum;
+use App\Models\Server;
 use App\Models\User;
-use Tests\Factories\ServerFactory;
-use Tests\Factories\UserFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -19,7 +18,7 @@ class ViewServerListingTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = UserFactory::new()->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */
@@ -47,7 +46,7 @@ class ViewServerListingTest extends TestCase
     /** @test */
     public function an_authorized_user_can_view_server_api_listings()
     {
-        ServerFactory::new()->create([
+        Server::factory()->create([
             'name'        => 'My Test Server',
             'address'     => '255.1.1.100',
             'port'        => 1111,
@@ -71,9 +70,9 @@ class ViewServerListingTest extends TestCase
     /** @test */
     public function the_server_listings_are_in_alphabetical_order()
     {
-        $serverA = ServerFactory::new()->create(['name' => 'Some Server']);
-        $serverB = ServerFactory::new()->create(['name' => 'Another Server']);
-        $serverC = ServerFactory::new()->create(['name' => 'The Last Server']);
+        $serverA = Server::factory()->create(['name' => 'Some Server']);
+        $serverB = Server::factory()->create(['name' => 'Another Server']);
+        $serverC = Server::factory()->create(['name' => 'The Last Server']);
 
         $response = $this->actingAs($this->user)
             ->get(route('servers.listing'))
@@ -89,8 +88,8 @@ class ViewServerListingTest extends TestCase
     /** @test */
     public function the_server_listings_can_be_filtered_by_server_type()
     {
-        $serverA = ServerFactory::new()->create(['server_type' => ServerTypeEnum::VPS()]);
-        $serverB = ServerFactory::new()->create(['server_type' => ServerTypeEnum::DEDICATED()]);
+        $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::vps()]);
+        $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::dedicated()]);
 
         $response = $this->actingAs($this->user)
             ->get(route('servers.listing', ['type' => 'vps']))
