@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Filters\AccountFilters;
 use App\Models\Concerns\Unguarded;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
-    use Unguarded;
+    use HasFactory, Unguarded;
 
     protected $casts = ['backup' => 'boolean', 'suspended' => 'boolean'];
     protected $dates = ['suspend_time', 'setup_date'];
