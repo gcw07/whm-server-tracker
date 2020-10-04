@@ -7,9 +7,9 @@ use App\Connectors\ServerConnector;
 use App\Jobs\FetchServerAccounts;
 use App\Models\Server;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GetServerAccountsTest extends TestCase
 {

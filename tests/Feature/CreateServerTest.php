@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use App\Enums\ServerTypeEnum;
 use App\Models\Server;
 use App\Models\User;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CreateServerTest extends TestCase
 {

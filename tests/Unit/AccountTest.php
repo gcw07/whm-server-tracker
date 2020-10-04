@@ -4,8 +4,8 @@ namespace Tests\Unit;
 
 use App\Models\Account;
 use App\Models\Server;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class AccountTest extends TestCase
 {

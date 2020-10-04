@@ -7,10 +7,10 @@ use App\Events\FetchedServerAccounts;
 use App\Models\Server;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class FetchServerAccounts implements ShouldQueue
 {
@@ -64,13 +64,9 @@ class FetchServerAccounts implements ShouldQueue
     public function failed(Exception $exception)
     {
         if ($exception instanceof InvalidServerTypeException) {
-
         } elseif ($exception instanceof MissingTokenException) {
-
         } elseif ($exception instanceof ServerConnectionException) {
-
         } elseif ($exception instanceof ForbiddenAccessException) {
-
         }
     }
 }

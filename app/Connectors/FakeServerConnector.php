@@ -2,13 +2,8 @@
 
 namespace App\Connectors;
 
-use App\Exceptions\Server\ForbiddenAccessException;
-use App\Exceptions\Server\ServerConnectionException;
 use App\Exceptions\Server\InvalidServerTypeException;
 use App\Exceptions\Server\MissingTokenException;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
 
 class FakeServerConnector implements ServerConnector
 {
@@ -89,6 +84,5 @@ class FakeServerConnector implements ServerConnector
 
     public function getSystemLoadAvg()
     {
-
     }
 }

@@ -37,5 +37,4 @@ class ServersTokenController extends Controller
 
         return response()->json($server);
     }
-
 }

@@ -167,7 +167,8 @@ after('deploy:failed', 'deploy:unlock');
  | variables are set and for showing error messages.
  */
 
-function checkEnvVariablesAreSet() {
+function checkEnvVariablesAreSet()
+{
     $notSet = false;
     if (empty(get('deployment_host'))) {
         errorMessage('The .env DEPLOY_HOST variable is not set.');
@@ -194,6 +195,7 @@ function checkEnvVariablesAreSet() {
     }
 }
 
-function errorMessage($message) {
+function errorMessage($message)
+{
     echo "\e[1;31;mError: " .$message. "\e[0m\n";
 }

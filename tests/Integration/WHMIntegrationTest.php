@@ -4,11 +4,11 @@ namespace Tests\Integration;
 
 use App\Connectors\WHMServerConnector;
 use App\Exceptions\Server\ForbiddenAccessException;
-use App\Exceptions\Server\ServerConnectionException;
 use App\Exceptions\Server\InvalidServerTypeException;
 use App\Exceptions\Server\MissingTokenException;
-use Tests\TestCase;
+use App\Exceptions\Server\ServerConnectionException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class WHMIntegrationTest extends TestCase
 {

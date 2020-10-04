@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Server;
-use Illuminate\Http\Request;
 
 class AccountsController extends Controller
 {
