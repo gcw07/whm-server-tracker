@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Account;
+use App\Models\Server;
 use Illuminate\Database\Seeder;
 
 class ServersTableSeeder extends Seeder
@@ -13,12 +15,6 @@ class ServersTableSeeder extends Seeder
      */
     public function run()
     {
-        $servers = factory('App\Models\Server', 10)->create();
-
-        foreach ($servers as $server) {
-            factory('App\Models\Account', 15)->create([
-                'server_id' => $server->id
-            ]);
-        }
+        Server::factory()->has(Account::factory()->count(15))->count(10)->create();
     }
 }
