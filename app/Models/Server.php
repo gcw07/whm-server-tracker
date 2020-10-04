@@ -18,9 +18,10 @@ class Server extends Model
     protected $withCount = ['accounts'];
     protected $casts = [
         'server_type' => ServerTypeEnum::class,
-        'settings' => 'json'
+        'settings' => 'json',
+        'details_last_updated' => 'datetime',
+        'accounts_last_updated' => 'datetime',
     ];
-    protected $dates = ['details_last_updated', 'accounts_last_updated'];
     protected $appends = [
         'formatted_server_type',
         'formatted_backup_days',
