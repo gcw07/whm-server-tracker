@@ -9,6 +9,6 @@ class BladeComponentServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        // Blade::component('components.navigationItem', 'navigation-item');
+        //
     }
 }
