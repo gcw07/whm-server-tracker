@@ -36,7 +36,7 @@ module.exports = {
   },
   variants: {
     fill: ['responsive', 'hover', 'focus', 'group-hover'],
-    opacity: ['responsive', 'hover'],
+    opacity: ['responsive', 'hover', 'group-hover'],
     textColor: ['responsive', 'hover', 'focus', 'group-hover'],
     zIndex: ['responsive', 'focus'],
   },
