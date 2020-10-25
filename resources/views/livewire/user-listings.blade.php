@@ -1,7 +1,7 @@
 <x-table>
   <x-slot name="head">
-    <x-table.heading sortable multi-column wire:click="sortBy('name')" :direction="$sorts['name'] ?? null">Name</x-table.heading>
-    <x-table.heading sortable multi-column wire:click="sortBy('email')" :direction="$sorts['email'] ?? null">Email</x-table.heading>
+    <x-table.heading sortable wire:click="sortBy('name')" :direction="$sortField === 'name' ? $sortDirection : null">Name</x-table.heading>
+    <x-table.heading sortable wire:click="sortBy('email')" :direction="$sortField === 'email' ? $sortDirection : null">Email</x-table.heading>
     <x-table.heading>Last Login</x-table.heading>
     <x-table.heading>Last IP Address</x-table.heading>
     <x-table.heading />
@@ -18,11 +18,11 @@
         </x-table.cell>
 
         <x-table.cell>
-          date
+          {{ $user->lastLogin->created_at->diffForHumans() }}
         </x-table.cell>
 
         <x-table.cell>
-          IP
+          {{ $user->lastLogin->ip_address }}
         </x-table.cell>
 
         <x-table.cell>
@@ -31,10 +31,10 @@
       </x-table.row>
     @empty
       <x-table.row>
-        <x-table.cell colspan="6">
+        <x-table.cell colspan="5">
           <div class="flex justify-center items-center space-x-2">
-            <x-heroicon-o-inbox class="h-8 w-8 text-cool-gray-400"/>
-            <span class="font-medium py-8 text-cool-gray-400 text-xl">No transactions found...</span>
+            <x-heroicon-o-user class="h-8 w-8 text-cool-gray-400"/>
+            <span class="font-medium py-8 text-cool-gray-400 text-xl">No users found...</span>
           </div>
         </x-table.cell>
       </x-table.row>
