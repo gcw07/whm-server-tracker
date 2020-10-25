@@ -5,7 +5,7 @@ namespace App\Http\Livewire\DataTable;
 trait WithSorting
 {
     public $sortField;
-    public $sortDirection = 'asc';
+    public $sortDirection;
 
     public function sortBy($field)
     {
