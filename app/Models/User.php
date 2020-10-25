@@ -41,6 +41,10 @@ class User extends Authenticatable
 {
     use HasLogins, HasFactory, Notifiable, Unguarded;
 
-    protected $casts = ['email' => Lower::class,];
+    protected $casts = [
+        'email' => Lower::class,
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
     protected $hidden = ['password', 'remember_token'];
 }
