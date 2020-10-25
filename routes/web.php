@@ -18,6 +18,7 @@ use App\Http\Controllers\ServersController;
 use App\Http\Controllers\ServersTokenController;
 use App\Http\Controllers\UserChangePasswordController;
 use App\Http\Controllers\UserController;
+use App\Http\Livewire\UserListings;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -64,7 +65,7 @@ Route::prefix('servers')->middleware('auth')->group(function () {
 // User Routes...
 Route::prefix('users')->middleware('auth')->group(function () {
     Route::post('/', [UserController::class, 'store'])->name('users.store');
-    Route::get('/', [UserController::class, 'index'])->name('users.index');
+    Route::get('/', UserListings::class)->name('users.index');
     Route::get('/create', [UserController::class, 'create'])->name('users.create');
     Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/{user}', [UserController::class, 'update'])->name('users.update');
