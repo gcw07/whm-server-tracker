@@ -41,6 +41,6 @@ module.exports = {
     zIndex: ['responsive', 'focus'],
   },
   plugins: [
-    require('@tailwindcss/ui'),
+    require('@tailwindcss/forms'),
   ],
 };
