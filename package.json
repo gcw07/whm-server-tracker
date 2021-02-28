@@ -10,7 +10,9 @@
     "production": "mix --production"
   },
   "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/typography": "^0.4.0",
     "alpinejs": "^2.8.1",
     "axios": "^0.21.1",
     "cross-env": "^7.0.3",
