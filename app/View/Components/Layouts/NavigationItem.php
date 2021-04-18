@@ -25,9 +25,10 @@ class NavigationItem extends Component
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(string $href, bool $mobile = false)
     {
-        //
+        $this->href = $href;
+        $this->mobile = $mobile;
     }
 
     /**
