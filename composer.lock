@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83aef8f9aea7bd74b0153666539f1816",
+    "content-hash": "89b9ceb68e4c31d8fa4d0b472171ec28",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -64,26 +64,26 @@
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
-            "version": "0.3.1",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blade-ui-kit/blade-heroicons.git",
-                "reference": "b80c667dfe6eb5c69730e11810ca2d5d1654314a"
+                "reference": "2e47c31b6553e158ff93f14a961cc588d3302b0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blade-ui-kit/blade-heroicons/zipball/b80c667dfe6eb5c69730e11810ca2d5d1654314a",
-                "reference": "b80c667dfe6eb5c69730e11810ca2d5d1654314a",
+                "url": "https://api.github.com/repos/blade-ui-kit/blade-heroicons/zipball/2e47c31b6553e158ff93f14a961cc588d3302b0d",
+                "reference": "2e47c31b6553e158ff93f14a961cc588d3302b0d",
                 "shasum": ""
             },
             "require": {
-                "blade-ui-kit/blade-icons": "^0.5.0",
-                "illuminate/support": "^7.14|^8.0",
-                "php": "^7.3|^8.0"
+                "blade-ui-kit/blade-icons": "^1.0",
+                "illuminate/support": "^8.0",
+                "php": "^7.4|^8.0"
             },
             "require-dev": {
-                "orchestra/testbench": "^5.0|^6.0",
-                "phpunit/phpunit": "^8.0|^9.0"
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.0"
             },
             "type": "library",
             "extra": {
@@ -105,9 +105,7 @@
             "authors": [
                 {
                     "name": "Dries Vints",
-                    "email": "dries@vints.io",
-                    "homepage": "https://driesvints.com",
-                    "role": "Developer"
+                    "homepage": "https://driesvints.com"
                 }
             ],
             "description": "A package to easily make use of Heroicons in your Laravel Blade views.",
@@ -119,41 +117,45 @@
             ],
             "support": {
                 "issues": "https://github.com/blade-ui-kit/blade-heroicons/issues",
-                "source": "https://github.com/blade-ui-kit/blade-heroicons/tree/0.3.1"
+                "source": "https://github.com/blade-ui-kit/blade-heroicons/tree/1.0.1"
             },
             "funding": [
+                {
+                    "url": "https://github.com/caneco",
+                    "type": "github"
+                },
                 {
                     "url": "https://github.com/driesvints",
                     "type": "github"
                 }
             ],
-            "time": "2020-11-23T21:21:12+00:00"
+            "time": "2021-03-31T15:01:44+00:00"
         },
         {
             "name": "blade-ui-kit/blade-icons",
-            "version": "0.5.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blade-ui-kit/blade-icons.git",
-                "reference": "d6bb74cdf0420900d14c6bc2304e28d0463dd0a9"
+                "reference": "716c3991efb77389046785ff87a9565aceda8657"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blade-ui-kit/blade-icons/zipball/d6bb74cdf0420900d14c6bc2304e28d0463dd0a9",
-                "reference": "d6bb74cdf0420900d14c6bc2304e28d0463dd0a9",
+                "url": "https://api.github.com/repos/blade-ui-kit/blade-icons/zipball/716c3991efb77389046785ff87a9565aceda8657",
+                "reference": "716c3991efb77389046785ff87a9565aceda8657",
                 "shasum": ""
             },
             "require": {
-                "illuminate/contracts": "^7.14|^8.0",
-                "illuminate/filesystem": "^7.14|^8.0",
-                "illuminate/support": "^7.14|^8.0",
-                "illuminate/view": "^7.14|^8.0",
-                "php": "^7.3|^8.0"
+                "illuminate/contracts": "^8.0",
+                "illuminate/filesystem": "^8.0",
+                "illuminate/support": "^8.0",
+                "illuminate/view": "^8.0",
+                "php": "^7.4|^8.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.3",
-                "orchestra/testbench": "^5.0|^6.0",
-                "phpunit/phpunit": "^8.0|^9.0"
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.0"
             },
             "type": "library",
             "extra": {
@@ -178,9 +180,7 @@
             "authors": [
                 {
                     "name": "Dries Vints",
-                    "email": "dries@vints.io",
-                    "homepage": "https://driesvints.com",
-                    "role": "Developer"
+                    "homepage": "https://driesvints.com"
                 }
             ],
             "description": "A package to easily make use of icons in your Laravel Blade views.",
@@ -197,11 +197,15 @@
             },
             "funding": [
                 {
+                    "url": "https://github.com/caneco",
+                    "type": "github"
+                },
+                {
                     "url": "https://github.com/driesvints",
                     "type": "github"
                 }
             ],
-            "time": "2020-11-05T20:40:53+00:00"
+            "time": "2021-04-03T19:08:34+00:00"
         },
         {
             "name": "blade-ui-kit/blade-ui-kit",
@@ -1419,6 +1423,57 @@
             "time": "2021-03-21T16:25:00+00:00"
         },
         {
+            "name": "hamcrest/hamcrest-php",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hamcrest/hamcrest-php.git",
+                "reference": "8c3d0a3f6af734494ad8f6fbbee0ba92422859f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hamcrest/hamcrest-php/zipball/8c3d0a3f6af734494ad8f6fbbee0ba92422859f3",
+                "reference": "8c3d0a3f6af734494ad8f6fbbee0ba92422859f3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3|^7.0|^8.0"
+            },
+            "replace": {
+                "cordoval/hamcrest-php": "*",
+                "davedevelopment/hamcrest-php": "*",
+                "kodova/hamcrest-php": "*"
+            },
+            "require-dev": {
+                "phpunit/php-file-iterator": "^1.4 || ^2.0",
+                "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5 || ^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "hamcrest"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "This is the PHP port of Hamcrest Matchers",
+            "keywords": [
+                "test"
+            ],
+            "support": {
+                "issues": "https://github.com/hamcrest/hamcrest-php/issues",
+                "source": "https://github.com/hamcrest/hamcrest-php/tree/v2.0.1"
+            },
+            "time": "2020-07-09T08:09:16+00:00"
+        },
+        {
             "name": "laravel/framework",
             "version": "v8.37.0",
             "source": {
@@ -2112,6 +2167,78 @@
                 }
             ],
             "time": "2021-04-16T14:27:45+00:00"
+        },
+        {
+            "name": "mockery/mockery",
+            "version": "1.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mockery/mockery.git",
+                "reference": "d1339f64479af1bee0e82a0413813fe5345a54ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/d1339f64479af1bee0e82a0413813fe5345a54ea",
+                "reference": "d1339f64479af1bee0e82a0413813fe5345a54ea",
+                "shasum": ""
+            },
+            "require": {
+                "hamcrest/hamcrest-php": "^2.0.1",
+                "lib-pcre": ">=7.0",
+                "php": "^7.3 || ^8.0"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5 || ^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Mockery": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Pádraic Brady",
+                    "email": "padraic.brady@gmail.com",
+                    "homepage": "http://blog.astrumfutura.com"
+                },
+                {
+                    "name": "Dave Marshall",
+                    "email": "dave.marshall@atstsolutions.co.uk",
+                    "homepage": "http://davedevelopment.co.uk"
+                }
+            ],
+            "description": "Mockery is a simple yet flexible PHP mock object framework",
+            "homepage": "https://github.com/mockery/mockery",
+            "keywords": [
+                "BDD",
+                "TDD",
+                "library",
+                "mock",
+                "mock objects",
+                "mockery",
+                "stub",
+                "test",
+                "test double",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/mockery/mockery/issues",
+                "source": "https://github.com/mockery/mockery/tree/1.4.3"
+            },
+            "time": "2021-02-24T09:51:49+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3086,24 +3213,24 @@
         },
         {
             "name": "spatie/db-dumper",
-            "version": "2.21.1",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/db-dumper.git",
-                "reference": "05e5955fb882008a8947c5a45146d86cfafa10d1"
+                "reference": "1364325f3f3c5b7cdafd46bca5e9d422227a34d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/db-dumper/zipball/05e5955fb882008a8947c5a45146d86cfafa10d1",
-                "reference": "05e5955fb882008a8947c5a45146d86cfafa10d1",
+                "url": "https://api.github.com/repos/spatie/db-dumper/zipball/1364325f3f3c5b7cdafd46bca5e9d422227a34d2",
+                "reference": "1364325f3f3c5b7cdafd46bca5e9d422227a34d2",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0",
-                "symfony/process": "^4.2|^5.0"
+                "php": "^8.0",
+                "symfony/process": "^5.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.0|^8.0|^9.0"
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
             "autoload": {
@@ -3134,15 +3261,19 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/db-dumper/issues",
-                "source": "https://github.com/spatie/db-dumper/tree/2.21.1"
+                "source": "https://github.com/spatie/db-dumper/tree/3.0.1"
             },
             "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
                 {
                     "url": "https://github.com/spatie",
                     "type": "github"
                 }
             ],
-            "time": "2021-02-24T14:56:42+00:00"
+            "time": "2021-04-01T07:28:47+00:00"
         },
         {
             "name": "spatie/enum",
@@ -3222,38 +3353,43 @@
         },
         {
             "name": "spatie/laravel-backup",
-            "version": "6.16.0",
+            "version": "7.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-backup.git",
-                "reference": "6b2229a07d92c2bb146ad9c5223fc32e9d74830c"
+                "reference": "f6be7328249d6e8557f9e2fee7ffa4446461793b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/6b2229a07d92c2bb146ad9c5223fc32e9d74830c",
-                "reference": "6b2229a07d92c2bb146ad9c5223fc32e9d74830c",
+                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/f6be7328249d6e8557f9e2fee7ffa4446461793b",
+                "reference": "f6be7328249d6e8557f9e2fee7ffa4446461793b",
                 "shasum": ""
             },
             "require": {
+                "ext-pcntl": "*",
                 "ext-zip": "^1.14.0",
-                "illuminate/console": "^6.0|^7.0|^8.0",
-                "illuminate/contracts": "^6.0|^7.0|^8.0",
-                "illuminate/events": "^6.0|^7.0|^8.0",
-                "illuminate/filesystem": "^6.0|^7.0|^8.0",
-                "illuminate/notifications": "^6.0|^7.0|^8.0",
-                "illuminate/support": "^6.0|^7.0|^8.0",
-                "league/flysystem": "^1.0.49",
-                "php": "^7.3|^8.0",
-                "spatie/db-dumper": "^2.12",
-                "spatie/temporary-directory": "^1.1",
-                "symfony/finder": "^4.2|^5.0"
+                "illuminate/console": "^8.36",
+                "illuminate/contracts": "^8.36",
+                "illuminate/events": "^8.36",
+                "illuminate/filesystem": "^8.36",
+                "illuminate/notifications": "^8.36",
+                "illuminate/support": "^8.36",
+                "league/flysystem": "^1.0.49|^2.0",
+                "php": "^8.0",
+                "spatie/db-dumper": "^3.0",
+                "spatie/laravel-package-tools": "^1.6.2",
+                "spatie/laravel-signal-aware-command": "^1.1",
+                "spatie/temporary-directory": "^2.0",
+                "symfony/console": "^5.2.6",
+                "symfony/finder": "^5.2"
             },
             "require-dev": {
+                "composer-runtime-api": "^2.0",
                 "laravel/slack-notification-channel": "^2.3",
-                "league/flysystem-aws-s3-v3": "^1.0",
-                "mockery/mockery": "^1.4.2",
-                "orchestra/testbench": "4.*|5.*|6.*",
-                "phpunit/phpunit": "^8.4|^9.0"
+                "league/flysystem-aws-s3-v3": "^1.0.29",
+                "mockery/mockery": "^1.4",
+                "orchestra/testbench": "^6.17",
+                "phpunit/phpunit": "^9.5.4"
             },
             "suggest": {
                 "laravel/slack-notification-channel": "Required for sending notifications via Slack"
@@ -3296,7 +3432,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-backup/issues",
-                "source": "https://github.com/spatie/laravel-backup/tree/6.16.0"
+                "source": "https://github.com/spatie/laravel-backup/tree/7.5.1"
             },
             "funding": [
                 {
@@ -3308,7 +3444,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2021-04-15T09:31:32+00:00"
+            "time": "2021-04-15T09:37:45+00:00"
         },
         {
             "name": "spatie/laravel-enum",
@@ -3403,24 +3539,158 @@
             "time": "2021-02-19T11:35:56+00:00"
         },
         {
-            "name": "spatie/temporary-directory",
-            "version": "1.3.0",
+            "name": "spatie/laravel-package-tools",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/spatie/temporary-directory.git",
-                "reference": "f517729b3793bca58f847c5fd383ec16f03ffec6"
+                "url": "https://github.com/spatie/laravel-package-tools.git",
+                "reference": "4bb554dc9870127606c34d906a602989b8b376ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/temporary-directory/zipball/f517729b3793bca58f847c5fd383ec16f03ffec6",
-                "reference": "f517729b3793bca58f847c5fd383ec16f03ffec6",
+                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/4bb554dc9870127606c34d906a602989b8b376ff",
+                "reference": "4bb554dc9870127606c34d906a602989b8b376ff",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0"
+                "illuminate/contracts": "^7.0|^8.0",
+                "mockery/mockery": "^1.4",
+                "php": "^7.4|^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.0|^9.0"
+                "orchestra/testbench": "^5.0|^6.0",
+                "phpunit/phpunit": "^9.3",
+                "spatie/test-time": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\LaravelPackageTools\\": "src",
+                    "Spatie\\LaravelPackageTools\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tools for creating Laravel packages",
+            "homepage": "https://github.com/spatie/laravel-package-tools",
+            "keywords": [
+                "laravel-package-tools",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-package-tools/issues",
+                "source": "https://github.com/spatie/laravel-package-tools/tree/1.6.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-03-25T08:05:55+00:00"
+        },
+        {
+            "name": "spatie/laravel-signal-aware-command",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-signal-aware-command.git",
+                "reference": "8c605808028943da9f6c0064d3fd16358526bcad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-signal-aware-command/zipball/8c605808028943da9f6c0064d3fd16358526bcad",
+                "reference": "8c605808028943da9f6c0064d3fd16358526bcad",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^8.35",
+                "php": "^8.0",
+                "spatie/laravel-package-tools": "^1.4.3"
+            },
+            "require-dev": {
+                "brianium/paratest": "^6.2",
+                "ext-pcntl": "*",
+                "nunomaduro/collision": "^5.3",
+                "orchestra/testbench": "^6.16",
+                "phpunit/phpunit": "^9.5",
+                "spatie/laravel-ray": "^1.17",
+                "vimeo/psalm": "^4.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\SignalAwareCommand\\SignalAwareCommandServiceProvider"
+                    ],
+                    "aliases": {
+                        "Signal": "Spatie\\SignalAwareCommand\\Facades\\Signal"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\SignalAwareCommand\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Handle signals in artisan commands",
+            "homepage": "https://github.com/spatie/laravel-signal-aware-command",
+            "keywords": [
+                "laravel",
+                "laravel-signal-aware-command",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-signal-aware-command/issues",
+                "source": "https://github.com/spatie/laravel-signal-aware-command/tree/1.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-04-14T20:35:49+00:00"
+        },
+        {
+            "name": "spatie/temporary-directory",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/temporary-directory.git",
+                "reference": "06fe0f10d068fdf145c9b2235030e568c913bb61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/temporary-directory/zipball/06fe0f10d068fdf145c9b2235030e568c913bb61",
+                "reference": "06fe0f10d068fdf145c9b2235030e568c913bb61",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
             "autoload": {
@@ -3449,9 +3719,19 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/temporary-directory/issues",
-                "source": "https://github.com/spatie/temporary-directory/tree/1.3.0"
+                "source": "https://github.com/spatie/temporary-directory/tree/2.0.0"
             },
-            "time": "2020-11-09T15:54:21+00:00"
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-03-30T19:46:13+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -7281,57 +7561,6 @@
             "time": "2021-04-06T18:37:33+00:00"
         },
         {
-            "name": "hamcrest/hamcrest-php",
-            "version": "v2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hamcrest/hamcrest-php.git",
-                "reference": "8c3d0a3f6af734494ad8f6fbbee0ba92422859f3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hamcrest/hamcrest-php/zipball/8c3d0a3f6af734494ad8f6fbbee0ba92422859f3",
-                "reference": "8c3d0a3f6af734494ad8f6fbbee0ba92422859f3",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3|^7.0|^8.0"
-            },
-            "replace": {
-                "cordoval/hamcrest-php": "*",
-                "davedevelopment/hamcrest-php": "*",
-                "kodova/hamcrest-php": "*"
-            },
-            "require-dev": {
-                "phpunit/php-file-iterator": "^1.4 || ^2.0",
-                "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5 || ^7.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "hamcrest"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "This is the PHP port of Hamcrest Matchers",
-            "keywords": [
-                "test"
-            ],
-            "support": {
-                "issues": "https://github.com/hamcrest/hamcrest-php/issues",
-                "source": "https://github.com/hamcrest/hamcrest-php/tree/v2.0.1"
-            },
-            "time": "2020-07-09T08:09:16+00:00"
-        },
-        {
             "name": "justinrainbow/json-schema",
             "version": "5.2.10",
             "source": {
@@ -7527,78 +7756,6 @@
                 "source": "https://github.com/maximebf/php-debugbar/tree/v1.16.5"
             },
             "time": "2020-12-07T11:07:24+00:00"
-        },
-        {
-            "name": "mockery/mockery",
-            "version": "1.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mockery/mockery.git",
-                "reference": "d1339f64479af1bee0e82a0413813fe5345a54ea"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/d1339f64479af1bee0e82a0413813fe5345a54ea",
-                "reference": "d1339f64479af1bee0e82a0413813fe5345a54ea",
-                "shasum": ""
-            },
-            "require": {
-                "hamcrest/hamcrest-php": "^2.0.1",
-                "lib-pcre": ">=7.0",
-                "php": "^7.3 || ^8.0"
-            },
-            "conflict": {
-                "phpunit/phpunit": "<8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^8.5 || ^9.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.4.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Mockery": "library/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Pádraic Brady",
-                    "email": "padraic.brady@gmail.com",
-                    "homepage": "http://blog.astrumfutura.com"
-                },
-                {
-                    "name": "Dave Marshall",
-                    "email": "dave.marshall@atstsolutions.co.uk",
-                    "homepage": "http://davedevelopment.co.uk"
-                }
-            ],
-            "description": "Mockery is a simple yet flexible PHP mock object framework",
-            "homepage": "https://github.com/mockery/mockery",
-            "keywords": [
-                "BDD",
-                "TDD",
-                "library",
-                "mock",
-                "mock objects",
-                "mockery",
-                "stub",
-                "test",
-                "test double",
-                "testing"
-            ],
-            "support": {
-                "issues": "https://github.com/mockery/mockery/issues",
-                "source": "https://github.com/mockery/mockery/tree/1.4.3"
-            },
-            "time": "2021-02-24T09:51:49+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -11227,7 +11384,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.0|^7.4"
+        "php": "^8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
