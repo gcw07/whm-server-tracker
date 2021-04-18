@@ -51,12 +51,8 @@
         <!-- Mobile menu button -->
         <button @click="open = !open" type="button" class="bg-blue-600 inline-flex items-center justify-center p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-500 hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-600 focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
           <span class="sr-only">Open main menu</span>
-          <svg xmlns="http://www.w3.org/2000/svg" :class="{'hidden': open, 'block': !open }" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <svg xmlns="http://www.w3.org/2000/svg" :class="{'block': open, 'hidden': !open }" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <x-heroicon-o-menu ::class="{'hidden': open, 'block': !open }" class="h-6 w-6"/>
+          <x-heroicon-o-x ::class="{'block': open, 'hidden': !open }" class="h-6 w-6"/>
         </button>
       </div>
     </div>
