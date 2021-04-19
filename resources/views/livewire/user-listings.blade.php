@@ -51,8 +51,18 @@
                 x-transition:leave-end="transform opacity-0 scale-95"
                 class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" x-cloak>
                 <div class="px-1 py-1">
-                  <a href="#" class="block px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">Your Profile</a>
-                  <a href="#" class="block px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">Settings</a>
+                  <a href="#" class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                    <x-heroicon-o-lock-closed class="h-4 w-4 mr-2"/>
+                    Change Password
+                  </a>
+                  <a href="#" class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                    <x-heroicon-o-pencil class="h-4 w-4 mr-2"/>
+                    Edit
+                  </a>
+                  <a href="#" class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                    <x-heroicon-o-trash class="h-4 w-4 mr-2"/>
+                    Remove
+                  </a>
                 </div>
               </div>
             </x-dropdown>
@@ -77,8 +87,18 @@
                   x-transition:leave-end="transform opacity-0 scale-95"
                   class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" x-cloak>
                   <div class="px-1 py-1">
-                    <a href="#" class="block px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">Your Profile</a>
-                    <a href="#" class="block px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">Settings</a>
+                    <a href="#" class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                      <x-heroicon-o-lock-closed class="h-4 w-4 mr-2"/>
+                      Change Password
+                    </a>
+                    <a href="#" class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                      <x-heroicon-o-pencil class="h-4 w-4 mr-2"/>
+                      Edit
+                    </a>
+                    <a href="#" class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                      <x-heroicon-o-trash class="h-4 w-4 mr-2"/>
+                      Remove
+                    </a>
                   </div>
                 </div>
               </x-dropdown>
