@@ -38,11 +38,16 @@
               x-transition:leave-start="transform opacity-100 scale-100"
               x-transition:leave-end="transform opacity-0 scale-95"
               class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" x-cloak>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700">Your Profile</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700">Settings</a>
-                <x-logout class="block px-4 py-2 text-sm text-gray-700">
-                  Sign out
+              <div class="px-1 py-1">
+                <a href="#" class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                  <x-heroicon-o-user class="h-4 w-4 mr-2"/>
+                  Your Profile
+                </a>
+                <x-logout class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                  <x-heroicon-o-logout class="h-4 w-4 mr-2"/>
+                  Sign Out
                 </x-logout>
+              </div>
             </div>
           </x-dropdown>
         </div>
