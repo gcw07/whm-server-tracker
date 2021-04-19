@@ -8,11 +8,11 @@
           {{ $title }}
         </h1>
       </div>
-      @if(isset($actions))
+      @isset($actions)
         <div class="mt-4 flex md:mt-0 md:ml-4">
           {{ $actions }}
         </div>
-      @endif
+      @endisset
     </div>
   </header>
   <main>
