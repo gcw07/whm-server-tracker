@@ -4,7 +4,7 @@
 ])
 
 <th
-  scope="col" {{ $attributes->merge(['class' => 'px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider'])->only('class') }}
+  scope="col" {{ $attributes->merge(['class' => 'px-6 py-3 text-left text-xs bg-gray-50 text-gray-500 uppercase tracking-wider'])->only('class') }}
 >
   @unless ($sortable)
     <span class="flex items-center space-x-1 leading-4 font-medium">{{ $slot }}</span>
