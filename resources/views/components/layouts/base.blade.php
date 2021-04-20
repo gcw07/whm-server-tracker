@@ -16,6 +16,8 @@
 
   <x-layouts.footer />
 
+  @livewire('livewire-ui-modal')
+  @livewireUIScripts
   @livewireScripts
   @bukScripts
 </x-html>
