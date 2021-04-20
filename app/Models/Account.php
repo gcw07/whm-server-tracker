@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read mixed $domain_url
  * @property-read mixed $whm_url
  * @property-read \App\Models\Server $server
+ * @method static \Database\Factories\AccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Account filter(\App\Filters\AccountFilters $filters)
  * @method static \Illuminate\Database\Eloquent\Builder|Account newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Account newQuery()

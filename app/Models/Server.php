@@ -37,6 +37,7 @@ use Illuminate\Support\Arr;
  * @property-read mixed $formatted_server_type
  * @property-read mixed $missing_token
  * @property-read mixed $whm_url
+ * @method static \Database\Factories\ServerFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Server filter(\App\Filters\ServerFilters $filters)
  * @method static \Illuminate\Database\Eloquent\Builder|Server newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Server newQuery()
