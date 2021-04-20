@@ -9,7 +9,6 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     @livewireStyles
-    @bukStyles
   </x-slot>
 
   {{ $slot }}
@@ -19,5 +18,4 @@
   @livewire('livewire-ui-modal')
   @livewireUIScripts
   @livewireScripts
-  @bukScripts
 </x-html>
