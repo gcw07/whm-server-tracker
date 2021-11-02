@@ -26,7 +26,7 @@
             <x-slot name="trigger">
               <button type="button" class="max-w-xs bg-blue-600 rounded-full flex items-center text-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-600 focus:ring-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                 <span class="sr-only">Open user menu</span>
-                <x-avatar search="gcw07" class="h-8 w-8 rounded-full" />
+                <x-avatar search="test@email.com" class="h-8 w-8 rounded-full" />
               </button>
             </x-slot>
 
