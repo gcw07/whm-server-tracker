@@ -1,86 +1,60 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-class ChangePasswordTest extends TestCase
-{
-    use RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-    private User $user;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+test('guests cannot change a password', function () {
+    $this->putJson(route('users.change-password', $this->user->id), [
+        'password' => 'secret',
+        'password_confirmation' => 'secret',
+    ])->assertUnauthorized();
+});
 
-        $this->user = User::factory()->create();
-    }
+test('an authorized user can change a password', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function guests_cannot_change_a_password()
-    {
-        $this->putJson(route('users.change-password', $this->user->id), [
-            'password'              => 'secret',
-            'password_confirmation' => 'secret',
-        ])->assertUnauthorized();
-    }
+    $this->actingAs($user)
+        ->putJson(route('users.change-password', $this->user->id), [
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
+        ])->assertSuccessful();
+});
 
-    /** @test */
-    public function an_authorized_user_can_change_a_password()
-    {
-        $user = User::factory()->create();
+test('password confirmation is required for user change password', function () {
+    $user = User::factory()->create();
 
-        $this->actingAs($user)
-            ->putJson(route('users.change-password', $this->user->id), [
-                'password'              => 'secret',
-                'password_confirmation' => 'secret'
-            ])->assertSuccessful();
-    }
+    $response = $this->actingAs($user)
+        ->putJson(route('users.change-password', $this->user->id), [
+            'password' => 'secret',
+            'password_confirmation' => '',
+        ]);
 
-    /**
-     * @dataProvider validationDataProvider
-     * @test
-     * @param $field
-     * @param $value
-     * @param $errorMessage
-     */
-    public function validate_rules_for_user_change_password($field, $value, $errorMessage)
-    {
-        $user = User::factory()->create();
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['password' => 'confirmation does not match']);
+});
 
-        $response = $this->actingAs($user)
-            ->putJson(route('users.change-password', $this->user->id), [
-                $field => $value,
-            ]);
+it('validates rules for change user password form', function ($data) {
+    // This could be fixed in future pest version.
+    $field = $data[0];
+    $value = $data[1];
+    $errorMessage = $data[2];
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors([$field => $errorMessage]);
-    }
+    $user = User::factory()->create();
 
-    public function validationDataProvider()
-    {
-        return [
-            'password is required' => ['password', '', 'field is required'],
-            'password must be at least 6 characters' => ['password', Str::random(5), 'must be at least 6 characters'],
-        ];
-    }
+    $response = $this->actingAs($user)
+        ->putJson(route('users.change-password', $this->user->id), [
+            $field => $value,
+        ]);
 
-    /** @test */
-    public function password_confirmation_is_required_for_user_change_password()
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)
-            ->putJson(route('users.change-password', $this->user->id), [
-                'password' => 'secret',
-                'password_confirmation' => '',
-            ]);
-
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['password' => 'confirmation does not match']);
-    }
-}
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors([$field => $errorMessage]);
+})->with([
+    fn() => ['password', '', 'field is required'],
+    fn() => ['password', Str::random(5), 'must be at least 6 characters'],
+]);
