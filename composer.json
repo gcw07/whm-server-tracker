@@ -19,10 +19,10 @@
         "laravel/horizon": "^v5.0",
         "laravel/tinker": "^v2.5.0",
         "laravel/ui": "^v3.2.0",
-        "livewire-ui/modal": "^0.1.2",
         "livewire/livewire": "^2.0",
         "spatie/laravel-backup": "^7.0",
-        "spatie/laravel-enum": "^2.0"
+        "spatie/laravel-enum": "^2.0",
+        "wire-elements/modal": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.3",
