@@ -1,131 +1,104 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-class CreateUserTest extends TestCase
+uses(LazilyRefreshDatabase::class);
+
+function validParams($overrides = []): array
 {
-    use RefreshDatabase;
+    return array_merge([
+        'name' => 'Grant Williams',
+        'email' => 'grant@example.com',
+        'password' => 'secret',
+    ], $overrides);
+}
 
-    private function validParams($overrides = [])
-    {
-        return array_merge([
-            'name'     => 'Grant Williams',
-            'email'    => 'grant@example.com',
-            'password' => 'secret',
-        ], $overrides);
-    }
+test('guests cannot view the_add_user_form', function () {
+    $this->get(route('users.create'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function guests_cannot_view_the_add_user_form()
-    {
-        $this->get(route('users.create'))
-            ->assertRedirect(route('login'));
-    }
+test('an authorized user can view the add user form', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function an_authorized_user_can_view_the_add_user_form()
-    {
-        $user = User::factory()->create();
+    $this->actingAs($user)
+        ->get(route('users.create'))
+        ->assertSuccessful();
+});
 
-        $this->actingAs($user)
-            ->get(route('users.create'))
-            ->assertSuccessful();
-    }
+test('guests cannot add new users', function () {
+    $this->postJson(route('users.store'), validParams())
+        ->assertUnauthorized();
 
-    /** @test */
-    public function guests_cannot_add_new_users()
-    {
-        $this->postJson(route('users.store'), $this->validParams())
-            ->assertUnauthorized();
+    $this->assertEquals(0, User::count());
+});
 
-        $this->assertEquals(0, User::count());
-    }
+test('an authorized user can add a valid user', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function an_authorized_user_can_add_a_valid_user()
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)
-            ->postJson(route('users.store'), $this->validParams([
-                'name'                  => 'Grant Williams',
-            'email'                 => 'grant@example.com',
-            'password'              => 'secret',
-            'password_confirmation' => 'secret'
-            ]));
-
-        $response->assertRedirect(route('users.index'));
-
-        $this->assertDatabaseHas('users', [
+    $response = $this->actingAs($user)
+        ->postJson(route('users.store'), validParams([
             'name' => 'Grant Williams',
             'email' => 'grant@example.com',
-        ]);
-    }
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
+        ]));
 
-    /**
-     * @dataProvider validationDataProvider
-     * @test
-     * @param $field
-     * @param $value
-     * @param $errorMessage
-     */
-    public function validate_rules_for_user_create($field, $value, $errorMessage)
-    {
-        $user = User::factory()->create();
+    $response->assertRedirect(route('users.index'));
 
-        $response = $this->actingAs($user)
-            ->postJson(route('users.store'), $this->validParams([
-                $field => $value,
-            ]));
+    $this->assertDatabaseHas('users', [
+        'name' => 'Grant Williams',
+        'email' => 'grant@example.com',
+    ]);
+});
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors([$field => $errorMessage]);
-        $this->assertEquals(1, User::count());
-    }
+test('email must be unique for user create', function () {
+    $user = User::factory()->create(['email' => 'grant@example.com']);
 
-    public function validationDataProvider()
-    {
-        return [
-            'name is required' => ['name', '', 'field is required'],
-            'email is required' => ['email', '', 'field is required'],
-            'email must be valid' => ['email', 'not-valid-email', 'must be a valid email address'],
-            'password is required' => ['password', '', 'field is required'],
-            'password must be at least 6 characters' => ['password', Str::random(5), 'must be at least 6 characters'],
-        ];
-    }
+    $response = $this->actingAs($user)
+        ->postJson(route('users.store'), validParams([
+            'email' => 'grant@example.com',
+        ]));
 
-    /** @test */
-    public function email_must_be_unique_for_user_create()
-    {
-        $user = User::factory()->create(['email' => 'grant@example.com']);
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['email' => 'has already been taken']);
+    $this->assertEquals(1, User::count());
+});
 
-        $response = $this->actingAs($user)
-            ->postJson(route('users.store'), $this->validParams([
-                'email' => 'grant@example.com',
-            ]));
+test('password confirmation is required for user create', function () {
+    $user = User::factory()->create();
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['email' => 'has already been taken']);
-        $this->assertEquals(1, User::count());
-    }
+    $response = $this->actingAs($user)
+        ->postJson(route('users.store'), validParams([
+            'password_confirmation' => '',
+        ]));
 
-    /** @test */
-    public function password_confirmation_is_required_for_user_create()
-    {
-        $user = User::factory()->create();
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['password' => 'confirmation does not match']);
+    $this->assertEquals(1, User::count());
+});
 
-        $response = $this->actingAs($user)
-            ->postJson(route('users.store'), $this->validParams([
-                'password_confirmation' => '',
-            ]));
+it('validates rules for create user form', function ($data) {
+    // This could be fixed in future pest version.
+    $field = $data[0];
+    $value = $data[1];
+    $errorMessage = $data[2];
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['password' => 'confirmation does not match']);
-        $this->assertEquals(1, User::count());
-    }
-}
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->postJson(route('users.store'), validParams([
+            $field => $value,
+        ]));
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors([$field => $errorMessage]);
+    $this->assertEquals(1, User::count());
+})->with([
+    fn() => ['name', '', 'field is required'],
+    fn() => ['email', '', 'field is required'],
+    fn() => ['email', 'not-valid-email', 'must be a valid email address'],
+    fn() => ['password', '', 'field is required'],
+    fn() => ['password', Str::random(5), 'must be at least 6 characters'],
+]);
