@@ -2,17 +2,13 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\Factories\UserRequestDataFactory;
 
 uses(LazilyRefreshDatabase::class);
 
-function validParams($overrides = []): array
-{
-    return array_merge([
-        'name' => 'Grant Williams',
-        'email' => 'grant@example.com',
-        'password' => 'secret',
-    ], $overrides);
-}
+beforeEach(function () {
+    $this->requestData = UserRequestDataFactory::new();
+});
 
 test('guests cannot view the_add_user_form', function () {
     $this->get(route('users.create'))
@@ -28,7 +24,7 @@ test('an authorized user can view the add user form', function () {
 });
 
 test('guests cannot add new users', function () {
-    $this->postJson(route('users.store'), validParams())
+    $this->postJson(route('users.store'), $this->requestData->create())
         ->assertUnauthorized();
 
     $this->assertEquals(0, User::count());
@@ -38,7 +34,7 @@ test('an authorized user can add a valid user', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
-        ->postJson(route('users.store'), validParams([
+        ->postJson(route('users.store'), $this->requestData->create([
             'name' => 'Grant Williams',
             'email' => 'grant@example.com',
             'password' => 'secret',
@@ -57,7 +53,7 @@ test('email must be unique for user create', function () {
     $user = User::factory()->create(['email' => 'grant@example.com']);
 
     $response = $this->actingAs($user)
-        ->postJson(route('users.store'), validParams([
+        ->postJson(route('users.store'), $this->requestData->create([
             'email' => 'grant@example.com',
         ]));
 
@@ -70,7 +66,7 @@ test('password confirmation is required for user create', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
-        ->postJson(route('users.store'), validParams([
+        ->postJson(route('users.store'), $this->requestData->create([
             'password_confirmation' => '',
         ]));
 
@@ -88,7 +84,7 @@ it('validates rules for create user form', function ($data) {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
-        ->postJson(route('users.store'), validParams([
+        ->postJson(route('users.store'), $this->requestData->create([
             $field => $value,
         ]));
 
