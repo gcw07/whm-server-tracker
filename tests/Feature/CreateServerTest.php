@@ -4,24 +4,14 @@ use App\Enums\ServerTypeEnum;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\Factories\ServerRequestDataFactory;
 
 uses(LazilyRefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create();
+    $this->requestData = ServerRequestDataFactory::new();
 });
-
-function validParams($overrides = []): array
-{
-    return array_merge([
-        'name' => 'my-server-name',
-        'address' => '127.0.0.1',
-        'port' => 2087,
-        'server_type' => ServerTypeEnum::VPS(),
-        'notes' => 'a server note',
-        'token' => 'server-api-token'
-    ], $overrides);
-}
 
 test('guests cannot view the add server form', function () {
     $this->get(route('servers.create'))
@@ -35,7 +25,7 @@ test('an authorized user can view the add server form', function () {
 });
 
 test('guests cannot add new servers', function () {
-    $response = $this->postJson(route('servers.store'), validParams());
+    $response = $this->postJson(route('servers.store'), $this->requestData->create());
 
     $response->assertStatus(401);
     $this->assertEquals(0, Server::count());
@@ -43,11 +33,11 @@ test('guests cannot add new servers', function () {
 
 test('an authorized user can add a valid server', function () {
     $response = $this->actingAs($this->user)
-        ->postJson(route('servers.store'), validParams([
+        ->postJson(route('servers.store'), $this->requestData->create([
             'name' => 'My Test Server',
             'address' => '255.1.1.100',
             'port' => 1111,
-            'server_type' => ServerTypeEnum::DEDICATED(),
+            'server_type' => ServerTypeEnum::dedicated(),
             'notes' => 'some server note',
             'token' => 'new-server-api-token'
         ]));
@@ -68,7 +58,7 @@ it('validates rules for create server form', function ($data) {
     $errorMessage = $data[3];
 
     $response = $this->actingAs($this->user)
-        ->postJson(route('servers.store'), validParams([
+        ->postJson(route('servers.store'), $this->requestData->create([
             $field => $value,
         ]));
 
