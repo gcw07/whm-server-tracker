@@ -1,53 +1,36 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-class DeleteUserTest extends TestCase
-{
-    use RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-    private User $user;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+test('guests cannot delete a user', function () {
+    $this->deleteJson(route('users.destroy', $this->user->id))
+        ->assertUnauthorized();
 
-        $this->user = User::factory()->create();
-    }
+    $this->assertEquals(1, User::count());
+});
 
-    /** @test */
-    public function guests_cannot_delete_a_user()
-    {
-        $this->deleteJson(route('users.destroy', $this->user->id))
-            ->assertUnauthorized();
+test('an authorized user can delete a user', function () {
+    $user = User::factory()->create();
 
-        $this->assertEquals(1, User::count());
-    }
+    $this->actingAs($user)
+        ->deleteJson((route('users.destroy', $this->user->id)))
+        ->assertSuccessful();
 
-    /** @test */
-    public function an_authorized_user_can_delete_a_user()
-    {
-        $user = User::factory()->create();
+    $this->assertEquals(1, User::count());
+});
 
-        $this->actingAs($user)
-            ->deleteJson((route('users.destroy', $this->user->id)))
-            ->assertSuccessful();
+test('an authorized user cannot delete themselves', function () {
+    $response = $this->actingAs($this->user)
+        ->deleteJson((route('users.destroy', $this->user->id)));
 
-        $this->assertEquals(1, User::count());
-    }
+    $response->assertStatus(422);
 
-    /** @test */
-    public function an_authorized_user_cannot_delete_themselves()
-    {
-        $response = $this->actingAs($this->user)
-            ->deleteJson((route('users.destroy', $this->user->id)));
-
-        $response->assertStatus(422);
-
-        $this->assertEquals(1, User::count());
-    }
-}
+    $this->assertEquals(1, User::count());
+});

@@ -1,68 +1,51 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-class DeleteServerTest extends TestCase
-{
-    use RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-    private User $user;
-    private Server $server;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->server = Server::factory()->create();
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+test('guests cannot delete a server', function () {
+    $this->deleteJson(route('servers.destroy', $this->server->id))
+        ->assertUnauthorized();
 
-        $this->user = User::factory()->create();
-        $this->server = Server::factory()->create();
-    }
+    $this->assertEquals(1, Server::count());
+});
 
-    /** @test */
-    public function guests_cannot_delete_a_server()
-    {
-        $this->deleteJson(route('servers.destroy', $this->server->id))
-            ->assertUnauthorized();
+test('an authorized user can delete a server', function () {
+    $this->actingAs($this->user)
+        ->deleteJson((route('servers.destroy', $this->server->id)))
+        ->assertSuccessful();
 
-        $this->assertEquals(1, Server::count());
-    }
+    $this->assertEquals(0, Server::count());
+});
 
-    /** @test */
-    public function an_authorized_user_can_delete_a_server()
-    {
-        $this->actingAs($this->user)
-            ->deleteJson((route('servers.destroy', $this->server->id)))
-            ->assertSuccessful();
+test('accounts are deleted when a server is deleted', function () {
+    $server = Server::factory()
+        ->has(Account::factory()->count(5))
+        ->create(['name' => 'my-server-name']);
 
-        $this->assertEquals(0, Server::count());
-    }
+    Server::factory()
+        ->has(Account::factory()->count(1))
+        ->create(['name' => 'other-server-name']);
 
-    /** @test */
-    public function accounts_are_deleted_when_a_server_is_deleted()
-    {
-        $server = Server::factory()
-            ->has(Account::factory()->count(5))
-            ->create(['name' => 'my-server-name']);
-        $otherServer = Server::factory()
-            ->has(Account::factory()->count(1))
-            ->create(['name' => 'other-server-name']);
+    $this->assertEquals(3, Server::count());
 
-        $this->assertEquals(3, Server::count());
+    tap($server->fresh(), function (Server $server) {
+        $this->assertCount(5, $server->accounts);
+    });
 
-        tap($server->fresh(), function (Server $server) {
-            $this->assertCount(5, $server->accounts);
-        });
+    $this->actingAs($this->user)
+        ->deleteJson((route('servers.destroy', $server->id)))
+        ->assertSuccessful();
 
-        $this->actingAs($this->user)
-            ->deleteJson((route('servers.destroy', $server->id)))
-            ->assertSuccessful();
-
-        $this->assertEquals(2, Server::count());
-        $this->assertEquals(1, Account::count());
-    }
-}
+    $this->assertEquals(2, Server::count());
+    $this->assertEquals(1, Account::count());
+});

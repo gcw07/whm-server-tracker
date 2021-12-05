@@ -1,47 +1,31 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Server;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-class DeleteServerTokenTest extends TestCase
-{
-    use RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-    private User $user;
-    private Server $server;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->server = Server::factory()->create([
+        'token' => 'valid-api-token'
+    ]);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+test('guests cannot delete a server token', function () {
+    $this->deleteJson(route('servers.token-destroy', $this->server->id))
+        ->assertUnauthorized();
 
-        $this->user = User::factory()->create();
-        $this->server = Server::factory()->create([
-            'token' => 'valid-api-token'
-        ]);
-    }
+    $this->assertEquals('valid-api-token', $this->server->fresh()->token);
+});
 
-    /** @test */
-    public function guests_cannot_delete_a_server_token()
-    {
-        $this->deleteJson(route('servers.token-destroy', $this->server->id))
-            ->assertUnauthorized();
+test('an authorized user can delete a server token', function () {
+    $this->actingAs($this->user)
+        ->deleteJson((route('servers.token-destroy', $this->server->id)))
+        ->assertSuccessful();
 
-        $this->assertEquals('valid-api-token', $this->server->fresh()->token);
-    }
-
-    /** @test */
-    public function an_authorized_user_can_delete_a_server_token()
-    {
-        $this->actingAs($this->user)
-            ->deleteJson((route('servers.token-destroy', $this->server->id)))
-            ->assertSuccessful();
-
-        tap($this->server->fresh(), function (Server $server) {
-            $this->assertNull($server->token);
-        });
-    }
-}
+    tap($this->server->fresh(), function (Server $server) {
+        $this->assertNull($server->token);
+    });
+});
