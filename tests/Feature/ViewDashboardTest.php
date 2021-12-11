@@ -1,110 +1,88 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Enums\ServerTypeEnum;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-class ViewDashboardTest extends TestCase
-{
-    use RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-    /** @test */
-    public function guests_can_not_view_dashboard_page()
-    {
-        $this->get(route('dashboard'))
-            ->assertRedirect(route('login'));
-    }
+test('guests can not view dashboard page', function () {
+    $this->get(route('dashboard'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function an_authorized_user_can_view_dashboard_page()
-    {
-        $user = User::factory()->create();
+test('an authorized user can view dashboard page', function () {
+    $user = User::factory()->create();
 
-        $this->actingAs($user)
-            ->get(route('dashboard'))
-            ->assertSuccessful();
-    }
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertSuccessful();
+});
 
-    /** @test */
-    public function guests_can_not_view_dashboard_api_stats()
-    {
-        $this->get(route('dashboard.stats'))
-            ->assertRedirect(route('login'));
-    }
+test('guests can not view dashboard api stats', function () {
+    $this->get(route('dashboard.stats'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function an_authorized_user_can_view_dashboard_api_stats()
-    {
-        $user = User::factory()->create();
-        Server::factory()
-            ->has(Account::factory()->count(5))
-            ->count(3)
-            ->create();
+test('an authorized user can view dashboard api stats', function () {
+    $user = User::factory()->create();
+    Server::factory()
+        ->has(Account::factory()->count(5))
+        ->count(3)
+        ->create();
 
-        $response = $this->actingAs($user)
-            ->get(route('dashboard.stats'))
-            ->assertSuccessful();
+    $response = $this->actingAs($user)
+        ->get(route('dashboard.stats'))
+        ->assertSuccessful();
 
-        tap($response->json(), function ($data) {
-            $this->assertEquals(1, $data['users']);
-            $this->assertEquals(3, $data['servers']);
-            $this->assertEquals(15, $data['accounts']);
-        });
-    }
+    tap($response->json(), function ($data) {
+        $this->assertEquals(1, $data['users']);
+        $this->assertEquals(3, $data['servers']);
+        $this->assertEquals(15, $data['accounts']);
+    });
+});
 
-    /** @test */
-    public function guests_can_not_view_dashboard_api_servers()
-    {
-        $this->get(route('dashboard.servers'))
-            ->assertRedirect(route('login'));
-    }
+test('guests can not view dashboard api servers', function () {
+    $this->get(route('dashboard.servers'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function an_authorized_user_can_view_dashboard_api_servers()
-    {
-        $user = User::factory()->create();
+test('an authorized user can view dashboard api servers', function () {
+    $user = User::factory()->create();
 
-        Server::factory()->count(2)->create(['server_type' => ServerTypeEnum::dedicated()]);
-        Server::factory()->count(3)->create(['server_type' => ServerTypeEnum::vps()]);
-        Server::factory()->create(['server_type' => ServerTypeEnum::reseller()]);
+    Server::factory()->count(2)->create(['server_type' => ServerTypeEnum::dedicated()]);
+    Server::factory()->count(3)->create(['server_type' => ServerTypeEnum::vps()]);
+    Server::factory()->create(['server_type' => ServerTypeEnum::reseller()]);
 
-        $response = $this->actingAs($user)
-            ->get(route('dashboard.servers'))
-            ->assertSuccessful();
+    $response = $this->actingAs($user)
+        ->get(route('dashboard.servers'))
+        ->assertSuccessful();
 
-        tap($response->json(), function ($data) {
-            $this->assertEquals(2, $data['dedicated']);
-            $this->assertEquals(3, $data['vps']);
-            $this->assertEquals(1, $data['reseller']);
-        });
-    }
+    tap($response->json(), function ($data) {
+        $this->assertEquals(2, $data['dedicated']);
+        $this->assertEquals(3, $data['vps']);
+        $this->assertEquals(1, $data['reseller']);
+    });
+});
 
-    /** @test */
-    public function guests_can_not_view_dashboard_api_latest_accounts()
-    {
-        $this->get(route('dashboard.latest-accounts'))
-            ->assertRedirect(route('login'));
-    }
+test('guests can not view dashboard api latest accounts', function () {
+    $this->get(route('dashboard.latest-accounts'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function an_authorized_user_can_view_dashboard_api_latest_accounts()
-    {
-        $user = User::factory()->create();
+test('an authorized user can view dashboard api latest accounts', function () {
+    $user = User::factory()->create();
 
-        $server = Server::factory()->create();
-        Account::factory()->count(10)->create(['server_id' => $server->id]);
+    $server = Server::factory()->create();
+    Account::factory()->count(10)->create(['server_id' => $server->id]);
 
-        $response = $this->actingAs($user)
-            ->get(route('dashboard.latest-accounts'))
-            ->assertSuccessful();
+    $response = $this->actingAs($user)
+        ->get(route('dashboard.latest-accounts'))
+        ->assertSuccessful();
 
-        tap($response->json(), function ($latest) {
-            $this->assertCount(5, $latest);
-        });
-    }
-}
+    tap($response->json(), function ($latest) {
+        $this->assertCount(5, $latest);
+    });
+});

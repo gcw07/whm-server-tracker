@@ -1,106 +1,83 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Enums\ServerTypeEnum;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-class ViewAccountListingTest extends TestCase
-{
-    use RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-    private User $user;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+test('guests can not view account listings page', function () {
+    $this->get(route('accounts.index'))
+        ->assertRedirect(route('login'));
+});
 
-        $this->user = User::factory()->create();
-    }
+test('an authorized user can view account listings page', function () {
+    $this->actingAs($this->user)
+        ->get(route('accounts.index'))
+        ->assertSuccessful();
+});
 
-    /** @test */
-    public function guests_can_not_view_account_listings_page()
-    {
-        $this->get(route('accounts.index'))
-            ->assertRedirect(route('login'));
-    }
+test('guests can not view account api listings', function () {
+    $this->get(route('accounts.listing'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function an_authorized_user_can_view_account_listings_page()
-    {
-        $this->actingAs($this->user)
-            ->get(route('accounts.index'))
-            ->assertSuccessful();
-    }
+test('an authorized user can view account api listings', function () {
+    $server = Server::factory()->create();
+    Account::factory()->create([
+        'server_id' => $server->id,
+        'domain' => 'mytestsite.com',
+        'ip'     => '255.1.1.100',
+    ]);
 
-    /** @test */
-    public function guests_can_not_view_account_api_listings()
-    {
-        $this->get(route('accounts.listing'))
-            ->assertRedirect(route('login'));
-    }
+    $response = $this->actingAs($this->user)
+        ->get(route('accounts.listing'))
+        ->assertSuccessful();
 
-    /** @test */
-    public function an_authorized_user_can_view_account_api_listings()
-    {
-        $server = Server::factory()->create();
-        Account::factory()->create([
-            'server_id' => $server->id,
-            'domain' => 'mytestsite.com',
-            'ip'     => '255.1.1.100',
-        ]);
+    tap($response->json(), function ($accounts) {
+        $this->assertCount(1, $accounts);
+        $this->assertEquals('mytestsite.com', $accounts[0]['domain']);
+        $this->assertEquals('255.1.1.100', $accounts[0]['ip']);
+    });
+});
 
-        $response = $this->actingAs($this->user)
-            ->get(route('accounts.listing'))
-            ->assertSuccessful();
+test('the account listings are in alphabetical order', function () {
+    $server = Server::factory()->create();
 
-        tap($response->json(), function ($accounts) {
-            $this->assertCount(1, $accounts);
-            $this->assertEquals('mytestsite.com', $accounts[0]['domain']);
-            $this->assertEquals('255.1.1.100', $accounts[0]['ip']);
-        });
-    }
+    $accountA = Account::factory()->create(['server_id' => $server->id, 'domain' => 'somesite.com']);
+    $accountB = Account::factory()->create(['server_id' => $server->id, 'domain' => 'anothersite.com']);
+    $accountC = Account::factory()->create(['server_id' => $server->id, 'domain' => 'thelastsite.com']);
 
-    /** @test */
-    public function the_account_listings_are_in_alphabetical_order()
-    {
-        $server = Server::factory()->create();
+    $response = $this->actingAs($this->user)
+        ->get(route('accounts.listing'))
+        ->assertSuccessful();
 
-        $accountA = Account::factory()->create(['server_id' => $server->id, 'domain' => 'somesite.com']);
-        $accountB = Account::factory()->create(['server_id' => $server->id, 'domain' => 'anothersite.com']);
-        $accountC = Account::factory()->create(['server_id' => $server->id, 'domain' => 'thelastsite.com']);
+    $response->jsonData()->assertEquals([
+        $accountB,
+        $accountA,
+        $accountC
+    ]);
+});
 
-        $response = $this->actingAs($this->user)
-            ->get(route('accounts.listing'))
-            ->assertSuccessful();
+test('the account listings can be filtered by server', function () {
+    $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::vps()]);
+    $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::dedicated()]);
 
-        $response->jsonData()->assertEquals([
-            $accountB,
-            $accountA,
-            $accountC
-        ]);
-    }
+    $accountA = Account::factory()->create(['server_id' => $serverA->id, 'domain' => 'somedomain.com']);
+    $accountA = Account::factory()->create(['server_id' => $serverB->id, 'domain' => 'anotherdomain.com']);
 
-    /** @test */
-    public function the_account_listings_can_be_filtered_by_server()
-    {
-        $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::vps()]);
-        $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::dedicated()]);
+    $response = $this->actingAs($this->user)
+        ->get(route('accounts.server-listing', $serverA->id))
+        ->assertSuccessful();
 
-        $accountA = Account::factory()->create(['server_id' => $serverA->id, 'domain' => 'somedomain.com']);
-        $accountA = Account::factory()->create(['server_id' => $serverB->id, 'domain' => 'anotherdomain.com']);
-
-        $response = $this->actingAs($this->user)
-            ->get(route('accounts.server-listing', $serverA->id))
-            ->assertSuccessful();
-
-        tap($response->json(), function ($accounts) {
-            $this->assertCount(1, $accounts);
-            $this->assertEquals('somedomain.com', $accounts[0]['domain']);
-        });
-    }
-}
+    tap($response->json(), function ($accounts) {
+        $this->assertCount(1, $accounts);
+        $this->assertEquals('somedomain.com', $accounts[0]['domain']);
+    });
+});
