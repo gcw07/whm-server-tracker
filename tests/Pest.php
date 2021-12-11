@@ -11,6 +11,8 @@
 |
 */
 
+use App\Models\User;
+
 uses(Tests\TestCase::class)->in('Feature');
 
 /*
@@ -42,4 +44,9 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function signIn(User $user = null)
+{
+    return test()->actingAs($user ?? User::factory()->create());
 }
