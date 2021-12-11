@@ -47,40 +47,40 @@ test('an authorized user can edit a server', function () {
     });
 });
 
-test('the api token disk and backup details are cleared when reseller server type is selected', function () {
-    signIn();
-
-    $server = Server::factory()->create([
-        'server_type' => ServerTypeEnum::dedicated(),
-        'token' => 'old-api-token',
-    ]);
-
-    $server->settings()->merge([
-        'disk_used' => 10000000,
-        'disk_available' => 115000000,
-        'disk_total' => 125000000,
-        'disk_percentage' => 8,
-        'backup_enabled' => false,
-        'backup_days' => '1,2',
-        'backup_retention' => 10
-    ]);
-
-    $response = $this->putJson("/servers/{$server->id}", $this->requestData->create([
-        'server_type' => 'reseller'
-    ]));
-
-    tap($server->fresh(), function ($server) {
-        $this->assertEquals('reseller', $server->server_type);
-        $this->assertNull($server->token);
-        $this->assertNull($server->settings()->disk_used);
-        $this->assertNull($server->settings()->disk_available);
-        $this->assertNull($server->settings()->disk_total);
-        $this->assertNull($server->settings()->disk_percentage);
-        $this->assertNull($server->settings()->backup_enabled);
-        $this->assertNull($server->settings()->backup_days);
-        $this->assertNull($server->settings()->backup_retention);
-    });
-});
+//test('the api token disk and backup details are cleared when reseller server type is selected', function () {
+//    signIn();
+//
+//    $server = Server::factory()->create([
+//        'server_type' => ServerTypeEnum::dedicated(),
+//        'token' => 'old-api-token',
+//    ]);
+//
+//    $server->settings()->merge([
+//        'disk_used' => 10000000,
+//        'disk_available' => 115000000,
+//        'disk_total' => 125000000,
+//        'disk_percentage' => 8,
+//        'backup_enabled' => false,
+//        'backup_days' => '1,2',
+//        'backup_retention' => 10
+//    ]);
+//
+//    $response = $this->putJson("/servers/{$server->id}", $this->requestData->create([
+//        'server_type' => 'reseller'
+//    ]));
+//
+//    tap($server->fresh(), function ($server) {
+//        $this->assertEquals('reseller', $server->server_type);
+//        $this->assertNull($server->token);
+//        $this->assertNull($server->settings()->disk_used);
+//        $this->assertNull($server->settings()->disk_available);
+//        $this->assertNull($server->settings()->disk_total);
+//        $this->assertNull($server->settings()->disk_percentage);
+//        $this->assertNull($server->settings()->backup_enabled);
+//        $this->assertNull($server->settings()->backup_days);
+//        $this->assertNull($server->settings()->backup_retention);
+//    });
+//});
 
 it('validates rules for server edit form', function ($data) {
     // This could be fixed in future pest version.
