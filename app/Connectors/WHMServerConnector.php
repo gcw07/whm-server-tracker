@@ -2,6 +2,7 @@
 
 namespace App\Connectors;
 
+use App\Enums\ServerTypeEnum;
 use App\Exceptions\Server\ForbiddenAccessException;
 use App\Exceptions\Server\InvalidServerTypeException;
 use App\Exceptions\Server\MissingTokenException;
@@ -21,7 +22,7 @@ class WHMServerConnector implements ServerConnector
     {
         $this->server = $server;
 
-        if ($this->server->server_type === 'reseller') {
+        if ($this->server->server_type === ServerTypeEnum::reseller()) {
             throw new InvalidServerTypeException;
         }
 
