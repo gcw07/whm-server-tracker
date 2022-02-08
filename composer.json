@@ -6,8 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "blade-ui-kit/blade-heroicons": "^1.0",
-        "blade-ui-kit/blade-ui-kit": "^0.2.0",
+        "blade-ui-kit/blade-heroicons": "^1.2",
+        "blade-ui-kit/blade-ui-kit": "^0.3.3",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -17,14 +17,13 @@
         "laravel/tinker": "^v2.7.0",
         "laravel/ui": "^v3.2.0",
         "livewire/livewire": "^2.0",
-        "spatie/laravel-backup": "^7.0",
-        "spatie/laravel-enum": "^2.0",
+        "spatie/laravel-backup": "^8.0",
+        "spatie/laravel-enum": "^3.0",
         "wire-elements/modal": "^1.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.3",
+        "barryvdh/laravel-debugbar": "^3.6",
         "barryvdh/laravel-ide-helper": "^2.7",
-        "deployer/deployer": "^v7.0",
         "fakerphp/faker": "^1.9.1",
         "friendsofphp/php-cs-fixer": "^v3.3.2",
         "mockery/mockery": "^1.4.4",
