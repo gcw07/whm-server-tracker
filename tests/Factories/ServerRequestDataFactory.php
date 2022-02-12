@@ -18,7 +18,8 @@ class ServerRequestDataFactory
         return new self();
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->serverType = ServerTypeEnum::vps();
     }
 
@@ -72,7 +73,7 @@ class ServerRequestDataFactory
             'port' => $this->port,
             'server_type' => $this->serverType,
             'notes' => $this->notes,
-            'token' => $this->token
+            'token' => $this->token,
         ], $overrides);
     }
 }

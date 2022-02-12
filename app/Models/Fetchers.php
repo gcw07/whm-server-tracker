@@ -32,10 +32,10 @@ class Fetchers
         }
 
         $this->server->settings()->merge([
-            'disk_used'       => $diskUsage['used'],
-            'disk_available'  => $diskUsage['available'],
-            'disk_total'      => $diskUsage['total'],
-            'disk_percentage' => $diskUsage['percentage']
+            'disk_used' => $diskUsage['used'],
+            'disk_available' => $diskUsage['available'],
+            'disk_total' => $diskUsage['total'],
+            'disk_percentage' => $diskUsage['percentage'],
         ]);
 
         return true;
@@ -50,9 +50,9 @@ class Fetchers
         }
 
         $this->server->settings()->merge([
-            'backup_enabled'   => $backups['backupenable'],
-            'backup_days'      => $backups['backupdays'],
-            'backup_retention' => $backups['backup_daily_retention']
+            'backup_enabled' => $backups['backupenable'],
+            'backup_days' => $backups['backupdays'],
+            'backup_retention' => $backups['backup_daily_retention'],
         ]);
 
         return true;
@@ -82,7 +82,7 @@ class Fetchers
         $this->processAccounts($accounts);
 
         $this->server->update([
-            'accounts_last_updated' => Carbon::now()
+            'accounts_last_updated' => Carbon::now(),
         ]);
 
         return true;
@@ -95,17 +95,17 @@ class Fetchers
         collect($accounts)
             ->map(function ($item) {
                 return [
-                    'domain'         => $item['domain'],
-                    'user'           => $item['user'],
-                    'ip'             => $item['ip'],
-                    'backup'         => $item['backup'],
-                    'suspended'      => $item['suspended'],
+                    'domain' => $item['domain'],
+                    'user' => $item['user'],
+                    'ip' => $item['ip'],
+                    'backup' => $item['backup'],
+                    'suspended' => $item['suspended'],
                     'suspend_reason' => $item['suspendreason'],
-                    'suspend_time'   => ($item['suspendtime'] != 0 ? Carbon::createFromTimestamp($item['suspendtime']) : null),
-                    'setup_date'     => Carbon::parse($item['startdate']),
-                    'disk_used'      => $item['diskused'],
-                    'disk_limit'     => $item['disklimit'],
-                    'plan'           => $item['plan']
+                    'suspend_time' => ($item['suspendtime'] != 0 ? Carbon::createFromTimestamp($item['suspendtime']) : null),
+                    'setup_date' => Carbon::parse($item['startdate']),
+                    'disk_used' => $item['diskused'],
+                    'disk_limit' => $item['disklimit'],
+                    'plan' => $item['plan'],
                 ];
             })->reject(function ($item) use ($config) {
                 return in_array($item['user'], $config['ignore_usernames']);

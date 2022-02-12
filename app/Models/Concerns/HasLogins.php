@@ -25,7 +25,7 @@ trait HasLogins
             'last_login_id' => Login::select('id')
                 ->whereColumn('user_id', 'users.id')
                 ->latest()
-                ->limit(1)
+                ->limit(1),
         ])->with('lastLogin');
     }
 }

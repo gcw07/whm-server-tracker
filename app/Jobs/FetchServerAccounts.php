@@ -19,7 +19,7 @@ class FetchServerAccounts implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      *
-     * @var integer
+     * @var int
      */
     public $tries = 5;
 
@@ -42,7 +42,7 @@ class FetchServerAccounts implements ShouldQueue
      * Execute the job.
      *
      * @param ServerConnector $serverConnector
-     * @return boolean
+     * @return bool
      */
     public function handle(ServerConnector $serverConnector)
     {

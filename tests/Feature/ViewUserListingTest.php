@@ -52,6 +52,6 @@ test('the user listings are in alphabetical order', function () {
     $response->jsonData()->assertEquals([
         $userB,
         $userA,
-        $userC
+        $userC,
     ]);
 });

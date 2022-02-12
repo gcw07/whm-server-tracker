@@ -29,12 +29,12 @@ test('guests can not view server api listings', function () {
 
 test('an authorized user can view server api listings', function () {
     Server::factory()->create([
-        'name'        => 'My Test Server',
-        'address'     => '255.1.1.100',
-        'port'        => 1111,
+        'name' => 'My Test Server',
+        'address' => '255.1.1.100',
+        'port' => 1111,
         'server_type' => 'dedicated',
-        'notes'       => 'some server note',
-        'token'       => 'new-server-api-token',
+        'notes' => 'some server note',
+        'token' => 'new-server-api-token',
     ]);
 
     $response = $this->actingAs($this->user)
@@ -61,7 +61,7 @@ test('the server listings are in alphabetical order', function () {
     $response->jsonData()->assertEquals([
         $serverB,
         $serverA,
-        $serverC
+        $serverC,
     ]);
 });
 

@@ -44,7 +44,7 @@ it('a server can update a setting', function () {
 it('a server can update multiple settings at once', function () {
     $this->server->settings()->merge([
         'disk_used' => 10000,
-        'disk_available' => 200000
+        'disk_available' => 200000,
     ]);
 
     $this->assertEquals('10000', $this->server->settings()->get('disk_used'));
@@ -82,7 +82,7 @@ it('a server can add an account', function () {
         'setup_date' => Carbon::parse('-1 month'),
         'disk_used' => '500M',
         'disk_limit' => '2000M',
-        'plan' => '2 Gig'
+        'plan' => '2 Gig',
     ]);
 
     $this->assertCount(1, $this->server->accounts);
@@ -90,7 +90,7 @@ it('a server can add an account', function () {
 
 it('a server can remove an account', function () {
     $account = Account::factory()->create([
-        'server_id' => $this->server->id
+        'server_id' => $this->server->id,
     ]);
 
     $this->server->removeAccount($account);
@@ -112,7 +112,7 @@ it('it will add an account if it does not exist', function () {
             'diskused' => '300M',
             'disklimit' => '2000M',
             'plan' => '2 Gig',
-        ]
+        ],
     ];
 
     $this->server->fetchers()->processAccounts($accounts);
@@ -124,7 +124,7 @@ it('it will update an account if it exists', function () {
     $account = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'my-site.com',
-        'user' => 'mysite'
+        'user' => 'mysite',
     ]);
 
     $accounts = [
@@ -140,7 +140,7 @@ it('it will update an account if it exists', function () {
             'diskused' => '300M',
             'disklimit' => '2000M',
             'plan' => '2 Gig',
-        ]
+        ],
     ];
 
     $this->server->fetchers()->processAccounts($accounts);
@@ -194,13 +194,13 @@ it('it will remove accounts that no longer exists on server', function () {
     $account1 = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'first-site.com',
-        'user' => 'firstsite'
+        'user' => 'firstsite',
     ]);
 
     $account2 = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'site-to-remove.com',
-        'user' => 'sitetoremove'
+        'user' => 'sitetoremove',
     ]);
 
     $accounts = [
@@ -216,7 +216,7 @@ it('it will remove accounts that no longer exists on server', function () {
             'diskused' => '300M',
             'disklimit' => '2000M',
             'plan' => '2 Gig',
-        ]
+        ],
     ];
 
     $this->server->fetchers()->processAccounts($accounts);
@@ -232,19 +232,19 @@ it('will only remove accounts that no longer exists on the server that is being 
     $accountToKeep = Account::factory()->create([
         'server_id' => $serverB->id,
         'domain' => 'site-to-remove.com',
-        'user' => 'sitetoremove'
+        'user' => 'sitetoremove',
     ]);
 
     $account1 = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'first-site.com',
-        'user' => 'firstsite'
+        'user' => 'firstsite',
     ]);
 
     $account2 = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'site-to-remove.com',
-        'user' => 'sitetoremove'
+        'user' => 'sitetoremove',
     ]);
 
     $fetchedAccounts = [
@@ -260,7 +260,7 @@ it('will only remove accounts that no longer exists on the server that is being 
             'diskused' => '300M',
             'disklimit' => '2000M',
             'plan' => '2 Gig',
-        ]
+        ],
     ];
 
     $this->assertEquals(3, Account::count());

@@ -16,7 +16,7 @@ class NavigationItem extends Component
     /**
      * Flag if it is a mobile menu item
      *
-     * @var boolean
+     * @var bool
      */
     public $mobile;
 

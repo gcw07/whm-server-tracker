@@ -96,7 +96,7 @@ it('validate rules for user edit', function ($data) {
     $response->assertStatus(422);
     $response->assertJsonValidationErrors([$field => $errorMessage]);
 })->with([
-    fn() => ['name', '', 'field is required'],
-    fn() => ['email', '', 'field is required'],
-    fn() => ['email', 'not-valid-email', 'must be a valid email address'],
+    fn () => ['name', '', 'field is required'],
+    fn () => ['email', '', 'field is required'],
+    fn () => ['email', 'not-valid-email', 'must be a valid email address'],
 ]);

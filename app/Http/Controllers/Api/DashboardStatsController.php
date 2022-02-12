@@ -23,7 +23,7 @@ class DashboardStatsController extends Controller
         $data = [
             'accounts' => $accounts,
             'servers' => $servers,
-            'users' => $users
+            'users' => $users,
         ];
 
         return response()->json($data);

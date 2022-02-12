@@ -39,7 +39,7 @@ test('an authorized user can add a valid server', function () {
             'port' => 1111,
             'server_type' => ServerTypeEnum::dedicated(),
             'notes' => 'some server note',
-            'token' => 'new-server-api-token'
+            'token' => 'new-server-api-token',
         ]));
 
     $response->assertRedirect(route('servers.index'));
@@ -72,12 +72,12 @@ it('validates rules for create server form', function ($data) {
         });
     }
 })->with([
-    fn() => ['name', '', 'invalid', 'field is required'],
-    fn() => ['address', '', 'invalid', 'field is required'],
-    fn() => ['port', '', 'invalid', 'field is required'],
-    fn() => ['port', 'not-a-number', 'invalid', 'must be a number'],
-    fn() => ['server_type', '', 'invalid', 'field is required'],
-    fn() => ['server_type', 'not-valid-type', 'invalid', 'field is not a valid'],
-    fn() => ['notes', '', 'success', null],
-    fn() => ['token', '', 'success', null],
+    fn () => ['name', '', 'invalid', 'field is required'],
+    fn () => ['address', '', 'invalid', 'field is required'],
+    fn () => ['port', '', 'invalid', 'field is required'],
+    fn () => ['port', 'not-a-number', 'invalid', 'must be a number'],
+    fn () => ['server_type', '', 'invalid', 'field is required'],
+    fn () => ['server_type', 'not-valid-type', 'invalid', 'field is not a valid'],
+    fn () => ['notes', '', 'success', null],
+    fn () => ['token', '', 'success', null],
 ]);

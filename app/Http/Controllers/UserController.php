@@ -26,7 +26,7 @@ class UserController extends Controller
     public function store(CreateUserRequest $request)
     {
         $data = collect($request->validated())->merge([
-            'password' => bcrypt($request->get('password'))
+            'password' => bcrypt($request->get('password')),
         ])->toArray();
 
         User::create($data);

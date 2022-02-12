@@ -17,7 +17,7 @@ class UserChangePasswordController extends Controller
     public function update(Request $request, User $user): Response
     {
         $this->validate($request, [
-            'password' => ['required', 'string', 'min:6', 'confirmed']
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
 
         $user->update(['password' => bcrypt($request->get('password'))]);

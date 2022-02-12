@@ -38,7 +38,7 @@ test('an authorized user can add a valid user', function () {
             'name' => 'Grant Williams',
             'email' => 'grant@example.com',
             'password' => 'secret',
-            'password_confirmation' => 'secret'
+            'password_confirmation' => 'secret',
         ]));
 
     $response->assertRedirect(route('users.index'));
@@ -92,9 +92,9 @@ it('validates rules for create user form', function ($data) {
     $response->assertJsonValidationErrors([$field => $errorMessage]);
     $this->assertEquals(1, User::count());
 })->with([
-    fn() => ['name', '', 'field is required'],
-    fn() => ['email', '', 'field is required'],
-    fn() => ['email', 'not-valid-email', 'must be a valid email address'],
-    fn() => ['password', '', 'field is required'],
-    fn() => ['password', Str::random(5), 'must be at least 6 characters'],
+    fn () => ['name', '', 'field is required'],
+    fn () => ['email', '', 'field is required'],
+    fn () => ['email', 'not-valid-email', 'must be a valid email address'],
+    fn () => ['password', '', 'field is required'],
+    fn () => ['password', Str::random(5), 'must be at least 6 characters'],
 ]);

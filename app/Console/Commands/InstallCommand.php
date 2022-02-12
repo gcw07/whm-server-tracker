@@ -90,8 +90,8 @@ class InstallCommand extends Command
         }
 
         User::create([
-            'name'     => $name,
-            'email'    => $email,
+            'name' => $name,
+            'email' => $email,
             'password' => bcrypt($password),
         ]);
     }

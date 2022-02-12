@@ -77,7 +77,7 @@ class Server extends Model
         'formatted_php_version',
         'missing_token',
         'can_refresh_data',
-        'whm_url'
+        'whm_url',
     ];
     protected $hidden = ['token'];
 

@@ -27,7 +27,7 @@ class Settings
      */
     protected $allowed = [
         'disk_used', 'disk_available', 'disk_total', 'disk_percentage',
-        'backup_enabled', 'backup_days', 'backup_retention'
+        'backup_enabled', 'backup_days', 'backup_retention',
     ];
 
     /**
@@ -95,7 +95,7 @@ class Settings
      * Determine if the given setting exists.
      *
      * @param  string $key
-     * @return boolean
+     * @return bool
      */
     public function has($key)
     {

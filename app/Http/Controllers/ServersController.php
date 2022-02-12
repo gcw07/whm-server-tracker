@@ -26,7 +26,7 @@ class ServersController extends Controller
     public function store(CreateServerRequest $request)
     {
         $data = collect($request->validated())->merge([
-            'settings' => []
+            'settings' => [],
         ])->toArray();
 
         $server = Server::create($data);

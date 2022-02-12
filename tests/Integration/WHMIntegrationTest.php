@@ -29,13 +29,14 @@ function canTestWHMServerConnector(): bool
 
 test('a server with the wrong server type throws an exception', function () {
     $server = Server::factory()->create([
-        'server_type' => 'reseller'
+        'server_type' => 'reseller',
     ]);
 
     try {
         $this->connector->setServer($server);
     } catch (InvalidServerTypeException $e) {
         $this->assertEquals('reseller', $server->server_type);
+
         return;
     }
 
@@ -45,7 +46,7 @@ test('a server with the wrong server type throws an exception', function () {
 test('a server with a missing api token throws an exception', function () {
     $server = Server::factory()->create([
         'server_type' => 'vps',
-        'token' => null
+        'token' => null,
     ]);
 
     try {
@@ -53,6 +54,7 @@ test('a server with a missing api token throws an exception', function () {
     } catch (MissingTokenException $e) {
         $this->assertEquals('vps', $server->server_type);
         $this->assertNull($server->token);
+
         return;
     }
 
@@ -64,7 +66,7 @@ test('a server with an incorrect address throws an exception', function () {
         'address' => 'invalid-address',
         'port' => '2087',
         'server_type' => 'vps',
-        'token' => 'valid-api-token'
+        'token' => 'valid-api-token',
     ]);
 
     try {
@@ -73,6 +75,7 @@ test('a server with an incorrect address throws an exception', function () {
         $diskUsage = $this->connector->getDiskUsage();
     } catch (ServerConnectionException $e) {
         $this->assertEquals('invalid-address', $server->address);
+
         return;
     }
 
@@ -84,7 +87,7 @@ test('a server with an invalid api token throws an exception', function () {
         'address' => $this->whmTestServerAddress,
         'port' => '2087',
         'server_type' => 'vps',
-        'token' => 'invalid-api-token'
+        'token' => 'invalid-api-token',
     ]);
 
     try {
@@ -93,6 +96,7 @@ test('a server with an invalid api token throws an exception', function () {
         $diskUsage = $this->connector->getDiskUsage();
     } catch (ForbiddenAccessException $e) {
         $this->assertEquals('invalid-api-token', $server->token);
+
         return;
     }
 
@@ -104,7 +108,7 @@ test('it can fetch server disk usage information', function () {
         'address' => $this->whmTestServerAddress,
         'port' => '2087',
         'server_type' => 'vps',
-        'token' => $this->whmTestServerToken
+        'token' => $this->whmTestServerToken,
     ]);
 
     $this->connector->setServer($server);
@@ -121,7 +125,7 @@ test('it can fetch server backup information', function () {
         'address' => $this->whmTestServerAddress,
         'port' => '2087',
         'server_type' => 'vps',
-        'token' => $this->whmTestServerToken
+        'token' => $this->whmTestServerToken,
     ]);
 
     $this->connector->setServer($server);
@@ -137,7 +141,7 @@ test('it can fetch server default php version', function () {
         'address' => $this->whmTestServerAddress,
         'port' => '2087',
         'server_type' => 'vps',
-        'token' => $this->whmTestServerToken
+        'token' => $this->whmTestServerToken,
     ]);
 
     $this->connector->setServer($server);
@@ -151,7 +155,7 @@ test('it can fetch server account list', function () {
         'address' => $this->whmTestServerAddress,
         'port' => '2087',
         'server_type' => 'vps',
-        'token' => $this->whmTestServerToken
+        'token' => $this->whmTestServerToken,
     ]);
 
     $this->connector->setServer($server);
@@ -165,7 +169,7 @@ test('it can fetch server system load average', function () {
         'address' => $this->whmTestServerAddress,
         'port' => '2087',
         'server_type' => 'vps',
-        'token' => $this->whmTestServerToken
+        'token' => $this->whmTestServerToken,
     ]);
 
     $this->connector->setServer($server);

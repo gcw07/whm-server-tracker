@@ -26,7 +26,7 @@ class ServerFactory extends Factory
             'address' => $this->faker->ipv4,
             'port' => '2087',
             'server_type' => $this->faker->randomElement(['vps', 'dedicated', 'reseller']),
-            'settings' => []
+            'settings' => [],
         ];
     }
 }

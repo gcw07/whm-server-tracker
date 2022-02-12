@@ -33,7 +33,7 @@ test('an authorized user can view account api listings', function () {
     Account::factory()->create([
         'server_id' => $server->id,
         'domain' => 'mytestsite.com',
-        'ip'     => '255.1.1.100',
+        'ip' => '255.1.1.100',
     ]);
 
     $response = $this->actingAs($this->user)
@@ -61,7 +61,7 @@ test('the account listings are in alphabetical order', function () {
     $response->jsonData()->assertEquals([
         $accountB,
         $accountA,
-        $accountC
+        $accountC,
     ]);
 });
 

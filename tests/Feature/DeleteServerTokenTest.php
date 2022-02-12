@@ -9,7 +9,7 @@ uses(LazilyRefreshDatabase::class);
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->server = Server::factory()->create([
-        'token' => 'valid-api-token'
+        'token' => 'valid-api-token',
     ]);
 });
 

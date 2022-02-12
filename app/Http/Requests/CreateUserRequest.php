@@ -21,9 +21,9 @@ class CreateUserRequest extends FormRequest
                 'string',
                 'email',
                 'max:191',
-                Rule::unique('users', 'email')
+                Rule::unique('users', 'email'),
             ],
-            'password' => ['required', 'string', 'min:6', 'confirmed']
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ];
     }
 }

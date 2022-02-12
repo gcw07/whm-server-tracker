@@ -15,18 +15,18 @@ class FakeServerConnector implements ServerConnector
     {
         $this->accounts = [
             [
-                'domain'        => 'my-site.com',
-                'user'          => 'mysite',
-                'ip'            => '1.1.1.1',
-                'backup'        => 1,
-                'suspended'     => 0,
+                'domain' => 'my-site.com',
+                'user' => 'mysite',
+                'ip' => '1.1.1.1',
+                'backup' => 1,
+                'suspended' => 0,
                 'suspendreason' => 'not suspended',
-                'suspendtime'   => 0,
-                'startdate'     => '17 Jan 1 10:35',
-                'diskused'      => '300M',
-                'disklimit'     => '2000M',
-                'plan'          => '2 Gig',
-            ]
+                'suspendtime' => 0,
+                'startdate' => '17 Jan 1 10:35',
+                'diskused' => '300M',
+                'disklimit' => '2000M',
+                'plan' => '2 Gig',
+            ],
         ];
     }
 
@@ -56,18 +56,18 @@ class FakeServerConnector implements ServerConnector
     public function getDiskUsage()
     {
         return [
-            'used'       => 100000000,
-            'available'  => 200000000,
-            'total'      => 300000000,
-            'percentage' => 33
+            'used' => 100000000,
+            'available' => 200000000,
+            'total' => 300000000,
+            'percentage' => 33,
         ];
     }
 
     public function getBackups()
     {
         return [
-            'backupenable'           => 1,
-            'backupdays'             => '0,2,4,6',
+            'backupenable' => 1,
+            'backupdays' => '0,2,4,6',
             'backup_daily_retention' => 10,
         ];
     }

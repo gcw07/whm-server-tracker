@@ -20,7 +20,7 @@ class FetchServerDetails implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      *
-     * @var integer
+     * @var int
      */
     public $tries = 5;
 
@@ -43,7 +43,7 @@ class FetchServerDetails implements ShouldQueue
      * Execute the job.
      *
      * @param ServerConnector $serverConnector
-     * @return boolean
+     * @return bool
      */
     public function handle(ServerConnector $serverConnector)
     {
@@ -56,7 +56,7 @@ class FetchServerDetails implements ShouldQueue
         });
 
         $this->server->update([
-            'details_last_updated' => Carbon::now()
+            'details_last_updated' => Carbon::now(),
         ]);
 
         event(new FetchedServerDetails($this->server));

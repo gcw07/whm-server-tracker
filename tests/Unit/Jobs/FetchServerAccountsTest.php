@@ -16,7 +16,7 @@ function createValidAccounts($times = 1, $extraAccounts = [])
     if (sizeof($extraAccounts) > 0) {
         return $accounts
             ->push($extraAccounts)
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'domain' => $item->domain,
                 'user' => $item->user,
                 'ip' => $item->ip,
@@ -32,7 +32,7 @@ function createValidAccounts($times = 1, $extraAccounts = [])
     }
 
     return $accounts
-        ->map(fn($item) => [
+        ->map(fn ($item) => [
             'domain' => $item->domain,
             'user' => $item->user,
             'ip' => $item->ip,

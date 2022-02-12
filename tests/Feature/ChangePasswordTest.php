@@ -22,7 +22,7 @@ test('an authorized user can change a password', function () {
     $this->actingAs($user)
         ->putJson(route('users.change-password', $this->user->id), [
             'password' => 'secret',
-            'password_confirmation' => 'secret'
+            'password_confirmation' => 'secret',
         ])->assertSuccessful();
 });
 
@@ -55,6 +55,6 @@ it('validates rules for change user password form', function ($data) {
     $response->assertStatus(422);
     $response->assertJsonValidationErrors([$field => $errorMessage]);
 })->with([
-    fn() => ['password', '', 'field is required'],
-    fn() => ['password', Str::random(5), 'must be at least 6 characters'],
+    fn () => ['password', '', 'field is required'],
+    fn () => ['password', Str::random(5), 'must be at least 6 characters'],
 ]);

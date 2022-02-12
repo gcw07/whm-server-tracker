@@ -28,7 +28,7 @@ class UserListings extends Component
     public function render()
     {
         return view('livewire.user-listings', [
-            'users' => $this->rows
+            'users' => $this->rows,
         ])->layout('components.layouts.app', ['title' => 'Users']);
     }
 }

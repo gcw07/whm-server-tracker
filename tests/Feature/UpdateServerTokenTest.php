@@ -14,7 +14,7 @@ test('guests cannot edit a server token', function () {
     $server = Server::factory()->create(['token' => 'old-valid-api-token']);
 
     $this->putJson(route('servers.token', $server->id), [
-        'token' => 'new-valid-api-token'
+        'token' => 'new-valid-api-token',
     ])->assertUnauthorized();
 
     $this->assertEquals('old-valid-api-token', $server->fresh()->token);

@@ -16,11 +16,11 @@ class UpdateServerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => ['required', 'string', 'max:191'],
-            'address'     => ['required', 'string', 'max:191'],
-            'port'        => ['required', 'numeric'],
+            'name' => ['required', 'string', 'max:191'],
+            'address' => ['required', 'string', 'max:191'],
+            'port' => ['required', 'numeric'],
             'server_type' => ['required', new EnumRule(ServerTypeEnum::class)],
-            'notes'       => ['nullable', 'string'],
+            'notes' => ['nullable', 'string'],
         ];
     }
 }

@@ -10,11 +10,11 @@ uses(LazilyRefreshDatabase::class);
 
 it('fetches server details', function () {
     $server = Server::factory()->create([
-        'name'        => 'my-server-name',
-        'address'     => '1.1.1.1',
-        'port'        => 1000,
+        'name' => 'my-server-name',
+        'address' => '1.1.1.1',
+        'port' => 1000,
         'server_type' => 'vps',
-        'token'       => 'valid-server-api-token',
+        'token' => 'valid-server-api-token',
     ]);
 
     $fake = new FakeServerConnector;
