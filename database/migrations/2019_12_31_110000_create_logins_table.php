@@ -4,13 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLoginsTable extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('logins', function (Blueprint $table) {
@@ -20,4 +15,4 @@ class CreateLoginsTable extends Migration
             $table->timestamp('created_at');
         });
     }
-}
+};

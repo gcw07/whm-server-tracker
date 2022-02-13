@@ -4,13 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServersTable extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('servers', function (Blueprint $table) {
@@ -27,4 +22,4 @@ class CreateServersTable extends Migration
             $table->timestamps();
         });
     }
-}
+};
