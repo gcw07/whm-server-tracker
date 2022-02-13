@@ -2,26 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Account;
 use App\Models\Server;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AccountFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Account::class;
-
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         $domain = $this->faker->domainName;
         $user = explode('.', $domain)[0];
