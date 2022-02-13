@@ -109,7 +109,7 @@ class WHMServerConnector implements ServerConnector
 
         $this->baseUrl = "{$config['urls']['protocol']}://{$host}/{$config['urls']['api-path']}";
         $this->authHeader = [
-            'Authorization' => "whm {$config['remote']['username']}:{$this->server->token}"
+            'Authorization' => "whm {$config['remote']['username']}:{$this->server->token}",
         ];
         $this->timeout = $config['remote']['timeout'];
     }
@@ -121,8 +121,8 @@ class WHMServerConnector implements ServerConnector
 
             $response = $client->request('GET', $url, [
                 'headers' => $this->authHeader,
-                'verify'  => false,
-                'connect_timeout' => $this->timeout
+                'verify' => false,
+                'connect_timeout' => $this->timeout,
             ]);
 
             return json_decode($response->getBody(), true);
