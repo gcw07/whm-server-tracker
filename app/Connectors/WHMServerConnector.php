@@ -22,10 +22,6 @@ class WHMServerConnector implements ServerConnector
     {
         $this->server = $server;
 
-        if ($this->server->server_type === ServerTypeEnum::reseller()) {
-            throw new InvalidServerTypeException;
-        }
-
         if (! $this->server->token) {
             throw new MissingTokenException;
         }

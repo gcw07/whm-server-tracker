@@ -56,7 +56,7 @@ class FetchServerDetails implements ShouldQueue
         });
 
         $this->server->update([
-            'details_last_updated' => Carbon::now(),
+            'server_updated_at' => Carbon::now(),
         ]);
 
         event(new FetchedServerDetails($this->server));

@@ -108,6 +108,6 @@ it('validates rules for server edit form', function ($data) {
     fn () => ['port', '', 'invalid', 'field is required'],
     fn () => ['port', 'not-a-number', 'invalid', 'must be a number'],
     fn () => ['server_type', '', 'invalid', 'field is required'],
-    fn () => ['server_type', 'not-valid-type', 'invalid', 'field is not a valid'],
+    fn () => ['server_type', 'not-valid-type', 'invalid', 'is invalid'],
     fn () => ['notes', '', 'success', null],
 ]);

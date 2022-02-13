@@ -82,7 +82,7 @@ class Fetchers
         $this->processAccounts($accounts);
 
         $this->server->update([
-            'accounts_last_updated' => Carbon::now(),
+            'server_updated_at' => Carbon::now(),
         ]);
 
         return true;

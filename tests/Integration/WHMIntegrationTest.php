@@ -27,22 +27,6 @@ function canTestWHMServerConnector(): bool
         empty(getenv('WHM_TEST_SERVER_ADDRESS')));
 }
 
-test('a server with the wrong server type throws an exception', function () {
-    $server = Server::factory()->create([
-        'server_type' => 'reseller',
-    ]);
-
-    try {
-        $this->connector->setServer($server);
-    } catch (InvalidServerTypeException $e) {
-        $this->assertEquals('reseller', $server->server_type);
-
-        return;
-    }
-
-    $this->fail("Server still attempted to connect even with the wrong server type.");
-});
-
 test('a server with a missing api token throws an exception', function () {
     $server = Server::factory()->create([
         'server_type' => 'vps',
@@ -52,7 +36,7 @@ test('a server with a missing api token throws an exception', function () {
     try {
         $this->connector->setServer($server);
     } catch (MissingTokenException $e) {
-        $this->assertEquals('vps', $server->server_type);
+        $this->assertEquals('vps', $server->server_type->value);
         $this->assertNull($server->token);
 
         return;

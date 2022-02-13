@@ -66,8 +66,8 @@ test('the account listings are in alphabetical order', function () {
 });
 
 test('the account listings can be filtered by server', function () {
-    $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::vps()]);
-    $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::dedicated()]);
+    $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::Vps]);
+    $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::Dedicated]);
 
     $accountA = Account::factory()->create(['server_id' => $serverA->id, 'domain' => 'somedomain.com']);
     $accountA = Account::factory()->create(['server_id' => $serverB->id, 'domain' => 'anotherdomain.com']);

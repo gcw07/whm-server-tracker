@@ -276,9 +276,9 @@ it('will only remove accounts that no longer exists on the server that is being 
 });
 
 it('can get formatted server types', function () {
-    $serverA = Server::factory()->make(['server_type' => ServerTypeEnum::VPS()]);
-    $serverB = Server::factory()->make(['server_type' => ServerTypeEnum::DEDICATED()]);
-    $serverC = Server::factory()->make(['server_type' => ServerTypeEnum::RESELLER()]);
+    $serverA = Server::factory()->make(['server_type' => ServerTypeEnum::Vps]);
+    $serverB = Server::factory()->make(['server_type' => ServerTypeEnum::Dedicated]);
+    $serverC = Server::factory()->make(['server_type' => ServerTypeEnum::Reseller]);
 
     $this->assertEquals('VPS', $serverA->formatted_server_type);
     $this->assertEquals('Dedicated', $serverB->formatted_server_type);
@@ -321,19 +321,17 @@ it('can get formatted disk total', function () {
 });
 
 it('can determine a missing api token', function () {
-    $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::vps(), 'token' => 'valid-token']);
-    $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::vps()]);
-    $serverTypeNeedsNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::reseller()]);
+    $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps, 'token' => 'valid-token']);
+    $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps]);
 
     $this->assertFalse($serverValidToken->missing_token);
     $this->assertTrue($serverNoToken->missing_token);
-    $this->assertFalse($serverTypeNeedsNoToken->missing_token);
 });
 
 it('can determine if it can refresh external data', function () {
-    $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::vps(), 'token' => 'valid-token']);
-    $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::vps()]);
-    $serverTypeNeedsNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::reseller()]);
+    $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps, 'token' => 'valid-token']);
+    $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps]);
+    $serverTypeNeedsNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::Reseller]);
 
     $this->assertTrue($serverValidToken->can_refresh_data);
     $this->assertFalse($serverNoToken->can_refresh_data);
@@ -349,7 +347,7 @@ it('can get whm external url', function () {
 });
 
 it('the api token should not be included in returned data', function () {
-    $server = Server::factory()->make(['server_type' => ServerTypeEnum::vps(), 'token' => 'valid-token']);
+    $server = Server::factory()->make(['server_type' => ServerTypeEnum::Vps, 'token' => 'valid-token']);
 
     $this->assertArrayNotHasKey('token', $server->toArray());
 });

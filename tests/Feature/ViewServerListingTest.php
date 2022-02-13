@@ -66,8 +66,8 @@ test('the server listings are in alphabetical order', function () {
 });
 
 test('the server listings can be filtered by server type', function () {
-    $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::vps()]);
-    $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::dedicated()]);
+    $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::Vps]);
+    $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::Dedicated]);
 
     $response = $this->actingAs($this->user)
         ->get(route('servers.listing', ['type' => 'vps']))

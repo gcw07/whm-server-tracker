@@ -52,9 +52,9 @@ test('guests can not view dashboard api servers', function () {
 test('an authorized user can view dashboard api servers', function () {
     $user = User::factory()->create();
 
-    Server::factory()->count(2)->create(['server_type' => ServerTypeEnum::dedicated()]);
-    Server::factory()->count(3)->create(['server_type' => ServerTypeEnum::vps()]);
-    Server::factory()->create(['server_type' => ServerTypeEnum::reseller()]);
+    Server::factory()->count(2)->create(['server_type' => ServerTypeEnum::Dedicated]);
+    Server::factory()->count(3)->create(['server_type' => ServerTypeEnum::Vps]);
+    Server::factory()->create(['server_type' => ServerTypeEnum::Reseller]);
 
     $response = $this->actingAs($user)
         ->get(route('dashboard.servers'))
