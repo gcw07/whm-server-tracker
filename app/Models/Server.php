@@ -21,8 +21,7 @@ use Illuminate\Support\Arr;
  * @property string|null $token
  * @property string|null $notes
  * @property array $settings
- * @property \Illuminate\Support\Carbon|null $details_last_updated
- * @property \Illuminate\Support\Carbon|null $accounts_last_updated
+ * @property \Illuminate\Support\Carbon|null $server_updated_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Account[] $accounts
@@ -42,15 +41,14 @@ use Illuminate\Support\Arr;
  * @method static \Illuminate\Database\Eloquent\Builder|Server newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Server query()
  * @method static \Illuminate\Database\Eloquent\Builder|Server search($search)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereAccountsLastUpdated($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereDetailsLastUpdated($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server wherePort($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereServerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereServerUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereSettings($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereUpdatedAt($value)
@@ -61,13 +59,15 @@ class Server extends Model
     use HasFactory;
 
     protected $guarded = [];
+
     protected $withCount = ['accounts'];
+
     protected $casts = [
         'server_type' => ServerTypeEnum::class,
         'settings' => 'json',
-        'details_last_updated' => 'datetime',
-        'accounts_last_updated' => 'datetime',
+        'server_updated_at' => 'datetime',
     ];
+
     protected $appends = [
         'formatted_server_type',
         'formatted_backup_days',
@@ -79,16 +79,8 @@ class Server extends Model
         'can_refresh_data',
         'whm_url',
     ];
+
     protected $hidden = ['token'];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($server) {
-            $server->accounts->each->delete();
-        });
-    }
 
     public static function refreshData()
     {
