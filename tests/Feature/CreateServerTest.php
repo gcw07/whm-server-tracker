@@ -37,7 +37,7 @@ test('an authorized user can add a valid server', function () {
             'name' => 'My Test Server',
             'address' => '255.1.1.100',
             'port' => 1111,
-            'server_type' => ServerTypeEnum::dedicated(),
+            'server_type' => ServerTypeEnum::Dedicated,
             'notes' => 'some server note',
             'token' => 'new-server-api-token',
         ]));

@@ -20,7 +20,7 @@ class ServerRequestDataFactory
 
     public function __construct()
     {
-        $this->serverType = ServerTypeEnum::vps();
+        $this->serverType = ServerTypeEnum::Vps;
     }
 
     public function withName(string $name): self
