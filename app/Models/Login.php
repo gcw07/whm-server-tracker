@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $user_id
  * @property string $ip_address
- * @property string $created_at
+ * @property \Illuminate\Support\Carbon $created_at
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Login newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Login newQuery()
