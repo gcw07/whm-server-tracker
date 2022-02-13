@@ -23,7 +23,7 @@ return [
 
     'remote' => [
         'username' => 'root',
-        'timeout' => 10
+        'timeout' => 10,
     ],
 
     /*
@@ -34,7 +34,7 @@ return [
     */
 
     'ignore_usernames' => [
-        'gwscripts'
+        'gwscripts',
     ],
 
     /*
@@ -46,7 +46,7 @@ return [
     */
 
     'admin_emails' => [
-        'grant@gwscripts.com'
-    ]
+        'grant@gwscripts.com',
+    ],
 
 ];
