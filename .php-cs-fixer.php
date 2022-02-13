@@ -15,6 +15,7 @@ $finder = Symfony\Component\Finder\Finder::create()
     ->ignoreVCS(true);
 
 $config = new PhpCsFixer\Config();
+
 return $config->setRules([
         '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
@@ -33,6 +34,6 @@ return $config->setRules([
         'method_argument_space' => [
             'on_multiline' => 'ensure_fully_multiline',
             'keep_multiple_spaces_after_comma' => true,
-        ]
+        ],
     ])
     ->setFinder($finder);
