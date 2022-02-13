@@ -56,8 +56,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Account extends Model
 {
-    use HasFactory, Unguarded;
+    use HasFactory;
 
+    protected $guarded = [];
     protected $casts = ['backup' => 'boolean', 'suspended' => 'boolean'];
     protected $dates = ['suspend_time', 'setup_date'];
     protected $appends = ['disk_usage', 'disk_usage_raw', 'cpanel_url', 'whm_url', 'domain_url'];

@@ -59,8 +59,9 @@ use Illuminate\Support\Arr;
  */
 class Server extends Model
 {
-    use HasFactory, Unguarded;
+    use HasFactory;
 
+    protected $guarded = [];
     protected $withCount = ['accounts'];
     protected $casts = [
         'server_type' => ServerTypeEnum::class,

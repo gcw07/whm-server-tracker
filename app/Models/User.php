@@ -40,7 +40,9 @@ use Illuminate\Notifications\Notifiable;
  */
 class User extends Authenticatable
 {
-    use HasLogins, HasFactory, Notifiable, Unguarded;
+    use HasLogins, HasFactory, Notifiable;
+
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast.

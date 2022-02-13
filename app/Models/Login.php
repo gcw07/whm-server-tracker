@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Login extends Model
 {
+    protected $guarded = [];
+
     public $timestamps = false;
 
     protected $casts = [
