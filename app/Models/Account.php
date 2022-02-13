@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Filters\AccountFilters;
-use App\Models\Concerns\Unguarded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
