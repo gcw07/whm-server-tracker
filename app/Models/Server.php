@@ -209,7 +209,7 @@ class Server extends Model
 
     public function getMissingTokenAttribute()
     {
-        if ($this->server_type != 'reseller' && $this->token === null) {
+        if ($this->token === null) {
             return true;
         }
 
