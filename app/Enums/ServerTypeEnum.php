@@ -2,21 +2,9 @@
 
 namespace App\Enums;
 
-use Spatie\Enum\Laravel\Enum;
-
-/**
- * @method static self dedicated()
- * @method static self reseller()
- * @method static self vps()
- */
-class ServerTypeEnum extends Enum
+enum ServerTypeEnum: string
 {
-    protected static function labels(): array
-    {
-        return [
-            'dedicated' => 'Dedicated',
-            'reseller' => 'Reseller',
-            'vps' => 'VPS',
-        ];
-    }
+    case Dedicated = 'dedicated';
+    case Reseller = 'reseller';
+    case Vps = 'vps';
 }
