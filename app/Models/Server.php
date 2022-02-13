@@ -141,13 +141,11 @@ class Server extends Model
 
     public function getFormattedServerTypeAttribute()
     {
-        if ($this->server_type == 'vps') {
-            return 'VPS';
-        } elseif ($this->server_type == 'dedicated') {
-            return 'Dedicated';
-        }
-
-        return 'Reseller';
+        return match ($this->server_type) {
+            ServerTypeEnum::Dedicated => 'Dedicated',
+            ServerTypeEnum::Reseller => 'Reseller',
+            ServerTypeEnum::Vps => 'VPS',
+        };
     }
 
     public function getFormattedBackupDaysAttribute()
