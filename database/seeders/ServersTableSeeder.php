@@ -15,6 +15,9 @@ class ServersTableSeeder extends Seeder
      */
     public function run()
     {
-        Server::factory()->has(Account::factory()->count(15))->count(10)->create();
+        Server::factory()
+            ->has(Account::factory()->count(15))
+            ->count(10)
+            ->create();
     }
 }
