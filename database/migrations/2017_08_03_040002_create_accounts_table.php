@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('server_id');
+            $table->foreignId('server_id')->constrained('servers')->cascadeOnDelete();
             $table->string('domain');
             $table->string('user');
             $table->string('ip');

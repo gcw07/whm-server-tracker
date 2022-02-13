@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('logins', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->index();
+            $table->foreignId('user_id')->index()->constrained('users')->cascadeOnDelete();
             $table->string('ip_address');
             $table->timestamp('created_at');
         });
