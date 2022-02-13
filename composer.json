@@ -17,7 +17,6 @@
         "laravel/ui": "^v3.2.0",
         "livewire/livewire": "^2.0",
         "spatie/laravel-backup": "^8.0",
-        "spatie/laravel-enum": "^3.0",
         "wire-elements/modal": "^1.0"
     },
     "require-dev": {
@@ -67,7 +66,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
