@@ -8,6 +8,7 @@ use App\Jobs\FetchServerAccounts;
 use App\Jobs\FetchServerDetails;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
 
 /**
@@ -106,7 +107,7 @@ class Server extends Model
         return new Fetchers($this);
     }
 
-    public function accounts()
+    public function accounts(): HasMany
     {
         return $this->hasMany(Account::class);
     }
