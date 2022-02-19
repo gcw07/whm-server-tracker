@@ -6,6 +6,7 @@ use App\Enums\ServerTypeEnum;
 use App\Filters\ServerFilters;
 use App\Jobs\FetchServerAccounts;
 use App\Jobs\FetchServerDetails;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,22 +38,23 @@ use Illuminate\Support\Arr;
  * @property-read mixed $missing_token
  * @property-read mixed $whm_url
  * @method static \Database\Factories\ServerFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|Server filter(\App\Filters\ServerFilters $filters)
- * @method static \Illuminate\Database\Eloquent\Builder|Server newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Server newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Server query()
- * @method static \Illuminate\Database\Eloquent\Builder|Server search($search)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereNotes($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server wherePort($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereServerType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereServerUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereSettings($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Server whereUpdatedAt($value)
+ * @method static Builder|Server filter(\App\Filters\ServerFilters $filters)
+ * @method static Builder|Server newModelQuery()
+ * @method static Builder|Server newQuery()
+ * @method static Builder|Server query()
+ * @method static Builder|Server search($search)
+ * @method static Builder|Server whereAddress($value)
+ * @method static Builder|Server whereCreatedAt($value)
+ * @method static Builder|Server whereId($value)
+ * @method static Builder|Server whereName($value)
+ * @method static Builder|Server whereNotes($value)
+ * @method static Builder|Server wherePort($value)
+ * @method static Builder|Server whereServerType($value)
+ * @method static Builder|Server whereServerUpdatedAt($value)
+ * @method static Builder|Server whereSettings($value)
+ * @method static Builder|Server whereToken($value)
+ * @method static Builder|Server whereUpdatedAt($value)
+ * @method static Builder|Server withTokens()
  * @mixin \Eloquent
  */
 class Server extends Model
@@ -125,6 +127,11 @@ class Server extends Model
     public function findAccount($username)
     {
         return $this->fresh()->accounts()->where('user', $username)->first();
+    }
+
+    public function scopeWithTokens(Builder $query): void
+    {
+        $query->whereNotNull('token');
     }
 
     public function scopeFilter($query, ServerFilters $filters)
