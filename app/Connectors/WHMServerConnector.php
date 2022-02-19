@@ -56,12 +56,23 @@ class WHMServerConnector implements ServerConnector
         return false;
     }
 
-    public function getPhpVersion()
+    public function getPhpDefaultVersion()
     {
         $data = $this->fetch("{$this->baseUrl}/php_get_system_default_version?api.version=1");
 
         if (array_key_exists('data', $data)) {
             return $data['data']['version'];
+        }
+
+        return false;
+    }
+
+    public function getPhpVersions()
+    {
+        $data = $this->fetch("{$this->baseUrl}/php_get_installed_versions?api.version=1");
+
+        if (array_key_exists('data', $data)) {
+            return $data['data']['versions'];
         }
 
         return false;
