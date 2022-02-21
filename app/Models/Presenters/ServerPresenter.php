@@ -3,6 +3,7 @@
 namespace App\Models\Presenters;
 
 use App\Enums\ServerTypeEnum;
+use Illuminate\Support\Arr;
 
 trait ServerPresenter
 {
@@ -126,9 +127,9 @@ trait ServerPresenter
         return $bytes;
     }
 
-    private function trimTrailingZeroes($number)
+    private function trimTrailingZeroes($number): string
     {
-        if (strpos($number, '.') !== false) {
+        if (! str_contains($number, '.')) {
             $number = rtrim($number, '0');
         }
 
