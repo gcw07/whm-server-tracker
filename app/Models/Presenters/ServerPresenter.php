@@ -14,6 +14,15 @@ trait ServerPresenter
         return "$protocol://$this->address:$this->port/json-api/";
     }
 
+    public function getWhmUrlAttribute(): string
+    {
+        if ($this->port == 2087) {
+            return "https://$this->address:$this->port";
+        }
+
+        return "http://$this->address:$this->port";
+    }
+
     public function getFormattedServerTypeAttribute()
     {
         return match ($this->server_type) {
@@ -101,15 +110,6 @@ trait ServerPresenter
         }
 
         return true;
-    }
-
-    public function getWhmUrlAttribute()
-    {
-        if ($this->port == 2087) {
-            return "https://{$this->address}:{$this->port}";
-        }
-
-        return "http://{$this->address}:{$this->port}";
     }
 
     private function formatFileSize($bytes)
