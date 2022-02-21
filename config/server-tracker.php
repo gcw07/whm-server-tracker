@@ -4,9 +4,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | URL Defaults
+    | WHM Server Settings
     |--------------------------------------------------------------------------
     */
+
+    'whm' => [
+        /**
+         * The protocol for the WHM servers your connecting too.
+         */
+        'protocol' => 'https',
+
+        /**
+         * This is the server username the API token was created under. Usually
+         * this username represents the root user or a reseller user.
+         */
+        'username' => 'root',
+
+        /**
+         * The connection timeout in seconds.
+         */
+        'connection_timeout' => 10,
+    ],
 
     'urls' => [
         'protocol' => 'https',
