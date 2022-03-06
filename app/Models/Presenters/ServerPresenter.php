@@ -3,33 +3,38 @@
 namespace App\Models\Presenters;
 
 use App\Enums\ServerTypeEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Arr;
 
 trait ServerPresenter
 {
-    public function getWhmBaseApiUrlAttribute(): string
+    protected function whmBaseApiUrl(): Attribute
     {
         $protocol = config('server-tracker.whm.protocol');
 
-        return "$protocol://$this->address:$this->port/json-api/";
+        return Attribute::make(
+            get: fn () => "$protocol://$this->address:$this->port/json-api/",
+        );
     }
 
-    public function getWhmUrlAttribute(): string
+    protected function whmUrl(): Attribute
     {
-        if ($this->port == 2087) {
-            return "https://$this->address:$this->port";
-        }
+        $protocol = ($this->port === 2087) ? 'https' : 'http';
 
-        return "http://$this->address:$this->port";
+        return Attribute::make(
+            get: fn () => "$protocol://$this->address:$this->port",
+        );
     }
 
-    public function getFormattedServerTypeAttribute()
+    protected function formattedServerType(): Attribute
     {
-        return match ($this->server_type) {
-            ServerTypeEnum::Dedicated => 'Dedicated',
-            ServerTypeEnum::Reseller => 'Reseller',
-            ServerTypeEnum::Vps => 'VPS',
-        };
+        return Attribute::make(
+            get: fn () => match ($this->server_type) {
+                ServerTypeEnum::Dedicated => 'Dedicated',
+                ServerTypeEnum::Reseller => 'Reseller',
+                ServerTypeEnum::Vps => 'VPS',
+            },
+        );
     }
 
     public function getFormattedBackupDaysAttribute()
@@ -94,22 +99,18 @@ trait ServerPresenter
         return Arr::get($versions, $this->settings()->php_version, 'Unknown');
     }
 
-    public function getMissingTokenAttribute()
+    protected function missingToken(): Attribute
     {
-        if ($this->token === null) {
-            return true;
-        }
-
-        return false;
+        return Attribute::make(
+            get: fn () => $this->token === null,
+        );
     }
 
-    public function getCanRefreshDataAttribute()
+    protected function canRefreshData(): Attribute
     {
-        if ($this->server_type == 'reseller' || $this->missing_token) {
-            return false;
-        }
-
-        return true;
+        return Attribute::make(
+            get: fn () => ! $this->missing_token,
+        );
     }
 
     private function formatFileSize($bytes)
