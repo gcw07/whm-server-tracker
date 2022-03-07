@@ -2,8 +2,8 @@
 
 namespace App\Casts;
 
+use App\Collections\SettingsCollection;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Support\Collection;
 
 class Settings implements CastsAttributes
 {
@@ -12,15 +12,15 @@ class Settings implements CastsAttributes
         'backup_enabled', 'backup_days', 'backup_retention',
     ];
 
-    public function get($model, $key, $value, $attributes): ?Collection
+    public function get($model, $key, $value, $attributes): ?SettingsCollection
     {
-        return isset($attributes[$key]) ? new Collection(json_decode($attributes[$key], true)) : null;
+        return isset($attributes[$key]) ? new SettingsCollection(json_decode($attributes[$key], true)) : null;
     }
 
     public function set($model, $key, $value, $attributes): array
     {
-        if (! $value instanceof Collection) {
-            return [$key => json_encode([])];
+        if (! $value instanceof SettingsCollection) {
+            $value = new SettingsCollection($value);
         }
 
         return [$key => json_encode($value->only($this->allowed))];
