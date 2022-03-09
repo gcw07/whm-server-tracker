@@ -37,66 +37,153 @@ trait ServerPresenter
         );
     }
 
-    public function getFormattedBackupDaysAttribute()
+    protected function formattedDiskUsed(): Attribute
     {
-        if (! $this->settings()->backup_days) {
-            return 'None';
-        }
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('disk_used')) {
+                    return 'Unknown';
+                }
 
-        return str_replace(
-            [0, 1, 2, 3, 4, 5, 6],
-            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            $this->settings()->backup_days
+                return $this->formatFileSize($this->settings->get('disk_used'));
+            },
         );
     }
 
-    public function getFormattedDiskUsedAttribute()
+    protected function formattedDiskAvailable(): Attribute
     {
-        if (! $this->settings()->disk_used) {
-            return 'Unknown';
-        }
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('disk_available')) {
+                    return 'Unknown';
+                }
 
-        return $this->formatFileSize($this->settings()->disk_used);
+                return $this->formatFileSize($this->settings->get('disk_available'));
+            },
+        );
     }
 
-    public function getFormattedDiskAvailableAttribute()
+    protected function formattedDiskTotal(): Attribute
     {
-        if (! $this->settings()->disk_available) {
-            return 'Unknown';
-        }
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('disk_total')) {
+                    return 'Unknown';
+                }
 
-        return $this->formatFileSize($this->settings()->disk_available);
+                return $this->formatFileSize($this->settings->get('disk_total'));
+            },
+        );
     }
 
-    public function getFormattedDiskTotalAttribute()
+    protected function formattedBackupDailyDays(): Attribute
     {
-        if (! $this->settings()->disk_total) {
-            return 'Unknown';
-        }
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('backup_daily_days')) {
+                    return 'None';
+                }
 
-        return $this->formatFileSize($this->settings()->disk_total);
+                return str_replace(
+                    [0, 1, 2, 3, 4, 5, 6],
+                    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    $this->settings->get('backup_daily_days')
+                );
+            },
+        );
     }
 
-    public function getFormattedPhpVersionAttribute()
+    protected function formattedBackupWeeklyDay(): Attribute
     {
-        if (! $this->settings()->php_version) {
-            return 'Unknown';
-        }
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('backup_weekly_day')) {
+                    return 'None';
+                }
 
-        $versions = [
-            'ea-php54' => 'PHP 5.4',
-            'ea-php55' => 'PHP 5.5',
-            'ea-php56' => 'PHP 5.6',
-            'ea-php70' => 'PHP 7.0',
-            'ea-php71' => 'PHP 7.1',
-            'ea-php72' => 'PHP 7.2',
-            'ea-php73' => 'PHP 7.3',
-            'ea-php74' => 'PHP 7.4',
-            'ea-php80' => 'PHP 8.0',
-            'ea-php81' => 'PHP 8.1',
-        ];
+                $days = [
+                    'Sunday',
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday',
+                    'Saturday',
+                ];
 
-        return Arr::get($versions, $this->settings()->php_version, 'Unknown');
+                return $days[$this->settings->get('backup_weekly_day')];
+            },
+        );
+    }
+
+    protected function formattedBackupMonthlyDays(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('backup_monthly_days')) {
+                    return 'None';
+                }
+
+                return str_replace(
+                    [1, 15],
+                    ['1st', '15th'],
+                    $this->settings->get('backup_monthly_days')
+                );
+            },
+        );
+    }
+
+    protected function formattedPhpInstalledVersions(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('php_installed_versions')) {
+                    return 'Unknown';
+                }
+
+                return '';
+            },
+        );
+    }
+
+    protected function formattedPhpSystemVersion(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('php_system_version')) {
+                    return 'Unknown';
+                }
+
+                $versions = [
+                    'ea-php53' => '5.3',
+                    'ea-php54' => '5.4',
+                    'ea-php55' => '5.5',
+                    'ea-php56' => '5.6',
+                    'ea-php70' => '7.0',
+                    'ea-php71' => '7.1',
+                    'ea-php72' => '7.2',
+                    'ea-php73' => '7.3',
+                    'ea-php74' => '7.4',
+                    'ea-php80' => '8.0',
+                    'ea-php81' => '8.1',
+                ];
+
+                return Arr::get($versions, $this->settings->get('php_system_version'), 'Unknown');
+            },
+        );
+    }
+
+    protected function formattedWhmVersion(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->settings->get('whm_version')) {
+                    return 'Unknown';
+                }
+
+                return $this->settings->get('whm_version');
+            },
+        );
     }
 
     protected function missingToken(): Attribute
