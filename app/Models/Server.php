@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ServerTypeEnum $server_type
  * @property string|null $token
  * @property string|null $notes
- * @property \App\Casts\Settings|null $settings
+ * @property \App\Collections\SettingsCollection|null $settings
  * @property \Illuminate\Support\Carbon|null $server_updated_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
