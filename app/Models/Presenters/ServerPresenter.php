@@ -176,11 +176,13 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->get('whm_version')) {
+                if (! $this->settings->has('whm_version')) {
                     return 'Unknown';
                 }
 
-                return $this->settings->get('whm_version');
+                [, $version] = explode('.', $this->settings->get('whm_version'), 2);
+
+                return "v$version";
             },
         );
     }
