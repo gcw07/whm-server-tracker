@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Settings;
 use App\Enums\ServerTypeEnum;
 use App\Filters\ServerFilters;
 use App\Jobs\FetchServerAccounts;
@@ -22,21 +23,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ServerTypeEnum $server_type
  * @property string|null $token
  * @property string|null $notes
- * @property array $settings
+ * @property \App\Casts\Settings|null $settings
  * @property \Illuminate\Support\Carbon|null $server_updated_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Account[] $accounts
  * @property-read int|null $accounts_count
- * @property-read mixed $can_refresh_data
- * @property-read mixed $formatted_backup_days
- * @property-read mixed $formatted_disk_available
- * @property-read mixed $formatted_disk_total
- * @property-read mixed $formatted_disk_used
- * @property-read mixed $formatted_php_version
- * @property-read mixed $formatted_server_type
- * @property-read mixed $missing_token
- * @property-read mixed $whm_url
  * @method static \Database\Factories\ServerFactory factory(...$parameters)
  * @method static Builder|Server filter(\App\Filters\ServerFilters $filters)
  * @method static Builder|Server newModelQuery()
@@ -67,7 +59,7 @@ class Server extends Model
 
     protected $casts = [
         'server_type' => ServerTypeEnum::class,
-        'settings' => \App\Casts\Settings::class,
+        'settings' => Settings::class,
         'server_updated_at' => 'datetime',
     ];
 
