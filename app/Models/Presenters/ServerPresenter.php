@@ -155,7 +155,6 @@ trait ServerPresenter
                 }
 
                 $versions = [
-                    'ea-php53' => '5.3',
                     'ea-php54' => '5.4',
                     'ea-php55' => '5.5',
                     'ea-php56' => '5.6',
