@@ -200,7 +200,7 @@ trait ServerPresenter
         );
     }
 
-    private function formatFileSize($bytes)
+    private function formatFileSize($bytes): string
     {
         if ($bytes >= 1073741824) {
             $bytes = $this->trimTrailingZeroes(number_format($bytes / 1073741824, 2)) . ' TB';
