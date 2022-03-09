@@ -67,20 +67,24 @@ class Server extends Model
 
     protected $casts = [
         'server_type' => ServerTypeEnum::class,
-        'settings' => 'json',
+        'settings' => \App\Casts\Settings::class,
         'server_updated_at' => 'datetime',
     ];
 
     protected $appends = [
+        'whm_url',
         'formatted_server_type',
-        'formatted_backup_days',
         'formatted_disk_used',
         'formatted_disk_available',
         'formatted_disk_total',
-        'formatted_php_version',
+        'formatted_backup_daily_days',
+        'formatted_backup_weekly_day',
+        'formatted_backup_monthly_days',
+        'formatted_php_installed_versions',
+        'formatted_php_system_version',
+        'formatted_whm_version',
         'missing_token',
         'can_refresh_data',
-        'whm_url',
     ];
 
     protected $hidden = ['token'];
@@ -97,11 +101,6 @@ class Server extends Model
         });
 
         return true;
-    }
-
-    public function settings()
-    {
-        return new Settings($this, $this->settings);
     }
 
     public function fetchers()
