@@ -8,8 +8,23 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 class Settings implements CastsAttributes
 {
     protected array $allowed = [
-        'disk_used', 'disk_available', 'disk_total', 'disk_percentage',
-        'backup_enabled', 'backup_days', 'backup_retention',
+        'disk_used',
+        'disk_available',
+        'disk_total',
+        'disk_percentage',
+        'backup_enabled',
+        'backup_daily_enabled',
+        'backup_daily_retention',
+        'backup_daily_days',
+        'backup_weekly_enabled',
+        'backup_weekly_retention',
+        'backup_weekly_day',
+        'backup_monthly_enabled',
+        'backup_monthly_retention',
+        'backup_monthly_days',
+        'php_installed_versions',
+        'php_system_version',
+        'whm_version',
     ];
 
     public function get($model, $key, $value, $attributes): ?SettingsCollection
