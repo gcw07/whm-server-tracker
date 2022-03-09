@@ -199,27 +199,17 @@ trait ServerPresenter
         );
     }
 
-    private function formatFileSize($bytes): string
+    private function formatFileSize($kilobytes, $precision = null): string
     {
-        if ($bytes >= 1073741824) {
-            $bytes = $this->trimTrailingZeroes(number_format($bytes / 1073741824, 2)) . ' TB';
-        } elseif ($bytes >= 1048576) {
-            $bytes = $this->trimTrailingZeroes(number_format($bytes / 1048576, 2)) . ' GB';
-        } elseif ($bytes >= 1024) {
-            $bytes = $this->trimTrailingZeroes(number_format($bytes / 1024, 2)) . ' MB';
-        } else {
-            $bytes = $bytes . ' KB';
+        $byteUnits = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $bytePrecision = [0, 1, 2, 2, 3, 3, 4, 4];
+        $byteNext = 1024;
+
+        $kilobytes = (int) $kilobytes;
+        for ($i = 0; ($kilobytes / $byteNext) >= 0.9 && $i < count($byteUnits); $i++) {
+            $kilobytes /= $byteNext;
         }
 
-        return $bytes;
-    }
-
-    private function trimTrailingZeroes($number): string
-    {
-        if (! str_contains($number, '.')) {
-            $number = rtrim($number, '0');
-        }
-
-        return rtrim($number, '.');
+        return round($kilobytes, is_null($precision) ? $bytePrecision[$i] : (int) $precision) . ' ' . $byteUnits[$i];
     }
 }
