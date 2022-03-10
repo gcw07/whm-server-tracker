@@ -84,11 +84,17 @@ trait ServerPresenter
                     return 'None';
                 }
 
-                return str_replace(
-                    [0, 1, 2, 3, 4, 5, 6],
-                    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-                    $this->settings->get('backup_daily_days')
-                );
+                $values = explode(',', $this->settings->get('backup_daily_days'));
+
+                return collect($values)->map(fn ($item) => match ($item) {
+                    '0' => 'Sun',
+                    '1' => 'Mon',
+                    '2' => 'Tue',
+                    '3' => 'Wed',
+                    '4' => 'Thu',
+                    '5' => 'Fri',
+                    '6' => 'Sat',
+                })->join(', ');
             },
         );
     }
@@ -124,11 +130,12 @@ trait ServerPresenter
                     return 'None';
                 }
 
-                return str_replace(
-                    [1, 15],
-                    ['1st', '15th'],
-                    $this->settings->get('backup_monthly_days')
-                );
+                $values = explode(',', $this->settings->get('backup_monthly_days'));
+
+                return collect($values)->map(fn ($item) => match ($item) {
+                    '1' => '1st',
+                    '15' => '15th',
+                })->join(', ');
             },
         );
     }
@@ -138,10 +145,23 @@ trait ServerPresenter
         return Attribute::make(
             get: function () {
                 if (! $this->settings->has('php_installed_versions')) {
-                    return 'Unknown';
+                    return ['Unknown'];
                 }
 
-                return '';
+                return collect($this->settings->get('php_installed_versions'))
+                    ->map(fn ($item) => match ($item) {
+                        'ea-php54' => '5.4',
+                        'ea-php55' => '5.5',
+                        'ea-php56' => '5.6',
+                        'ea-php70' => '7.0',
+                        'ea-php71' => '7.1',
+                        'ea-php72' => '7.2',
+                        'ea-php73' => '7.3',
+                        'ea-php74' => '7.4',
+                        'ea-php80' => '8.0',
+                        'ea-php81' => '8.1',
+                        default => 'Unknown'
+                    })->toArray();
             },
         );
     }
@@ -150,7 +170,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->get('php_system_version')) {
+                if (! $this->settings->has('php_system_version')) {
                     return 'Unknown';
                 }
 

@@ -336,9 +336,9 @@ it('can get formatted backup daily days', function () {
     $serverC = Server::factory()->create(['settings' => ['backup_daily_days' => '0,2,4,6']]);
     $serverD = Server::factory()->create();
 
-    $this->assertEquals('Sun,Mon,Tue', $serverA->formatted_backup_daily_days);
-    $this->assertEquals('Wed,Thu,Fri,Sat', $serverB->formatted_backup_daily_days);
-    $this->assertEquals('Sun,Tue,Thu,Sat', $serverC->formatted_backup_daily_days);
+    $this->assertEquals('Sun, Mon, Tue', $serverA->formatted_backup_daily_days);
+    $this->assertEquals('Wed, Thu, Fri, Sat', $serverB->formatted_backup_daily_days);
+    $this->assertEquals('Sun, Tue, Thu, Sat', $serverC->formatted_backup_daily_days);
     $this->assertEquals('None', $serverD->formatted_backup_daily_days);
 });
 
@@ -360,38 +360,38 @@ it('can get formatted backup monthly days', function () {
     $serverC = Server::factory()->create(['settings' => ['backup_monthly_days' => '15']]);
     $serverD = Server::factory()->create();
 
-    $this->assertEquals('1st,15th', $serverA->formatted_backup_monthly_days);
+    $this->assertEquals('1st, 15th', $serverA->formatted_backup_monthly_days);
     $this->assertEquals('1st', $serverB->formatted_backup_monthly_days);
     $this->assertEquals('15th', $serverC->formatted_backup_monthly_days);
     $this->assertEquals('None', $serverD->formatted_backup_monthly_days);
 });
 
 it('can get formatted php installed versions', function () {
-    $serverA = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php54']]);
-    $serverB = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php55']]);
-    $serverC = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php56']]);
-    $serverD = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php70']]);
-    $serverE = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php71']]);
-    $serverF = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php72']]);
-    $serverG = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php73']]);
-    $serverH = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php74']]);
-    $serverI = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php80']]);
-    $serverJ = Server::factory()->create(['settings' => ['php_installed_versions' => 'ea-php81']]);
+    $serverA = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php54']]]);
+    $serverB = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php55']]]);
+    $serverC = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php56']]]);
+    $serverD = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php70']]]);
+    $serverE = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php71']]]);
+    $serverF = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php72']]]);
+    $serverG = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php73']]]);
+    $serverH = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php74']]]);
+    $serverI = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php80']]]);
+    $serverJ = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php81']]]);
     $serverK = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php74','ea-php80']]]);
     $serverL = Server::factory()->create();
 
-    $this->assertEquals('5.4', $serverA->formatted_php_installed_versions);
-    $this->assertEquals('5.5', $serverB->formatted_php_installed_versions);
-    $this->assertEquals('5.6', $serverC->formatted_php_installed_versions);
-    $this->assertEquals('7.0', $serverD->formatted_php_installed_versions);
-    $this->assertEquals('7.1', $serverE->formatted_php_installed_versions);
-    $this->assertEquals('7.2', $serverF->formatted_php_installed_versions);
-    $this->assertEquals('7.3', $serverG->formatted_php_installed_versions);
-    $this->assertEquals('7.4', $serverH->formatted_php_installed_versions);
-    $this->assertEquals('8.0', $serverI->formatted_php_installed_versions);
-    $this->assertEquals('8.1', $serverJ->formatted_php_installed_versions);
-    $this->assertEquals('8.1', $serverK->formatted_php_installed_versions);
-    $this->assertEquals('Unknown', $serverL->formatted_php_installed_versions);
+    $this->assertEquals(['5.4'], $serverA->formatted_php_installed_versions);
+    $this->assertEquals(['5.5'], $serverB->formatted_php_installed_versions);
+    $this->assertEquals(['5.6'], $serverC->formatted_php_installed_versions);
+    $this->assertEquals(['7.0'], $serverD->formatted_php_installed_versions);
+    $this->assertEquals(['7.1'], $serverE->formatted_php_installed_versions);
+    $this->assertEquals(['7.2'], $serverF->formatted_php_installed_versions);
+    $this->assertEquals(['7.3'], $serverG->formatted_php_installed_versions);
+    $this->assertEquals(['7.4'], $serverH->formatted_php_installed_versions);
+    $this->assertEquals(['8.0'], $serverI->formatted_php_installed_versions);
+    $this->assertEquals(['8.1'], $serverJ->formatted_php_installed_versions);
+    $this->assertEquals(['7.4', '8.0'], $serverK->formatted_php_installed_versions);
+    $this->assertEquals(['Unknown'], $serverL->formatted_php_installed_versions);
 });
 
 it('can get formatted php system version', function () {
