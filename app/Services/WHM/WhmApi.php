@@ -10,6 +10,7 @@ use App\Services\WHM\DataProcessors\ProcessDiskUsage;
 use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
 
@@ -50,6 +51,10 @@ class WhmApi
                 $this->apiRequestFailed($type, $response);
             }
         }
+
+        $this->server->update([
+            'server_updated_at' => Carbon::now(),
+        ]);
     }
 
     private function promiseHeaders(): array
