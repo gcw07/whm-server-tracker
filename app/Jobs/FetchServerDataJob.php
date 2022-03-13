@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Events\FetchedServerDetails;
+use App\Events\FetchedServerDataEvent;
 use App\Models\Server;
 use App\Services\WHM\WhmApi;
 use Illuminate\Bus\Queueable;
@@ -29,6 +29,6 @@ class FetchServerDataJob implements ShouldQueue
         $whmApi->setServer($this->server);
         $whmApi->fetch();
 
-        event(new FetchedServerDetails($this->server));
+        event(new FetchedServerDataEvent($this->server));
     }
 }
