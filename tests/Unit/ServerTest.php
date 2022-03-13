@@ -3,6 +3,7 @@
 use App\Enums\ServerTypeEnum;
 use App\Models\Account;
 use App\Models\Server;
+use App\Services\WHM\DataProcessors\ProcessAccounts;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
@@ -110,7 +111,7 @@ it('a server can remove an account', function () {
 });
 
 it('it will add an account if it does not exist', function () {
-    $accounts = [
+    $data['data']['acct'] = [
         [
             'domain' => 'my-site.com',
             'user' => 'mysite',
@@ -126,19 +127,19 @@ it('it will add an account if it does not exist', function () {
         ],
     ];
 
-    $this->server->fetchers()->processAccounts($accounts);
+    (new ProcessAccounts)->execute($this->server, $data);
 
     $this->assertCount(1, $this->server->fresh()->accounts);
 });
 
 it('it will update an account if it exists', function () {
-    $account = Account::factory()->create([
+    Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'my-site.com',
         'user' => 'mysite',
     ]);
 
-    $accounts = [
+    $data['data']['acct'] = [
         [
             'domain' => 'my-site.com',
             'user' => 'mysite',
@@ -154,7 +155,7 @@ it('it will update an account if it exists', function () {
         ],
     ];
 
-    $this->server->fetchers()->processAccounts($accounts);
+    (new ProcessAccounts)->execute($this->server, $data);
 
     tap($this->server->fresh(), function ($server) {
         $this->assertCount(1, $server->accounts);
@@ -192,9 +193,9 @@ it('it will skip over ignored usernames', function () {
         'plan' => '2 Gig',
     ];
 
-    $accounts = [$validAccount, $skipAccount];
+    $data['data']['acct'] = [$validAccount, $skipAccount];
 
-    $this->server->fetchers()->processAccounts($accounts);
+    (new ProcessAccounts)->execute($this->server, $data);
 
     tap($this->server->fresh(), function ($server) {
         $this->assertCount(1, $server->accounts);
@@ -202,19 +203,19 @@ it('it will skip over ignored usernames', function () {
 });
 
 it('it will remove accounts that no longer exists on server', function () {
-    $account1 = Account::factory()->create([
+    Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'first-site.com',
         'user' => 'firstsite',
     ]);
 
-    $account2 = Account::factory()->create([
+    Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'site-to-remove.com',
         'user' => 'sitetoremove',
     ]);
 
-    $accounts = [
+    $data['data']['acct'] = [
         [
             'domain' => 'first-site.com',
             'user' => 'firstsite',
@@ -230,7 +231,7 @@ it('it will remove accounts that no longer exists on server', function () {
         ],
     ];
 
-    $this->server->fetchers()->processAccounts($accounts);
+    (new ProcessAccounts)->execute($this->server, $data);
 
     tap($this->server->fresh(), function ($server) {
         $this->assertCount(1, $server->accounts);
@@ -240,25 +241,26 @@ it('it will remove accounts that no longer exists on server', function () {
 it('will only remove accounts that no longer exists on the server that is being processed', function () {
     $serverB = Server::factory()->create();
 
-    $accountToKeep = Account::factory()->create([
+    // This account should be kept because it is on another server
+    Account::factory()->create([
         'server_id' => $serverB->id,
         'domain' => 'site-to-remove.com',
         'user' => 'sitetoremove',
     ]);
 
-    $account1 = Account::factory()->create([
+    Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'first-site.com',
         'user' => 'firstsite',
     ]);
 
-    $account2 = Account::factory()->create([
+    Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'site-to-remove.com',
         'user' => 'sitetoremove',
     ]);
 
-    $fetchedAccounts = [
+    $data['data']['acct'] = [
         [
             'domain' => 'first-site.com',
             'user' => 'firstsite',
@@ -276,7 +278,7 @@ it('will only remove accounts that no longer exists on the server that is being 
 
     $this->assertEquals(3, Account::count());
 
-    $this->server->fetchers()->processAccounts($fetchedAccounts);
+    (new ProcessAccounts)->execute($this->server, $data);
 
     tap($this->server->fresh(), function ($server) {
         $this->assertCount(1, $server->accounts);
