@@ -95,17 +95,12 @@ class Server extends Model
         return true;
     }
 
-    public function fetchers()
-    {
-        return new Fetchers($this);
-    }
-
     public function accounts(): HasMany
     {
         return $this->hasMany(Account::class);
     }
 
-    public function addAccount($account)
+    public function addAccount($account): Account
     {
         return $this->accounts()->create($account);
     }
