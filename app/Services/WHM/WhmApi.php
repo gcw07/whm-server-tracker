@@ -4,6 +4,12 @@ namespace App\Services\WHM;
 
 use App\Exceptions\Server\MissingTokenException;
 use App\Models\Server;
+use App\Services\WHM\DataProcessors\ProcessAccounts;
+use App\Services\WHM\DataProcessors\ProcessBackups;
+use App\Services\WHM\DataProcessors\ProcessDiskUsage;
+use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
+use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
+use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
 
@@ -72,62 +78,17 @@ class WhmApi
         $data = json_decode($response['value']->getBody()->getContents(), true);
 
         match ($type) {
-            'accounts' => $this->processAccounts($data),
-            'backups' => $this->processBackups($data),
-            'diskUsage' => $this->processDiskUsage($data),
-            'phpInstalledVersions' => $this->processPhpInstalledVersions($data),
-            'phpSystemVersion' => $this->processPhpSystemVersion($data),
-            'whmVersion' => $this->processWhmVersion($data),
+            'accounts' => (new ProcessAccounts)->execute($this->server, $data),
+            'backups' => (new ProcessBackups)->execute($this->server, $data),
+            'diskUsage' => (new ProcessDiskUsage)->execute($this->server, $data),
+            'phpInstalledVersions' => (new ProcessPhpInstalledVersions)->execute($this->server, $data),
+            'phpSystemVersion' => (new ProcessPhpSystemVersion)->execute($this->server, $data),
+            'whmVersion' => (new ProcessWhmVersion)->execute($this->server, $data),
         };
     }
 
     private function apiRequestFailed($type, $response)
     {
         $data = $response['reason']->getMessage();
-    }
-
-    public function processAccounts($data)
-    {
-        $data['data']['acct'];
-    }
-
-    public function processBackups($data)
-    {
-        $backups = $data['data']['backup_config'];
-
-        $this->server->settings()->merge([
-            'backup_enabled' => $backups['backupenable'],
-            'backup_days' => $backups['backupdays'],
-            'backup_retention' => $backups['backup_daily_retention'],
-        ]);
-    }
-
-    public function processDiskUsage($data)
-    {
-        $partition = $this->findPrimaryPartition($data['data']['partition']);
-    }
-
-    public function processPhpInstalledVersions($data)
-    {
-        $data['data']['versions'];
-    }
-
-    public function processPhpSystemVersion($data)
-    {
-        $data['data']['version'];
-    }
-
-    public function processWhmVersion($data)
-    {
-        $data['data']['version'];
-    }
-
-    private function findPrimaryPartition($partitions): string
-    {
-        if (sizeof($partitions) > 1) {
-            return collect($partitions)->firstWhere('mount', '/');
-        }
-
-        return $partitions[0];
     }
 }
