@@ -1,22 +1,22 @@
 <?php
 
-use App\Connectors\FakeServerConnector;
-use App\Connectors\ServerConnector;
-use App\Jobs\FetchServerDetails;
+use App\Jobs\FetchServerDataJob;
 use App\Models\Server;
 use App\Models\User;
+use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\Factories\WhmApiFake;
 
 uses(LazilyRefreshDatabase::class);
 
-test('guests cannot fetch server details', function () {
+test('guests cannot refresh server data', function () {
     $server = Server::factory()->create();
 
-    $this->get(route('servers.fetch-details', $server->id))
+    $this->get(route('servers.refresh', $server->id))
         ->assertRedirect(route('login'));
 });
 
-test('an authorized user can fetch server details', function () {
+test('an authorized user can refresh server data', function () {
     $user = User::factory()->create();
     $server = Server::factory()->create([
         'name' => 'my-server-name',
@@ -28,14 +28,14 @@ test('an authorized user can fetch server details', function () {
 
     Queue::fake();
 
-    $fake = new FakeServerConnector;
-    $this->app->instance(ServerConnector::class, $fake);
+    $fake = new WhmApiFake;
+    $this->app->instance(WhmApi::class, $fake);
 
     $this->actingAs($user)
-        ->get(route('servers.fetch-details', $server->id))
+        ->get(route('servers.refresh', $server->id))
         ->assertSuccessful();
 
-    Queue::assertPushed(FetchServerDetails::class, function ($job) use ($server) {
+    Queue::assertPushed(FetchServerDataJob::class, function ($job) use ($server) {
         return $job->server->is($server);
     });
 });
