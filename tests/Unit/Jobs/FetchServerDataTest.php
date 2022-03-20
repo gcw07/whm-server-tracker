@@ -1,51 +1,12 @@
 <?php
 
 use App\Jobs\FetchServerDataJob;
-use App\Models\Account;
 use App\Models\Server;
 use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\Factories\WhmApiFake;
 
 uses(LazilyRefreshDatabase::class);
-
-function createValidAccounts($times = 1, $extraAccounts = [])
-{
-    $accounts = Account::factory()->times($times)->make();
-
-    if (sizeof($extraAccounts) > 0) {
-        return $accounts
-            ->push($extraAccounts)
-            ->map(fn ($item) => [
-                'domain' => $item->domain,
-                'user' => $item->user,
-                'ip' => $item->ip,
-                'backup' => $item->backup,
-                'suspended' => $item->suspended,
-                'suspendreason' => $item->suspend_reason,
-                'suspendtime' => $item->suspend_time === null ? 0 : $item->suspend_time->timestamp,
-                'startdate' => $item->setup_date->format('y M d G:i'),
-                'diskused' => $item->disk_used,
-                'disklimit' => $item->disk_limit,
-                'plan' => $item->plan,
-            ]);
-    }
-
-    return $accounts
-        ->map(fn ($item) => [
-            'domain' => $item->domain,
-            'user' => $item->user,
-            'ip' => $item->ip,
-            'backup' => $item->backup,
-            'suspended' => $item->suspended,
-            'suspendreason' => $item->suspend_reason,
-            'suspendtime' => $item->suspend_time === null ? 0 : $item->suspend_time->timestamp,
-            'startdate' => $item->setup_date->format('y M d G:i'),
-            'diskused' => $item->disk_used,
-            'disklimit' => $item->disk_limit,
-            'plan' => $item->plan,
-        ]);
-}
 
 it('fetches server details', function () {
     $server = Server::factory()->create([
