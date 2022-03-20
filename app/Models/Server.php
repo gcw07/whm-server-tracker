@@ -5,8 +5,7 @@ namespace App\Models;
 use App\Casts\Settings;
 use App\Enums\ServerTypeEnum;
 use App\Filters\ServerFilters;
-use App\Jobs\FetchServerAccounts;
-use App\Jobs\FetchServerDetails;
+use App\Jobs\FetchServerDataJob;
 use App\Models\Presenters\ServerPresenter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -81,18 +80,11 @@ class Server extends Model
 
     protected $hidden = ['token'];
 
-    public static function refreshData()
+    public static function refreshData(): void
     {
-        $servers = static::where('server_type', '!=', 'reseller')
-            ->orderBy('name')
-            ->get();
+        $servers = static::query()->withTokens()->get();
 
-        $servers->each(function ($server) {
-            FetchServerDetails::dispatch($server);
-            FetchServerAccounts::dispatch($server);
-        });
-
-        return true;
+        $servers->each(fn ($server) => dispatch(new FetchServerDataJob($server)));
     }
 
     public function accounts(): HasMany
