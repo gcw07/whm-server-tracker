@@ -1,11 +1,10 @@
 <?php
 
-use App\Connectors\WHMServerConnector;
 use App\Exceptions\Server\ForbiddenAccessException;
-use App\Exceptions\Server\InvalidServerTypeException;
 use App\Exceptions\Server\MissingTokenException;
 use App\Exceptions\Server\ServerConnectionException;
 use App\Models\Server;
+use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);
@@ -18,12 +17,12 @@ beforeEach(function () {
     $this->whmTestServerAddress = getenv('WHM_TEST_SERVER_ADDRESS');
     $this->whmTestServerToken = getenv('WHM_TEST_SERVER_TOKEN');
 
-    $this->connector = new WHMServerConnector;
+    $this->whmApi = new WhmApi();
 });
 
 function canTestWHMServerConnector(): bool
 {
-    return ! (empty(getenv('WHM_TEST_SERVER_TOKEN')) or
+    return ! (empty(getenv('WHM_TEST_SERVER_TOKEN')) ||
         empty(getenv('WHM_TEST_SERVER_ADDRESS')));
 }
 
@@ -34,7 +33,8 @@ test('a server with a missing api token throws an exception', function () {
     ]);
 
     try {
-        $this->connector->setServer($server);
+        $this->whmApi->setServer($server);
+        $this->whmApi->fetch();
     } catch (MissingTokenException $e) {
         $this->assertEquals('vps', $server->server_type->value);
         $this->assertNull($server->token);
@@ -53,10 +53,11 @@ test('a server with an incorrect address throws an exception', function () {
         'token' => 'valid-api-token',
     ]);
 
+    Config::set('server-tracker.whm.connection_timeout', 3);
+
     try {
-        $this->connector->setServer($server);
-        $this->connector->setTimeout(3);
-        $diskUsage = $this->connector->getDiskUsage();
+        $this->whmApi->setServer($server);
+        $this->whmApi->fetch();
     } catch (ServerConnectionException $e) {
         $this->assertEquals('invalid-address', $server->address);
 
@@ -74,10 +75,11 @@ test('a server with an invalid api token throws an exception', function () {
         'token' => 'invalid-api-token',
     ]);
 
+    Config::set('server-tracker.whm.connection_timeout', 3);
+
     try {
-        $this->connector->setServer($server);
-        $this->connector->setTimeout(3);
-        $diskUsage = $this->connector->getDiskUsage();
+        $this->whmApi->setServer($server);
+        $this->whmApi->fetch();
     } catch (ForbiddenAccessException $e) {
         $this->assertEquals('invalid-api-token', $server->token);
 
@@ -87,7 +89,7 @@ test('a server with an invalid api token throws an exception', function () {
     $this->fail("Server still connected even with an invalid server api token.");
 });
 
-test('it can fetch server disk usage information', function () {
+test('it can fetch server data', function () {
     $server = Server::factory()->create([
         'address' => $this->whmTestServerAddress,
         'port' => '2087',
@@ -95,43 +97,28 @@ test('it can fetch server disk usage information', function () {
         'token' => $this->whmTestServerToken,
     ]);
 
-    $this->connector->setServer($server);
-    $diskUsage = $this->connector->getDiskUsage();
+    $this->whmApi->setServer($server);
+    $this->whmApi->fetch();
 
-    $this->assertNotEmpty($diskUsage['used']);
-    $this->assertNotEmpty($diskUsage['available']);
-    $this->assertNotEmpty($diskUsage['total']);
-    $this->assertNotEmpty($diskUsage['percentage']);
-});
-
-test('it can fetch server backup information', function () {
-    $server = Server::factory()->create([
-        'address' => $this->whmTestServerAddress,
-        'port' => '2087',
-        'server_type' => 'vps',
-        'token' => $this->whmTestServerToken,
-    ]);
-
-    $this->connector->setServer($server);
-    $backups = $this->connector->getBackups();
-
-    $this->assertNotEmpty($backups['backupenable']);
-    $this->assertNotEmpty($backups['backupdays']);
-    $this->assertNotEmpty($backups['backup_daily_retention']);
-});
-
-test('it can fetch server default php version', function () {
-    $server = Server::factory()->create([
-        'address' => $this->whmTestServerAddress,
-        'port' => '2087',
-        'server_type' => 'vps',
-        'token' => $this->whmTestServerToken,
-    ]);
-
-    $this->connector->setServer($server);
-    $phpVersion = $this->connector->getPhpVersion();
-
-    $this->assertNotEmpty($phpVersion);
+    tap($server->fresh(), function (Server $server) {
+        $this->assertNotEmpty($server->settings->get('disk_used'));
+        $this->assertNotEmpty($server->settings->get('disk_available'));
+        $this->assertNotEmpty($server->settings->get('disk_total'));
+        $this->assertNotEmpty($server->settings->get('disk_percentage'));
+        $this->assertNotEmpty($server->settings->get('backup_enabled'));
+        $this->assertNotEmpty($server->settings->get('backup_daily_enabled'));
+        $this->assertNotEmpty($server->settings->get('backup_daily_retention'));
+        $this->assertNotEmpty($server->settings->get('backup_daily_days'));
+        $this->assertNotNull($server->settings->get('backup_weekly_enabled'));
+        $this->assertNotEmpty($server->settings->get('backup_weekly_retention'));
+        $this->assertNotNull($server->settings->get('backup_weekly_day'));
+        $this->assertNotNull($server->settings->get('backup_monthly_enabled'));
+        $this->assertNotEmpty($server->settings->get('backup_monthly_retention'));
+        $this->assertNotEmpty($server->settings->get('backup_monthly_days'));
+        $this->assertNotEmpty($server->settings->get('php_system_version'));
+        $this->assertNotEmpty($server->settings->get('php_installed_versions'));
+        $this->assertNotEmpty($server->settings->get('whm_version'));
+    });
 });
 
 test('it can fetch server account list', function () {
@@ -142,22 +129,10 @@ test('it can fetch server account list', function () {
         'token' => $this->whmTestServerToken,
     ]);
 
-    $this->connector->setServer($server);
-    $accounts = $this->connector->getAccounts();
+    $this->whmApi->setServer($server);
+    $this->whmApi->fetch();
 
-    $this->assertGreaterThan(0, sizeof($accounts));
-});
-
-test('it can fetch server system load average', function () {
-    $server = Server::factory()->create([
-        'address' => $this->whmTestServerAddress,
-        'port' => '2087',
-        'server_type' => 'vps',
-        'token' => $this->whmTestServerToken,
-    ]);
-
-    $this->connector->setServer($server);
-    $load = $this->connector->getSystemLoadAvg();
-
-    $this->assertNotEmpty($load['one']);
+    tap($server->fresh(), function (Server $server) {
+        $this->assertGreaterThan(0, sizeof($server->accounts));
+    });
 });
