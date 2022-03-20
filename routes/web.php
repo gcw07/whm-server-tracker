@@ -12,7 +12,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FetchAccountsController;
-use App\Http\Controllers\FetchDetailsController;
+use App\Http\Controllers\RefreshServerController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServersController;
 use App\Http\Controllers\ServersTokenController;
@@ -58,8 +58,7 @@ Route::prefix('servers')->middleware('auth')->group(function () {
     Route::put('/{server}/token', [ServersTokenController::class, 'update'])->name('servers.token');
     Route::delete('/{server}/token', [ServersTokenController::class, 'destroy'])->name('servers.token-destroy');
 
-    Route::get('/{server}/fetch-details', [FetchDetailsController::class, 'update'])->name('servers.fetch-details');
-    Route::get('/{server}/fetch-accounts', [FetchAccountsController::class, 'update'])->name('servers.fetch-accounts');
+    Route::get('/{server}/refresh', [RefreshServerController::class, 'update'])->name('servers.refresh');
 });
 
 // User Routes...
