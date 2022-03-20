@@ -62,7 +62,7 @@ class WhmApi
         $username = config('server-tracker.whm.username');
 
         return collect([])
-            ->merge(['Authorization' => "whm $username:$this->server->token"])
+            ->merge(['Authorization' => "whm $username:{$this->server->token}"])
             ->toArray();
     }
 
