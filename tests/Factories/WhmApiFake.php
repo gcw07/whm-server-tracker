@@ -15,7 +15,7 @@ use Carbon\Carbon;
 
 class WhmApiFake extends WhmApi
 {
-    private Server $server;
+    protected Server $server;
 
     public function setServer(Server $server)
     {
@@ -40,7 +40,7 @@ class WhmApiFake extends WhmApi
         ]);
     }
 
-    private function apiRequestSucceeded($type, $data)
+    protected function apiRequestSucceeded($type, $data)
     {
         match ($type) {
             'accounts' => (new ProcessAccounts)->execute($this->server, $data),
@@ -52,7 +52,7 @@ class WhmApiFake extends WhmApi
         };
     }
 
-    private function getAccountsData(): array
+    protected function getAccountsData(): array
     {
         return [
             'data' => [
@@ -88,7 +88,7 @@ class WhmApiFake extends WhmApi
         ];
     }
 
-    private function getBackupsData(): array
+    protected function getBackupsData(): array
     {
         return [
             'data' => [
@@ -108,7 +108,7 @@ class WhmApiFake extends WhmApi
         ];
     }
 
-    private function getDiskUsageData(): array
+    protected function getDiskUsageData(): array
     {
         return [
             'data' => [
@@ -125,7 +125,7 @@ class WhmApiFake extends WhmApi
         ];
     }
 
-    private function getPhpInstalledVersionsData(): array
+    protected function getPhpInstalledVersionsData(): array
     {
         return [
             'data' => [
@@ -137,7 +137,7 @@ class WhmApiFake extends WhmApi
         ];
     }
 
-    private function getPhpSystemVersionData(): array
+    protected function getPhpSystemVersionData(): array
     {
         return [
             'data' => [
@@ -146,7 +146,7 @@ class WhmApiFake extends WhmApi
         ];
     }
 
-    private function getWhmVersionData(): array
+    protected function getWhmVersionData(): array
     {
         return [
             'data' => [

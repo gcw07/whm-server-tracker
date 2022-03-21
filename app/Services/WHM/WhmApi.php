@@ -16,11 +16,7 @@ use GuzzleHttp\Promise;
 
 class WhmApi
 {
-    private Server $server;
-
-    public function __construct()
-    {
-    }
+    protected Server $server;
 
     public function setServer(Server $server)
     {
@@ -66,7 +62,7 @@ class WhmApi
             ->toArray();
     }
 
-    private function getPromises($client): array
+    protected function getPromises($client): array
     {
         return [
             'accounts' => $client->getAsync('listaccts?api.version=1'),
@@ -78,7 +74,7 @@ class WhmApi
         ];
     }
 
-    private function apiRequestSucceeded($type, $response)
+    protected function apiRequestSucceeded($type, $response)
     {
         $data = json_decode($response['value']->getBody()->getContents(), true);
 
@@ -92,7 +88,7 @@ class WhmApi
         };
     }
 
-    private function apiRequestFailed($type, $response)
+    protected function apiRequestFailed($type, $response)
     {
         $data = $response['reason']->getMessage();
     }
