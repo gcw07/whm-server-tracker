@@ -58,6 +58,7 @@ class Server extends Model
 
     protected $casts = [
         'server_type' => ServerTypeEnum::class,
+        'token' => 'encrypted',
         'settings' => Settings::class,
         'server_updated_at' => 'datetime',
     ];

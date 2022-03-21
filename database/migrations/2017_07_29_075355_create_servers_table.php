@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('address');
             $table->integer('port');
             $table->string('server_type');
-            $table->string('token')->nullable();
+            $table->text('token')->nullable();
             $table->text('notes')->nullable();
             $table->json('settings')->nullable();
             $table->timestamp('server_updated_at')->nullable();
