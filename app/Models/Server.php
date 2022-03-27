@@ -60,7 +60,8 @@ class Server extends Model
         'server_type' => ServerTypeEnum::class,
         'token' => 'encrypted',
         'settings' => Settings::class,
-        'server_updated_at' => 'datetime',
+        'server_update_last_failed_at' => 'datetime',
+        'server_update_last_succeeded_at' => 'datetime',
     ];
 
     protected $appends = [
