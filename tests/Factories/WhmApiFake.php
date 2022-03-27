@@ -34,10 +34,6 @@ class WhmApiFake extends WhmApi
         $this->apiRequestSucceeded('phpInstalledVersions', $this->getPhpInstalledVersionsData());
         $this->apiRequestSucceeded('phpSystemVersion', $this->getPhpSystemVersionData());
         $this->apiRequestSucceeded('whmVersion', $this->getWhmVersionData());
-
-        $this->server->update([
-            'server_updated_at' => Carbon::now(),
-        ]);
     }
 
     protected function apiRequestSucceeded($type, $data): void
