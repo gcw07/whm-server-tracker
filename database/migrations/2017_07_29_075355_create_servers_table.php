@@ -17,7 +17,8 @@ return new class extends Migration
             $table->text('token')->nullable();
             $table->text('notes')->nullable();
             $table->json('settings')->nullable();
-            $table->timestamp('server_updated_at')->nullable();
+            $table->timestamp('server_update_last_failed_at')->nullable();
+            $table->timestamp('server_update_last_succeeded_at')->nullable();
             $table->timestamps();
         });
     }
