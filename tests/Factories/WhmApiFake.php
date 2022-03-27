@@ -26,7 +26,7 @@ class WhmApiFake extends WhmApi
         $this->server = $server;
     }
 
-    public function fetch()
+    public function fetch(): void
     {
         $this->apiRequestSucceeded('accounts', $this->getAccountsData());
         $this->apiRequestSucceeded('backups', $this->getBackupsData());
@@ -40,7 +40,7 @@ class WhmApiFake extends WhmApi
         ]);
     }
 
-    protected function apiRequestSucceeded($type, $data)
+    protected function apiRequestSucceeded($type, $data): void
     {
         match ($type) {
             'accounts' => (new ProcessAccounts)->execute($this->server, $data),
