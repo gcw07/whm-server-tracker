@@ -2,6 +2,8 @@
 
 namespace App\Services\WHM;
 
+use App\Events\FetchedDataFailedEvent;
+use App\Events\FetchedDataSucceededEvent;
 use App\Exceptions\Server\MissingTokenException;
 use App\Models\Server;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
@@ -17,6 +19,8 @@ use GuzzleHttp\Promise;
 class WhmApi
 {
     protected Server $server;
+    protected array $successMessages;
+    protected array $failureMessages;
 
     public function setServer(Server $server)
     {
@@ -27,7 +31,7 @@ class WhmApi
         $this->server = $server;
     }
 
-    public function fetch()
+    public function fetch(): void
     {
         $client = new Client([
             'base_uri' => $this->server->whm_base_api_url,
@@ -47,6 +51,8 @@ class WhmApi
                 $this->apiRequestFailed($type, $response);
             }
         }
+
+        $this->processMessages();
 
         $this->server->update([
             'server_updated_at' => Carbon::now(),
@@ -74,7 +80,7 @@ class WhmApi
         ];
     }
 
-    protected function apiRequestSucceeded($type, $response)
+    protected function apiRequestSucceeded($type, $response): void
     {
         $data = json_decode($response['value']->getBody()->getContents(), true);
 
@@ -86,10 +92,23 @@ class WhmApi
             'phpSystemVersion' => (new ProcessPhpSystemVersion)->execute($this->server, $data),
             'whmVersion' => (new ProcessWhmVersion)->execute($this->server, $data),
         };
+
+        $this->successMessages[] = ['type' => $type, 'message' => 'success'];
     }
 
-    protected function apiRequestFailed($type, $response)
+    protected function apiRequestFailed($type, $response): void
     {
-        $data = $response['reason']->getMessage();
+        $this->failureMessages[] = ['type' => $type, 'message' => $response['reason']->getMessage()];
+    }
+
+    protected function processMessages(): void
+    {
+        if (sizeof($this->successMessages) > 0) {
+            event(new FetchedDataSucceededEvent($this->server, $this->successMessages));
+        }
+
+        if (sizeof($this->failureMessages) > 0) {
+            event(new FetchedDataFailedEvent($this->server, $this->failureMessages));
+        }
     }
 }
