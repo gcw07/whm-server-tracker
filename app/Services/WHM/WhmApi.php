@@ -120,6 +120,10 @@ class WhmApi
 
     protected function shouldFireFailedEvent(): bool
     {
+        if (is_null($this->server->server_update_last_failed_at)) {
+            return true;
+        }
+
         if ($this->server->server_update_last_failed_at->diffInHours() >= config('server-tracker.notifications.resend_failed_notification_every_hours')) {
             return true;
         }
