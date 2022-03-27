@@ -28,6 +28,24 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    */
+
+    'notifications' => [
+
+        'notifications' => [
+
+        ],
+
+        /**
+         * Send failed notification only when it fails after every given number of minutes.
+         */
+        'resend_failed_notification_every_minutes' => 1440,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Ignore Usernames
     |--------------------------------------------------------------------------
     | Skip over usernames that are ignored.
