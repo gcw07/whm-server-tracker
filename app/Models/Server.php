@@ -20,10 +20,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $address
  * @property int $port
  * @property ServerTypeEnum $server_type
- * @property string|null $token
+ * @property mixed|null $token
  * @property string|null $notes
  * @property \App\Collections\SettingsCollection|null $settings
- * @property \Illuminate\Support\Carbon|null $server_updated_at
+ * @property \Illuminate\Support\Carbon|null $server_update_last_failed_at
+ * @property \Illuminate\Support\Carbon|null $server_update_last_succeeded_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Account[] $accounts
@@ -41,7 +42,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Server whereNotes($value)
  * @method static Builder|Server wherePort($value)
  * @method static Builder|Server whereServerType($value)
- * @method static Builder|Server whereServerUpdatedAt($value)
+ * @method static Builder|Server whereServerUpdateLastFailedAt($value)
+ * @method static Builder|Server whereServerUpdateLastSucceededAt($value)
  * @method static Builder|Server whereSettings($value)
  * @method static Builder|Server whereToken($value)
  * @method static Builder|Server whereUpdatedAt($value)
