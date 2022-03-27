@@ -55,10 +55,6 @@ class WhmApi
         }
 
         $this->processMessages();
-
-        $this->server->update([
-            'server_updated_at' => Carbon::now(),
-        ]);
     }
 
     private function promiseHeaders(): array
@@ -106,11 +102,28 @@ class WhmApi
     protected function processMessages(): void
     {
         if (sizeof($this->successMessages) > 0) {
+            $this->server->update([
+                'server_update_last_succeeded_at' => Carbon::now(),
+            ]);
+
             event(new FetchedDataSucceededEvent($this->server, $this->successMessages));
         }
 
-        if (sizeof($this->failureMessages) > 0) {
+        if (sizeof($this->failureMessages) > 0 && $this->shouldFireFailedEvent()) {
+            $this->server->update([
+                'server_update_last_failed_at' => Carbon::now(),
+            ]);
+
             event(new FetchedDataFailedEvent($this->server, $this->failureMessages));
         }
+    }
+
+    protected function shouldFireFailedEvent(): bool
+    {
+        if ($this->server->server_update_last_failed_at->diffInHours() >= config('server-tracker.notifications.resend_failed_notification_every_hours')) {
+            return true;
+        }
+
+        return false;
     }
 }
