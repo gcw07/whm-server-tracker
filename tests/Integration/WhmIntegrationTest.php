@@ -64,6 +64,26 @@ test('a server fetch failure triggers a failure event', function () {
     });
 });
 
+test('a server fetch failure event will only trigger if it has exceeded the set hours amount', function () {
+    Event::fake();
+
+    $server = Server::factory()->create([
+        'address' => $this->whmTestServerAddress,
+        'port' => '2087',
+        'server_type' => 'vps',
+        'token' => 'invalid-api-token',
+        'server_update_last_failed_at' => now()->subHours(6),
+    ]);
+
+    Config::set('server-tracker.whm.connection_timeout', 3);
+    Config::set('server-tracker.notifications.resend_failed_notification_every_hours', 10);
+
+    $this->whmApi->setServer($server);
+    $this->whmApi->fetch();
+
+    Event::assertNotDispatched(FetchedDataFailedEvent::class);
+});
+
 test('it can fetch server data', function () {
     $server = Server::factory()->create([
         'address' => $this->whmTestServerAddress,
