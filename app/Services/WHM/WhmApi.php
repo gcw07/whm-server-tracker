@@ -29,6 +29,8 @@ class WhmApi
         }
 
         $this->server = $server;
+        $this->successMessages = [];
+        $this->failureMessages = [];
     }
 
     public function fetch(): void
