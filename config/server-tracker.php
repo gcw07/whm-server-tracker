@@ -39,9 +39,9 @@ return [
         ],
 
         /**
-         * Send failed notification only when it fails after every given number of minutes.
+         * Send failed notification only when it fails after every given number of hours.
          */
-        'resend_failed_notification_every_minutes' => 1440,
+        'resend_failed_notification_every_hours' => 24,
     ],
 
     /*
