@@ -1,8 +1,7 @@
 <?php
 
-use App\Exceptions\Server\ForbiddenAccessException;
+use App\Events\FetchedDataFailedEvent;
 use App\Exceptions\Server\MissingTokenException;
-use App\Exceptions\Server\ServerConnectionException;
 use App\Models\Server;
 use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -45,29 +44,9 @@ test('a server with a missing api token throws an exception', function () {
     $this->fail("Server still attempted to connect even with a missing api token.");
 });
 
-test('a server with an incorrect address throws an exception', function () {
-    $server = Server::factory()->create([
-        'address' => 'invalid-address',
-        'port' => '2087',
-        'server_type' => 'vps',
-        'token' => 'valid-api-token',
-    ]);
+test('a server fetch failure triggers a failure event', function () {
+    Event::fake();
 
-    Config::set('server-tracker.whm.connection_timeout', 3);
-
-    try {
-        $this->whmApi->setServer($server);
-        $this->whmApi->fetch();
-    } catch (ServerConnectionException $e) {
-        $this->assertEquals('invalid-address', $server->address);
-
-        return;
-    }
-
-    $this->fail("Server still connected even with an invalid server address.");
-});
-
-test('a server with an invalid api token throws an exception', function () {
     $server = Server::factory()->create([
         'address' => $this->whmTestServerAddress,
         'port' => '2087',
@@ -77,16 +56,12 @@ test('a server with an invalid api token throws an exception', function () {
 
     Config::set('server-tracker.whm.connection_timeout', 3);
 
-    try {
-        $this->whmApi->setServer($server);
-        $this->whmApi->fetch();
-    } catch (ForbiddenAccessException $e) {
-        $this->assertEquals('invalid-api-token', $server->token);
+    $this->whmApi->setServer($server);
+    $this->whmApi->fetch();
 
-        return;
-    }
-
-    $this->fail("Server still connected even with an invalid server api token.");
+    Event::assertDispatched(FetchedDataFailedEvent::class, function ($event) use ($server) {
+        return $event->server->id === $server->id;
+    });
 });
 
 test('it can fetch server data', function () {
