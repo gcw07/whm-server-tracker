@@ -28,7 +28,5 @@ class FetchServerDataJob implements ShouldQueue
     {
         $whmApi->setServer($this->server);
         $whmApi->fetch();
-
-        event(new FetchedServerDataEvent($this->server));
     }
 }
