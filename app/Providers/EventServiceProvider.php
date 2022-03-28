@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Events\FetchedDataFailedEvent;
 use App\Events\FetchedDataSucceededEvent;
+use App\Listeners\SendFetchedDataFailedNotification;
+use App\Listeners\SendFetchedDataSucceededNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,11 +20,11 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         FetchedDataSucceededEvent::class => [
-
+            SendFetchedDataSucceededNotification::class,
         ],
 
         FetchedDataFailedEvent::class => [
-
+            SendFetchedDataFailedNotification::class,
         ],
 
         Registered::class => [
