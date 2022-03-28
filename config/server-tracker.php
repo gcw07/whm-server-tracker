@@ -35,7 +35,16 @@ return [
     'notifications' => [
 
         'notifications' => [
+            'fetched_data_succeeded' => [],
+            'fetched_data_failed' => ['mail'],
+        ],
 
+        'mail' => [
+            'to' => env('SERVER_TRACKER_MAIL_TO_ADDRESS'),
+        ],
+
+        'slack' => [
+            'webhook_url' => env('SERVER_TRACKER_SLACK_WEBHOOK_URL'),
         ],
 
         /**
