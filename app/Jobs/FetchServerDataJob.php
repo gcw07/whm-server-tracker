@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Events\FetchedServerDataEvent;
 use App\Models\Server;
 use App\Services\WHM\WhmApi;
 use Illuminate\Bus\Queueable;
