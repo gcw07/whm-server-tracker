@@ -22,6 +22,7 @@
         "barryvdh/laravel-debugbar": "^3.6",
         "barryvdh/laravel-ide-helper": "^2.7",
         "brianium/paratest": "^6.4",
+        "deployer/deployer": "^7.0",
         "fakerphp/faker": "^1.9.1",
         "friendsofphp/php-cs-fixer": "^v3.3.2",
         "mockery/mockery": "^1.4.4",
