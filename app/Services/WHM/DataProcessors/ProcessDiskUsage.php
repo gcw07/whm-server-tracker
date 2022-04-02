@@ -15,6 +15,10 @@ class ProcessDiskUsage
             'disk_available' => $diskUsage['available'],
             'disk_total' => $diskUsage['total'],
             'disk_percentage' => $diskUsage['percentage'],
+            'inodes_used' => $diskUsage['inodes_used'],
+            'inodes_available' => $diskUsage['inodes_available'],
+            'inodes_total' => $diskUsage['inodes_total'],
+            'inodes_percentage' => $diskUsage['inodes_ipercentage'],
         ]);
 
         $server->save();
