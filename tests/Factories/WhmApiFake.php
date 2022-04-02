@@ -11,7 +11,6 @@ use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use App\Services\WHM\WhmApi;
-use Carbon\Carbon;
 
 class WhmApiFake extends WhmApi
 {
