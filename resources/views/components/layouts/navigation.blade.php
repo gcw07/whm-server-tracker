@@ -9,16 +9,7 @@
         </div>
 
         <nav aria-label="Global" class="hidden lg:ml-10 lg:flex lg:items-center lg:space-x-4">
-          <!-- Current: "bg-sky-700 text-white", Default: "text-white hover:bg-sky-500 hover:bg-opacity-75" -->
-          <a href="#" class="inline-flex items-center bg-sky-700 text-white rounded-md py-2 px-3 text-sm font-medium" aria-current="page">
-            <x-heroicon-s-server class="-ml-0.5 mr-2 h-4 w-4" />
-            Servers
-          </a>
-
-          <a href="#" class="inline-flex items-center text-white hover:bg-sky-500 hover:bg-opacity-75 rounded-md py-2 px-3 text-sm font-medium">
-            <x-heroicon-s-globe-alt class="-ml-0.5 mr-2 h-4 w-4" />
-            Accounts
-          </a>
+          <x-layouts.navigation-items />
         </nav>
       </div>
 
