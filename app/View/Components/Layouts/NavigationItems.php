@@ -16,29 +16,26 @@ class NavigationItems extends Component
     {
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|string
-     */
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View|string
     {
         return view('components.layouts.navigation-items', [
             'routes' => $this->registerRoutes(),
         ]);
     }
 
-    protected function registerRoutes()
+    protected function registerRoutes(): array
     {
         return [
             [
                 'name' => 'Servers',
                 'url' => route('servers.index'),
+                'icon' => 'heroicon-s-server',
                 'active' => $this->isActiveRoute('servers.*'),
             ],
             [
                 'name' => 'Accounts',
                 'url' => route('accounts.index'),
+                'icon' => 'heroicon-s-globe-alt',
                 'active' => $this->isActiveRoute('accounts.*'),
             ],
         ];
