@@ -1,6 +1,11 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.vue",
+  ],
   theme: {
     extend: {
       spacing: {
@@ -17,22 +22,6 @@ module.exports = {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
     },
-    // customForms: (theme) => ({
-    //   default: {
-    //     input: {
-    //       borderColor: theme('colors.cool-gray[300]'),
-    //     },
-    //     textarea: {
-    //       borderColor: theme('colors.cool-gray[300]'),
-    //     },
-    //     checkbox: {
-    //       borderColor: theme('colors.cool-gray[400]'),
-    //     },
-    //     radio: {
-    //       borderColor: theme('colors.cool-gray[400]'),
-    //     },
-    //   },
-    // }),
   },
   variants: {
     fill: ['responsive', 'hover', 'focus', 'group-hover'],
@@ -42,7 +31,5 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
   ],
-};
+}
