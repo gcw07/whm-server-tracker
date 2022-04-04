@@ -56,8 +56,6 @@ class Server extends Model
 
     protected $guarded = [];
 
-    protected $withCount = ['accounts'];
-
     protected $casts = [
         'server_type' => ServerTypeEnum::class,
         'token' => 'encrypted',
