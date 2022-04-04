@@ -54,61 +54,22 @@
   <!-- Activity list (smallest breakpoint only) -->
   <div class="shadow sm:hidden">
     <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
-      <li>
-        <a href="#" class="block px-4 py-4 bg-white hover:bg-gray-50">
-                <span class="flex items-center space-x-4">
-                  <span class="flex-1 flex space-x-2 truncate">
-                    <span class="flex flex-col text-gray-500 text-sm truncate">
-                      <span class="truncate">AdvertisingOklahoma.com</span>
-                      <span><span class="text-gray-900 font-medium">10</span> accounts</span>
-                      <span>26%</span>
-                    </span>
-                  </span>
-                  <!-- Heroicon name: solid/chevron-right -->
-                  <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                  </svg>
+      @foreach($servers as $server)
+        <li>
+          <a href="#" class="block px-4 py-4 bg-white hover:bg-gray-50">
+            <span class="flex items-center space-x-4">
+              <span class="flex-1 flex space-x-2 truncate">
+                <span class="flex flex-col text-gray-500 text-sm truncate">
+                  <span class="truncate">{{ $server->name }}</span>
+                  <span><span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span> accounts</span>
+                  <span>26%</span>
                 </span>
-        </a>
-      </li>
-
-      <li>
-        <a href="#" class="block px-4 py-4 bg-white hover:bg-gray-50">
-                <span class="flex items-center space-x-4">
-                  <span class="flex-1 flex space-x-2 truncate">
-                    <span class="flex flex-col text-gray-500 text-sm truncate">
-                      <span class="truncate">DesignerEdmond.com</span>
-                      <span><span class="text-gray-900 font-medium">8</span> accounts</span>
-                      <span>54%</span>
-                    </span>
-                  </span>
-                  <!-- Heroicon name: solid/chevron-right -->
-                  <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </span>
-        </a>
-      </li>
-
-      <li>
-        <a href="#" class="block px-4 py-4 bg-white hover:bg-gray-50">
-                <span class="flex items-center space-x-4">
-                  <span class="flex-1 flex space-x-2 truncate">
-                    <span class="flex flex-col text-gray-500 text-sm truncate">
-                      <span class="truncate">OklahomaWebSolutions.com</span>
-                      <span><span class="text-gray-900 font-medium">3</span> accounts</span>
-                      <span>35%</span>
-                    </span>
-                  </span>
-                  <!-- Heroicon name: solid/chevron-right -->
-                  <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </span>
-        </a>
-      </li>
-
-      <!-- More transactions... -->
+              </span>
+              <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
+            </span>
+          </a>
+        </li>
+      @endforeach
     </ul>
 
     <nav class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200" aria-label="Pagination">
@@ -286,7 +247,6 @@
 {{--                </td>--}}
 {{--              </tr>--}}
 
-              <!-- More servers... -->
             </tbody>
           </table>
           <!-- Pagination -->
