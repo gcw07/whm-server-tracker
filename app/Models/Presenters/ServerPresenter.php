@@ -41,11 +41,11 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings?->has('disk_used')) {
-                    return 'Unknown';
+                if ($this->settings?->has('disk_used')) {
+                    return $this->formatFileSize($this->settings->get('disk_used'));
                 }
 
-                return $this->formatFileSize($this->settings->get('disk_used'));
+                return 'Unknown';
             },
         );
     }
@@ -54,11 +54,11 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings?->has('disk_available')) {
-                    return 'Unknown';
+                if ($this->settings?->has('disk_available')) {
+                    return $this->formatFileSize($this->settings->get('disk_available'));
                 }
 
-                return $this->formatFileSize($this->settings->get('disk_available'));
+                return 'Unknown';
             },
         );
     }
@@ -67,11 +67,11 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings?->has('disk_total')) {
-                    return 'Unknown';
+                if ($this->settings?->has('disk_total')) {
+                    return $this->formatFileSize($this->settings->get('disk_total'));
                 }
 
-                return $this->formatFileSize($this->settings->get('disk_total'));
+                return 'Unknown';
             },
         );
     }
@@ -80,21 +80,21 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings?->has('backup_daily_days')) {
-                    return 'None';
+                if ($this->settings?->has('backup_daily_days')) {
+                    $values = explode(',', $this->settings->get('backup_daily_days'));
+
+                    return collect($values)->map(fn ($item) => match ($item) {
+                        '0' => 'Sun',
+                        '1' => 'Mon',
+                        '2' => 'Tue',
+                        '3' => 'Wed',
+                        '4' => 'Thu',
+                        '5' => 'Fri',
+                        '6' => 'Sat',
+                    })->join(', ');
                 }
 
-                $values = explode(',', $this->settings->get('backup_daily_days'));
-
-                return collect($values)->map(fn ($item) => match ($item) {
-                    '0' => 'Sun',
-                    '1' => 'Mon',
-                    '2' => 'Tue',
-                    '3' => 'Wed',
-                    '4' => 'Thu',
-                    '5' => 'Fri',
-                    '6' => 'Sat',
-                })->join(', ');
+                return 'None';
             },
         );
     }
@@ -103,21 +103,21 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings?->has('backup_weekly_day')) {
-                    return 'None';
+                if ($this->settings?->has('backup_weekly_day')) {
+                    $days = [
+                        'Sunday',
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday',
+                    ];
+
+                    return $days[$this->settings->get('backup_weekly_day')];
                 }
 
-                $days = [
-                    'Sunday',
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday',
-                    'Saturday',
-                ];
-
-                return $days[$this->settings->get('backup_weekly_day')];
+                return 'None';
             },
         );
     }
@@ -126,16 +126,16 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings?->has('backup_monthly_days')) {
-                    return 'None';
+                if ($this->settings?->has('backup_monthly_days')) {
+                    $values = explode(',', $this->settings->get('backup_monthly_days'));
+
+                    return collect($values)->map(fn ($item) => match ($item) {
+                        '1' => '1st',
+                        '15' => '15th',
+                    })->join(', ');
                 }
 
-                $values = explode(',', $this->settings->get('backup_monthly_days'));
-
-                return collect($values)->map(fn ($item) => match ($item) {
-                    '1' => '1st',
-                    '15' => '15th',
-                })->join(', ');
+                return 'None';
             },
         );
     }
@@ -144,12 +144,34 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings?->has('php_installed_versions')) {
-                    return ['Unknown'];
+                if ($this->settings?->has('php_installed_versions')) {
+                    return collect($this->settings->get('php_installed_versions'))
+                        ->map(fn ($item) => match ($item) {
+                            'ea-php54' => '5.4',
+                            'ea-php55' => '5.5',
+                            'ea-php56' => '5.6',
+                            'ea-php70' => '7.0',
+                            'ea-php71' => '7.1',
+                            'ea-php72' => '7.2',
+                            'ea-php73' => '7.3',
+                            'ea-php74' => '7.4',
+                            'ea-php80' => '8.0',
+                            'ea-php81' => '8.1',
+                            default => 'Unknown'
+                        })->toArray();
                 }
 
-                return collect($this->settings->get('php_installed_versions'))
-                    ->map(fn ($item) => match ($item) {
+                return ['Unknown'];
+            },
+        );
+    }
+
+    protected function formattedPhpSystemVersion(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->settings?->has('php_system_version')) {
+                    $versions = [
                         'ea-php54' => '5.4',
                         'ea-php55' => '5.5',
                         'ea-php56' => '5.6',
@@ -160,34 +182,12 @@ trait ServerPresenter
                         'ea-php74' => '7.4',
                         'ea-php80' => '8.0',
                         'ea-php81' => '8.1',
-                        default => 'Unknown'
-                    })->toArray();
-            },
-        );
-    }
+                    ];
 
-    protected function formattedPhpSystemVersion(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                if (! $this->settings?->has('php_system_version')) {
-                    return 'Unknown';
+                    return Arr::get($versions, $this->settings->get('php_system_version'), 'Unknown');
                 }
 
-                $versions = [
-                    'ea-php54' => '5.4',
-                    'ea-php55' => '5.5',
-                    'ea-php56' => '5.6',
-                    'ea-php70' => '7.0',
-                    'ea-php71' => '7.1',
-                    'ea-php72' => '7.2',
-                    'ea-php73' => '7.3',
-                    'ea-php74' => '7.4',
-                    'ea-php80' => '8.0',
-                    'ea-php81' => '8.1',
-                ];
-
-                return Arr::get($versions, $this->settings->get('php_system_version'), 'Unknown');
+                return 'Unknown';
             },
         );
     }
@@ -196,13 +196,13 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings?->has('whm_version')) {
-                    return 'Unknown';
+                if ($this->settings?->has('whm_version')) {
+                    [, $version] = explode('.', $this->settings->get('whm_version'), 2);
+
+                    return "v$version";
                 }
 
-                [, $version] = explode('.', $this->settings->get('whm_version'), 2);
-
-                return "v$version";
+                return 'Unknown';
             },
         );
     }
