@@ -41,7 +41,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('disk_used')) {
+                if (! $this->settings?->has('disk_used')) {
                     return 'Unknown';
                 }
 
@@ -54,7 +54,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('disk_available')) {
+                if (! $this->settings?->has('disk_available')) {
                     return 'Unknown';
                 }
 
@@ -67,7 +67,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('disk_total')) {
+                if (! $this->settings?->has('disk_total')) {
                     return 'Unknown';
                 }
 
@@ -80,7 +80,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('backup_daily_days')) {
+                if (! $this->settings?->has('backup_daily_days')) {
                     return 'None';
                 }
 
@@ -103,7 +103,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('backup_weekly_day')) {
+                if (! $this->settings?->has('backup_weekly_day')) {
                     return 'None';
                 }
 
@@ -126,7 +126,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('backup_monthly_days')) {
+                if (! $this->settings?->has('backup_monthly_days')) {
                     return 'None';
                 }
 
@@ -144,7 +144,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('php_installed_versions')) {
+                if (! $this->settings?->has('php_installed_versions')) {
                     return ['Unknown'];
                 }
 
@@ -170,7 +170,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('php_system_version')) {
+                if (! $this->settings?->has('php_system_version')) {
                     return 'Unknown';
                 }
 
@@ -196,7 +196,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                if (! $this->settings->has('whm_version')) {
+                if (! $this->settings?->has('whm_version')) {
                     return 'Unknown';
                 }
 
