@@ -11,13 +11,13 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FetchAccountsController;
 use App\Http\Controllers\RefreshServerController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServersController;
 use App\Http\Controllers\ServersTokenController;
 use App\Http\Controllers\UserChangePasswordController;
 use App\Http\Controllers\UserController;
+use App\Http\Livewire\Server\Listings as ServerListings;
 use App\Http\Livewire\UserListings;
 use Illuminate\Support\Facades\Route;
 
@@ -48,7 +48,7 @@ Route::prefix('accounts')->middleware('auth')->group(function () {
 // Server Routes...
 Route::prefix('servers')->middleware('auth')->group(function () {
     Route::post('/', [ServersController::class, 'store'])->name('servers.store');
-    Route::get('/', [ServersController::class, 'index'])->name('servers.index');
+    Route::get('/', ServerListings::class)->name('servers.index');
     Route::get('/create', [ServersController::class, 'create'])->name('servers.create');
     Route::delete('/{server}', [ServersController::class, 'destroy'])->name('servers.destroy');
     Route::put('/{server}', [ServersController::class, 'update'])->name('servers.update');
