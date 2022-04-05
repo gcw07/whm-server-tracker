@@ -5,46 +5,25 @@
     </div>
     <div class="pl-0 mt-3">
 
-{{--      <x-form :action="route('login')">--}}
-{{--        <input type="hidden" name="remember" value="1">--}}
+      <x-forms.form :action="route('login')">
+        <input type="hidden" name="remember" value="1">
 
-{{--        <div>--}}
-{{--          <label for="email">--}}
-{{--            <span class="form-label">--}}
-{{--              E-Mail Address--}}
-{{--            </span>--}}
-{{--            <span class="form-input-group">--}}
-{{--              <span class="form-input-icon">--}}
-{{--                <x-heroicon-s-mail/>--}}
-{{--              </span>--}}
-{{--              <x-email name="email" required autofocus--}}
-{{--                       class="form-input w-full {{ $errors->has('email') ? 'is-invalid' : '' }}"/>--}}
-{{--            </span>--}}
-{{--            <x-error field="email" class="invalid-feedback"/>--}}
-{{--          </label>--}}
-{{--        </div>--}}
-{{--        <div class="mt-4">--}}
-{{--          <label for="password">--}}
-{{--            <span class="form-label">--}}
-{{--              Password--}}
-{{--            </span>--}}
-{{--            <span class="form-input-group">--}}
-{{--              <span class="form-input-icon">--}}
-{{--                <x-heroicon-s-lock-closed/>--}}
-{{--              </span>--}}
-{{--              <x-password name="password" required--}}
-{{--                          class="form-input w-full {{ $errors->has('password') ? 'is-invalid' : '' }}"/>--}}
-{{--            </span>--}}
-{{--            <x-error field="password" class="invalid-feedback"/>--}}
-{{--          </label>--}}
-{{--        </div>--}}
-{{--        <div class="flex items-center justify-between mt-6">--}}
-{{--          <button class="w-full btn btn-blue" type="submit">--}}
-{{--            Sign In--}}
-{{--          </button>--}}
-{{--        </div>--}}
+        <div>
+          <x-forms.label for="email" value="E-Mail Address" required></x-forms.label>
+          <x-forms.email-input id="email" name="email" placeholder="you@example.com" required autofocus></x-forms.email-input>
+          <x-forms.error field="email"></x-forms.error>
+        </div>
 
-{{--      </x-form>--}}
+        <div class="mt-4">
+          <x-forms.label for="password" value="Password" required></x-forms.label>
+          <x-forms.text-input id="password" type="password" name="password" required></x-forms.text-input>
+          <x-forms.error field="password"></x-forms.error>
+        </div>
+
+        <div class="flex items-center justify-between mt-6">
+          <x-forms.button class="w-full">Sign In</x-forms.button>
+        </div>
+      </x-forms.form>
 
     </div>
   </div>
