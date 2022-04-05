@@ -432,6 +432,16 @@ it('can get formatted whm version', function () {
     $this->assertEquals('Unknown', $serverC->formatted_whm_version);
 });
 
+it('can get if backups are enabled', function () {
+    $serverA = Server::factory()->create(['settings' => ['backup_enabled' => true]]);
+    $serverB = Server::factory()->create(['settings' => ['backup_enabled' => false]]);
+    $serverC = Server::factory()->create();
+
+    $this->assertTrue($serverA->backups_enabled);
+    $this->assertFalse($serverB->backups_enabled);
+    $this->assertFalse($serverC->backups_enabled);
+});
+
 it('can determine a missing api token', function () {
     $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps, 'token' => 'valid-token']);
     $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps]);

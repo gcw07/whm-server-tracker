@@ -207,6 +207,19 @@ trait ServerPresenter
         );
     }
 
+    protected function backupsEnabled(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->settings?->has('backup_enabled')) {
+                    return $this->settings->get('backup_enabled');
+                }
+
+                return false;
+            },
+        );
+    }
+
     protected function missingToken(): Attribute
     {
         return Attribute::make(

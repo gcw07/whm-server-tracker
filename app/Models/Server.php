@@ -76,6 +76,7 @@ class Server extends Model
         'formatted_php_installed_versions',
         'formatted_php_system_version',
         'formatted_whm_version',
+        'backups_enabled',
         'missing_token',
         'can_refresh_data',
     ];
