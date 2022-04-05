@@ -6,5 +6,9 @@
          type="{{ $type }}"
          id="{{ $id }}"
          @if($value)value="{{ $value }}"@endif
-         {!! $attributes->merge(['class' => 'border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full sm:text-sm']) !!}>
+    {{ $attributes->class([
+       'focus:ring focus:ring-opacity-50 rounded-md shadow-sm block w-full sm:text-sm',
+       'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200' => ! $hasErrors(),
+       'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500' => $hasErrors(),
+    ]) }}>
 </div>
