@@ -33,7 +33,7 @@ class NavigationItems extends Component
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
-                'icon' => 'heroicon-s-server',
+                'icon' => 'heroicon-s-home',
                 'active' => $this->isActiveRoute('dashboard'),
                 'mobileOnly' => true,
             ],
