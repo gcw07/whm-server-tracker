@@ -86,7 +86,7 @@
                 </div>
               </div>
               <div class="mt-3 px-2 space-y-1">
-                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Manage Users</a>
+                <a href="{{ route('users.index') }}" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Manage Users</a>
                 <x-navigation.logout class="w-full text-left block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Sign out</x-navigation.logout>
               </div>
             </div>
