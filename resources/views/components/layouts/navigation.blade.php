@@ -87,7 +87,7 @@
               </div>
               <div class="mt-3 px-2 space-y-1">
                 <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Manage Users</a>
-                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Sign out</a>
+                <x-navigation.logout class="w-full text-left block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Sign out</x-navigation.logout>
               </div>
             </div>
           </div>
@@ -114,9 +114,3 @@
     </div>
   </div>
 </header>
-
-
-{{--                <x-logout class="flex items-center w-full px-2 py-2 text-sm text-gray-700 rounded hover:bg-gray-200">--}}
-{{--                  <x-heroicon-o-logout class="h-4 w-4 mr-2"/>--}}
-{{--                  Sign Out--}}
-{{--                </x-logout>--}}
