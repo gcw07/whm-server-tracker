@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class UpgradeCommand extends Command
@@ -121,7 +121,7 @@ class UpgradeCommand extends Command
                 'address' => $server->address,
                 'port' => $server->port,
                 'server_type' => $server->server_type,
-                'token' => encrypt($server->token),
+                'token' => Crypt::encryptString($server->token),
                 'notes' => $server->notes,
                 'created_at' => $server->created_at,
                 'updated_at' => $server->updated_at,
