@@ -37,18 +37,8 @@
         </button>
       </div>
 
-      <!-- Mobile menu, show/hide based on mobile menu state. -->
+      <!-- Mobile menu -->
       <div :class="{'block': open, 'hidden': !open }" class="lg:hidden">
-        <!--
-          Mobile menu overlay, show/hide based on mobile menu state.
-
-          Entering: "duration-150 ease-out"
-            From: "opacity-0"
-            To: "opacity-100"
-          Leaving: "duration-150 ease-in"
-            From: "opacity-100"
-            To: "opacity-0"
-        -->
         <div class="z-20 fixed inset-0 bg-black bg-opacity-25" aria-hidden="true"></div>
 
         <div x-transition:enter="transition ease-out duration-150"
