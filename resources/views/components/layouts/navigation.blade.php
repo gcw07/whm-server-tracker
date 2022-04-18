@@ -76,13 +76,7 @@
                 </div>
               </div>
               <div class="mt-3 px-2 space-y-1">
-                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Dashboard</a>
-
-                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Jobs</a>
-
-                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Applicants</a>
-
-                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Company</a>
+                <x-layouts.navigation-items is-mobile-menu />
               </div>
             </div>
             <div class="pt-4 pb-2">
@@ -91,15 +85,11 @@
                   <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80" alt="">
                 </div>
                 <div class="ml-3">
-                  <div class="text-base font-medium text-gray-800">Whitney Francis</div>
-                  <div class="text-sm font-medium text-gray-500">whitney@example.com</div>
+                  <div class="text-base font-medium text-gray-800">Emilia Birch</div>
                 </div>
               </div>
               <div class="mt-3 px-2 space-y-1">
-                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Your Profile</a>
-
-                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Settings</a>
-
+                <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Manage Users</a>
                 <a href="#" class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">Sign out</a>
               </div>
             </div>
