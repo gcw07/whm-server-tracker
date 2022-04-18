@@ -80,7 +80,7 @@
               <div class="flex items-center px-5">
                 <x-heroicon-s-user-circle class="h-10 w-10 text-gray-800" />
                 <div class="ml-3">
-                  <div class="text-base font-medium text-gray-800">Emilia Birch</div>
+                  <div class="text-base font-medium text-gray-800">{{ auth()->user()->name }}</div>
                 </div>
               </div>
               <div class="mt-3 px-2 space-y-1">
@@ -98,7 +98,7 @@
           <x-slot name="trigger">
             <button type="button" class="max-w-xs bg-sky-600 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-sky-500" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
               <x-heroicon-s-user-circle class="h-5 w-5 text-white" />
-              <span class="hidden ml-2 text-white text-sm font-medium lg:block"><span class="sr-only">Open user menu for </span>Emilia Birch</span>
+              <span class="hidden ml-2 text-white text-sm font-medium lg:block"><span class="sr-only">Open user menu for </span>{{ auth()->user()->name }}</span>
               <x-heroicon-s-chevron-down class="hidden flex-shrink-0 ml-1 h-5 w-5 text-white lg:block" />
             </button>
           </x-slot>
