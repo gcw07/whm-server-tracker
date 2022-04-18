@@ -3,7 +3,7 @@
     <div class="flex justify-between h-16">
       <div class="flex px-2 lg:px-0">
         <div class="flex-shrink-0 flex items-center">
-          <a href="#">
+          <a href="{{ route('dashboard') }}">
             <img class="h-14 w-14" src="/logo-cloud.svg" alt="Workflow">
           </a>
         </div>
