@@ -142,15 +142,27 @@
                       </span>
                     </td>
                     <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-300 text-amber-700 capitalize">
-                          7.4
+                      @foreach($server->formatted_php_installed_versions as $version)
+                        <span @class([
+                                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize',
+                                'bg-red-200 text-red-800' => (
+                                    $version === '5.4' ||
+                                    $version === '5.5' ||
+                                    $version === '5.6' ||
+                                    $version === '7.0' ||
+                                    $version === '7.1' ||
+                                    $version === '7.2' ||
+                                    $version === '7.3'
+                                ),
+                                'bg-amber-300 text-amber-700' => $version === '7.4',
+                                'bg-green-200 text-green-800' => ($version === '8.0' || $version === '8.1'),
+                              ])>
+                          {{ $version }}
                         </span>
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">
-                          8.0
-                        </span>
+                      @endforeach
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                      <span class="text-gray-900 font-medium">26% {{ $server->formatted_disk_used }}</span>
+                      <span class="text-gray-900 font-medium">{{ $server->settings->get('disk_percentage') }}%</span>
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                       <a href="{{ $server->whm_url }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
