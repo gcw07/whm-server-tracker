@@ -78,9 +78,7 @@
             </div>
             <div class="pt-4 pb-2">
               <div class="flex items-center px-5">
-                <div class="flex-shrink-0">
-                  <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80" alt="">
-                </div>
+                <x-heroicon-s-user-circle class="h-10 w-10 text-gray-800" />
                 <div class="ml-3">
                   <div class="text-base font-medium text-gray-800">Emilia Birch</div>
                 </div>
