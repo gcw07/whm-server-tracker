@@ -2,9 +2,18 @@
 
 namespace App\View\Components\Navigation;
 
-use BladeUIKit\Components\Navigation\Dropdown as OriginalDropdown;
+use Illuminate\Contracts\View\View;
+use Illuminate\View\Component;
 
-class Dropdown extends OriginalDropdown
+class Dropdown extends Component
 {
-    // Overwrite component parent here...
+    public function __construct()
+    {
+
+    }
+
+    public function render(): View
+    {
+        return view('components.navigation.dropdown');
+    }
 }
