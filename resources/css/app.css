@@ -1,15 +1,5 @@
-@tailwind base;
-
-/* Base Custom Styles */
-/*a {*/
-/*  @apply font-bold text-blue-500;*/
-/*}*/
-
-/*a:hover {*/
-/*  @apply text-blue-800;*/
-/*}*/
-
-@tailwind components;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
 
 /* 3rd Party Styles */
 
@@ -24,9 +14,9 @@
 /*@import 'components/toasts.css';*/
 /*@import 'components/tooltips.css';*/
 
-@tailwind utilities;
+@import 'tailwindcss/utilities';
 
 /* Custom Extra Styles */
 /*@import 'components/animations.css';*/
 /*@import 'components/loader.css';*/
-/*@import 'components/cloak.css';*/
+@import 'components/cloak.css';
