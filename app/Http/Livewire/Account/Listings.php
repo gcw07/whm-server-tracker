@@ -11,7 +11,7 @@ class Listings extends Component
 
     public function mount()
     {
-        $this->accounts = Account::query()->orderBy('domain')->get();
+        $this->accounts = Account::with(['server'])->orderBy('domain')->get();
     }
 
     public function render()
