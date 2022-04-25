@@ -137,9 +137,15 @@
                       <span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span>
                     </td>
                     <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">
-                        yes
-                      </span>
+                      @if($server->backups_enabled)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">
+                          yes
+                        </span>
+                      @else
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">
+                          no
+                        </span>
+                      @endif
                     </td>
                     <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
                       @foreach($server->formatted_php_installed_versions as $version)
