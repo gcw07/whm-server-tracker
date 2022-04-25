@@ -52,7 +52,7 @@
   <div class="mt-6">
     <!-- Begin content -->
 
-    <!-- Activity list (smallest breakpoint only) -->
+    <!-- Server list (smallest breakpoint only) -->
     <div class="shadow sm:hidden">
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
         @foreach($servers as $server)
@@ -90,7 +90,7 @@
       </nav>
     </div>
 
-    <!-- Activity table (small breakpoint and up) -->
+    <!-- Server table (small breakpoint and up) -->
     <div class="hidden sm:block">
       <div class="mx-auto">
         <div class="flex flex-col mt-2">
@@ -174,95 +174,6 @@
                     </td>
                   </tr>
                 @endforeach
-
-
-                {{--              <tr class="bg-gray-50">--}}
-                {{--                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">--}}
-                {{--                  <div class="flex">--}}
-                {{--                    <a href="#" class="group inline-flex space-x-2 truncate text-sm">--}}
-                {{--                      <p class="text-gray-500 truncate group-hover:text-gray-900">--}}
-                {{--                        DesignerEdmond.com--}}
-                {{--                      </p>--}}
-                {{--                    </a>--}}
-                {{--                  </div>--}}
-                {{--                </td>--}}
-                {{--                <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">--}}
-                {{--                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800 capitalize">--}}
-                {{--                          VPS--}}
-                {{--                        </span>--}}
-                {{--                </td>--}}
-                {{--                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">--}}
-                {{--                  <span class="text-gray-900 font-medium">8</span>--}}
-                {{--                </td>--}}
-                {{--                <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">--}}
-                {{--                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">--}}
-                {{--                          yes--}}
-                {{--                        </span>--}}
-                {{--                </td>--}}
-                {{--                <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">--}}
-                {{--                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">--}}
-                {{--                          5.6--}}
-                {{--                        </span>--}}
-                {{--                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">--}}
-                {{--                          8.1--}}
-                {{--                        </span>--}}
-                {{--                </td>--}}
-                {{--                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">--}}
-                {{--                  <span class="text-gray-900 font-medium">54%</span>--}}
-                {{--                </td>--}}
-                {{--                <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">--}}
-                {{--                  <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">--}}
-                {{--                    <!-- Heroicon name: solid/external-link -->--}}
-                {{--                    <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">--}}
-                {{--                      <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />--}}
-                {{--                      <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />--}}
-                {{--                    </svg>--}}
-                {{--                  </a>--}}
-                {{--                </td>--}}
-                {{--              </tr>--}}
-
-                {{--              <tr class="bg-white">--}}
-                {{--                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">--}}
-                {{--                  <div class="flex">--}}
-                {{--                    <a href="#" class="group inline-flex space-x-2 truncate text-sm">--}}
-                {{--                      <p class="text-gray-500 truncate group-hover:text-gray-900">--}}
-                {{--                        OklahomaWebSolutions.com--}}
-                {{--                      </p>--}}
-                {{--                    </a>--}}
-                {{--                  </div>--}}
-                {{--                </td>--}}
-                {{--                <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">--}}
-                {{--                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800 capitalize">--}}
-                {{--                          Dedicated--}}
-                {{--                        </span>--}}
-                {{--                </td>--}}
-                {{--                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">--}}
-                {{--                  <span class="text-gray-900 font-medium">3</span>--}}
-                {{--                </td>--}}
-                {{--                <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">--}}
-                {{--                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 capitalize">--}}
-                {{--                          no--}}
-                {{--                        </span>--}}
-                {{--                </td>--}}
-                {{--                <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">--}}
-                {{--                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">--}}
-                {{--                          8.1--}}
-                {{--                        </span>--}}
-                {{--                </td>--}}
-                {{--                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">--}}
-                {{--                  <span class="text-gray-900 font-medium">35%</span>--}}
-                {{--                </td>--}}
-                {{--                <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">--}}
-                {{--                  <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">--}}
-                {{--                    <!-- Heroicon name: solid/external-link -->--}}
-                {{--                    <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">--}}
-                {{--                      <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />--}}
-                {{--                      <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />--}}
-                {{--                    </svg>--}}
-                {{--                  </a>--}}
-                {{--                </td>--}}
-                {{--              </tr>--}}
-
               </tbody>
             </table>
             <!-- Pagination -->
