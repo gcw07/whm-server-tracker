@@ -17,6 +17,7 @@ use App\Http\Controllers\ServersController;
 use App\Http\Controllers\ServersTokenController;
 use App\Http\Controllers\UserChangePasswordController;
 use App\Http\Controllers\UserController;
+use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Server\Listings as ServerListings;
 use App\Http\Livewire\UserListings;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +42,7 @@ Route::middleware('auth')->group(function () {
 
 // Account Routes...
 Route::prefix('accounts')->middleware('auth')->group(function () {
-    Route::get('/', [AccountsController::class, 'index'])->name('accounts.index');
+    Route::get('/', AccountListings::class)->name('accounts.index');
     Route::get('/{server}', [AccountsController::class, 'index'])->name('accounts.server-index');
 });
 
