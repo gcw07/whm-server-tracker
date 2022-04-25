@@ -68,7 +68,7 @@
                   <span class="flex flex-col text-gray-500 text-sm truncate">
                     <span class="truncate">{{ $server->name }}</span>
                     <span><span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span> accounts</span>
-                    <span>26%</span>
+                    <span>{{ $server->settings->get('disk_percentage') }}%</span>
                   </span>
                 </span>
                 <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
