@@ -57,17 +57,22 @@
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
         @foreach($servers as $server)
           <li>
-            <a href="#" class="block px-4 py-4 bg-white hover:bg-gray-50">
-            <span class="flex items-center space-x-4">
-              <span class="flex-1 flex space-x-2 truncate">
-                <span class="flex flex-col text-gray-500 text-sm truncate">
-                  <span class="truncate">{{ $server->name }}</span>
-                  <span><span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span> accounts</span>
-                  <span>26%</span>
+            <a href="#"
+               @class([
+                'block px-4 py-4 hover:bg-gray-50',
+                'bg-gray-50' => $loop->even,
+                'bg-white' => $loop->odd
+               ])>
+              <span class="flex items-center space-x-4">
+                <span class="flex-1 flex space-x-2 truncate">
+                  <span class="flex flex-col text-gray-500 text-sm truncate">
+                    <span class="truncate">{{ $server->name }}</span>
+                    <span><span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span> accounts</span>
+                    <span>26%</span>
+                  </span>
                 </span>
+                <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
               </span>
-              <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
-            </span>
             </a>
           </li>
         @endforeach
@@ -118,7 +123,7 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($servers as $server)
-                  <tr class="bg-white">
+                  <tr @class(['bg-gray-50' => $loop->even, 'bg-white' => $loop->odd])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
                         <a href="#" class="group inline-flex space-x-2 truncate text-sm">
