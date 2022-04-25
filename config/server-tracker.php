@@ -55,6 +55,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Disk Usage Messages
+    |--------------------------------------------------------------------------
+    */
+
+    'disk_usage' => [
+        /**
+         * The disk percentage of the server when it should show various states.
+         */
+        'server_disk_warning' => 80,
+        'server_disk_critical' => 90,
+        'server_disk_full' => 98,
+
+        /**
+         * The disk percentage of an account when it should show various states.
+         */
+        'account_disk_warning' => 80,
+        'account_disk_critical' => 90,
+        'account_disk_full' => 98,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Ignore Usernames
     |--------------------------------------------------------------------------
     | Skip over usernames that are ignored.
