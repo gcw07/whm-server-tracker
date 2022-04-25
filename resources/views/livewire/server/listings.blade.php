@@ -145,17 +145,9 @@
                       @foreach($server->formatted_php_installed_versions as $version)
                         <span @class([
                                 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize',
-                                'bg-red-200 text-red-800' => (
-                                    $version === '5.4' ||
-                                    $version === '5.5' ||
-                                    $version === '5.6' ||
-                                    $version === '7.0' ||
-                                    $version === '7.1' ||
-                                    $version === '7.2' ||
-                                    $version === '7.3'
-                                ),
-                                'bg-amber-300 text-amber-700' => $version === '7.4',
-                                'bg-green-200 text-green-800' => ($version === '8.0' || $version === '8.1'),
+                                'bg-red-200 text-red-800' => $server->isPhpVersionEndOfLife($version),
+                                'bg-amber-300 text-amber-700' => $server->isPhpVersionSecurityOnly($version),
+                                'bg-green-200 text-green-800' => $server->isPhpVersionActive($version),
                               ])>
                           {{ $version }}
                         </span>

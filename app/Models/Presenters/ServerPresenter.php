@@ -234,6 +234,28 @@ trait ServerPresenter
         );
     }
 
+    public function isPhpVersionActive($version): bool
+    {
+        return $version === '8.0' || $version === '8.1';
+    }
+
+    public function isPhpVersionSecurityOnly($version): bool
+    {
+        return $version === '7.4';
+    }
+
+    public function isPhpVersionEndOfLife($version): bool
+    {
+        return
+            $version === '5.4' ||
+            $version === '5.5' ||
+            $version === '5.6' ||
+            $version === '7.0' ||
+            $version === '7.1' ||
+            $version === '7.2' ||
+            $version === '7.3';
+    }
+
     private function formatFileSize($kilobytes, $precision = null): string
     {
         $byteUnits = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
