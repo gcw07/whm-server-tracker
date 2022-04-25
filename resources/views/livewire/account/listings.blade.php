@@ -6,10 +6,7 @@
     </h3>
     <div class="mt-3 sm:mt-0 sm:ml-4">
       <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-        <!-- Heroicon name: solid/filter -->
-        <svg class="-ml-0.5 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-        </svg>
+        <x-heroicon-s-filter class="-ml-0.5 mr-2 h-4 w-4" />
         Filters
       </button>
     </div>
@@ -147,6 +144,58 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
+                @foreach($accounts as $account)
+                  <tr class="bg-white">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <div class="flex">
+                        <a href="{{ $account->domain_url }}" target="_blank" class="group inline-flex space-x-2 truncate text-sm">
+                          <p class="text-gray-500 truncate group-hover:text-gray-900">
+                            {{ $account->domain }}
+                          </p>
+                        </a>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <div class="flex">
+                        <a href="#" class="group inline-flex space-x-2 truncate text-sm">
+                          <p class="text-gray-500 truncate group-hover:text-gray-900">
+                            {{ $account->server->name }}
+                          </p>
+                        </a>
+                      </div>
+                    </td>
+                    <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
+                      {{ $account->user }}
+                    </td>
+                    <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
+                      @if($account->backups_enabled)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">
+                          yes
+                        </span>
+                      @else
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">
+                          no
+                        </span>
+                      @endif
+                    </td>
+                    <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
+                      {{ $account->disk_used }} / {{ $account->disk_limit }}
+                    </td>
+                    <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
+                      @if($account->formatted_disk_usage === 'Unknown')
+                        <span class="text-gray-900 font-medium">&mdash;</span>
+                      @else
+                        <span class="text-gray-900 font-medium">{{ $account->formatted_disk_usage }}</span>
+                      @endif
+                    </td>
+                    <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
+                      <a href="{{ $account->server->whm_url }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        <x-heroicon-s-external-link class="-ml-0.5 h-4 w-4" />
+                      </a>
+                    </td>
+                  </tr>
+                @endforeach
+
                 <tr class="bg-white">
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     <div class="flex">
