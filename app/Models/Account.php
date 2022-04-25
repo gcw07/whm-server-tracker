@@ -6,6 +6,7 @@ use App\Filters\AccountFilters;
 use App\Models\Presenters\AccountPresenter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Account
@@ -25,11 +26,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $plan
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read mixed $cpanel_url
- * @property-read mixed $disk_usage
- * @property-read mixed $disk_usage_raw
- * @property-read mixed $domain_url
- * @property-read mixed $whm_url
  * @property-read \App\Models\Server $server
  * @method static \Database\Factories\AccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Account filter(\App\Filters\AccountFilters $filters)
@@ -63,7 +59,7 @@ class Account extends Model
     protected $dates = ['suspend_time', 'setup_date'];
     protected $appends = ['domain_url', 'cpanel_url', 'formatted_disk_usage', 'backups_enabled'];
 
-    public function server()
+    public function server(): BelongsTo
     {
         return $this->belongsTo(Server::class);
     }
