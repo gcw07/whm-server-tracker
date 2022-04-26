@@ -145,7 +145,7 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($accounts as $account)
-                  <tr class="bg-white">
+                  <tr @class(['bg-gray-50' => $loop->even, 'bg-white' => $loop->odd])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
                         <a href="{{ $account->domain_url }}" target="_blank" class="group inline-flex space-x-2 truncate text-sm">
