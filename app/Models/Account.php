@@ -57,7 +57,15 @@ class Account extends Model
     protected $guarded = [];
     protected $casts = ['backup' => 'boolean', 'suspended' => 'boolean'];
     protected $dates = ['suspend_time', 'setup_date'];
-    protected $appends = ['domain_url', 'cpanel_url', 'formatted_disk_usage', 'backups_enabled'];
+    protected $appends = [
+        'domain_url',
+        'cpanel_url',
+        'formatted_disk_usage',
+        'backups_enabled',
+        'is_disk_warning',
+        'is_disk_critical',
+        'is_disk_full',
+    ];
 
     public function server(): BelongsTo
     {

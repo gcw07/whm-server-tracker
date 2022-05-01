@@ -2,9 +2,7 @@
 
 namespace App\Models\Presenters;
 
-use App\Enums\ServerTypeEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Support\Arr;
 
 trait AccountPresenter
 {
@@ -26,16 +24,7 @@ trait AccountPresenter
     {
         return Attribute::make(
             get: function () {
-                $diskUsed = substr($this->disk_used, 0, -1);
-                $diskLimit = substr($this->disk_limit, 0, -1);
-
-                if (is_numeric($diskLimit)) {
-                    $percentage = round(($diskUsed / $diskLimit) * 100, 1);
-
-                    return "$percentage%";
-                }
-
-                return 'Unknown';
+                return $this->getDiskPercentage() ? $this->getDiskPercentage() . '%' : 'Unknown';
             },
         );
     }
@@ -47,5 +36,52 @@ trait AccountPresenter
                 return $this->backup;
             },
         );
+    }
+
+    protected function isDiskWarning(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $diskWarning = config('server-tracker.disk_usage.account_disk_warning');
+                $diskCritical = config('server-tracker.disk_usage.account_disk_critical');
+
+                return $this->getDiskPercentage() ? $this->getDiskPercentage() >= $diskWarning && $this->getDiskPercentage() < $diskCritical : null;
+            },
+        );
+    }
+
+    protected function isDiskCritical(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $diskCritical = config('server-tracker.disk_usage.account_disk_critical');
+                $diskFull = config('server-tracker.disk_usage.account_disk_full');
+
+                return $this->getDiskPercentage() ? $this->getDiskPercentage() >= $diskCritical && $this->getDiskPercentage() < $diskFull : null;
+            },
+        );
+    }
+
+    protected function isDiskFull(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $diskFull = config('server-tracker.disk_usage.account_disk_full');
+
+                return $this->getDiskPercentage() ? $this->getDiskPercentage() >= $diskFull : null;
+            },
+        );
+    }
+
+    protected function getDiskPercentage(): ?float
+    {
+        $diskUsed = substr($this->disk_used, 0, -1);
+        $diskLimit = substr($this->disk_limit, 0, -1);
+
+        if (is_numeric($diskLimit)) {
+            return round(($diskUsed / $diskLimit) * 100, 1);
+        }
+
+        return null;
     }
 }
