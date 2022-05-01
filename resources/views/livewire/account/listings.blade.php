@@ -27,6 +27,7 @@
              'bg-yellow-100' => $account->is_disk_warning,
              'bg-orange-100' => $account->is_disk_critical,
              'bg-red-100' => $account->is_disk_full,
+             'bg-blue-200' => $account->suspended,
              'bg-gray-50' => $loop->even,
              'bg-white' => $loop->odd
             ])>
