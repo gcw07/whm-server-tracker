@@ -103,6 +103,7 @@
                         'bg-yellow-100' => $account->is_disk_warning,
                         'bg-orange-100' => $account->is_disk_critical,
                         'bg-red-100' => $account->is_disk_full,
+                        'bg-blue-200' => $account->suspended,
                         'bg-gray-50' => $loop->even,
                         'bg-white' => $loop->odd
                     ])>
@@ -113,8 +114,8 @@
                             {{ $account->domain }}
                           </p>
                         </a>
-                        @if($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                          <x-heroicon-s-exclamation class="ml-2 h-6 w-6 text-gray-500" />
+                        @if($account->suspended)
+                          <x-heroicon-s-ban class="ml-2 h-6 w-6 text-gray-500" />
                         @endif
                       </div>
                     </td>
@@ -145,11 +146,16 @@
                       {{ $account->disk_used }} / {{ $account->disk_limit }}
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                      @if($account->formatted_disk_usage === 'Unknown')
-                        <span class="text-gray-900 font-medium">&mdash;</span>
-                      @else
-                        <span class="text-gray-900 font-medium">{{ $account->formatted_disk_usage }}</span>
-                      @endif
+                      <div class="flex items-center justify-center">
+                        @if($account->formatted_disk_usage === 'Unknown')
+                          <span class="text-gray-900 font-medium">&mdash;</span>
+                        @else
+                          <span class="text-gray-900 font-medium">{{ $account->formatted_disk_usage }}</span>
+                          @if($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
+                            <x-heroicon-s-exclamation class="ml-2 h-6 w-6 text-gray-500" />
+                          @endif
+                        @endif
+                      </div>
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                       <a href="{{ $account->server->whm_url }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
