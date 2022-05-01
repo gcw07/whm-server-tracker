@@ -58,11 +58,14 @@
         @foreach($servers as $server)
           <li>
             <a href="#"
-               @class([
-                'block px-4 py-4 hover:bg-gray-50',
-                'bg-gray-50' => $loop->even,
-                'bg-white' => $loop->odd
-               ])>
+              @class([
+               'block px-4 py-4 hover:bg-gray-50',
+               'bg-yellow-100' => $server->is_disk_warning,
+               'bg-orange-100' => $server->is_disk_critical,
+               'bg-red-100' => $server->is_disk_full,
+               'bg-gray-50' => $loop->even,
+               'bg-white' => $loop->odd
+              ])>
               <span class="flex items-center space-x-4">
                 <span class="flex-1 flex space-x-2 truncate">
                   <span class="flex flex-col text-gray-500 text-sm truncate">
