@@ -36,15 +36,20 @@
                 <span class="flex flex-col text-gray-500 text-sm truncate">
                   <span class="flex items-center">
                     <span class="text-gray-900 font-medium truncate">{{ $account->domain }}</span>
-                    @if($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                      <x-heroicon-s-exclamation class="ml-2 h-6 w-6 text-gray-500" />
+                    @if($account->suspended)
+                      <x-heroicon-s-ban class="ml-2 h-6 w-6 text-gray-500" />
                     @endif
                   </span>
                   <span class="truncate">{{ $account->server->name }}</span>
                   @if($account->formatted_disk_usage === 'Unknown')
                     <span>&mdash;</span>
                   @else
-                    <span>{{ $account->formatted_disk_usage }}</span>
+                    <span class="flex items-center">
+                      <span>{{ $account->formatted_disk_usage }}</span>
+                      @if($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
+                        <x-heroicon-s-exclamation class="ml-2 h-6 w-6 text-gray-500" />
+                      @endif
+                    </span>
                   @endif
                 </span>
               </span>
