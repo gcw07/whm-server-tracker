@@ -220,6 +220,47 @@ trait ServerPresenter
         );
     }
 
+    protected function isDiskWarning(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $diskWarning = config('server-tracker.disk_usage.server_disk_warning');
+                $diskCritical = config('server-tracker.disk_usage.server_disk_critical');
+
+                $percentage = $this->settings?->has('disk_percentage') ? $this->settings->get('disk_percentage') : null;
+
+                return $percentage ? $percentage >= $diskWarning && $percentage < $diskCritical : null;
+            },
+        );
+    }
+
+    protected function isDiskCritical(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $diskCritical = config('server-tracker.disk_usage.server_disk_critical');
+                $diskFull = config('server-tracker.disk_usage.server_disk_full');
+
+                $percentage = $this->settings?->has('disk_percentage') ? $this->settings->get('disk_percentage') : null;
+
+                return $percentage ? $percentage >= $diskCritical && $percentage < $diskFull : null;
+            },
+        );
+    }
+
+    protected function isDiskFull(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $diskFull = config('server-tracker.disk_usage.server_disk_full');
+
+                $percentage = $this->settings?->has('disk_percentage') ? $this->settings->get('disk_percentage') : null;
+
+                return $percentage ? $percentage >= $diskFull : null;
+            },
+        );
+    }
+
     protected function missingToken(): Attribute
     {
         return Attribute::make(
@@ -256,7 +297,7 @@ trait ServerPresenter
             $version === '7.3';
     }
 
-    private function formatFileSize($kilobytes, $precision = null): string
+    protected function formatFileSize($kilobytes, $precision = null): string
     {
         $byteUnits = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $bytePrecision = [0, 1, 2, 2, 3, 3, 4, 4];
