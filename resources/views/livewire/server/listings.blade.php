@@ -123,7 +123,13 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($servers as $server)
-                  <tr @class(['bg-gray-50' => $loop->even, 'bg-white' => $loop->odd])>
+                  <tr @class([
+                        'bg-yellow-100' => $server->is_disk_warning,
+                        'bg-orange-100' => $server->is_disk_critical,
+                        'bg-red-100' => $server->is_disk_full,
+                        'bg-gray-50' => $loop->even,
+                        'bg-white' => $loop->odd
+                    ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
                         <a href="#" class="group inline-flex space-x-2 truncate text-sm">
