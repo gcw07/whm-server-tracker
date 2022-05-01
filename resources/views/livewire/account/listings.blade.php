@@ -19,84 +19,39 @@
     <!-- Accounts list (smallest breakpoint only) -->
     <div class="shadow sm:hidden">
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
+        @foreach($accounts as $account)
         <li>
-          <a href="#" class="block px-4 py-4 bg-white hover:bg-gray-50">
-                <span class="flex items-center space-x-4">
-                  <span class="flex-1 flex space-x-2 truncate">
-                    <span class="flex flex-col text-gray-500 text-sm truncate">
-                      <span class="text-gray-900 font-medium truncate">centralokhose.com</span>
-                      <span class="truncate">AdvertisingOklahoma.com</span>
-                      <span>39.2%</span>
-                    </span>
+          <a href="#"
+            @class([
+             'block px-4 py-4 hover:bg-gray-50',
+             'bg-yellow-100' => $account->is_disk_warning,
+             'bg-orange-100' => $account->is_disk_critical,
+             'bg-red-100' => $account->is_disk_full,
+             'bg-gray-50' => $loop->even,
+             'bg-white' => $loop->odd
+            ])>
+            <span class="flex items-center space-x-4">
+              <span class="flex-1 flex space-x-2 truncate">
+                <span class="flex flex-col text-gray-500 text-sm truncate">
+                  <span class="flex items-center">
+                    <span class="text-gray-900 font-medium truncate">{{ $account->domain }}</span>
+                    @if($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
+                      <x-heroicon-s-exclamation class="ml-2 h-6 w-6 text-gray-500" />
+                    @endif
                   </span>
-                  <!-- Heroicon name: solid/chevron-right -->
-                  <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                  </svg>
+                  <span class="truncate">{{ $account->server->name }}</span>
+                  @if($account->formatted_disk_usage === 'Unknown')
+                    <span>&mdash;</span>
+                  @else
+                    <span>{{ $account->formatted_disk_usage }}</span>
+                  @endif
                 </span>
+              </span>
+              <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
+            </span>
           </a>
         </li>
-
-        <li>
-          <a href="#" class="block px-4 py-4 bg-red-100 hover:bg-gray-50">
-                <span class="flex items-center space-x-4">
-                  <span class="flex-1 flex space-x-2 truncate">
-                    <span class="flex flex-col text-gray-500 text-sm truncate">
-                      <span class="flex items-center">
-                        <span class="text-gray-900 font-medium truncate">furstclasscanine.com</span>
-                        <svg class="ml-2 h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                          </svg>
-                      </span>
-                      <span class="truncate">DesignerEdmond.com</span>
-                      <span>57.6%</span>
-                    </span>
-                  </span>
-                  <!-- Heroicon name: solid/chevron-right -->
-                  <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </span>
-          </a>
-        </li>
-
-        <li>
-          <a href="#" class="block px-4 py-4 bg-white hover:bg-gray-50">
-                <span class="flex items-center space-x-4">
-                  <span class="flex-1 flex space-x-2 truncate">
-                    <span class="flex flex-col text-gray-500 text-sm truncate">
-                      <span class="text-gray-900 font-medium truncate">minternational.com</span>
-                      <span class="truncate">DesignerEdmond.com</span>
-                      <span>&mdash;</span>
-                    </span>
-                  </span>
-                  <!-- Heroicon name: solid/chevron-right -->
-                  <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </span>
-          </a>
-        </li>
-
-        <li>
-          <a href="#" class="block px-4 py-4 bg-white hover:bg-gray-50">
-                <span class="flex items-center space-x-4">
-                  <span class="flex-1 flex space-x-2 truncate">
-                    <span class="flex flex-col text-gray-500 text-sm truncate">
-                      <span class="text-gray-900 font-medium truncate">oklahomafoam.com</span>
-                      <span class="truncate">DesignerEdmond.com</span>
-                      <span>1.3%</span>
-                    </span>
-                  </span>
-                  <!-- Heroicon name: solid/chevron-right -->
-                  <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </span>
-          </a>
-        </li>
-
-        <!-- More accounts... -->
+        @endforeach
       </ul>
 
       <nav class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200" aria-label="Pagination">
