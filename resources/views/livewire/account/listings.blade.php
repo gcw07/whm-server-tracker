@@ -145,7 +145,13 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($accounts as $account)
-                  <tr @class(['bg-gray-50' => $loop->even, 'bg-white' => $loop->odd])>
+                  <tr @class([
+                        'bg-yellow-100' => $account->is_disk_warning,
+                        'bg-orange-100' => $account->is_disk_critical,
+                        'bg-red-100' => $account->is_disk_full,
+                        'bg-gray-50' => $loop->even,
+                        'bg-white' => $loop->odd
+                    ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
                         <a href="{{ $account->domain_url }}" target="_blank" class="group inline-flex space-x-2 truncate text-sm">
@@ -196,56 +202,7 @@
                   </tr>
                 @endforeach
 
-                <tr class="bg-white">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div class="flex">
-                      <a href="#" class="group inline-flex space-x-2 truncate text-sm">
-                        <p class="text-gray-500 truncate group-hover:text-gray-900">
-                          centralokhose.com
-                        </p>
-                      </a>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div class="flex">
-                      <a href="#" class="group inline-flex space-x-2 truncate text-sm">
-                        <p class="text-gray-500 truncate group-hover:text-gray-900">
-                          AdvertisingOklahoma.com
-                        </p>
-                      </a>
-                    </div>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                    centralo
-                  </td>
-                  <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 border border-green-300 capitalize">
-                          yes
-                        </span>
-                  </td>
-                  <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                    3137M / 8000M
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    <span class="text-gray-900 font-medium">39.2%</span>
-                  </td>
-                  <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                    <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                      <!-- Heroicon name: solid/external-link -->
-                      <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                      </svg>
-                    </a>
 
-                    <!--                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">-->
-                    <!--                          &lt;!&ndash; Heroicon name: solid/dots-vertical &ndash;&gt;-->
-                    <!--                          <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">-->
-                    <!--                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />-->
-                    <!--                          </svg>-->
-                    <!--                        </a>-->
-                  </td>
-                </tr>
 
                 <tr class="bg-red-100">
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
