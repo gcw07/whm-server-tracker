@@ -153,12 +153,15 @@
                         'bg-white' => $loop->odd
                     ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <div class="flex">
+                      <div class="flex items-center">
                         <a href="{{ $account->domain_url }}" target="_blank" class="group inline-flex space-x-2 truncate text-sm">
                           <p class="text-gray-500 truncate group-hover:text-gray-900">
                             {{ $account->domain }}
                           </p>
                         </a>
+                        @if($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
+                          <x-heroicon-s-exclamation class="ml-2 h-6 w-6 text-gray-500" />
+                        @endif
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
