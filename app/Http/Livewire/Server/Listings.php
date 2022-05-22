@@ -8,11 +8,10 @@ use Livewire\Component;
 
 class Listings extends Component
 {
-    public string|null $serverType;
+    public string|null $serverType = null;
 
     public function mount()
     {
-        $this->serverType = null;
     }
 
     public function render()
