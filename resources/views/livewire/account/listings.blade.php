@@ -34,11 +34,15 @@
             <span class="flex items-center space-x-4">
               <span class="flex-1 flex space-x-2 truncate">
                 <span class="flex flex-col text-gray-500 text-sm truncate">
-                  <span class="flex items-center">
-                    <span class="text-gray-900 font-medium truncate">{{ $account->domain }}</span>
+                  <span class="flex items-center truncate space-x-3">
                     @if($account->suspended)
-                      <x-heroicon-s-ban class="ml-2 h-6 w-6 text-gray-500" />
+                      <x-heroicon-s-ban class="h-5 w-5 text-blue-600" />
+                    @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
+                      <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
+                    @else
+                      <span class="w-3 h-3 m-1 flex-shrink-0 rounded-full bg-green-600" aria-hidden="true"></span>
                     @endif
+                    <span class="text-gray-900 font-medium truncate">{{ $account->domain }}</span>
                   </span>
                   <span class="truncate">{{ $account->server->name }}</span>
                   @if($account->formatted_disk_usage === 'Unknown')
@@ -46,9 +50,6 @@
                   @else
                     <span class="flex items-center">
                       <span>{{ $account->formatted_disk_usage }}</span>
-                      @if($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                        <x-heroicon-s-exclamation class="ml-2 h-6 w-6 text-gray-500" />
-                      @endif
                     </span>
                   @endif
                 </span>
@@ -114,15 +115,21 @@
                         'bg-white' => $loop->odd
                     ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <div class="flex items-center">
+                      <div class="flex items-center space-x-3 lg:pl-2">
+                        <div>
+                          @if($account->suspended)
+                            <x-heroicon-s-ban class="h-5 w-5 text-blue-600" />
+                          @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
+                            <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
+                          @else
+                            <div class="flex-shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
+                          @endif
+                        </div>
                         <a href="{{ $account->domain_url }}" target="_blank" class="group inline-flex space-x-2 truncate text-sm">
                           <p class="text-gray-500 truncate group-hover:text-gray-900">
                             {{ $account->domain }}
                           </p>
                         </a>
-                        @if($account->suspended)
-                          <x-heroicon-s-ban class="ml-2 h-6 w-6 text-gray-500" />
-                        @endif
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -157,9 +164,6 @@
                           <span class="text-gray-900 font-medium">&mdash;</span>
                         @else
                           <span class="text-gray-900 font-medium">{{ $account->formatted_disk_usage }}</span>
-                          @if($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                            <x-heroicon-s-exclamation class="ml-2 h-6 w-6 text-gray-500" />
-                          @endif
                         @endif
                       </div>
                     </td>
