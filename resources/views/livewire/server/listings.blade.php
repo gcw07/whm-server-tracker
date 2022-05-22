@@ -31,18 +31,38 @@
       <div class="hidden sm:block">
         <nav class="-mb-px flex space-x-8">
           <!-- Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
-          <a href="#" class="border-sky-500 text-sky-600 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" aria-current="page">
+          <button wire:click.prevent="filterType(null)"
+            @class([
+             'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm',
+             'border-sky-500 text-sky-600' => $serverType == null,
+             'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $serverType != null,
+            ])>
             All
-          </a>
-          <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm">
+          </button>
+          <button wire:click.prevent="filterType('dedicated')"
+            @class([
+             'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm',
+             'border-sky-500 text-sky-600' => $serverType == 'dedicated',
+             'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $serverType != 'dedicated',
+            ])>
             Dedicated
-          </a>
-          <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm">
+          </button>
+          <button wire:click.prevent="filterType('reseller')"
+            @class([
+             'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm',
+             'border-sky-500 text-sky-600' => $serverType == 'reseller',
+             'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $serverType != 'reseller',
+            ])>
             Reseller
-          </a>
-          <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm">
+          </button>
+          <button wire:click.prevent="filterType('vps')"
+            @class([
+             'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm',
+             'border-sky-500 text-sky-600' => $serverType == 'vps',
+             'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $serverType != 'vps',
+            ])>
             VPS
-          </a>
+          </button>
         </nav>
       </div>
     </div>
