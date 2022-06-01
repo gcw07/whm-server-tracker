@@ -46,6 +46,6 @@ class Listings extends Component
     {
         return Server::query()->withCount(['accounts'])->when($this->serverType, function ($query) {
             return $query->where('server_type', $this->serverType);
-        })->orderBy('name')->paginate(5);
+        })->orderBy('name')->paginate(50);
     }
 }
