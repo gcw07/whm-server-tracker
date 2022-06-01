@@ -2,8 +2,10 @@
 
 namespace Deployer;
 
-require 'recipe/laravel.php';
-require 'contrib/npm.php';
+require_once __DIR__ . '/vendor/autoload.php';
+
+import('recipe/laravel.php');
+import('contrib/npm.php');
 
 /*
  |-------------------------------------------------------------------
