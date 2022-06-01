@@ -117,7 +117,7 @@
                 Usage
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                28%
+                {{ $server->settings->get('disk_percentage') }}%
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -125,7 +125,7 @@
                 Used
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                33.31 GB
+                {{ $server->formatted_disk_used }}
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -133,7 +133,7 @@
                 Available
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                86.69 GB
+                {{ $server->formatted_disk_available }}
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -141,7 +141,7 @@
                 Total
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                120 GB
+                {{ $server->formatted_disk_total }}
               </dd>
             </div>
           </dl>
@@ -150,11 +150,7 @@
         <div>
           <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
             <div class="bg-sky-500 rounded-md p-1 mr-2">
-              <!-- Heroicon name: solid/archive -->
-              <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-                <path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd" />
-              </svg>
+              <x-heroicon-s-archive class="h-5 w-5 text-white" />
             </div>
             Backups
           </dt>
