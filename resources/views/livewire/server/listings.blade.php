@@ -75,7 +75,7 @@
     <!-- Server list (smallest breakpoint only) -->
     <div class="shadow sm:hidden">
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
-        @foreach($servers as $server)
+        @forelse($servers as $server)
           <li>
             <a href="#"
               @class([
@@ -98,7 +98,13 @@
               </span>
             </a>
           </li>
-        @endforeach
+        @empty
+          <li>
+            <span class="block px-4 py-4 bg-white hover:bg-gray-50">
+              No entries found.
+            </span>
+          </li>
+        @endforelse
       </ul>
 
       <nav class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200" aria-label="Pagination">
@@ -145,7 +151,7 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($servers as $server)
+                @forelse($servers as $server)
                   <tr @class([
                         'bg-yellow-100' => $server->is_disk_warning,
                         'bg-orange-100' => $server->is_disk_critical,
@@ -202,7 +208,13 @@
                       </a>
                     </td>
                   </tr>
-                @endforeach
+                @empty
+                  <tr class="bg-white">
+                    <td colspan="7" class="py-8 whitespace-nowrap font-semibold text-center text-sm text-gray-700">
+                      No entries found.
+                    </td>
+                  </tr>
+                @endforelse
               </tbody>
             </table>
             <!-- Pagination -->
