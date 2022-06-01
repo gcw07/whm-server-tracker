@@ -6,13 +6,13 @@
         <ol role="list" class="flex items-center space-x-4">
           <li>
             <div class="flex">
-              <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-700">Servers</a>
+              <a href="{{ route('servers.index') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">Servers</a>
             </div>
           </li>
           <li>
             <div class="flex items-center">
               <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
-              <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">VPS</a>
+              <span class="ml-4 text-sm font-medium text-gray-500">{{ $server->formatted_server_type }}</span>
             </div>
           </li>
         </ol>
