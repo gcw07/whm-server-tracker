@@ -328,201 +328,73 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr class="bg-white">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div class="flex">
-                      <a href="#" class="group inline-flex space-x-2 truncate text-sm">
-                        <p class="text-gray-500 truncate group-hover:text-gray-900">
-                          centralokhose.com
-                        </p>
-                      </a>
-                    </div>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                    centralo
-                  </td>
-                  <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 border border-green-300 capitalize">
+                @foreach($server->accounts as $account)
+                  <tr @class([
+                        'bg-yellow-100' => $account->is_disk_warning,
+                        'bg-orange-100' => $account->is_disk_critical,
+                        'bg-red-100' => $account->is_disk_full,
+                        'bg-blue-200' => $account->suspended,
+                        'bg-gray-50' => $loop->even,
+                        'bg-white' => $loop->odd
+                    ])>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <div class="flex items-center space-x-3 lg:pl-2">
+                        <div>
+                          @if($account->suspended)
+                            <x-heroicon-s-ban class="h-5 w-5 text-blue-600" />
+                          @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
+                            <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
+                          @else
+                            <div class="flex-shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
+                          @endif
+                        </div>
+                        <a href="{{ $account->domain_url }}" target="_blank" class="group inline-flex space-x-2 truncate text-sm">
+                          <p class="text-gray-500 truncate group-hover:text-gray-900">
+                            {{ $account->domain }}
+                          </p>
+                        </a>
+                      </div>
+                    </td>
+                    <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
+                      {{ $account->user }}
+                    </td>
+                    <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
+                      @if($account->backups_enabled)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">
                           yes
                         </span>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-900 lg:table-cell">
-                    <div class="flex">
-                      8 Gig
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    3137M / 8000M
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    <span class="text-gray-900 font-medium">39.2%</span>
-                  </td>
-                  <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                    <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                      <!-- Heroicon name: solid/external-link -->
-                      <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                      </svg>
-                    </a>
-
-                    <!--                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">-->
-                    <!--                          &lt;!&ndash; Heroicon name: solid/dots-vertical &ndash;&gt;-->
-                    <!--                          <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">-->
-                    <!--                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />-->
-                    <!--                          </svg>-->
-                    <!--                        </a>-->
-                  </td>
-                </tr>
-
-                <tr class="bg-red-100">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div class="flex items-center">
-                      <a href="#" class="group inline-flex space-x-2 truncate text-sm">
-                        <p class="text-gray-500 truncate group-hover:text-gray-900">
-                          furstclasscanine.com
-                        </p>
-                      </a>
-                      <svg class="ml-2 h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                      </svg>
-                    </div>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                    furstc
-                  </td>
-                  <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 border border-green-300 capitalize">
-                          yes
-                        </span>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-900 lg:table-cell">
-                    <div class="flex">
-                      5 Gig
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    2878M / 5000M
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    <span class="text-gray-900 font-medium">57.6%</span>
-                  </td>
-                  <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                    <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                      <!-- Heroicon name: solid/external-link -->
-                      <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                      </svg>
-                    </a>
-                  </td>
-                </tr>
-
-                <tr class="bg-white">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div class="flex">
-                      <a href="#" class="group inline-flex space-x-2 truncate text-sm">
-                        <p class="text-gray-500 truncate group-hover:text-gray-900">
-                          minternational.com
-                        </p>
-                      </a>
-                    </div>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                    minter
-                  </td>
-                  <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200 capitalize">
+                      @else
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">
                           no
                         </span>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-900 lg:table-cell">
-                    <div class="flex">
-                      30 Gig
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    1048M / unlimited
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    <span class="text-gray-900 font-medium">&mdash;</span>
-                  </td>
-                  <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                    <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                      <!-- Heroicon name: solid/external-link -->
-                      <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                      </svg>
-                    </a>
-                  </td>
-                </tr>
-
-                <tr class="bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div class="flex">
-                      <a href="#" class="group inline-flex space-x-2 truncate text-sm">
-                        <p class="text-gray-500 truncate group-hover:text-gray-900">
-                          oklahomafoam.com
-                        </p>
+                      @endif
+                    </td>
+                    <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-900 lg:table-cell">
+                      <div class="flex">
+                        {{ $account->plan }}
+                      </div>
+                    </td>
+                    <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
+                      {{ $account->disk_used }} / {{ $account->disk_limit }}
+                    </td>
+                    <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
+                      <div class="flex items-center justify-center">
+                        @if($account->formatted_disk_usage === 'Unknown')
+                          <span class="text-gray-900 font-medium">&mdash;</span>
+                        @else
+                          <span class="text-gray-900 font-medium">{{ $account->formatted_disk_usage }}</span>
+                        @endif
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
+                      <a href="{{ $account->server->whm_url }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        <x-heroicon-s-external-link class="-ml-0.5 h-4 w-4" />
                       </a>
-                    </div>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                    oklafoam
-                  </td>
-                  <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 border border-green-300 capitalize">
-                          yes
-                        </span>
-                  </td>
-                  <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-900 lg:table-cell">
-                    <div class="flex">
-                      40 Gig
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    520M / 40000M
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                    <span class="text-gray-900 font-medium">1.3%</span>
-                  </td>
-                  <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                    <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                      <!-- Heroicon name: solid/external-link -->
-                      <svg class="-ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                      </svg>
-                    </a>
-                  </td>
-                </tr>
-
-                <!-- More accounts... -->
+                    </td>
+                  </tr>
+                @endforeach
               </tbody>
             </table>
-            <!-- Pagination -->
-            <!--                <nav class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6" aria-label="Pagination">-->
-            <!--                  <div class="hidden sm:block">-->
-            <!--                    <p class="text-sm text-gray-700">-->
-            <!--                      Showing-->
-            <!--                      <span class="font-medium">1</span>-->
-            <!--                      to-->
-            <!--                      <span class="font-medium">50</span>-->
-            <!--                      of-->
-            <!--                      <span class="font-medium">50</span>-->
-            <!--                      results-->
-            <!--                    </p>-->
-            <!--                  </div>-->
-            <!--                  <div class="flex-1 flex justify-between sm:justify-end">-->
-            <!--                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">-->
-            <!--                      Previous-->
-            <!--                    </a>-->
-            <!--                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">-->
-            <!--                      Next-->
-            <!--                    </a>-->
-            <!--                  </div>-->
-            <!--                </nav>-->
           </div>
         </div>
       </div>
