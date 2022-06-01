@@ -220,7 +220,7 @@
     <!-- Accounts list (smallest breakpoint only) -->
     <div class="shadow sm:hidden mt-8">
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden rounded-lg">
-        @foreach($server->accounts as $account)
+        @forelse($server->accounts as $account)
           <li>
             <a href="#"
               @class([
@@ -259,7 +259,13 @@
             </span>
             </a>
           </li>
-        @endforeach
+        @empty
+          <li>
+            <span class="block px-4 py-4 bg-white hover:bg-gray-50">
+              No accounts found.
+            </span>
+          </li>
+        @endforelse
       </ul>
     </div>
 
@@ -295,7 +301,7 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($server->accounts as $account)
+                @forelse($server->accounts as $account)
                   <tr @class([
                         'bg-yellow-100' => $account->is_disk_warning,
                         'bg-orange-100' => $account->is_disk_critical,
@@ -359,7 +365,13 @@
                       </a>
                     </td>
                   </tr>
-                @endforeach
+                @empty
+                  <tr class="bg-white">
+                    <td colspan="7" class="py-8 whitespace-nowrap font-semibold text-center text-sm text-gray-700">
+                      No accounts found.
+                    </td>
+                  </tr>
+                @endforelse
               </tbody>
             </table>
           </div>
