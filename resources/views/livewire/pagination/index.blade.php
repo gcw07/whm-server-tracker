@@ -37,5 +37,3 @@
     @endif
   </div>
 </nav>
-
-{{--@if ($paginator->hasPages())--}}
