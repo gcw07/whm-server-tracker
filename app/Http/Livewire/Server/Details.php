@@ -11,7 +11,9 @@ class Details extends Component
 
     public function mount(Server $server)
     {
-        $server->loadMissing(['accounts'])->loadCount(['accounts']);
+        $server->loadMissing(['accounts' => function ($query) {
+            return $query->orderBy('domain');
+        }])->loadCount(['accounts']);
 
         $this->server = $server;
     }
