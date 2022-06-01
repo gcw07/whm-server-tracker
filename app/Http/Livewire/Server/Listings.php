@@ -3,18 +3,20 @@
 namespace App\Http\Livewire\Server;
 
 use App\Enums\ServerTypeEnum;
+use App\Http\Livewire\WithCache;
 use App\Models\Server;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Listings extends Component
 {
-    use WithPagination;
+    use WithPagination, WithCache;
 
     public string|null $serverType = null;
 
     public function mount()
     {
+        $this->serverType = $this->getCache('serverType');
     }
 
     public function render()
@@ -31,6 +33,8 @@ class Listings extends Component
         } else {
             $this->serverType = null;
         }
+
+        $this->putCache('serverType', $this->serverType);
     }
 
     public function updatedServerType($type)
@@ -40,6 +44,8 @@ class Listings extends Component
         } else {
             $this->serverType = null;
         }
+
+        $this->putCache('serverType', $this->serverType);
     }
 
     protected function query()
