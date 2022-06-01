@@ -336,7 +336,7 @@
                         {{ $account->plan }}
                       </div>
                     </td>
-                    <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
+                    <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                       {{ $account->disk_used }} / {{ $account->disk_limit }}
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
