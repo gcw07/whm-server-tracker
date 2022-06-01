@@ -5,9 +5,12 @@ namespace App\Http\Livewire\Server;
 use App\Enums\ServerTypeEnum;
 use App\Models\Server;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Listings extends Component
 {
+    use WithPagination;
+
     public string|null $serverType = null;
 
     public function mount()
@@ -43,6 +46,6 @@ class Listings extends Component
     {
         return Server::query()->withCount(['accounts'])->when($this->serverType, function ($query) {
             return $query->where('server_type', $this->serverType);
-        })->orderBy('name')->get();
+        })->orderBy('name')->paginate(5);
     }
 }
