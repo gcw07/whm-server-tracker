@@ -173,7 +173,7 @@
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
                 @if($server->settings->get('backup_daily_enabled'))
-                  {{ $server->settings->get('backup_daily_retention') }} / Sun, Mon, Tue, Fri
+                  {{ $server->settings->get('backup_daily_retention') }} / {{ $server->formatted_backup_daily_days }}
                 @else
                   Disabled
                 @endif
@@ -185,7 +185,7 @@
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
                 @if($server->settings->get('backup_weekly_enabled'))
-                  {{ $server->settings->get('backup_weekly_retention') }} / Sunday
+                  {{ $server->settings->get('backup_weekly_retention') }} / {{ $server->formatted_backup_weekly_day }}
                 @else
                   Disabled
                 @endif
@@ -197,7 +197,7 @@
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
                 @if($server->settings->get('backup_monthly_enabled'))
-                  {{ $server->settings->get('backup_monthly_retention') }} / 1st, 15th
+                  {{ $server->settings->get('backup_monthly_retention') }} / {{ $server->formatted_backup_monthly_days }}
                 @else
                   Disabled
                 @endif
