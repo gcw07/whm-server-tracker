@@ -13,7 +13,7 @@ class Details extends Component
     {
         $server->loadMissing(['accounts' => function ($query) {
             return $query->orderBy('domain');
-        }])->loadCount(['accounts']);
+        }, 'accounts.server'])->loadCount(['accounts']);
 
         $this->server = $server;
     }
