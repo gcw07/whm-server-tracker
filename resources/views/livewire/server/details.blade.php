@@ -96,6 +96,8 @@
                 @foreach($server->formatted_php_installed_versions as $version)
                   {{ $version }}@if (!$loop->last),@endif
                 @endforeach
+                <span class="text-gray-400 font-medium">&mdash;</span>
+                <span>System</span> {{ $server->formatted_php_system_version }}
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
