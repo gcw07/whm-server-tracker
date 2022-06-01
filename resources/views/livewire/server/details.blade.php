@@ -54,7 +54,12 @@
     <!-- Begin content -->
 
     <div class="hidden text-sm text-gray-500 sm:flex sm:justify-end">
-      Last Updated: {{ $server->server_update_last_succeeded_at->diffForHumans() }}
+      Last Updated:
+      @if($server->server_update_last_succeeded_at)
+        {{ $server->server_update_last_succeeded_at->diffForHumans() }}
+      @else
+        Never
+      @endif
     </div>
     <div class="hidden sm:block">
       <dl class="mt-5 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow lg:grid-cols-3">
