@@ -172,7 +172,11 @@
                 Daily
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                10 / Sun, Mon, Tue, Fri
+                @if($server->settings->get('backup_daily_enabled'))
+                  {{ $server->settings->get('backup_daily_retention') }} / Sun, Mon, Tue, Fri
+                @else
+                  Disabled
+                @endif
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -180,7 +184,11 @@
                 Weekly
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                1 / Sunday
+                @if($server->settings->get('backup_weekly_enabled'))
+                  {{ $server->settings->get('backup_weekly_retention') }} / Sunday
+                @else
+                  Disabled
+                @endif
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -188,7 +196,11 @@
                 Monthly
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                1 / 1st, 15th
+                @if($server->settings->get('backup_monthly_enabled'))
+                  {{ $server->settings->get('backup_monthly_retention') }} / 1st, 15th
+                @else
+                  Disabled
+                @endif
               </dd>
             </div>
           </dl>
