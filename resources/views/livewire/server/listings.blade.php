@@ -161,9 +161,9 @@
                       </div>
                     </td>
                     <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800 capitalize">
-                      {{ $server->formatted_server_type }}
-                    </span>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800 capitalize">
+                        {{ $server->formatted_server_type }}
+                      </span>
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                       <span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span>
