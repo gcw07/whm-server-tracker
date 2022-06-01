@@ -18,6 +18,7 @@ use App\Http\Controllers\ServersTokenController;
 use App\Http\Controllers\UserChangePasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Livewire\Account\Listings as AccountListings;
+use App\Http\Livewire\Server\Details as ServerDetails;
 use App\Http\Livewire\Server\Listings as ServerListings;
 use App\Http\Livewire\UserListings;
 use Illuminate\Support\Facades\Route;
@@ -53,7 +54,7 @@ Route::prefix('servers')->middleware('auth')->group(function () {
     Route::get('/create', [ServersController::class, 'create'])->name('servers.create');
     Route::delete('/{server}', [ServersController::class, 'destroy'])->name('servers.destroy');
     Route::put('/{server}', [ServersController::class, 'update'])->name('servers.update');
-    Route::get('/{server}', [ServersController::class, 'show'])->name('servers.show');
+    Route::get('/{server}', ServerDetails::class)->name('servers.show');
     Route::get('/{server}/edit', [ServersController::class, 'edit'])->name('servers.edit');
 
     Route::put('/{server}/token', [ServersTokenController::class, 'update'])->name('servers.token');
