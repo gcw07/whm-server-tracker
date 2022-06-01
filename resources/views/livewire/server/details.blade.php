@@ -160,7 +160,11 @@
                 Enabled
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                Yes
+                @if($server->backups_enabled)
+                  Yes
+                @else
+                  No
+                @endif
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -191,7 +195,7 @@
         </div>
         <div class="col-span-1 lg:col-span-3 text-sm font-normal text-gray-600 p-4 flex sm:border-t sm:border-gray-200">
           <span class="font-semibold mr-4">Notes</span>
-          <p>Setup Aug. 6, 2020. Running CentOS 7.</p>
+          <p>{{ $server->notes }}</p>
         </div>
       </dl>
     </div>
