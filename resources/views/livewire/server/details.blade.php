@@ -86,6 +86,8 @@
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
                 {{ $server->formatted_server_type }}
+                <span class="text-gray-400 font-medium">&mdash;</span>
+                <span>WHM {{ $server->formatted_whm_version }}</span>
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -97,7 +99,7 @@
                   {{ $version }}@if (!$loop->last),@endif
                 @endforeach
                 <span class="text-gray-400 font-medium">&mdash;</span>
-                <span>System</span> {{ $server->formatted_php_system_version }}
+                <span>System {{ $server->formatted_php_system_version }}</span>
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
