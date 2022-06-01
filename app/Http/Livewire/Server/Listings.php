@@ -23,7 +23,16 @@ class Listings extends Component
 
     public function filterType($type)
     {
-        if (ServerTypeEnum::tryFrom($type)) {
+        if (! is_null($type) && ServerTypeEnum::tryFrom($type)) {
+            $this->serverType = $type;
+        } else {
+            $this->serverType = null;
+        }
+    }
+
+    public function updatedServerType($type)
+    {
+        if (! is_null($type) && ServerTypeEnum::tryFrom($type)) {
             $this->serverType = $type;
         } else {
             $this->serverType = null;
