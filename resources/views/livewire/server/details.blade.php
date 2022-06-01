@@ -62,10 +62,7 @@
         <div class="lg:border-r lg:border-gray-200">
           <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
             <div class="bg-sky-500 rounded-md p-1 mr-2">
-              <!-- Heroicon name: solid/information-circle -->
-              <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-              </svg>
+              <x-heroicon-s-information-circle class="h-5 w-5 text-white" />
             </div>
             Details
           </dt>
@@ -110,10 +107,7 @@
         <div class="lg:border-r lg:border-gray-200">
           <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
             <div class="bg-sky-500 rounded-md p-1 mr-2">
-              <!-- Heroicon name: solid/server -->
-              <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm14 1a1 1 0 11-2 0 1 1 0 012 0zM2 13a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2zm14 1a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd" />
-              </svg>
+              <x-heroicon-s-server class="h-5 w-5 text-white" />
             </div>
             Disk
           </dt>
