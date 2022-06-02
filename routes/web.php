@@ -44,7 +44,6 @@ Route::middleware('auth')->group(function () {
 // Account Routes...
 Route::prefix('accounts')->middleware('auth')->group(function () {
     Route::get('/', AccountListings::class)->name('accounts.index');
-    Route::get('/{server}', [AccountsController::class, 'index'])->name('accounts.server-index');
 });
 
 // Server Routes...
@@ -87,6 +86,4 @@ Route::prefix('api')->middleware('auth')->group(function () {
     Route::get('/dashboard/stats', [DashboardStatsController::class, 'index'])->name('dashboard.stats');
     Route::get('/dashboard/servers', [DashboardServersController::class, 'index'])->name('dashboard.servers');
     Route::get('/dashboard/latest-accounts', [DashboardLatestAccountsController::class, 'index'])->name('dashboard.latest-accounts');
-    Route::get('/servers', [ServersListingsController::class, 'index'])->name('servers.listing');
-    Route::get('/users', [UsersListingsController::class, 'index'])->name('users.listing');
 });
