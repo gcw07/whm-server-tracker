@@ -19,6 +19,6 @@ class Listings extends Component
 
     protected function query()
     {
-        return User::query()->orderBy('name')->paginate(50);
+        return User::query()->withLastLogin()->orderBy('name')->paginate(50);
     }
 }
