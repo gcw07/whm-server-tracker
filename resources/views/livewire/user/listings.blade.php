@@ -5,10 +5,10 @@
       Users
     </h3>
     <div class="mt-3 sm:mt-0">
-      <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+      <a href="{{ route('users.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
         <x-heroicon-s-plus class="-ml-0.5 mr-2 h-4 w-4"/>
         Create User
-      </button>
+      </a>
     </div>
   </div>
   <!-- / End Page Header -->
