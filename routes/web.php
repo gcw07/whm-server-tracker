@@ -20,6 +20,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Server\Details as ServerDetails;
 use App\Http\Livewire\Server\Listings as ServerListings;
+use App\Http\Livewire\User\Create as UserCreate;
 use App\Http\Livewire\User\Listings as UserListings;
 use Illuminate\Support\Facades\Route;
 
@@ -66,7 +67,7 @@ Route::prefix('servers')->middleware('auth')->group(function () {
 Route::prefix('users')->middleware('auth')->group(function () {
     Route::post('/', [UserController::class, 'store'])->name('users.store');
     Route::get('/', UserListings::class)->name('users.index');
-    Route::get('/create', [UserController::class, 'create'])->name('users.create');
+    Route::get('/create', UserCreate::class)->name('users.create');
     Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/{user}', [UserController::class, 'update'])->name('users.update');
     Route::get('/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
