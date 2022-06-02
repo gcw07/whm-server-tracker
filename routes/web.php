@@ -20,7 +20,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Server\Details as ServerDetails;
 use App\Http\Livewire\Server\Listings as ServerListings;
-use App\Http\Livewire\UserListings;
+use App\Http\Livewire\User\Listings as UserListings;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
