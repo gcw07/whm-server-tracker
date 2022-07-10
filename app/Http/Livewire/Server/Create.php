@@ -18,6 +18,7 @@ class Create extends Component
         'port' => '',
         'server_type' => '',
         'notes' => '',
+        'token' => '',
     ];
 
     protected $validationAttributes = [
@@ -26,6 +27,7 @@ class Create extends Component
         'state.port' => 'port',
         'state.server_type' => 'server type',
         'state.notes' => 'notes',
+        'state.token' => 'token',
     ];
 
     public function render()
@@ -41,6 +43,7 @@ class Create extends Component
             'state.port' => ['required', 'numeric'],
             'state.server_type' => ['required', new Enum(ServerTypeEnum::class)],
             'state.notes' => ['nullable', 'string'],
+            'state.token' => ['nullable', 'string'],
         ];
     }
 
