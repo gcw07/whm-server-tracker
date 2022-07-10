@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Livewire\Server;
+
+use App\Enums\ServerTypeEnum;
+use App\Models\Server;
+use Illuminate\Validation\Rules\Enum;
+use Livewire\Component;
+
+class Create extends Component
+{
+    /**
+     * The component's state.
+     */
+    public array $state = [
+        'name' => '',
+        'address' => '',
+        'port' => '',
+        'server_type' => '',
+        'notes' => '',
+    ];
+
+    protected $validationAttributes = [
+        'state.name' => 'name',
+        'state.address' => 'address',
+        'state.port' => 'port',
+        'state.server_type' => 'server type',
+        'state.notes' => 'notes',
+    ];
+
+    public function render()
+    {
+        return view('livewire.server.create')->layoutData(['title' => 'Create Server']);
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'state.name' => ['required', 'string', 'max:255'],
+            'state.address' => ['required', 'string', 'max:255'],
+            'state.port' => ['required', 'numeric'],
+            'state.server_type' => ['required', new Enum(ServerTypeEnum::class)],
+            'state.notes' => ['nullable', 'string'],
+        ];
+    }
+
+    public function save()
+    {
+        $this->validate();
+
+        Server::create($this->state);
+
+        return redirect()->route('servers.index');
+    }
+}
