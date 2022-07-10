@@ -47,7 +47,6 @@ Route::prefix('accounts')->middleware('auth')->group(function () {
 
 // Server Routes...
 Route::prefix('servers')->middleware('auth')->group(function () {
-//    Route::post('/', [ServersController::class, 'store'])->name('servers.store');
     Route::get('/', ServerListings::class)->name('servers.index');
     Route::get('/create', ServerCreate::class)->name('servers.create');
     Route::delete('/{server}', [ServersController::class, 'destroy'])->name('servers.destroy');
