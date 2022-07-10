@@ -18,7 +18,7 @@ class Create extends Component
         'port' => '',
         'server_type' => '',
         'notes' => '',
-        'token' => '',
+        'token' => null,
     ];
 
     protected $validationAttributes = [
