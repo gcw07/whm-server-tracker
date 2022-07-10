@@ -96,7 +96,7 @@
 
       <div class="hidden lg:ml-4 lg:flex lg:items-center">
         <!-- Profile dropdown -->
-        <x-navigation.dropdown class="ml-3 flex-shrink-0 x-cloak">
+        <x-navigation.dropdown class="ml-3 flex-shrink-0">
           <x-slot name="trigger">
             <button type="button"
                     class="max-w-xs bg-sky-600 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-sky-500"
