@@ -15,6 +15,7 @@ use App\Http\Controllers\ServersTokenController;
 use App\Http\Controllers\UserChangePasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Livewire\Account\Listings as AccountListings;
+use App\Http\Livewire\Server\Create as ServerCreate;
 use App\Http\Livewire\Server\Details as ServerDetails;
 use App\Http\Livewire\Server\Listings as ServerListings;
 use App\Http\Livewire\User\Create as UserCreate;
@@ -46,9 +47,9 @@ Route::prefix('accounts')->middleware('auth')->group(function () {
 
 // Server Routes...
 Route::prefix('servers')->middleware('auth')->group(function () {
-    Route::post('/', [ServersController::class, 'store'])->name('servers.store');
+//    Route::post('/', [ServersController::class, 'store'])->name('servers.store');
     Route::get('/', ServerListings::class)->name('servers.index');
-    Route::get('/create', [ServersController::class, 'create'])->name('servers.create');
+    Route::get('/create', ServerCreate::class)->name('servers.create');
     Route::delete('/{server}', [ServersController::class, 'destroy'])->name('servers.destroy');
     Route::put('/{server}', [ServersController::class, 'update'])->name('servers.update');
     Route::get('/{server}', ServerDetails::class)->name('servers.show');
