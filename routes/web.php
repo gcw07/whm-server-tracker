@@ -1,12 +1,9 @@
 <?php
 
-use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\Api\AccountsListingsController;
 use App\Http\Controllers\Api\DashboardLatestAccountsController;
 use App\Http\Controllers\Api\DashboardServersController;
 use App\Http\Controllers\Api\DashboardStatsController;
-use App\Http\Controllers\Api\ServersListingsController;
-use App\Http\Controllers\Api\UsersListingsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -65,7 +62,6 @@ Route::prefix('servers')->middleware('auth')->group(function () {
 
 // User Routes...
 Route::prefix('users')->middleware('auth')->group(function () {
-    Route::post('/', [UserController::class, 'store'])->name('users.store');
     Route::get('/', UserListings::class)->name('users.index');
     Route::get('/create', UserCreate::class)->name('users.create');
     Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy');
