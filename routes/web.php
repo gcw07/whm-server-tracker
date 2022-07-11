@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\AccountsListingsController;
 use App\Http\Controllers\Api\DashboardLatestAccountsController;
 use App\Http\Controllers\Api\DashboardServersController;
 use App\Http\Controllers\Api\DashboardStatsController;
@@ -10,7 +9,6 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RefreshServerController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\ServersController;
 use App\Http\Controllers\ServersTokenController;
 use App\Http\Controllers\UserChangePasswordController;
 use App\Http\Controllers\UserController;
@@ -74,8 +72,6 @@ Route::middleware('auth')->group(function () {
 
 // API Routes...
 Route::prefix('api')->middleware('auth')->group(function () {
-    Route::get('/accounts', [AccountsListingsController::class, 'index'])->name('accounts.listing');
-    Route::get('/accounts/{server}', [AccountsListingsController::class, 'index'])->name('accounts.server-listing');
     Route::get('/dashboard/stats', [DashboardStatsController::class, 'index'])->name('dashboard.stats');
     Route::get('/dashboard/servers', [DashboardServersController::class, 'index'])->name('dashboard.servers');
     Route::get('/dashboard/latest-accounts', [DashboardLatestAccountsController::class, 'index'])->name('dashboard.latest-accounts');
