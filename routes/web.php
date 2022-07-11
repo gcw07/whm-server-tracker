@@ -61,7 +61,6 @@ Route::prefix('servers')->middleware('auth')->group(function () {
 Route::prefix('users')->middleware('auth')->group(function () {
     Route::get('/', UserListings::class)->name('users.index');
     Route::get('/create', UserCreate::class)->name('users.create');
-    Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/{user}', [UserController::class, 'update'])->name('users.update');
     Route::get('/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 
