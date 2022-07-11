@@ -4,9 +4,12 @@ namespace App\Http\Livewire\Server;
 
 use App\Models\Server;
 use LivewireUI\Modal\ModalComponent;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Delete extends ModalComponent
 {
+    use WireToast;
+
     public $server;
 
     public function mount(Server $server)
@@ -28,6 +31,7 @@ class Delete extends ModalComponent
     {
         $this->server->delete();
 
+        toast()->success('The server was deleted successfully.')->pushOnNextPage();
         return redirect()->route('servers.index');
     }
 }
