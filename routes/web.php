@@ -49,10 +49,7 @@ Route::prefix('accounts')->middleware('auth')->group(function () {
 Route::prefix('servers')->middleware('auth')->group(function () {
     Route::get('/', ServerListings::class)->name('servers.index');
     Route::get('/create', ServerCreate::class)->name('servers.create');
-    Route::delete('/{server}', [ServersController::class, 'destroy'])->name('servers.destroy');
-    Route::put('/{server}', [ServersController::class, 'update'])->name('servers.update');
     Route::get('/{server}', ServerDetails::class)->name('servers.show');
-    Route::get('/{server}/edit', [ServersController::class, 'edit'])->name('servers.edit');
 
     Route::put('/{server}/token', [ServersTokenController::class, 'update'])->name('servers.token');
     Route::delete('/{server}/token', [ServersTokenController::class, 'destroy'])->name('servers.token-destroy');
