@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full bg-gray-100" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="h-full bg-gray-100" lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,6 +18,7 @@
   <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body class="h-full font-sans antialiased">
+<livewire:toasts />
 
 <div class="min-h-full">
   <x-layouts.navigation />
