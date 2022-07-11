@@ -37,10 +37,9 @@ class Delete extends ModalComponent
             return false;
         }
 
-        toast()->success('The user was deleted successfully.')->pushOnNextPage();
-
         $this->user->delete();
 
+        toast()->success('The user was deleted successfully.')->pushOnNextPage();
         return redirect()->route('users.index');
     }
 }
