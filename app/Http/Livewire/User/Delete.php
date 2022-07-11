@@ -30,14 +30,16 @@ class Delete extends ModalComponent
     public function delete()
     {
         if ($this->user->id === auth()->user()->id) {
-            toast()->danger('You may not delete yourself.')->pushOnNextPage();
+            toast()->danger('You may not delete yourself.')->push();
 
-            return redirect()->route('users.index');
+            $this->closeModal();
+
+            return false;
         }
 
         toast()->success('The user was deleted successfully.')->pushOnNextPage();
 
-//        $this->user->delete();
+        $this->user->delete();
 
         return redirect()->route('users.index');
     }
