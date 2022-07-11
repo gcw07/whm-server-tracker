@@ -41,10 +41,30 @@
         Refresh
       </button>
 
-      <button type="button" class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-        <x-heroicon-s-dots-vertical class="-ml-0.5 -mr-1 h-4 w-4" />
-        &nbsp;
-      </button>
+      <!-- Details menu dropdown -->
+      <x-navigation.dropdown class="ml-2">
+        <x-slot name="trigger">
+          <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
+            <x-heroicon-s-dots-vertical class="-ml-0.5 -mr-1 h-4 w-4" />
+            &nbsp;
+          </button>
+        </x-slot>
+
+        <div
+          class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+          role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+          <a href="{{ route('users.index') }}" class="flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+             role="menuitem" tabindex="-1" id="details-menu-item-0">
+            <x-heroicon-s-pencil-alt class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+            Edit
+          </a>
+          <button wire:click='$emit("openModal", "server.delete", {{ json_encode(["server" => $server->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+             role="menuitem" tabindex="-1" id="details-menu-item-1">
+            <x-heroicon-s-trash class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+            Delete
+          </button>
+        </div>
+      </x-navigation.dropdown>
     </div>
   </div>
   <!-- / End Page Header -->
