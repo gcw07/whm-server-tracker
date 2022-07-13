@@ -89,9 +89,18 @@
               <span class="flex items-center space-x-4">
                 <span class="flex-1 flex space-x-2 truncate">
                   <span class="flex flex-col text-gray-500 text-sm truncate">
-                    <span class="truncate">{{ $server->name }}</span>
-                    <span><span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span> accounts</span>
-                    <span>{{ $server->settings->get('disk_percentage') }}%</span>
+                    <span class="truncate">
+                      {{ $server->name }}
+                    </span>
+                    @if($server->missing_token)
+                      <span class="inline-flex items-center px-2.5 py-0.5 mt-3 rounded-full text-sm font-medium bg-red-200 text-red-800 capitalize">
+                        <x-heroicon-s-exclamation class="-ml-0.5 mr-1 h-4 w-4" />
+                        no token
+                      </span>
+                    @else
+                      <span><span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span> accounts</span>
+                      <span>{{ $server->settings->get('disk_percentage') }}%</span>
+                    @endif
                   </span>
                 </span>
                 <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
@@ -157,6 +166,12 @@
                           <p class="text-gray-500 truncate group-hover:text-gray-900">
                             {{ $server->name }}
                           </p>
+                          @if($server->missing_token)
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">
+                              <x-heroicon-s-exclamation class="-ml-0.5 mr-1 h-4 w-4" />
+                              no token
+                            </span>
+                          @endif
                         </a>
                       </div>
                     </td>

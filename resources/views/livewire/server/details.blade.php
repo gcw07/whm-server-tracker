@@ -19,6 +19,12 @@
       </nav>
       <h3 class="mt-2 text-2xl leading-6 font-medium text-gray-900">
         {{ $server->name }}
+        @if($server->missing_token)
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">
+            <x-heroicon-s-exclamation class="-ml-0.5 mr-1 h-4 w-4" />
+            no token
+          </span>
+        @endif
       </h3>
     </div>
 
