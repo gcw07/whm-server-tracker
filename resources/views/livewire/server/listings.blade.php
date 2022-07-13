@@ -77,7 +77,7 @@
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
         @forelse($servers as $server)
           <li>
-            <a href="#"
+            <a href="{{ route('servers.show', $server->id) }}"
               @class([
                'block px-4 py-4 hover:bg-gray-50',
                'bg-yellow-100' => $server->is_disk_warning,
