@@ -17,6 +17,7 @@ use App\Http\Livewire\Server\Create as ServerCreate;
 use App\Http\Livewire\Server\Details as ServerDetails;
 use App\Http\Livewire\Server\Listings as ServerListings;
 use App\Http\Livewire\User\Create as UserCreate;
+use App\Http\Livewire\User\Edit as UserEdit;
 use App\Http\Livewire\User\Listings as UserListings;
 use Illuminate\Support\Facades\Route;
 
@@ -59,8 +60,7 @@ Route::prefix('servers')->middleware('auth')->group(function () {
 Route::prefix('users')->middleware('auth')->group(function () {
     Route::get('/', UserListings::class)->name('users.index');
     Route::get('/create', UserCreate::class)->name('users.create');
-    Route::put('/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::get('/{user}/edit', UserEdit::class)->name('users.edit');
 
     Route::put('/{user}/change-password', [UserChangePasswordController::class, 'update'])->name('users.change-password');
 });
