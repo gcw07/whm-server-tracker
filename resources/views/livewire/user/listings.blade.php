@@ -55,7 +55,7 @@
     <div class="hidden sm:block">
       <div class="mx-auto">
         <div class="flex flex-col mt-2">
-          <div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+          <div class="align-middle min-w-full shadow sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200">
               <thead>
                 <tr>
