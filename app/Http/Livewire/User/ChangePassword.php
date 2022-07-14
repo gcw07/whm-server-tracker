@@ -41,6 +41,11 @@ class ChangePassword extends ModalComponent
         return 'xl';
     }
 
+    public static function closeModalOnClickAway(): bool
+    {
+        return false;
+    }
+
     protected function rules(): array
     {
         return [
