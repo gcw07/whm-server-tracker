@@ -48,8 +48,6 @@ Route::prefix('servers')->middleware('auth')->group(function () {
     Route::get('/create', ServerCreate::class)->name('servers.create');
     Route::get('/{server}', ServerDetails::class)->name('servers.show');
     Route::get('/{server}/edit', ServerEdit::class)->name('servers.edit');
-
-    Route::get('/{server}/refresh', [RefreshServerController::class, 'update'])->name('servers.refresh');
 });
 
 // User Routes...
