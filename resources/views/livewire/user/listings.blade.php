@@ -113,14 +113,19 @@
 
                         <div
                           class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                          role="menu" aria-orientation="vertical" aria-labelledby="details-menu-button" tabindex="-1">
+                          role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                           <a href="{{ route('users.edit', $user) }}" class="flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                             role="menuitem" tabindex="-1" id="details-menu-item-0">
+                             role="menuitem" tabindex="-1" id="user-menu-item-0">
                             <x-heroicon-s-pencil-alt class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
                             Edit
                           </a>
+                          <button wire:click='$emit("openModal", "user.change-password", {{ json_encode(["user" => $user->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  role="menuitem" tabindex="-1" id="user-menu-item-1">
+                            <x-heroicon-s-key class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                            Change Password
+                          </button>
                           <button wire:click='$emit("openModal", "user.delete", {{ json_encode(["user" => $user->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                  role="menuitem" tabindex="-1" id="details-menu-item-1">
+                                  role="menuitem" tabindex="-1" id="user-menu-item-2">
                             <x-heroicon-s-trash class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
                             Delete
                           </button>
