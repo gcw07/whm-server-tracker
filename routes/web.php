@@ -9,8 +9,6 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RefreshServerController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\ServersTokenController;
-use App\Http\Controllers\UserChangePasswordController;
 use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Server\Create as ServerCreate;
 use App\Http\Livewire\Server\Details as ServerDetails;
@@ -50,9 +48,6 @@ Route::prefix('servers')->middleware('auth')->group(function () {
     Route::get('/create', ServerCreate::class)->name('servers.create');
     Route::get('/{server}', ServerDetails::class)->name('servers.show');
     Route::get('/{server}/edit', ServerEdit::class)->name('servers.edit');
-
-    Route::put('/{server}/token', [ServersTokenController::class, 'update'])->name('servers.token');
-    Route::delete('/{server}/token', [ServersTokenController::class, 'destroy'])->name('servers.token-destroy');
 
     Route::get('/{server}/refresh', [RefreshServerController::class, 'update'])->name('servers.refresh');
 });
