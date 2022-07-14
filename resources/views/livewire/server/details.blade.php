@@ -29,14 +29,6 @@
     </div>
 
     <div class="flex mt-3 md:mt-0 md:ml-4">
-      <!--          <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">-->
-      <!--            &lt;!&ndash; Heroicon name: solid/pencil &ndash;&gt;-->
-      <!--            <svg class="-ml-0.5 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">-->
-      <!--              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />-->
-      <!--            </svg>-->
-      <!--            Edit-->
-      <!--          </button>-->
-
       <a href="{{ $server->whm_url }}" target="_blank" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
         <x-heroicon-s-external-link class="-ml-0.5 mr-2 h-4 w-4" />
         View
@@ -64,8 +56,13 @@
             <x-heroicon-s-pencil-alt class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
             Edit
           </a>
+          <button wire:click='$emit("openModal", "server.reset-token", {{ json_encode(["server" => $server->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem" tabindex="-1" id="details-menu-item-1">
+            <x-heroicon-s-key class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+            Reset API Token
+          </button>
           <button wire:click='$emit("openModal", "server.delete", {{ json_encode(["server" => $server->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-             role="menuitem" tabindex="-1" id="details-menu-item-1">
+             role="menuitem" tabindex="-1" id="details-menu-item-2">
             <x-heroicon-s-trash class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
             Delete
           </button>
