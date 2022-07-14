@@ -84,18 +84,20 @@
                     ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
-                        <a href="#" class="group inline-flex space-x-2 truncate text-sm">
-                          <p class="text-gray-500 truncate group-hover:text-gray-900">
-                            {{ $user->name }}
-                          </p>
-                        </a>
+                        <p class="text-gray-500 truncate text-sm group-hover:text-gray-900">
+                          {{ $user->name }}
+                        </p>
                       </div>
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                       <span class="text-gray-900 font-medium">{{ $user->email }}</span>
                     </td>
                     <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                      <span class="text-gray-900 font-medium">{{ $user->lastLogin?->created_at->format('F j, Y, g:i a') }}</span>
+                      @if($user->lastLogin)
+                        <span class="text-gray-900 font-medium">{{ $user->lastLogin?->created_at->format('F j, Y, g:i a') }}</span>
+                      @else
+                        <span class="text-gray-900 font-medium">Never</span>
+                      @endif
                     </td>
                     <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
                       <span class="text-gray-900 font-medium">{{ $user->lastLogin?->ip_address }}</span>
