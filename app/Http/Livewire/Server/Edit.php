@@ -6,9 +6,12 @@ use App\Enums\ServerTypeEnum;
 use App\Models\Server;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Component;
+use Usernotnull\Toast\Concerns\WireToast;
 
 class Edit extends Component
 {
+    use WireToast;
+
     public Server $server;
 
     /**
@@ -53,6 +56,7 @@ class Edit extends Component
 
         $this->server->update($this->state);
 
+        toast()->success('The server information was updated successfully.')->pushOnNextPage();
         return redirect()->route('servers.show', $this->server);
     }
 }
