@@ -51,8 +51,8 @@ class Create extends Component
     {
         $this->validate();
 
-        Server::create($this->state);
+        $server = Server::create($this->state);
 
-        return redirect()->route('servers.index');
+        return redirect()->route('servers.show', $server->id);
     }
 }
