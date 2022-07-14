@@ -49,7 +49,14 @@ class NewToken extends ModalComponent
     {
         $this->validate();
 
+        $hadMissingToken = $this->server->missing_token;
+
         $this->server->update($this->state);
+
+        if ($hadMissingToken) {
+            toast()->success('The server api token was updated successfully.')->pushOnNextPage();
+            return redirect()->route('servers.show', $this->server);
+        }
 
         toast()->success('The server api token was updated successfully.')->push();
         $this->forceClose()->closeModal();
