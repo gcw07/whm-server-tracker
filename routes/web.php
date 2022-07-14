@@ -7,7 +7,6 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\RefreshServerController;
 use App\Http\Controllers\SearchController;
 use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Server\Create as ServerCreate;
