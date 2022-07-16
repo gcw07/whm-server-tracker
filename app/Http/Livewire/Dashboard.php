@@ -51,7 +51,7 @@ class Dashboard extends Component
 
     protected function recentAccounts()
     {
-        return Account::query()->latest()->limit(10)->get();
+        return Account::query()->with(['server'])->latest()->limit(10)->get();
     }
 
 }

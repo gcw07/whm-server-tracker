@@ -114,6 +114,7 @@
                     <thead class="bg-gray-50">
                       <tr>
                         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Domain</th>
+                        <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Server</th>
                         <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Date Added</th>
                       </tr>
                     </thead>
@@ -127,10 +128,21 @@
                               </p>
                             </a>
                           </td>
+                          <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500">
+                            <a href="{{ route('servers.show', $account->server->id) }}" class="group inline-flex space-x-2 truncate text-sm">
+                              <p class="text-gray-500 truncate group-hover:text-gray-900">
+                                {{ $account->server->name }}
+                              </p>
+                            </a>
+                          </td>
                           <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500"> {{ $account->created_at?->diffForHumans() }} </td>
                         </tr>
                       @empty
-
+                        <tr>
+                          <td colspan="3" class="whitespace-nowrap py-3 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                            <p class="text-center">No accounts found. Please add valid servers to start importing accounts.</p>
+                          </td>
+                        </tr>
                       @endforelse
                     </tbody>
                   </table>
