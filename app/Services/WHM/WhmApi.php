@@ -104,6 +104,7 @@ class WhmApi
         if (sizeof($this->successMessages) > 0) {
             $this->server->update([
                 'server_update_last_succeeded_at' => Carbon::now(),
+                'server_update_last_failed_at' => null,
             ]);
 
             event(new FetchedDataSucceededEvent($this->server, $this->successMessages));
@@ -112,6 +113,7 @@ class WhmApi
         if (sizeof($this->failureMessages) > 0 && $this->shouldFireFailedEvent()) {
             $this->server->update([
                 'server_update_last_failed_at' => Carbon::now(),
+                'server_update_last_succeeded_at' => null,
             ]);
 
             event(new FetchedDataFailedEvent($this->server, $this->failureMessages));
