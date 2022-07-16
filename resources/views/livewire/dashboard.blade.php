@@ -56,7 +56,7 @@
     </div>
 
 
-    <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+    <div class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-3">
 
       <!--Server Types -->
       <div>
@@ -99,7 +99,7 @@
         </div>
 
       </div>
-      <div class="col-span-2">
+      <div class="md:col-span-2">
         <div>
           <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
