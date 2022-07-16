@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\DashboardLatestAccountsController;
-use App\Http\Controllers\Api\DashboardServersController;
-use App\Http\Controllers\Api\DashboardStatsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -59,11 +56,4 @@ Route::prefix('users')->middleware('auth')->group(function () {
 // Search Routes...
 Route::middleware('auth')->group(function () {
     Route::get('/search', [SearchController::class, 'index'])->name('search');
-});
-
-// API Routes...
-Route::prefix('api')->middleware('auth')->group(function () {
-    Route::get('/dashboard/stats', [DashboardStatsController::class, 'index'])->name('dashboard.stats');
-    Route::get('/dashboard/servers', [DashboardServersController::class, 'index'])->name('dashboard.servers');
-    Route::get('/dashboard/latest-accounts', [DashboardLatestAccountsController::class, 'index'])->name('dashboard.latest-accounts');
 });
