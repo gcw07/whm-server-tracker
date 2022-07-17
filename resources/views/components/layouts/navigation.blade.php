@@ -15,25 +15,27 @@
 
       <div class="flex-1 px-2 items-center flex justify-center lg:ml-6 lg:justify-end">
         <div class="max-w-lg w-full lg:max-w-xs">
-          <label for="search" class="sr-only">Search</label>
-          <div x-data="SearchComponent()"
-               @keydown.meta.k.window.prevent="focusBox()"
-               class="relative text-gray-400 focus-within:text-gray-600">
-            <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-              <x-heroicon-s-search class="h-5 w-5"/>
+          <form action="{{ route('search') }}">
+            <label for="search" class="sr-only">Search</label>
+            <div x-data="SearchComponent()"
+                 @keydown.meta.k.window.prevent="focusBox()"
+                 class="relative text-gray-400 focus-within:text-gray-600">
+              <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+                <x-heroicon-s-search class="h-5 w-5"/>
+              </div>
+              <input id="search"
+                     x-ref="search"
+                     class="block w-full bg-white py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-sky-600 focus:ring-white focus:border-white sm:text-sm"
+                     placeholder="Search" type="text" name="q">
+              <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+                <kbd
+                  class="inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400">
+                  <abbr x-show="isMacintosh()" title="Command" class="no-underline" x-cloak>⌘</abbr>
+                  <abbr x-show="!isMacintosh()" title="Command" class="no-underline" x-cloak>Ctrl</abbr> K
+                </kbd>
+              </div>
             </div>
-            <input id="search"
-                   x-ref="search"
-                   class="block w-full bg-white py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-sky-600 focus:ring-white focus:border-white sm:text-sm"
-                   placeholder="Search" type="search" name="search">
-            <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
-              <kbd
-                class="inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400">
-                <abbr x-show="isMacintosh()" title="Command" class="no-underline" x-cloak>⌘</abbr>
-                <abbr x-show="!isMacintosh()" title="Command" class="no-underline" x-cloak>Ctrl</abbr> K
-              </kbd>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
       <div class="flex items-center lg:hidden">
