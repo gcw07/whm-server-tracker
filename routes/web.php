@@ -3,9 +3,9 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\SearchController;
 use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\Search;
 use App\Http\Livewire\Server\Create as ServerCreate;
 use App\Http\Livewire\Server\Details as ServerDetails;
 use App\Http\Livewire\Server\Edit as ServerEdit;
@@ -55,5 +55,5 @@ Route::prefix('users')->middleware('auth')->group(function () {
 
 // Search Routes...
 Route::middleware('auth')->group(function () {
-    Route::get('/search', [SearchController::class, 'index'])->name('search');
+    Route::get('/search', Search::class)->name('search');
 });
