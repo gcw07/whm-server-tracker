@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\ServerTypeEnum;
+use App\Http\Livewire\Server\Edit as ServerEdit;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -25,62 +25,20 @@ test('an authorized user can view the edit server form', function () {
         ->assertSuccessful();
 });
 
-test('guests cannot edit a server', function () {
-    $this->putJson(route('servers.update', $this->server->id), $this->requestData->create())
-        ->assertUnauthorized();
-
-    tap($this->server->fresh(), function (Server $server) {
-        $this->assertEquals('old-my-server-name', $server->name);
-    });
-});
-
 test('an authorized user can edit a server', function () {
-    $response = $this->actingAs($this->user)
-        ->putJson(route('servers.update', $this->server->id), $this->requestData->create([
-            'name' => 'My Server',
-        ]));
+    $this->actingAs($this->user);
 
-    $response->assertRedirect(route('servers.index'));
+    Livewire::test(ServerEdit::class, ['server' => $this->server])
+        ->set('state', $this->requestData->create([
+            'name' => 'My Server',
+        ]))
+        ->call('save')
+        ->assertRedirect(route('servers.show', $this->server->id));
 
     tap($this->server->fresh(), function (Server $server) {
         $this->assertEquals('My Server', $server->name);
     });
 });
-
-//test('the api token disk and backup details are cleared when reseller server type is selected', function () {
-//    signIn();
-//
-//    $server = Server::factory()->create([
-//        'server_type' => ServerTypeEnum::dedicated(),
-//        'token' => 'old-api-token',
-//    ]);
-//
-//    $server->settings()->merge([
-//        'disk_used' => 10000000,
-//        'disk_available' => 115000000,
-//        'disk_total' => 125000000,
-//        'disk_percentage' => 8,
-//        'backup_enabled' => false,
-//        'backup_days' => '1,2',
-//        'backup_retention' => 10
-//    ]);
-//
-//    $response = $this->putJson("/servers/{$server->id}", $this->requestData->create([
-//        'server_type' => 'reseller'
-//    ]));
-//
-//    tap($server->fresh(), function ($server) {
-//        $this->assertEquals('reseller', $server->server_type);
-//        $this->assertNull($server->token);
-//        $this->assertNull($server->settings()->disk_used);
-//        $this->assertNull($server->settings()->disk_available);
-//        $this->assertNull($server->settings()->disk_total);
-//        $this->assertNull($server->settings()->disk_percentage);
-//        $this->assertNull($server->settings()->backup_enabled);
-//        $this->assertNull($server->settings()->backup_days);
-//        $this->assertNull($server->settings()->backup_retention);
-//    });
-//});
 
 it('validates rules for server edit form', function ($data) {
     // This could be fixed in future pest version.
@@ -89,25 +47,25 @@ it('validates rules for server edit form', function ($data) {
     $expectedResultType = $data[2];
     $errorMessage = $data[3];
 
-    $response = $this->actingAs($this->user)
-        ->putJson(route('servers.update', $this->server->id), $this->requestData->create([
-            $field => $value,
-        ]));
+    $this->actingAs($this->user);
+
+    $response = Livewire::test(ServerEdit::class, ['server' => $this->server])
+        ->set('state', $this->requestData->create([$field => $value,]))
+        ->call('save');
 
     if ($expectedResultType === 'invalid') {
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors([$field => $errorMessage]);
+        $response->assertHasErrors(["state.$field" => $errorMessage]);
     } else {
         tap(Server::first(), function (Server $server) use ($field) {
-            $this->assertNull($server->{$field});
+            $this->assertEmpty($server->{$field});
         });
     }
 })->with([
-    fn () => ['name', '', 'invalid', 'field is required'],
-    fn () => ['address', '', 'invalid', 'field is required'],
-    fn () => ['port', '', 'invalid', 'field is required'],
-    fn () => ['port', 'not-a-number', 'invalid', 'must be a number'],
-    fn () => ['server_type', '', 'invalid', 'field is required'],
-    fn () => ['server_type', 'not-valid-type', 'invalid', 'is invalid'],
+    fn () => ['name', '', 'invalid', 'required'],
+    fn () => ['address', '', 'invalid', 'required'],
+    fn () => ['port', '', 'invalid', 'required'],
+    fn () => ['port', 'not-a-number', 'invalid', 'numeric'],
+    fn () => ['server_type', '', 'invalid', 'required'],
+    fn () => ['server_type', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
     fn () => ['notes', '', 'success', null],
 ]);
