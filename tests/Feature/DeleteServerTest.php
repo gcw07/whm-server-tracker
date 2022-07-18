@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Server\Delete as ServerDelete;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
@@ -12,17 +13,17 @@ beforeEach(function () {
     $this->server = Server::factory()->create();
 });
 
-test('guests cannot delete a server', function () {
-    $this->deleteJson(route('servers.destroy', $this->server->id))
-        ->assertUnauthorized();
-
-    $this->assertEquals(1, Server::count());
+test('guests cannot access the delete server component', function () {
+    $response = Livewire::test(ServerDelete::class, ['server' => $this->server]);
+    $response->assertStatus(401);
 });
 
 test('an authorized user can delete a server', function () {
-    $this->actingAs($this->user)
-        ->deleteJson((route('servers.destroy', $this->server->id)))
-        ->assertSuccessful();
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test(ServerDelete::class, ['server' => $this->server])
+        ->call('delete')
+        ->assertRedirect(route('servers.index'));
 
     $this->assertEquals(0, Server::count());
 });
@@ -36,15 +37,17 @@ test('accounts are deleted when a server is deleted', function () {
         ->has(Account::factory()->count(1))
         ->create(['name' => 'other-server-name']);
 
-    $this->assertEquals(3, Server::count());
+    $this->assertEquals(3, Server::count()); // +1 from the beforeEach
 
     tap($server->fresh(), function (Server $server) {
         $this->assertCount(5, $server->accounts);
     });
 
-    $this->actingAs($this->user)
-        ->deleteJson((route('servers.destroy', $server->id)))
-        ->assertSuccessful();
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test(ServerDelete::class, ['server' => $server])
+        ->call('delete')
+        ->assertRedirect(route('servers.index'));
 
     $this->assertEquals(2, Server::count());
     $this->assertEquals(1, Account::count());
