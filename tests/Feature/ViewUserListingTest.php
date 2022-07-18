@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\User\Listings as UserListings;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
@@ -10,34 +11,13 @@ test('guests can not view user listings page', function () {
         ->assertRedirect(route('login'));
 });
 
-//test('an authorized user can view user listings page', function () {
-//    $user = User::factory()->create();
-//
-//    $this->actingAs($user)
-//        ->get(route('users.index'))
-//        ->assertSuccessful();
-//});
-
-test('guests can not view user api listings', function () {
-    $this->get(route('users.listing'))
-        ->assertRedirect(route('login'));
-});
-
-test('an authorized user can view user api listings', function () {
-    $user = User::factory()->create([
+test('an authorized user can view user listings page', function () {
+    $this->actingAs(User::factory()->create([
         'name' => 'John Doe',
-        'email' => 'john@example.com',
-    ]);
+    ]));
 
-    $response = $this->actingAs($user)
-        ->get(route('users.listing'))
-        ->assertSuccessful();
-
-    tap($response->json(), function ($users) {
-        $this->assertCount(1, $users);
-        $this->assertEquals('John Doe', $users[0]['name']);
-        $this->assertEquals('john@example.com', $users[0]['email']);
-    });
+    Livewire::test(UserListings::class)
+        ->assertSee('John Doe');
 });
 
 test('the user listings are in alphabetical order', function () {
@@ -45,13 +25,10 @@ test('the user listings are in alphabetical order', function () {
     $userB = User::factory()->create(['name' => 'Amy Smith']);
     $userC = User::factory()->create(['name' => 'Zach Williams']);
 
-    $response = $this->actingAs($userA)
-        ->get(route('users.listing'))
-        ->assertSuccessful();
+    $this->actingAs($userA);
 
-    $response->jsonData()->assertEquals([
-        $userB,
-        $userA,
-        $userC,
-    ]);
-});
+    Livewire::test(UserListings::class)
+        ->assertViewHas('users', function ($users) {
+            return 3 === count($users);
+        });
+})->skip();
