@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\ServerTypeEnum;
+use App\Http\Livewire\Server\Create as ServerCreate;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -24,25 +25,23 @@ test('an authorized user can view the add server form', function () {
         ->assertSuccessful();
 });
 
-test('guests cannot add new servers', function () {
-    $response = $this->postJson(route('servers.store'), $this->requestData->create());
-
-    $response->assertStatus(401);
-    $this->assertEquals(0, Server::count());
-});
-
 test('an authorized user can add a valid server', function () {
-    $response = $this->actingAs($this->user)
-        ->postJson(route('servers.store'), $this->requestData->create([
+    $this->actingAs($this->user);
+
+    $response = Livewire::test(ServerCreate::class)
+        ->set('state', [
             'name' => 'My Test Server',
             'address' => '255.1.1.100',
             'port' => 1111,
             'server_type' => ServerTypeEnum::Dedicated,
             'notes' => 'some server note',
             'token' => 'new-server-api-token',
-        ]));
+        ])
+        ->call('save');
 
-    $response->assertRedirect(route('servers.index'));
+    $server = Server::first();
+
+    $response->assertRedirect(route('servers.show', $server->id));
 
     $this->assertDatabaseHas('servers', [
         'name' => 'My Test Server',
@@ -57,27 +56,25 @@ it('validates rules for create server form', function ($data) {
     $expectedResultType = $data[2];
     $errorMessage = $data[3];
 
-    $response = $this->actingAs($this->user)
-        ->postJson(route('servers.store'), $this->requestData->create([
-            $field => $value,
-        ]));
+    $response = Livewire::test(ServerCreate::class)
+        ->set('state', $this->requestData->create([$field => $value,]))
+        ->call('save');
 
     if ($expectedResultType === 'invalid') {
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors([$field => $errorMessage]);
+        $response->assertHasErrors(["state.$field" => $errorMessage]);
         $this->assertEquals(0, Server::count());
     } else {
         tap(Server::first(), function (Server $server) use ($field) {
-            $this->assertNull($server->{$field});
+            $this->assertEmpty($server->{$field});
         });
     }
 })->with([
-    fn () => ['name', '', 'invalid', 'field is required'],
-    fn () => ['address', '', 'invalid', 'field is required'],
-    fn () => ['port', '', 'invalid', 'field is required'],
-    fn () => ['port', 'not-a-number', 'invalid', 'must be a number'],
-    fn () => ['server_type', '', 'invalid', 'field is required'],
-    fn () => ['server_type', 'not-valid-type', 'invalid', 'is invalid'],
+    fn () => ['name', '', 'invalid', 'required'],
+    fn () => ['address', '', 'invalid', 'required'],
+    fn () => ['port', '', 'invalid', 'required'],
+    fn () => ['port', 'not-a-number', 'invalid', 'numeric'],
+    fn () => ['server_type', '', 'invalid', 'required'],
+    fn () => ['server_type', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
     fn () => ['notes', '', 'success', null],
     fn () => ['token', '', 'success', null],
 ]);
