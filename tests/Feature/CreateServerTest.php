@@ -56,6 +56,8 @@ it('validates rules for create server form', function ($data) {
     $expectedResultType = $data[2];
     $errorMessage = $data[3];
 
+    $this->actingAs($this->user);
+
     $response = Livewire::test(ServerCreate::class)
         ->set('state', $this->requestData->create([$field => $value,]))
         ->call('save');
