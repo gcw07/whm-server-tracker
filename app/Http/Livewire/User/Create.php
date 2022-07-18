@@ -54,7 +54,7 @@ class Create extends Component
         ];
     }
 
-    public function save(): \Illuminate\Http\RedirectResponse
+    public function save()
     {
         $this->validate();
 
