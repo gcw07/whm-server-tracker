@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\User\Create as UserCreate;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\Factories\UserRequestDataFactory;
@@ -10,7 +11,7 @@ beforeEach(function () {
     $this->requestData = UserRequestDataFactory::new();
 });
 
-test('guests cannot view the_add_user_form', function () {
+test('guests cannot view the add user form', function () {
     $this->get(route('users.create'))
         ->assertRedirect(route('login'));
 });
@@ -23,25 +24,18 @@ test('an authorized user can view the add user form', function () {
         ->assertSuccessful();
 });
 
-test('guests cannot add new users', function () {
-    $this->postJson(route('users.store'), $this->requestData->create())
-        ->assertUnauthorized();
-
-    $this->assertEquals(0, User::count());
-});
-
 test('an authorized user can add a valid user', function () {
-    $user = User::factory()->create();
+    $this->actingAs(User::factory()->create());
 
-    $response = $this->actingAs($user)
-        ->postJson(route('users.store'), $this->requestData->create([
+    Livewire::test(UserCreate::class)
+        ->set('state', [
             'name' => 'Grant Williams',
             'email' => 'grant@example.com',
-            'password' => 'secret',
-            'password_confirmation' => 'secret',
-        ]));
-
-    $response->assertRedirect(route('users.index'));
+            'password' => 'NMeHq?Bzr#Nd#bt4',
+            'password_confirmation' => 'NMeHq?Bzr#Nd#bt4',
+        ])
+        ->call('save')
+        ->assertRedirect(route('users.index'));
 
     $this->assertDatabaseHas('users', [
         'name' => 'Grant Williams',
@@ -52,26 +46,30 @@ test('an authorized user can add a valid user', function () {
 test('email must be unique for user create', function () {
     $user = User::factory()->create(['email' => 'grant@example.com']);
 
-    $response = $this->actingAs($user)
-        ->postJson(route('users.store'), $this->requestData->create([
-            'email' => 'grant@example.com',
-        ]));
+    $this->actingAs($user);
 
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors(['email' => 'has already been taken']);
+    $response = Livewire::test(UserCreate::class)
+        ->set('state', $this->requestData->create([
+            'email' => 'grant@example.com',
+        ]))
+        ->call('save');
+
+    $response->assertHasErrors(["state.email" => 'unique']);
     $this->assertEquals(1, User::count());
 });
 
 test('password confirmation is required for user create', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['email' => 'grant@example.com']);
 
-    $response = $this->actingAs($user)
-        ->postJson(route('users.store'), $this->requestData->create([
+    $this->actingAs($user);
+
+    $response = Livewire::test(UserCreate::class)
+        ->set('state', $this->requestData->create([
             'password_confirmation' => '',
-        ]));
+        ]))
+        ->call('save');
 
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors(['password' => 'confirmation does not match']);
+    $response->assertHasErrors(["state.password" => 'confirmed']);
     $this->assertEquals(1, User::count());
 });
 
@@ -81,20 +79,18 @@ it('validates rules for create user form', function ($data) {
     $value = $data[1];
     $errorMessage = $data[2];
 
-    $user = User::factory()->create();
+    $this->actingAs(User::factory()->create());
 
-    $response = $this->actingAs($user)
-        ->postJson(route('users.store'), $this->requestData->create([
-            $field => $value,
-        ]));
+    $response = Livewire::test(UserCreate::class)
+        ->set('state', $this->requestData->create([$field => $value,]))
+        ->call('save');
 
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors([$field => $errorMessage]);
+    $response->assertHasErrors(["state.$field" => $errorMessage]);
     $this->assertEquals(1, User::count());
 })->with([
-    fn () => ['name', '', 'field is required'],
-    fn () => ['email', '', 'field is required'],
-    fn () => ['email', 'not-valid-email', 'must be a valid email address'],
-    fn () => ['password', '', 'field is required'],
-    fn () => ['password', Str::random(5), 'must be at least 6 characters'],
+    fn () => ['name', '', 'required'],
+    fn () => ['email', '', 'required'],
+    fn () => ['email', 'not-valid-email', 'email'],
+    fn () => ['password', '', 'required'],
+    fn () => ['password', Str::random(5), 'Illuminate\Validation\Rules\Password'],
 ]);
