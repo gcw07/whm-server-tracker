@@ -14,6 +14,8 @@ class Delete extends ModalComponent
 
     public function mount(Server $server)
     {
+        abort_if(auth()->guest(), 401);
+
         $this->server = $server;
     }
 
