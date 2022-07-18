@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\User\Edit as UserEdit;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\Factories\UserRequestDataFactory;
@@ -24,27 +25,16 @@ test('an authorized user can view the edit user form', function () {
         ->assertSuccessful();
 });
 
-test('guests cannot edit a user', function () {
-    $user = User::factory()->create(['name' => 'Grant Williams']);
-
-    $this->putJson(route('users.update', $user->id), $this->requestData->create())
-        ->assertUnauthorized();
-
-    tap($user->fresh(), function (User $user) {
-        $this->assertEquals('Grant Williams', $user->name);
-    });
-});
-
 test('an authorized user can edit a user', function () {
-    $user = User::factory()->create();
+    $this->actingAs(User::factory()->create());
 
-    $response = $this->actingAs($user)
-        ->putJson(route('users.update', $this->user->id), $this->requestData->create([
+    Livewire::test(UserEdit::class, ['user' => $this->user])
+        ->set('state', [
             'name' => 'Della Duck',
             'email' => 'della@example.com',
-        ]));
-
-    $response->assertRedirect(route('users.index'));
+        ])
+        ->call('save')
+        ->assertRedirect(route('users.index'));
 
     tap($this->user->fresh(), function (User $user) {
         $this->assertEquals('Della Duck', $user->name);
@@ -53,27 +43,31 @@ test('an authorized user can edit a user', function () {
 });
 
 test('email must be unique for user edit', function () {
-    $user = User::factory()->create(['email' => 'grant@example.com']);
+    $this->actingAs(User::factory()->create(['email' => 'grant@example.com']));
 
-    $response = $this->actingAs($user)
-        ->putJson(route('users.update', $this->user->id), $this->requestData->create([
+    $response = Livewire::test(UserEdit::class, ['user' => $this->user])
+        ->set('state', [
+            'name' => 'Della Duck',
             'email' => 'grant@example.com',
-        ]));
+        ])
+        ->call('save');
 
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors(['email' => 'has already been taken']);
+    $response->assertHasErrors(["state.email" => 'unique']);
 });
 
 test('email can be the same for the same user for user edit', function () {
     $user = User::factory()->create(['email' => 'grant@example.com']);
     $userB = User::factory()->create(['email' => 'mike@example.com']);
 
-    $response = $this->actingAs($user)
-        ->putJson(route('users.update', $userB->id), $this->requestData->create([
-            'email' => 'mike@example.com',
-        ]));
+    $this->actingAs($user);
 
-    $response->assertRedirect(route('users.index'));
+    Livewire::test(UserEdit::class, ['user' => $userB])
+        ->set('state', [
+            'name' => 'Mike Smith',
+            'email' => 'mike@example.com',
+        ])
+        ->call('save')
+        ->assertRedirect(route('users.index'));
 
     tap($userB->fresh(), function (User $user) {
         $this->assertEquals('mike@example.com', $user->email);
@@ -86,17 +80,15 @@ it('validate rules for user edit', function ($data) {
     $value = $data[1];
     $errorMessage = $data[2];
 
-    $user = User::factory()->create();
+    $this->actingAs(User::factory()->create());
 
-    $response = $this->actingAs($user)
-        ->putJson(route('users.update', $this->user->id), $this->requestData->create([
-            $field => $value,
-        ]));
+    $response = Livewire::test(UserEdit::class, ['user' => $this->user])
+        ->set('state', $this->requestData->create([$field => $value,]))
+        ->call('save');
 
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors([$field => $errorMessage]);
+    $response->assertHasErrors(["state.$field" => $errorMessage]);
 })->with([
-    fn () => ['name', '', 'field is required'],
-    fn () => ['email', '', 'field is required'],
-    fn () => ['email', 'not-valid-email', 'must be a valid email address'],
+    fn () => ['name', '', 'required'],
+    fn () => ['email', '', 'required'],
+    fn () => ['email', 'not-valid-email', 'email'],
 ]);
