@@ -28,6 +28,8 @@ class ChangePassword extends ModalComponent
 
     public function mount(User $user)
     {
+        abort_if(auth()->guest(), 401);
+
         $this->user = $user;
     }
 
