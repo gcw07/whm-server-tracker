@@ -10,6 +10,11 @@ beforeEach(function () {
     $this->user = User::factory()->create();
 });
 
+test('guests cannot access the delete user component', function () {
+    $response = Livewire::test(UserDelete::class, ['user' => $this->user]);
+    $response->assertStatus(401);
+});
+
 test('an authorized user can delete a user', function () {
     $this->actingAs(User::factory()->create());
 
