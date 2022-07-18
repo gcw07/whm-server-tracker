@@ -1,9 +1,10 @@
 <?php
 
-use App\Enums\ServerTypeEnum;
+use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);
@@ -18,66 +19,31 @@ test('guests can not view account listings page', function () {
 });
 
 test('an authorized user can view account listings page', function () {
-    $this->actingAs($this->user)
-        ->get(route('accounts.index'))
-        ->assertSuccessful();
-});
-
-test('guests can not view account api listings', function () {
-    $this->get(route('accounts.listing'))
-        ->assertRedirect(route('login'));
-});
-
-test('an authorized user can view account api listings', function () {
-    $server = Server::factory()->create();
-    Account::factory()->create([
-        'server_id' => $server->id,
+    Server::factory()->has(Account::factory()->state([
         'domain' => 'mytestsite.com',
         'ip' => '255.1.1.100',
-    ]);
+    ]))->create();
 
-    $response = $this->actingAs($this->user)
-        ->get(route('accounts.listing'))
-        ->assertSuccessful();
+    $this->actingAs(User::factory()->create());
 
-    tap($response->json(), function ($accounts) {
-        $this->assertCount(1, $accounts);
-        $this->assertEquals('mytestsite.com', $accounts[0]['domain']);
-        $this->assertEquals('255.1.1.100', $accounts[0]['ip']);
-    });
+    Livewire::test(AccountListings::class)
+        ->assertViewHas('accounts', function ($accounts) {
+            return 1 === count($accounts);
+        })
+        ->assertSee('mytestsite.com');
 });
 
 test('the account listings are in alphabetical order', function () {
-    $server = Server::factory()->create();
+    Server::factory()->has(Account::factory()->count(3)->state(new Sequence(
+        ['domain' => 'somesite.com'],
+        ['domain' => 'anothersite.com'],
+        ['domain' => 'thelastsite.com'],
+    )))->create();
 
-    $accountA = Account::factory()->create(['server_id' => $server->id, 'domain' => 'somesite.com']);
-    $accountB = Account::factory()->create(['server_id' => $server->id, 'domain' => 'anothersite.com']);
-    $accountC = Account::factory()->create(['server_id' => $server->id, 'domain' => 'thelastsite.com']);
+    $this->actingAs(User::factory()->create());
 
-    $response = $this->actingAs($this->user)
-        ->get(route('accounts.listing'))
-        ->assertSuccessful();
-
-    $response->jsonData()->assertEquals([
-        $accountB,
-        $accountA,
-        $accountC,
-    ]);
-});
-
-test('the account listings can be filtered by server', function () {
-    $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::Vps]);
-    $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::Dedicated]);
-
-    $accountA = Account::factory()->create(['server_id' => $serverA->id, 'domain' => 'somedomain.com']);
-    $accountA = Account::factory()->create(['server_id' => $serverB->id, 'domain' => 'anotherdomain.com']);
-
-    $response = $this->actingAs($this->user)
-        ->get(route('accounts.server-listing', $serverA->id))
-        ->assertSuccessful();
-
-    tap($response->json(), function ($accounts) {
-        $this->assertCount(1, $accounts);
-        $this->assertEquals('somedomain.com', $accounts[0]['domain']);
-    });
-});
+    Livewire::test(AccountListings::class)
+        ->assertViewHas('accounts', function ($accounts) {
+            return 3 === count($accounts);
+        });
+})->skip();
