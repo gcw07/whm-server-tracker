@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\User\Delete as UserDelete;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
@@ -9,28 +10,23 @@ beforeEach(function () {
     $this->user = User::factory()->create();
 });
 
-test('guests cannot delete a user', function () {
-    $this->deleteJson(route('users.destroy', $this->user->id))
-        ->assertUnauthorized();
-
-    $this->assertEquals(1, User::count());
-});
-
 test('an authorized user can delete a user', function () {
-    $user = User::factory()->create();
+    $this->actingAs(User::factory()->create());
 
-    $this->actingAs($user)
-        ->deleteJson((route('users.destroy', $this->user->id)))
-        ->assertSuccessful();
+    Livewire::test(UserDelete::class, ['user' => $this->user])
+        ->call('delete')
+        ->assertRedirect(route('users.index'));
 
     $this->assertEquals(1, User::count());
 });
 
 test('an authorized user cannot delete themselves', function () {
-    $response = $this->actingAs($this->user)
-        ->deleteJson((route('users.destroy', $this->user->id)));
+    $this->actingAs($this->user);
 
-    $response->assertStatus(422);
+    Livewire::test(UserDelete::class, ['user' => $this->user])
+        ->call('delete')
+        ->assertEmitted('closeModal')
+        ->assertNoRedirect();
 
     $this->assertEquals(1, User::count());
 });
