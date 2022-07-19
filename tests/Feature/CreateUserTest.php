@@ -54,7 +54,7 @@ test('email must be unique for user create', function () {
         ]))
         ->call('save');
 
-    $response->assertHasErrors(["state.email" => 'unique']);
+    $response->assertHasErrors(['state.email' => 'unique']);
     $this->assertEquals(1, User::count());
 });
 
@@ -69,7 +69,7 @@ test('password confirmation is required for user create', function () {
         ]))
         ->call('save');
 
-    $response->assertHasErrors(["state.password" => 'confirmed']);
+    $response->assertHasErrors(['state.password' => 'confirmed']);
     $this->assertEquals(1, User::count());
 });
 
@@ -82,7 +82,7 @@ it('validates rules for create user form', function ($data) {
     $this->actingAs(User::factory()->create());
 
     $response = Livewire::test(UserCreate::class)
-        ->set('state', $this->requestData->create([$field => $value,]))
+        ->set('state', $this->requestData->create([$field => $value]))
         ->call('save');
 
     $response->assertHasErrors(["state.$field" => $errorMessage]);

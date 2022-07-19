@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 import('recipe/laravel.php');
 import('contrib/npm.php');
@@ -112,7 +112,7 @@ task('deploy', [
     'artisan:migrate',
     'deploy:publish',
     'artisan:horizon:terminate',
-//    'artisan:websockets:serve',
+    //    'artisan:websockets:serve',
 ]);
 
 /*
@@ -153,5 +153,5 @@ function checkEnvVariablesAreSet()
 
 function errorMessage($message)
 {
-    echo "\e[1;31;mError: " .$message. "\e[0m\n";
+    echo "\e[1;31;mError: ".$message."\e[0m\n";
 }

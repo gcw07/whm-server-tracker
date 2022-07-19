@@ -59,7 +59,7 @@ it('validates rules for create server form', function ($data) {
     $this->actingAs($this->user);
 
     $response = Livewire::test(ServerCreate::class)
-        ->set('state', $this->requestData->create([$field => $value,]))
+        ->set('state', $this->requestData->create([$field => $value]))
         ->call('save');
 
     if ($expectedResultType === 'invalid') {

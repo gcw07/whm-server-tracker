@@ -41,7 +41,7 @@ test('a server with a missing api token throws an exception', function () {
         return;
     }
 
-    $this->fail("Server still attempted to connect even with a missing api token.");
+    $this->fail('Server still attempted to connect even with a missing api token.');
 });
 
 test('a server fetch failure triggers a failure event', function () {
@@ -128,6 +128,6 @@ test('it can fetch server account list', function () {
     $this->whmApi->fetch();
 
     tap($server->fresh(), function (Server $server) {
-        $this->assertGreaterThan(0, sizeof($server->accounts));
+        $this->assertGreaterThan(0, count($server->accounts));
     });
 });

@@ -36,7 +36,7 @@ test('password confirmation is required for user change password', function () {
             'password_confirmation' => '',
         ])
         ->call('save')
-        ->assertHasErrors(["state.password" => 'confirmed']);
+        ->assertHasErrors(['state.password' => 'confirmed']);
 });
 
 it('validates rules for change user password form', function ($data) {
@@ -48,7 +48,7 @@ it('validates rules for change user password form', function ($data) {
     $this->actingAs(User::factory()->create());
 
     $response = Livewire::test(UserChangePassword::class, ['user' => $this->user])
-        ->set('state', [$field => $value,])
+        ->set('state', [$field => $value])
         ->call('save');
 
     $response->assertHasErrors(["state.$field" => $errorMessage]);

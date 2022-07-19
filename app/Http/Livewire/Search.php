@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Models\Account;
 use App\Models\Server;
-use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
 class Search extends Component

@@ -52,7 +52,7 @@ class FetchedDataFailed extends Notification
             ->line('With the error messages provided:');
 
         foreach ($this->event->messages as $message) {
-            $mailMessage->line(new HtmlString('<b>'.$message['type'].':</b> ' . $message['message']));
+            $mailMessage->line(new HtmlString('<b>'.$message['type'].':</b> '.$message['message']));
         }
 
         $mailMessage->line('Thank you for using our application!');

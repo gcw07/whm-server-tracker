@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $ip_address
  * @property \Illuminate\Support\Carbon $created_at
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Login newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Login newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Login query()

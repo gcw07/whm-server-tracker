@@ -55,5 +55,5 @@ test('server token is required', function () {
         ])
         ->call('save');
 
-    $response->assertHasErrors(["state.token" => 'required']);
+    $response->assertHasErrors(['state.token' => 'required']);
 });

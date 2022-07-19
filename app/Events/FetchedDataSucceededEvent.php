@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class FetchedDataSucceededEvent implements ShouldQueue
 {
     public Server $server;
+
     public array $messages;
 
     public function __construct(Server $server, array $messages)

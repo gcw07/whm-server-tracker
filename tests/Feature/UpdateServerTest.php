@@ -50,7 +50,7 @@ it('validates rules for server edit form', function ($data) {
     $this->actingAs($this->user);
 
     $response = Livewire::test(ServerEdit::class, ['server' => $this->server])
-        ->set('state', $this->requestData->create([$field => $value,]))
+        ->set('state', $this->requestData->create([$field => $value]))
         ->call('save');
 
     if ($expectedResultType === 'invalid') {

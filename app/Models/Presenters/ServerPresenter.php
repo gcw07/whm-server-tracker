@@ -308,6 +308,6 @@ trait ServerPresenter
             $kilobytes /= $byteNext;
         }
 
-        return round($kilobytes, is_null($precision) ? $bytePrecision[$i] : (int) $precision) . ' ' . $byteUnits[$i];
+        return round($kilobytes, is_null($precision) ? $bytePrecision[$i] : (int) $precision).' '.$byteUnits[$i];
     }
 }

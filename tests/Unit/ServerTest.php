@@ -379,7 +379,7 @@ it('can get formatted php installed versions', function () {
     $serverH = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php74']]]);
     $serverI = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php80']]]);
     $serverJ = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php81']]]);
-    $serverK = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php74','ea-php80']]]);
+    $serverK = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php74', 'ea-php80']]]);
     $serverL = Server::factory()->create();
 
     $this->assertEquals(['5.4'], $serverA->formatted_php_installed_versions);

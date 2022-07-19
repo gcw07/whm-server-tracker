@@ -11,7 +11,6 @@ class Dashboard extends Component
 {
     public function mount()
     {
-
     }
 
     public function render()
@@ -53,5 +52,4 @@ class Dashboard extends Component
     {
         return Account::query()->with(['server'])->latest()->limit(10)->get();
     }
-
 }

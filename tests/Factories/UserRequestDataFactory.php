@@ -5,7 +5,9 @@ namespace Tests\Factories;
 class UserRequestDataFactory
 {
     protected string $name = 'Grant Williams';
+
     protected string $email = 'grant@example.com';
+
     protected string $password = 'NMeHq?Bzr#Nd#bt4';
 
     public static function new(): self

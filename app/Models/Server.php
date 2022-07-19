@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Account[] $accounts
  * @property-read int|null $accounts_count
+ *
  * @method static \Database\Factories\ServerFactory factory(...$parameters)
  * @method static Builder|Server filter(\App\Filters\ServerFilters $filters)
  * @method static Builder|Server newModelQuery()
@@ -126,8 +127,8 @@ class Server extends Model
     public function scopeSearch($query, $search)
     {
         return $query->where(function ($query) use ($search) {
-            $query->where('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('notes', 'LIKE', '%' . $search . '%');
+            $query->where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('notes', 'LIKE', '%'.$search.'%');
         });
     }
 }

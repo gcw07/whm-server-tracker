@@ -19,7 +19,9 @@ use GuzzleHttp\Promise;
 class WhmApi
 {
     protected Server $server;
+
     protected array $successMessages;
+
     protected array $failureMessages;
 
     public function setServer(Server $server)
@@ -101,7 +103,7 @@ class WhmApi
 
     protected function processMessages(): void
     {
-        if (sizeof($this->successMessages) > 0) {
+        if (count($this->successMessages) > 0) {
             $this->server->update([
                 'server_update_last_succeeded_at' => Carbon::now(),
                 'server_update_last_failed_at' => null,
@@ -110,7 +112,7 @@ class WhmApi
             event(new FetchedDataSucceededEvent($this->server, $this->successMessages));
         }
 
-        if (sizeof($this->failureMessages) > 0 && $this->shouldFireFailedEvent()) {
+        if (count($this->failureMessages) > 0 && $this->shouldFireFailedEvent()) {
             $this->server->update([
                 'server_update_last_failed_at' => Carbon::now(),
                 'server_update_last_succeeded_at' => null,

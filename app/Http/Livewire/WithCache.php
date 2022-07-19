@@ -8,7 +8,7 @@ trait WithCache
 {
     protected function putCache($name, $value)
     {
-        $key = $name . '.' . auth()->user()->id;
+        $key = $name.'.'.auth()->user()->id;
 
         Cache::put($key, $value, now()->addMinutes(15));
 
@@ -17,7 +17,7 @@ trait WithCache
 
     protected function getCache($name, $default = null)
     {
-        $key = $name . '.' . auth()->user()->id;
+        $key = $name.'.'.auth()->user()->id;
 
         if (Cache::has($key)) {
             return Cache::get($key);

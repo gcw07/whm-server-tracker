@@ -24,7 +24,7 @@ trait AccountPresenter
     {
         return Attribute::make(
             get: function () {
-                return $this->getDiskPercentage() ? $this->getDiskPercentage() . '%' : 'Unknown';
+                return $this->getDiskPercentage() ? $this->getDiskPercentage().'%' : 'Unknown';
             },
         );
     }

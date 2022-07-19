@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Server $server
+ *
  * @method static \Database\Factories\AccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Account filter(\App\Filters\AccountFilters $filters)
  * @method static \Illuminate\Database\Eloquent\Builder|Account newModelQuery()
@@ -55,8 +56,11 @@ class Account extends Model
     use HasFactory, AccountPresenter;
 
     protected $guarded = [];
+
     protected $casts = ['backup' => 'boolean', 'suspended' => 'boolean'];
+
     protected $dates = ['suspend_time', 'setup_date'];
+
     protected $appends = [
         'domain_url',
         'cpanel_url',
@@ -80,9 +84,9 @@ class Account extends Model
     public function scopeSearch($query, $search)
     {
         return $query->where(function ($query) use ($search) {
-            $query->where('domain', 'LIKE', '%' . $search . '%')
-                ->orWhere('user', 'LIKE', '%' . $search . '%')
-                ->orWhere('ip', 'LIKE', '%' . $search . '%');
+            $query->where('domain', 'LIKE', '%'.$search.'%')
+                ->orWhere('user', 'LIKE', '%'.$search.'%')
+                ->orWhere('ip', 'LIKE', '%'.$search.'%');
         });
     }
 }

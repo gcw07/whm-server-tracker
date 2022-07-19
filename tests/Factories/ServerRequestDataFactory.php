@@ -7,10 +7,15 @@ use App\Enums\ServerTypeEnum;
 class ServerRequestDataFactory
 {
     protected string $name = 'my-server-name';
+
     protected string $address = '127.0.0.1';
+
     protected string $port = '2087';
+
     protected ServerTypeEnum $serverType;
+
     protected string $notes = 'a server note';
+
     protected string $token = 'server-api-token';
 
     public static function new(): self

@@ -5,7 +5,9 @@ namespace App\Http\Livewire\DataTable;
 trait WithBulkActions
 {
     public $selectPage = false;
+
     public $selectAll = false;
+
     public $selected = [];
 
     public function renderingWithBulkActions()

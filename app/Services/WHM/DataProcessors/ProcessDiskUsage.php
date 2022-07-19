@@ -26,7 +26,7 @@ class ProcessDiskUsage
 
     private function findPrimaryPartition($partitions): array
     {
-        if (sizeof($partitions) > 1) {
+        if (count($partitions) > 1) {
             return collect($partitions)->firstWhere('mount', '/');
         }
 

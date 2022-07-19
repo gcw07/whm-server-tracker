@@ -12,7 +12,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,7 +48,7 @@ abstract class TestCase extends BaseTestCase
             Assert::assertEquals(count($this), count($items));
 
             $this->zip($items)->each(function ($pair) {
-                list($a, $b) = $pair;
+                [$a, $b] = $pair;
                 Assert::assertTrue($a->is($b));
             });
         });

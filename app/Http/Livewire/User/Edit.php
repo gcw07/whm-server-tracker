@@ -4,7 +4,6 @@ namespace App\Http\Livewire\User;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 
 class Edit extends Component

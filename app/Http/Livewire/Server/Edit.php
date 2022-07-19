@@ -57,6 +57,7 @@ class Edit extends Component
         $this->server->update($this->state);
 
         toast()->success('The server information was updated successfully.')->pushOnNextPage();
+
         return redirect()->route('servers.show', $this->server);
     }
 }

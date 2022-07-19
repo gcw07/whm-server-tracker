@@ -52,7 +52,7 @@ test('email must be unique for user edit', function () {
         ])
         ->call('save');
 
-    $response->assertHasErrors(["state.email" => 'unique']);
+    $response->assertHasErrors(['state.email' => 'unique']);
 });
 
 test('email can be the same for the same user for user edit', function () {
@@ -83,7 +83,7 @@ it('validate rules for user edit', function ($data) {
     $this->actingAs(User::factory()->create());
 
     $response = Livewire::test(UserEdit::class, ['user' => $this->user])
-        ->set('state', $this->requestData->create([$field => $value,]))
+        ->set('state', $this->requestData->create([$field => $value]))
         ->call('save');
 
     $response->assertHasErrors(["state.$field" => $errorMessage]);
