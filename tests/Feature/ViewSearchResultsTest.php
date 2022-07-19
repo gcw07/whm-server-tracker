@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Livewire\Search;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);
@@ -23,95 +25,82 @@ test('an authorized user can view search results page', function () {
 });
 
 test('the server name can be searched', function () {
-    $server = Server::factory()->create([
-        'name' => 'My Test Server',
-    ]);
+    Server::factory()->create(['name' => 'MyTestServer.com']);
+    Server::factory()->create(['name' => 'NoResults.com']);
 
-    $serverB = Server::factory()->create([
-        'name' => 'No Results',
-    ]);
+    $this->actingAs($this->user);
 
-    $response = $this->actingAs($this->user)
-        ->get(route('search', ['q' => 'test']))
-        ->assertSuccessful();
-
-//        $response->data('servers')->assertContains($server);
-//        $response->data('servers')->assertNotContains($serverB);
+    Livewire::test(Search::class)
+        ->set('q', 'test')
+        ->assertViewHas('servers', function ($servers) {
+            return 1 === count($servers);
+        })
+        ->assertSee('MyTestServer.com')
+        ->assertDontSee('NoResults.com');
 });
 
 test('the server notes can be searched', function () {
-    $server = Server::factory()->create([
-        'notes' => 'see this note',
-    ]);
+    Server::factory()->create(['notes' => 'see this note']);
+    Server::factory()->create(['notes' => 'do not see me']);
 
-    $serverB = Server::factory()->create([
-        'notes' => 'do not see me',
-    ]);
+    $this->actingAs($this->user);
 
-    $response = $this->actingAs($this->user)
-        ->get(route('search', ['q' => 'this']))
-        ->assertSuccessful();
-
-//        $response->data('servers')->assertContains($server);
-//        $response->data('servers')->assertNotContains($serverB);
+    Livewire::test(Search::class)
+        ->set('q', 'this')
+        ->assertViewHas('servers', function ($servers) {
+            return 1 === count($servers);
+        })
+        ->assertSee('this')
+        ->assertDontSee('not');
 });
 
 test('the account domain can be searched', function () {
-    $server = Server::factory()->create();
-    $account = Account::factory()->create([
-        'server_id' => $server->id,
-        'domain' => 'mytestsite.com',
-    ]);
+    Server::factory()->has(Account::factory()->count(2)->state(new Sequence(
+        ['domain' => 'mytestsite.com'],
+        ['domain' => 'never-see.com'],
+    )))->create();
 
-    $accountB = Account::factory()->create([
-        'server_id' => $server->id,
-        'domain' => 'never-see.com',
-    ]);
+    $this->actingAs($this->user);
 
-    $response = $this->actingAs($this->user)
-        ->get(route('search', ['q' => 'test']))
-        ->assertSuccessful();
-
-//        $response->data('accounts')->assertContains($account);
-//        $response->data('accounts')->assertNotContains($accountB);
+    Livewire::test(Search::class)
+        ->set('q', 'test')
+        ->assertViewHas('accounts', function ($accounts) {
+            return 1 === count($accounts);
+        })
+        ->assertSee('mytestsite')
+        ->assertDontSee('never-see');
 });
 
 test('the account ip can be searched', function () {
-    $server = Server::factory()->create();
-    $account = Account::factory()->create([
-        'server_id' => $server->id,
-        'ip' => '255.1.1.100',
-    ]);
+    Server::factory()->has(Account::factory()->count(2)->state(new Sequence(
+        ['domain' => 'mytestsite.com', 'ip' => '255.1.1.100'],
+        ['domain' => 'never-see.com', 'ip' => '192.1.1.100'],
+    )))->create();
 
-    $accountB = Account::factory()->create([
-        'server_id' => $server->id,
-        'ip' => '192.1.1.100',
-    ]);
+    $this->actingAs($this->user);
 
-    $response = $this->actingAs($this->user)
-        ->get(route('search', ['q' => '255']))
-        ->assertSuccessful();
-
-//        $response->data('accounts')->assertContains($account);
-//        $response->data('accounts')->assertNotContains($accountB);
+    Livewire::test(Search::class)
+        ->set('q', '255')
+        ->assertViewHas('accounts', function ($accounts) {
+            return 1 === count($accounts);
+        })
+        ->assertSee('mytestsite.com')
+        ->assertDontSee('never-see.com');
 });
 
 test('the account username can be searched', function () {
-    $server = Server::factory()->create();
-    $account = Account::factory()->create([
-        'server_id' => $server->id,
-        'user' => 'mysite',
-    ]);
+    Server::factory()->has(Account::factory()->count(2)->state(new Sequence(
+        ['domain' => 'something.com', 'user' => 'mytest'],
+        ['domain' => 'nope.com', 'user' => 'neversee'],
+    )))->create();
 
-    $accountB = Account::factory()->create([
-        'server_id' => $server->id,
-        'user' => 'neversee',
-    ]);
+    $this->actingAs($this->user);
 
-    $response = $this->actingAs($this->user)
-        ->get(route('search', ['q' => 'mysite']))
-        ->assertSuccessful();
-
-//        $response->data('accounts')->assertContains($account);
-//        $response->data('accounts')->assertNotContains($accountB);
+    Livewire::test(Search::class)
+        ->set('q', 'mytest')
+        ->assertViewHas('accounts', function ($accounts) {
+            return 1 === count($accounts);
+        })
+        ->assertSee('something.com')
+        ->assertDontSee('nope.com');
 });
