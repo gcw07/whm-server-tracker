@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Server\NewToken as ServerNewToken;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -7,40 +8,52 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 uses(LazilyRefreshDatabase::class);
 
 beforeEach(function () {
+    $this->server = Server::factory()->create(['token' => 'old-api-token']);
     $this->user = User::factory()->create();
 });
 
-test('guests cannot edit a server token', function () {
-    $server = Server::factory()->create(['token' => 'old-valid-api-token']);
-
-    $this->putJson(route('servers.token', $server->id), [
-        'token' => 'new-valid-api-token',
-    ])->assertUnauthorized();
-
-    $this->assertEquals('old-valid-api-token', $server->fresh()->token);
+test('guests cannot access the new server token component', function () {
+    $response = Livewire::test(ServerNewToken::class, ['server' => $this->server]);
+    $response->assertStatus(401);
 });
 
-test('an authorized user can edit a server token', function () {
-    $server = Server::factory()->create(['token' => 'old-server-api-token']);
+test('an authorized user can add a new server token', function () {
+    $this->actingAs(User::factory()->create());
 
-    $this->actingAs($this->user)
-        ->putJson(route('servers.token', $server->id), [
-            'token' => 'new-server-api-token',
-        ])->assertSuccessful();
+    $server = Server::factory()->create(['token' => null]);
 
-    tap($server->fresh(), function (Server $server) {
-        $this->assertEquals('new-server-api-token', $server->token);
+    Livewire::test(ServerNewToken::class, ['server' => $server])
+        ->set('state', [
+            'token' => 'new-api-token',
+        ])
+        ->call('save')
+        ->assertRedirect(route('servers.show', $server->id));
+});
+
+test('an authorized user can update a server token', function () {
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test(ServerNewToken::class, ['server' => $this->server])
+        ->set('state', [
+            'token' => 'new-api-token',
+        ])
+        ->call('save')
+        ->assertEmitted('closeModal')
+        ->assertNoRedirect();
+
+    tap($this->server->fresh(), function (Server $server) {
+        $this->assertEquals('new-api-token', $server->token);
     });
 });
 
 test('server token is required', function () {
-    $server = Server::factory()->create(['token' => 'old-server-api-token']);
+    $this->actingAs(User::factory()->create());
 
-    $response = $this->actingAs($this->user)
-        ->putJson(route('servers.token', $server->id), [
+    $response = Livewire::test(ServerNewToken::class, ['server' => $this->server])
+        ->set('state', [
             'token' => '',
-        ]);
+        ])
+        ->call('save');
 
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors(['token' => 'field is required']);
+    $response->assertHasErrors(["state.token" => 'required']);
 });
