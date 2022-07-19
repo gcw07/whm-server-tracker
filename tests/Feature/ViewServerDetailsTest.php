@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Server\Details as ServerDetails;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -14,12 +15,10 @@ test('guests can not view server details page', function () {
 });
 
 test('an authorized user can view server details page', function () {
-    $user = User::factory()->create();
-    $server = Server::factory()->create();
+    $server = Server::factory()->create(['name' => 'MyServer.com']);
 
-    $response = $this->actingAs($user)
-        ->get(route('servers.show', $server->id))
-        ->assertSuccessful();
+    $this->actingAs(User::factory()->create());
 
-//        $this->assertTrue($response->data('server')->is($server));
+    Livewire::test(ServerDetails::class, ['server' => $server])
+        ->assertSee('MyServer.com');
 });
