@@ -4,7 +4,7 @@
       <div class="flex px-2 lg:px-0">
         <div class="flex-shrink-0 flex items-center">
           <a href="{{ route('dashboard') }}">
-            <img class="h-14 w-14" src="/logo-cloud.svg" alt="{{ config('app.name') }}">
+            <img class="h-10 sm:h-14" src="/img/logo.svg" alt="{{ config('app.name') }}">
           </a>
         </div>
 
@@ -64,8 +64,8 @@
             <div class="pt-3 pb-2">
               <div class="flex items-center justify-between px-4">
                 <div>
-                  <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
-                       alt="Workflow">
+                  <img class="h-14 w-auto" src="/img/logo-mobile.svg"
+                       alt="Logo">
                 </div>
                 <div class="-mr-2">
                   <button @click="open = !open" type="button"
