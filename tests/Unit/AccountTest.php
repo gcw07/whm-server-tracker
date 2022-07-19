@@ -23,13 +23,13 @@ it('can get whm external url', function () {
     $server = Server::factory()->create(['address' => '1.1.1.1', 'port' => 2087]);
     $account = Account::factory()->make(['server_id' => $server->id, 'domain' => 'mydomain.com']);
 
-    $this->assertEquals('https://1.1.1.1:2087', $account->whm_url);
+    $this->assertEquals('https://1.1.1.1:2087', $account->server->whm_url);
 });
 
 it('can get domain external url', function () {
     $account = Account::factory()->make(['domain' => 'mydomain.com']);
 
-    $this->assertEquals('http://mydomain.com', $account->domain_url);
+    $this->assertEquals('https://mydomain.com', $account->domain_url);
 });
 
 it('can get disk usage', function () {
@@ -37,7 +37,7 @@ it('can get disk usage', function () {
     $accountB = Account::factory()->make(['disk_used' => '350M', 'disk_limit' => '2000M']);
     $accountC = Account::factory()->make(['disk_used' => '400M', 'disk_limit' => 'unlimited']);
 
-    $this->assertEquals('15%', $accountA->disk_usage);
-    $this->assertEquals('17.5%', $accountB->disk_usage);
-    $this->assertEquals('n/a', $accountC->disk_usage);
+    $this->assertEquals('15%', $accountA->formatted_disk_usage);
+    $this->assertEquals('17.5%', $accountB->formatted_disk_usage);
+    $this->assertEquals('Unknown', $accountC->formatted_disk_usage);
 });
