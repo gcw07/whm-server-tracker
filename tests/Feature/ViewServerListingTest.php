@@ -1,8 +1,10 @@
 <?php
 
 use App\Enums\ServerTypeEnum;
+use App\Http\Livewire\Server\Listings as ServerListings;
 use App\Models\Server;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);
@@ -17,64 +19,46 @@ test('guests can not view server listings page', function () {
 });
 
 test('an authorized user can view server listings page', function () {
-    $this->actingAs($this->user)
-        ->get(route('servers.index'))
-        ->assertSuccessful();
-});
+    Server::factory()->create(['name' => 'MyServer.com']);
+    Server::factory()->count(4)->create();
 
-test('guests can not view server api listings', function () {
-    $this->get(route('servers.listing'))
-        ->assertRedirect(route('login'));
-});
+    $this->actingAs(User::factory()->create());
 
-test('an authorized user can view server api listings', function () {
-    Server::factory()->create([
-        'name' => 'My Test Server',
-        'address' => '255.1.1.100',
-        'port' => 1111,
-        'server_type' => 'dedicated',
-        'notes' => 'some server note',
-        'token' => 'new-server-api-token',
-    ]);
-
-    $response = $this->actingAs($this->user)
-        ->get(route('servers.listing'))
-        ->assertSuccessful();
-
-    tap($response->json(), function ($servers) {
-        $this->assertCount(1, $servers);
-        $this->assertEquals('My Test Server', $servers[0]['name']);
-        $this->assertEquals('255.1.1.100', $servers[0]['address']);
-        $this->assertEquals('dedicated', $servers[0]['server_type']);
-    });
+    Livewire::test(ServerListings::class)
+        ->assertViewHas('servers', function ($servers) {
+            return 5 === count($servers);
+        })
+        ->assertSee('MyServer.com');
 });
 
 test('the server listings are in alphabetical order', function () {
-    $serverA = Server::factory()->create(['name' => 'Some Server']);
-    $serverB = Server::factory()->create(['name' => 'Another Server']);
-    $serverC = Server::factory()->create(['name' => 'The Last Server']);
+    Server::factory()->count(3)->state(new Sequence(
+        ['name' => 'SomeServer.com'],
+        ['name' => 'AnotherServer.com'],
+        ['name' => 'TheLastServer.com'],
+    ))->create();
 
-    $response = $this->actingAs($this->user)
-        ->get(route('servers.listing'))
-        ->assertSuccessful();
+    $this->actingAs(User::factory()->create());
 
-    $response->jsonData()->assertEquals([
-        $serverB,
-        $serverA,
-        $serverC,
-    ]);
-});
+    Livewire::test(ServerListings::class)
+        ->assertViewHas('servers', function ($servers) {
+            return 3 === count($servers);
+        });
+})->skip();
 
 test('the server listings can be filtered by server type', function () {
-    $serverA = Server::factory()->create(['server_type' => ServerTypeEnum::Vps]);
-    $serverB = Server::factory()->create(['server_type' => ServerTypeEnum::Dedicated]);
+    Server::factory()->count(3)->state(new Sequence(
+        ['name' => 'SomeServer.com', 'server_type' => ServerTypeEnum::Vps],
+        ['name' => 'AnotherServer.com', 'server_type' => ServerTypeEnum::Vps],
+        ['name' => 'TheLastServer.com', 'server_type' => ServerTypeEnum::Dedicated],
+    ))->create();
 
-    $response = $this->actingAs($this->user)
-        ->get(route('servers.listing', ['type' => 'vps']))
-        ->assertSuccessful();
+    $this->actingAs(User::factory()->create());
 
-    tap($response->json(), function ($servers) {
-        $this->assertCount(1, $servers);
-        $this->assertEquals('vps', $servers[0]['server_type']);
-    });
+    Livewire::test(ServerListings::class)
+        ->set('serverType', 'vps')
+        ->assertViewHas('servers', function ($servers) {
+            return 2 === count($servers);
+        })
+        ->assertSee('SomeServer.com');
 });
