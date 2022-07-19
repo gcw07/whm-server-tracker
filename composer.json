@@ -25,7 +25,7 @@
         "brianium/paratest": "^6.4",
         "deployer/deployer": "^7.0",
         "fakerphp/faker": "^1.9.1",
-        "friendsofphp/php-cs-fixer": "^v3.3.2",
+        "laravel/pint": "^1.0",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^v6.1",
         "pestphp/pest": "^1.0",
