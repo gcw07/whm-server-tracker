@@ -29,7 +29,7 @@ class Settings implements CastsAttributes
 
     public function get($model, $key, $value, $attributes): ?SettingsCollection
     {
-        return isset($attributes[$key]) ? new SettingsCollection(json_decode($attributes[$key], true)) : null;
+        return isset($attributes[$key]) ? new SettingsCollection(json_decode($attributes[$key], true)) : new SettingsCollection([]);
     }
 
     public function set($model, $key, $value, $attributes): array
