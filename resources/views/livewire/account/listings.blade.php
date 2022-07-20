@@ -126,7 +126,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
-                        <a href="#" class="group inline-flex space-x-2 truncate text-sm">
+                        <a href="{{ route('servers.show', $account->server->id) }}" class="group inline-flex space-x-2 truncate text-sm">
                           <p class="text-gray-500 truncate group-hover:text-gray-900">
                             {{ $account->server->name }}
                           </p>
