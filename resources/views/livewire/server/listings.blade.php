@@ -163,7 +163,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
                         <a href="{{ route('servers.show', $server->id) }}" class="group inline-flex space-x-2 truncate text-sm">
-                          <p class="text-gray-500 truncate group-hover:text-gray-900">
+                          <p class="text-gray-500 truncate font-semibold group-hover:text-gray-900">
                             {{ $server->name }}
                           </p>
                           @if($server->missing_token)
