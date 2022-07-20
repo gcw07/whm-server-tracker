@@ -3,8 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UpgradeCommand extends Command
 {
@@ -115,13 +116,18 @@ class UpgradeCommand extends Command
         $dataset = [];
         $servers = DB::connection('mysql_v1_db')->table('servers')->lazyById();
 
+        $key = $this->databaseEncryptionKey();
+        $cipher = config('app.cipher');
+
+        $encrypter = new Encrypter($key, $cipher);
+
         foreach ($servers as $server) {
             $dataset[] = [
                 'name' => $server->name,
                 'address' => $server->address,
                 'port' => $server->port,
                 'server_type' => $server->server_type,
-                'token' => Crypt::encryptString($server->token),
+                'token' => $encrypter->encryptString($server->token),
                 'notes' => $server->notes,
                 'created_at' => $server->created_at,
                 'updated_at' => $server->updated_at,
@@ -129,5 +135,12 @@ class UpgradeCommand extends Command
         }
 
         DB::table('servers')->insert($dataset);
+    }
+
+    protected function databaseEncryptionKey(): ?string
+    {
+        $key = config('database.encryption_key');
+
+        return base64_decode(Str::after($key, 'base64:'));
     }
 }

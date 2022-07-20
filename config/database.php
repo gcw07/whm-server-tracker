@@ -164,4 +164,18 @@ return [
 
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Database Encryption Key
+    |--------------------------------------------------------------------------
+    |
+    | This key is used to encrypt model items when using the 'encrypted'
+    | model casting. This is separate from the APP_KEY, so you can
+    | easily rotate the application APP_KEY without effecting
+    | encrypted items in the database.
+    |
+    */
+
+    'encryption_key' => env('APP_ENCRYPTION_KEY'),
+
 ];
