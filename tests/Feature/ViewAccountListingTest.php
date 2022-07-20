@@ -1,119 +1,49 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\Account\Listings as AccountListings;
+use App\Models\Account;
+use App\Models\Server;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class ViewAccountListingTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    /** @test */
-    public function guests_can_not_view_account_listings_page()
-    {
-        $account = create('App\Account');
+test('guests can not view account listings page', function () {
+    $this->get(route('accounts.index'))
+        ->assertRedirect(route('login'));
+});
 
-        $response = $this->get("/accounts");
+test('an authorized user can view account listings page', function () {
+    Server::factory()->has(Account::factory()->state([
+        'domain' => 'mytestsite.com',
+        'ip' => '255.1.1.100',
+    ]))->create();
 
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
+    $this->actingAs(User::factory()->create());
 
-    /** @test */
-    public function an_authorized_user_can_view_account_listings_page()
-    {
-        $this->signIn();
+    Livewire::test(AccountListings::class)
+        ->assertViewHas('accounts', function ($accounts) {
+            return 1 === count($accounts);
+        })
+        ->assertSee('mytestsite.com');
+});
 
-        $account = create('App\Account');
+test('the account listings are in alphabetical order', function () {
+    Server::factory()->has(Account::factory()->count(3)->state(new Sequence(
+        ['domain' => 'somesite.com'],
+        ['domain' => 'anothersite.com'],
+        ['domain' => 'thelastsite.com'],
+    )))->create();
 
-        $response = $this->get("/accounts");
+    $this->actingAs(User::factory()->create());
 
-        $response->assertStatus(200);
-    }
-
-    /** @test */
-    public function guests_can_not_view_account_api_listings()
-    {
-        $account = create('App\Account');
-
-        $response = $this->get("/api/accounts");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
-
-    /** @test */
-    public function an_authorized_user_can_view_account_api_listings()
-    {
-        $this->signIn();
-
-        $account = create('App\Account', [
-            'domain' => 'mytestsite.com',
-            'ip'     => '255.1.1.100',
-        ]);
-
-        $response = $this->get("/api/accounts");
-
-        $response->assertStatus(200);
-
-        tap($response->json(), function ($accounts) {
-            $this->assertCount(1, $accounts);
-            $this->assertEquals('mytestsite.com', $accounts[0]['domain']);
-            $this->assertEquals('255.1.1.100', $accounts[0]['ip']);
+    Livewire::test(AccountListings::class)
+        ->assertViewHas('accounts', function ($accounts) {
+            return 3 === count($accounts);
         });
-    }
-
-    /** @test */
-    public function the_account_listings_are_in_alphabetical_order()
-    {
-        $this->signIn();
-
-        $accountA = create('App\Account', ['domain' => 'somesite.com']);
-        $accountB = create('App\Account', ['domain' => 'anothersite.com']);
-        $accountC = create('App\Account', ['domain' => 'thelastsite.com']);
-
-        $response = $this->get("/api/accounts");
-
-        $response->assertStatus(200);
-
-        $response->jsonData()->assertEquals([
-            $accountB,
-            $accountA,
-            $accountC
-        ]);
-    }
-
-    /** @test */
-    public function the_account_listings_can_be_filtered_by_server()
-    {
-        $this->withoutExceptionHandling();
-        $this->signIn();
-
-        $serverA = create('App\Server', [
-            'server_type' => 'vps'
-        ]);
-        $serverB = create('App\Server', [
-            'server_type' => 'dedicated'
-        ]);
-
-        $accountA = create('App\Account', [
-            'server_id' => $serverA->id,
-            'domain' => 'somedomain.com'
-        ]);
-        $accountB = create('App\Account', [
-            'server_id' => $serverB->id,
-            'domain' => 'anotherdomain.com'
-        ]);
-
-
-        $response = $this->get("/api/accounts/{$serverA->id}");
-
-        $response->assertStatus(200);
-
-        tap($response->json(), function ($accounts) {
-            $this->assertCount(1, $accounts);
-            $this->assertEquals('somedomain.com', $accounts[0]['domain']);
-        });
-    }
-}
+})->skip();

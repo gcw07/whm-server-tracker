@@ -32,6 +32,10 @@ Install this package by cloning this repository and install like you normally in
 - Start your queue listener and setup the Laravel scheduler.
 - Run installer `php artisan server-tracker:install` to setup default user.
 
+## Contributions
+
+Several form components are copied and customized for this project's usage are based upon the [Blade UI Kit](https://blade-ui-kit.com). It offers an easy way to do common UI elements.
+
 ## License
 
 This project and the Laravel framework are open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Server;
+use App\Models\Server;
 use Illuminate\Console\Command;
 
 class RefreshCommand extends Command
@@ -20,16 +20,6 @@ class RefreshCommand extends Command
      * @var string
      */
     protected $description = 'Refresh remote server data.';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.

@@ -1,23 +1,19 @@
 <?php
 
-use App\Http\Controllers\AccountsController;
-use App\Http\Controllers\Api\AccountsListingsController;
-use App\Http\Controllers\Api\DashboardLatestAccountsController;
-use App\Http\Controllers\Api\DashboardServersController;
-use App\Http\Controllers\Api\DashboardStatsController;
-use App\Http\Controllers\Api\ServersListingsController;
-use App\Http\Controllers\Api\UsersListingsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FetchAccountsController;
-use App\Http\Controllers\FetchDetailsController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\ServersController;
-use App\Http\Controllers\ServersTokenController;
-use App\Http\Controllers\UsersChangePasswordController;
-use App\Http\Controllers\UsersController;
+use App\Http\Livewire\Account\Listings as AccountListings;
+use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\Search;
+use App\Http\Livewire\Server\Create as ServerCreate;
+use App\Http\Livewire\Server\Details as ServerDetails;
+use App\Http\Livewire\Server\Edit as ServerEdit;
+use App\Http\Livewire\Server\Listings as ServerListings;
+use App\Http\Livewire\User\Create as UserCreate;
+use App\Http\Livewire\User\Edit as UserEdit;
+use App\Http\Livewire\User\Listings as UserListings;
+use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
 
@@ -30,58 +26,34 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [ResetPasswordController::class, 'reset']);
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // Dashboard Routes...
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
 });
 
 // Account Routes...
 Route::prefix('accounts')->middleware('auth')->group(function () {
-    Route::get('/', [AccountsController::class, 'index'])->name('accounts.index');
-    Route::get('/{server}', [AccountsController::class, 'index'])->name('accounts.server-index');
+    Route::get('/', AccountListings::class)->name('accounts.index');
 });
 
 // Server Routes...
 Route::prefix('servers')->middleware('auth')->group(function () {
-    Route::post('/', [ServersController::class, 'store'])->name('servers.store');
-    Route::get('/', [ServersController::class, 'index'])->name('servers.index');
-    Route::delete('/{server}', [ServersController::class, 'destroy'])->name('servers.destroy');
-    Route::put('/{server}', [ServersController::class, 'update'])->name('servers.update');
-    Route::get('/{server}', [ServersController::class, 'show'])->name('servers.show');
-    Route::get('/{server}/edit', [ServersController::class, 'edit'])->name('servers.edit');
-
-    Route::put('/{server}/token', [ServersTokenController::class, 'update'])->name('servers.token');
-    Route::delete('/{server}/token', [ServersTokenController::class, 'destroy'])->name('servers.token-destroy');
-
-    Route::get('/{server}/fetch-details', [FetchDetailsController::class, 'update'])->name('servers.fetch-details');
-    Route::get('/{server}/fetch-accounts', [FetchAccountsController::class, 'update'])->name('servers.fetch-accounts');
+    Route::get('/', ServerListings::class)->name('servers.index');
+    Route::get('/create', ServerCreate::class)->name('servers.create');
+    Route::get('/{server}', ServerDetails::class)->name('servers.show');
+    Route::get('/{server}/edit', ServerEdit::class)->name('servers.edit');
 });
 
 // User Routes...
 Route::prefix('users')->middleware('auth')->group(function () {
-    Route::post('/', [UsersController::class, 'store'])->name('users.store');
-    Route::get('/', [UsersController::class, 'index'])->name('users.index');
-    Route::delete('/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
-    Route::put('/{user}', [UsersController::class, 'update'])->name('users.update');
-    Route::get('/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
-
-    Route::put('/{user}/change-password', [UsersChangePasswordController::class, 'update'])->name('users.change-password');
+    Route::get('/', UserListings::class)->name('users.index');
+    Route::get('/create', UserCreate::class)->name('users.create');
+    Route::get('/{user}/edit', UserEdit::class)->name('users.edit');
 });
 
 // Search Routes...
 Route::middleware('auth')->group(function () {
-    Route::get('/search', [SearchController::class, 'index'])->name('search');
-});
-
-// API Routes...
-Route::prefix('api')->middleware('auth')->group(function () {
-    Route::get('/accounts', [AccountsListingsController::class, 'index'])->name('accounts.listing');
-    Route::get('/accounts/{server}', [AccountsListingsController::class, 'index'])->name('accounts.server-listing');
-    Route::get('/dashboard/stats', [DashboardStatsController::class, 'index'])->name('dashboard.stats');
-    Route::get('/dashboard/servers', [DashboardServersController::class, 'index'])->name('dashboard.servers');
-    Route::get('/dashboard/latest-accounts', [DashboardLatestAccountsController::class, 'index'])->name('dashboard.latest-accounts');
-    Route::get('/servers', [ServersListingsController::class, 'index'])->name('servers.listing');
-    Route::get('/users', [UsersListingsController::class, 'index'])->name('users.listing');
+    Route::get('/search', Search::class)->name('search');
 });

@@ -1,85 +1,58 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\User\ChangePassword as UserChangePassword;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class ChangePasswordTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    /** @test */
-    public function guests_cannot_change_a_password()
-    {
-        $user = create('App\User');
+test('guests cannot access the change password component', function () {
+    $response = Livewire::test(UserChangePassword::class, ['user' => $this->user]);
+    $response->assertStatus(401);
+});
 
-        $response = $this->putJson("/users/{$user->id}/change-password", [
-            'password'              => 'secret',
-            'password_confirmation' => 'secret',
-        ]);
+test('an authorized user can change a password', function () {
+    $this->actingAs(User::factory()->create());
 
-        $response->assertStatus(401);
-    }
+    Livewire::test(UserChangePassword::class, ['user' => $this->user])
+        ->set('state', [
+            'password' => 'NMeHq?Bzr#Nd#bt4',
+            'password_confirmation' => 'NMeHq?Bzr#Nd#bt4',
+        ])
+        ->call('save')
+        ->assertEmitted('closeModal');
+});
 
-    /** @test */
-    function an_authorized_user_can_change_a_password()
-    {
-        $this->signIn();
+test('password confirmation is required for user change password', function () {
+    $this->actingAs(User::factory()->create());
 
-        $user = create('App\User');
-
-        $response = $this->putJson("/users/{$user->id}/change-password", [
-            'password'              => 'secret',
-            'password_confirmation' => 'secret',
-        ]);
-
-        $response->assertStatus(204);
-    }
-
-    /** @test */
-    public function password_is_required()
-    {
-        $this->signIn();
-
-        $user = create('App\User');
-
-        $response = $this->putJson("/users/{$user->id}/change-password", [
-            'password' => '',
-        ]);
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
-    }
-
-    /** @test */
-    public function password_confirmation_is_required()
-    {
-        $this->signIn();
-
-        $user = create('App\User');
-
-        $response = $this->putJson("/users/{$user->id}/change-password", [
+    Livewire::test(UserChangePassword::class, ['user' => $this->user])
+        ->set('state', [
+            'password' => 'NMeHq?Bzr#Nd#bt4',
             'password_confirmation' => '',
-        ]);
+        ])
+        ->call('save')
+        ->assertHasErrors(['state.password' => 'confirmed']);
+});
 
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
-    }
+it('validates rules for change user password form', function ($data) {
+    // This could be fixed in future pest version.
+    $field = $data[0];
+    $value = $data[1];
+    $errorMessage = $data[2];
 
-    /** @test */
-    public function password_must_be_at_least_6_characters()
-    {
-        $this->signIn();
+    $this->actingAs(User::factory()->create());
 
-        $user = create('App\User');
+    $response = Livewire::test(UserChangePassword::class, ['user' => $this->user])
+        ->set('state', [$field => $value])
+        ->call('save');
 
-        $response = $this->putJson("/users/{$user->id}/change-password", [
-            'password'              => 'four',
-            'password_confirmation' => 'four',
-        ]);
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
-    }
-}
+    $response->assertHasErrors(["state.$field" => $errorMessage]);
+})->with([
+    fn () => ['password', '', 'required'],
+    fn () => ['password', Str::random(5), 'Illuminate\Validation\Rules\Password'],
+]);

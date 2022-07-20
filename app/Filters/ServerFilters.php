@@ -14,7 +14,7 @@ class ServerFilters extends Filters
     /**
      * Filter the query by a given server type.
      *
-     * @param string $serverType
+     * @param  string  $serverType
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected function type($serverType)

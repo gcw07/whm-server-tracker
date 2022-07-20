@@ -1,86 +1,34 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\User\Listings as UserListings;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class ViewUserListingTest extends TestCase
-{
-    use RefreshDatabase;
+test('guests can not view user listings page', function () {
+    $this->get(route('users.index'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function guests_can_not_view_user_listings_page()
-    {
-        $user = create('App\User');
+test('an authorized user can view user listings page', function () {
+    $this->actingAs(User::factory()->create([
+        'name' => 'John Doe',
+    ]));
 
-        $response = $this->get("/users");
+    Livewire::test(UserListings::class)
+        ->assertSee('John Doe');
+});
 
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
+test('the user listings are in alphabetical order', function () {
+    $userA = User::factory()->create(['name' => 'John Doe']);
+    $userB = User::factory()->create(['name' => 'Amy Smith']);
+    $userC = User::factory()->create(['name' => 'Zach Williams']);
 
-    /** @test */
-    public function an_authorized_user_can_view_user_listings_page()
-    {
-        $this->signIn();
+    $this->actingAs($userA);
 
-        $user = create('App\User');
-
-        $response = $this->get("/users");
-
-        $response->assertStatus(200);
-    }
-
-    /** @test */
-    public function guests_can_not_view_user_api_listings()
-    {
-        $user = create('App\User');
-
-        $response = $this->get("/api/users");
-
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
-
-    /** @test */
-    public function an_authorized_user_can_view_user_api_listings()
-    {
-        $user = create('App\User', [
-            'name'        => 'John Doe',
-            'email'     => 'john@example.com',
-        ]);
-
-        $this->signIn($user);
-
-        $response = $this->get("/api/users");
-
-        $response->assertStatus(200);
-
-        tap($response->json(), function ($users) {
-            $this->assertCount(1, $users);
-            $this->assertEquals('John Doe', $users[0]['name']);
-            $this->assertEquals('john@example.com', $users[0]['email']);
+    Livewire::test(UserListings::class)
+        ->assertViewHas('users', function ($users) {
+            return 3 === count($users);
         });
-    }
-
-    /** @test */
-    public function the_user_listings_are_in_alphabetical_order()
-    {
-        $userA = create('App\User', ['name' => 'John Doe']);
-        $userB = create('App\User', ['name' => 'Amy Smith']);
-        $userC = create('App\User', ['name' => 'Zach Williams']);
-
-        $this->signIn($userA);
-
-        $response = $this->get("/api/users");
-
-        $response->assertStatus(200);
-
-        $response->jsonData()->assertEquals([
-            $userB,
-            $userA,
-            $userC
-        ]);
-    }
-}
+})->skip();

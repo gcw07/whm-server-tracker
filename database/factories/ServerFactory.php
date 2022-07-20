@@ -1,13 +1,19 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-$factory->define(App\Server::class, function (Faker $faker) {
-    return [
-        'name' => $faker->domainName,
-        'address' => $faker->ipv4,
-        'port' => '2087',
-        'server_type' => $faker->randomElement(['vps', 'dedicated', 'reseller']),
-        'settings' => []
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class ServerFactory extends Factory
+{
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->domainName,
+            'address' => $this->faker->ipv4,
+            'port' => '2087',
+            'server_type' => $this->faker->randomElement(['vps', 'dedicated', 'reseller']),
+            'settings' => null,
+        ];
+    }
+}

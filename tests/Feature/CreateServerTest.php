@@ -1,166 +1,82 @@
 <?php
 
-namespace Tests\Feature;
+use App\Enums\ServerTypeEnum;
+use App\Http\Livewire\Server\Create as ServerCreate;
+use App\Models\Server;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\Factories\ServerRequestDataFactory;
 
-use App\Server;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class CreateServerTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->requestData = ServerRequestDataFactory::new();
+});
 
-    private function validParams($overrides = [])
-    {
-        return array_merge([
-            'name'        => 'my-server-name',
-            'address'     => '127.0.0.1',
-            'port'        => 2087,
-            'server_type' => 'vps',
-            'notes'       => 'a server note',
-            'token'       => 'server-api-token'
-        ], $overrides);
-    }
+test('guests cannot view the add server form', function () {
+    $this->get(route('servers.create'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function guests_cannot_add_new_servers()
-    {
-        $response = $this->postJson('/servers', $this->validParams());
+test('an authorized user can view the add server form', function () {
+    $this->actingAs($this->user)
+        ->get(route('servers.create'))
+        ->assertSuccessful();
+});
 
-        $response->assertStatus(401);
+test('an authorized user can add a valid server', function () {
+    $this->actingAs($this->user);
+
+    $response = Livewire::test(ServerCreate::class)
+        ->set('state', [
+            'name' => 'My Test Server',
+            'address' => '255.1.1.100',
+            'port' => 1111,
+            'server_type' => ServerTypeEnum::Dedicated,
+            'notes' => 'some server note',
+            'token' => 'new-server-api-token',
+        ])
+        ->call('save');
+
+    $server = Server::first();
+
+    $response->assertRedirect(route('servers.show', $server->id));
+
+    $this->assertDatabaseHas('servers', [
+        'name' => 'My Test Server',
+        'address' => '255.1.1.100',
+    ]);
+});
+
+it('validates rules for create server form', function ($data) {
+    // This could be fixed in future pest version.
+    $field = $data[0];
+    $value = $data[1];
+    $expectedResultType = $data[2];
+    $errorMessage = $data[3];
+
+    $this->actingAs($this->user);
+
+    $response = Livewire::test(ServerCreate::class)
+        ->set('state', $this->requestData->create([$field => $value]))
+        ->call('save');
+
+    if ($expectedResultType === 'invalid') {
+        $response->assertHasErrors(["state.$field" => $errorMessage]);
         $this->assertEquals(0, Server::count());
-    }
-
-    /** @test */
-    public function an_authorized_user_can_add_a_valid_server()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'name'        => 'My Test Server',
-            'address'     => '255.1.1.100',
-            'port'        => 1111,
-            'server_type' => 'dedicated',
-            'notes'       => 'some server note',
-            'token'       => 'new-server-api-token'
-        ]));
-
-        $response->assertJson(['name' => 'My Test Server']);
-        $response->assertJson(['address' => '255.1.1.100']);
-        $response->assertJson(['port' => 1111]);
-        $response->assertJson(['server_type' => 'dedicated']);
-        $response->assertJson(['notes' => 'some server note']);
-    }
-
-    /** @test */
-    public function server_name_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'name' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('name');
-        $this->assertEquals(0, Server::count());
-    }
-
-    /** @test */
-    public function server_address_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'address' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('address');
-        $this->assertEquals(0, Server::count());
-    }
-
-    /** @test */
-    public function server_port_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'port' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('port');
-        $this->assertEquals(0, Server::count());
-    }
-
-    /** @test */
-    public function server_port_must_be_a_number()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'port' => 'not-a-number',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('port');
-        $this->assertEquals(0, Server::count());
-    }
-
-    /** @test */
-    public function server_type_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'server_type' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('server_type');
-        $this->assertEquals(0, Server::count());
-    }
-
-    /** @test */
-    public function server_type_must_be_a_valid_option()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'server_type' => 'invalid-option',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('server_type');
-        $this->assertEquals(0, Server::count());
-    }
-
-    /** @test */
-    public function server_notes_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'notes' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->notes);
+    } else {
+        tap(Server::first(), function (Server $server) use ($field) {
+            $this->assertEmpty($server->{$field});
         });
     }
-
-    /** @test */
-    public function server_token_is_optional()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/servers', $this->validParams([
-            'token' => '',
-        ]));
-
-        tap(Server::first(), function ($server) {
-            $this->assertNull($server->token);
-        });
-    }
-}
+})->with([
+    fn () => ['name', '', 'invalid', 'required'],
+    fn () => ['address', '', 'invalid', 'required'],
+    fn () => ['port', '', 'invalid', 'required'],
+    fn () => ['port', 'not-a-number', 'invalid', 'numeric'],
+    fn () => ['server_type', '', 'invalid', 'required'],
+    fn () => ['server_type', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
+    fn () => ['notes', '', 'success', null],
+    fn () => ['token', '', 'success', null],
+]);

@@ -14,7 +14,7 @@ class AccountFilters extends Filters
     /**
      * Filter the query by a given server id.
      *
-     * @param integer $serverId
+     * @param  int  $serverId
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected function server($serverId)

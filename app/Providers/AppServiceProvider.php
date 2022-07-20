@@ -2,23 +2,11 @@
 
 namespace App\Providers;
 
-use App\Connectors\ServerConnector;
-use App\Connectors\WHMServerConnector;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Schema::defaultStringLength(191);
-    }
-
     /**
      * Register any application services.
      *
@@ -26,6 +14,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(ServerConnector::class, WHMServerConnector::class);
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Model::preventLazyLoading(! $this->app->isProduction());
     }
 }

@@ -1,279 +1,71 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\Server\Edit as ServerEdit;
+use App\Models\Server;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\Factories\ServerRequestDataFactory;
 
-use App\Server;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class UpdateServerTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->server = Server::factory()->create(['name' => 'old-my-server-name']);
+    $this->requestData = ServerRequestDataFactory::new();
+});
 
-    private function oldAttributes($overrides = [])
-    {
-        return array_merge([
-            'name'        => 'old-my-server-name',
-            'address'     => '1.1.1.1',
-            'port'        => 1000,
-            'server_type' => 'dedicated',
-            'notes'       => 'old server note'
-        ], $overrides);
-    }
+test('guests cannot view the edit server form', function () {
+    $this->get(route('servers.edit', $this->server->id))
+        ->assertRedirect(route('login'));
+});
 
-    private function validParams($overrides = [])
-    {
-        return array_merge([
-            'name'        => 'new-my-server-name',
-            'address'     => '192.1.1.1',
-            'port'        => 2000,
-            'server_type' => 'vps',
-            'notes'       => 'new server note'
-        ], $overrides);
-    }
+test('an authorized user can view the edit server form', function () {
+    $this->actingAs($this->user)
+        ->get(route('servers.edit', $this->server->id))
+        ->assertSuccessful();
+});
 
-    /** @test */
-    public function guests_cannot_view_the_edit_server_form()
-    {
-        $server = create('App\Server');
+test('an authorized user can edit a server', function () {
+    $this->actingAs($this->user);
 
-        $response = $this->get("/servers/{$server->id}/edit");
+    Livewire::test(ServerEdit::class, ['server' => $this->server])
+        ->set('state', $this->requestData->create([
+            'name' => 'My Server',
+        ]))
+        ->call('save')
+        ->assertRedirect(route('servers.show', $this->server->id));
 
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
+    tap($this->server->fresh(), function (Server $server) {
+        $this->assertEquals('My Server', $server->name);
+    });
+});
 
-    /** @test */
-    public function an_authorized_user_can_view_the_edit_server_form()
-    {
-        $this->signIn();
-        $server = create('App\Server');
+it('validates rules for server edit form', function ($data) {
+    // This could be fixed in future pest version.
+    $field = $data[0];
+    $value = $data[1];
+    $expectedResultType = $data[2];
+    $errorMessage = $data[3];
 
-        $response = $this->get("/servers/{$server->id}/edit");
+    $this->actingAs($this->user);
 
-        $response->assertStatus(200);
-        $this->assertTrue($response->data('server')->is($server));
-    }
+    $response = Livewire::test(ServerEdit::class, ['server' => $this->server])
+        ->set('state', $this->requestData->create([$field => $value]))
+        ->call('save');
 
-    /** @test */
-    public function guests_cannot_edit_a_server()
-    {
-        $server = create('App\Server', $this->oldAttributes());
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams());
-
-        $response->assertStatus(401);
-        $this->assertArraySubset($this->oldAttributes(), $server->fresh()->getAttributes());
-    }
-
-    /** @test */
-    function an_authorized_user_can_edit_a_server()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'name'        => 'old-my-server-name',
-            'address'     => '1.1.1.1',
-            'port'        => 1000,
-            'server_type' => 'dedicated',
-            'notes'       => 'old server note'
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'name'        => 'new-my-server-name',
-            'address'     => '192.1.1.1',
-            'port'        => 2000,
-            'server_type' => 'vps',
-            'notes'       => 'new server note'
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals('new-my-server-name', $server->name);
-            $this->assertEquals('192.1.1.1', $server->address);
-            $this->assertEquals(2000, $server->port);
-            $this->assertEquals('vps', $server->server_type);
-            $this->assertEquals('new server note', $server->notes);
+    if ($expectedResultType === 'invalid') {
+        $response->assertHasErrors(["state.$field" => $errorMessage]);
+    } else {
+        tap(Server::first(), function (Server $server) use ($field) {
+            $this->assertEmpty($server->{$field});
         });
     }
-
-    /** @test */
-    public function the_api_token_disk_and_backup_details_are_cleared_when_reseller_server_type_is_selected()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'server_type'      => 'dedicated',
-            'token'            => 'old-api-token',
-        ]);
-
-        $server->settings()->merge([
-            'disk_used'        => 10000000,
-            'disk_available'   => 115000000,
-            'disk_total'       => 125000000,
-            'disk_percentage'  => 8,
-            'backup_enabled'   => false,
-            'backup_days'      => '1,2',
-            'backup_retention' => 10
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'server_type' => 'reseller'
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals('reseller', $server->server_type);
-            $this->assertNull($server->token);
-            $this->assertNull($server->settings()->disk_used);
-            $this->assertNull($server->settings()->disk_available);
-            $this->assertNull($server->settings()->disk_total);
-            $this->assertNull($server->settings()->disk_percentage);
-            $this->assertNull($server->settings()->backup_enabled);
-            $this->assertNull($server->settings()->backup_days);
-            $this->assertNull($server->settings()->backup_retention);
-        });
-    }
-
-    /** @test */
-    public function server_name_is_required()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'name' => 'old-my-server-name',
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'name' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('name');
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals('old-my-server-name', $server->name);
-        });
-    }
-
-    /** @test */
-    public function server_address_is_required()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'address' => '1.1.1.1',
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'address' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('address');
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals('1.1.1.1', $server->address);
-        });
-    }
-
-    /** @test */
-    public function server_port_is_required()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'port' => 1000,
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'port' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('port');
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals(1000, $server->port);
-        });
-    }
-
-    /** @test */
-    public function server_port_must_be_a_number()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'port' => 1000,
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'port' => 'not-a-number',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('port');
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals(1000, $server->port);
-        });
-    }
-
-    /** @test */
-    public function server_type_is_required()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'server_type' => 'vps',
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'server_type' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('server_type');
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals('vps', $server->server_type);
-        });
-    }
-
-    /** @test */
-    public function server_type_must_be_a_valid_option()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'server_type' => 'vps',
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'server_type' => 'invalid-option',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('server_type');
-
-        tap($server->fresh(), function ($server) {
-            $this->assertEquals('vps', $server->server_type);
-        });
-    }
-
-    /** @test */
-    public function server_notes_is_optional()
-    {
-        $this->signIn();
-
-        $server = create('App\Server', [
-            'notes' => 'old server notes',
-        ]);
-
-        $response = $this->putJson("/servers/{$server->id}", $this->validParams([
-            'notes' => '',
-        ]));
-
-        tap($server->fresh(), function ($server) {
-            $this->assertNull($server->notes);
-        });
-    }
-}
+})->with([
+    fn () => ['name', '', 'invalid', 'required'],
+    fn () => ['address', '', 'invalid', 'required'],
+    fn () => ['port', '', 'invalid', 'required'],
+    fn () => ['port', 'not-a-number', 'invalid', 'numeric'],
+    fn () => ['server_type', '', 'invalid', 'required'],
+    fn () => ['server_type', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
+    fn () => ['notes', '', 'success', null],
+]);

@@ -1,55 +1,37 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\User\Delete as UserDelete;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class DeleteUserTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    /** @test */
-    public function guests_cannot_delete_a_user()
-    {
-        $user = create('App\User', [
-            'name' => 'John Doe'
-        ]);
+test('guests cannot access the delete user component', function () {
+    $response = Livewire::test(UserDelete::class, ['user' => $this->user]);
+    $response->assertStatus(401);
+});
 
-        $response = $this->deleteJson("/users/{$user->id}");
+test('an authorized user can delete a user', function () {
+    $this->actingAs(User::factory()->create());
 
-        $response->assertStatus(401);
-        $this->assertEquals('John Doe', $user->fresh()->name);
-    }
+    Livewire::test(UserDelete::class, ['user' => $this->user])
+        ->call('delete')
+        ->assertRedirect(route('users.index'));
 
-    /** @test */
-    function an_authorized_user_can_delete_a_user()
-    {
-        $this->signIn();
+    $this->assertEquals(1, User::count());
+});
 
-        $user = create('App\User', [
-            'name' => 'John Doe'
-        ]);
+test('an authorized user cannot delete themselves', function () {
+    $this->actingAs($this->user);
 
-        $response = $this->deleteJson("/users/{$user->id}");
+    Livewire::test(UserDelete::class, ['user' => $this->user])
+        ->call('delete')
+        ->assertEmitted('closeModal')
+        ->assertNoRedirect();
 
-        $response->assertStatus(204);
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function an_authorized_user_cannot_delete_themselves()
-    {
-        $user = create('App\User', [
-            'name' => 'John Doe'
-        ]);
-
-        $this->signIn($user);
-
-        $response = $this->deleteJson("/users/{$user->id}");
-
-        $response->assertStatus(422);
-        $this->assertEquals(1, User::count());
-    }
-}
+    $this->assertEquals(1, User::count());
+});

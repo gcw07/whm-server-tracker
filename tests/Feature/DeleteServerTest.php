@@ -1,66 +1,54 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\Server\Delete as ServerDelete;
+use App\Models\Account;
+use App\Models\Server;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-use App\Account;
-use App\Server;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class DeleteServerTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->server = Server::factory()->create();
+});
 
-    /** @test */
-    public function guests_cannot_delete_a_server()
-    {
-        $server = create('App\Server', [
-            'name' => 'my-server-name'
-        ]);
+test('guests cannot access the delete server component', function () {
+    $response = Livewire::test(ServerDelete::class, ['server' => $this->server]);
+    $response->assertStatus(401);
+});
 
-        $response = $this->deleteJson("/servers/{$server->id}");
+test('an authorized user can delete a server', function () {
+    $this->actingAs(User::factory()->create());
 
-        $response->assertStatus(401);
-        $this->assertEquals('my-server-name', $server->fresh()->name);
-    }
+    Livewire::test(ServerDelete::class, ['server' => $this->server])
+        ->call('delete')
+        ->assertRedirect(route('servers.index'));
 
-    /** @test */
-    function an_authorized_user_can_delete_a_server()
-    {
-        $this->signIn();
+    $this->assertEquals(0, Server::count());
+});
 
-        $server = create('App\Server', [
-            'name' => 'my-server-name',
-        ]);
+test('accounts are deleted when a server is deleted', function () {
+    $server = Server::factory()
+        ->has(Account::factory()->count(5))
+        ->create(['name' => 'my-server-name']);
 
-        $response = $this->deleteJson("/servers/{$server->id}");
+    Server::factory()
+        ->has(Account::factory()->count(1))
+        ->create(['name' => 'other-server-name']);
 
-        $response->assertStatus(204);
-        $this->assertEquals(0, Server::count());
-    }
+    $this->assertEquals(3, Server::count()); // +1 from the beforeEach
 
-    /** @test */
-    public function accounts_are_deleted_when_a_server_is_deleted()
-    {
-        $this->signIn();
+    tap($server->fresh(), function (Server $server) {
+        $this->assertCount(5, $server->accounts);
+    });
 
-        $server = create('App\Server', ['name' => 'my-server-name']);
-        $otherServer = create('App\Server', ['name' => 'other-server-name']);
+    $this->actingAs(User::factory()->create());
 
-        $accounts = create('App\Account', ['server_id' => $server->id], 2);
-        $otherAccount = create('App\Account', ['server_id' => $otherServer->id]);
+    Livewire::test(ServerDelete::class, ['server' => $server])
+        ->call('delete')
+        ->assertRedirect(route('servers.index'));
 
-        $this->assertEquals(2, Server::count());
-
-        tap(Server::first(), function ($server) {
-            $this->assertCount(2, $server->accounts);
-        });
-
-        $response = $this->deleteJson("/servers/{$server->id}");
-
-        $response->assertStatus(204);
-
-        $this->assertEquals(1, Server::count());
-        $this->assertEquals(1, Account::count());
-    }
-}
+    $this->assertEquals(2, Server::count());
+    $this->assertEquals(1, Account::count());
+});

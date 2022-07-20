@@ -1,455 +1,467 @@
 <?php
 
-namespace Tests\Unit;
-
-use App\Account;
+use App\Enums\ServerTypeEnum;
+use App\Models\Account;
+use App\Models\Server;
+use App\Services\WHM\DataProcessors\ProcessAccounts;
 use Carbon\Carbon;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-class ServerTest extends TestCase
-{
-    use RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-    protected $server;
+beforeEach(function () {
+    $this->server = Server::factory()->create();
+});
 
-    public function setUp() : void
-    {
-        parent::setUp();
+it('a server has accounts', function () {
+    $this->assertInstanceOf(
+        'Illuminate\Database\Eloquent\Collection',
+        $this->server->accounts
+    );
+});
 
-        $this->server = create('App\Server');
-    }
+it('a server can add a setting', function () {
+    $this->server->settings['disk_used'] = 100000;
+    $this->server->settings['disk_available'] = 200000;
 
-    /** @test */
-    public function a_server_has_accounts()
-    {
-        $this->assertInstanceOf(
-            'Illuminate\Database\Eloquent\Collection', $this->server->accounts
-        );
-    }
+    $this->assertCount(2, $this->server->settings);
+    $this->assertEquals(100000, $this->server->settings['disk_used']);
+});
 
-    /** @test */
-    public function a_server_can_add_a_setting()
-    {
-        $this->server->settings()->set('disk_used', 100000);
-        $this->server->settings()->set('disk_available', 200000);
+it('a server can get a setting', function () {
+    $this->server->settings['disk_available'] = 200000;
 
-        $this->assertCount(2, $this->server->settings);
-        $this->assertEquals('100000', $this->server->settings()->get('disk_used'));
-    }
+    $this->assertEquals(200000, $this->server->settings['disk_available']);
+});
 
-    /** @test */
-    public function a_server_can_get_a_setting()
-    {
-        $this->server->settings()->set('disk_available', 200000);
+it('a server can update a setting', function () {
+    $this->server->settings['disk_available'] = 200000;
+    $this->assertEquals(200000, $this->server->settings['disk_available']);
 
-        $this->assertEquals('200000', $this->server->settings()->get('disk_available'));
-    }
+    $this->server->settings['disk_available'] = 500000;
+    $this->assertEquals(500000, $this->server->settings['disk_available']);
+});
 
-    /** @test */
-    public function a_server_can_update_a_setting()
-    {
-        $this->server->settings()->set('disk_available', 200000);
-        $this->assertEquals('200000', $this->server->settings()->get('disk_available'));
+it('a setting will not overwrite all settings when a single one is specified', function () {
+    $server = Server::factory()->create(['settings' => ['disk_available' => 500000]]);
 
-        $this->server->settings()->set('disk_available', 500000);
-        $this->assertEquals('500000', $this->server->settings()->get('disk_available'));
-    }
+    $this->assertEquals(500000, $server->settings['disk_available']);
+    $server->settings['disk_used'] = 100000;
 
-    /** @test */
-    public function a_server_can_update_multiple_settings_at_once()
-    {
-        $this->server->settings()->merge([
-            'disk_used' => 10000,
-            'disk_available' => 200000
-        ]);
+    $server->save();
+    $server->refresh();
 
-        $this->assertEquals('10000', $this->server->settings()->get('disk_used'));
-        $this->assertEquals('200000', $this->server->settings()->get('disk_available'));
-    }
+    $this->assertEquals(500000, $server->settings['disk_available']);
+    $this->assertEquals(100000, $server->settings['disk_used']);
+});
 
-    /** @test */
-    public function a_server_can_remove_a_setting()
-    {
-        $this->server->settings()->set('disk_available', 200000);
-        $this->assertCount(1, $this->server->settings);
+it('a server can update multiple settings at once', function () {
+    $this->server->settings->merge([
+        'disk_used' => 10000,
+        'disk_available' => 200000,
+    ]);
 
-        $this->server->settings()->forget('disk_available');
-        $this->assertCount(0, $this->server->settings);
-    }
+    $this->assertEquals(10000, $this->server->settings['disk_used']);
+    $this->assertEquals(200000, $this->server->settings['disk_available']);
+});
 
-    /** @test */
-    public function a_server_can_remove_all_settings()
-    {
-        $this->server->settings()->set('disk_used', 10000);
-        $this->server->settings()->set('disk_available', 200000);
+it('a server can remove a setting', function () {
+    $this->server->settings['disk_available'] = 200000;
+    $this->assertCount(1, $this->server->settings);
 
-        $this->assertCount(2, $this->server->settings);
+    $this->server->settings->forget('disk_available');
+    $this->assertCount(0, $this->server->settings);
+});
 
-        $this->server->settings()->forgetAll();
+it('a server can remove all settings', function () {
+    $this->server->settings['disk_used'] = 10000;
+    $this->server->settings['disk_available'] = 200000;
+    $this->assertCount(2, $this->server->settings);
 
-        $this->assertCount(0, $this->server->settings);
-    }
+    $this->server->settings->forgetAll();
+    $this->assertCount(0, $this->server->settings);
+});
 
-    /** @test */
-    public function a_server_can_add_an_account()
-    {
-        $this->server->addAccount([
-            'domain'         => 'my-server-name.com',
-            'user'           => 'my-server',
-            'ip'             => '1.1.1.1',
-            'backup'         => true,
-            'suspended'      => false,
-            'suspend_reason' => 'not suspended',
-            'suspend_time'   => null,
-            'setup_date'     => Carbon::parse('-1 month'),
-            'disk_used'      => '500M',
-            'disk_limit'     => '2000M',
-            'plan'           => '2 Gig'
-        ]);
+it('a server can add an account', function () {
+    $this->server->addAccount([
+        'domain' => 'my-server-name.com',
+        'user' => 'my-server',
+        'ip' => '1.1.1.1',
+        'backup' => true,
+        'suspended' => false,
+        'suspend_reason' => 'not suspended',
+        'suspend_time' => null,
+        'setup_date' => Carbon::parse('-1 month'),
+        'disk_used' => '500M',
+        'disk_limit' => '2000M',
+        'plan' => '2 Gig',
+    ]);
 
-        $this->assertCount(1, $this->server->accounts);
-    }
+    $this->assertCount(1, $this->server->accounts);
+});
 
-    /** @test */
-    public function a_server_can_remove_an_account()
-    {
-        $account = create('App\Account', [
-            'server_id' => $this->server->id
-        ]);
+it('a server can remove an account', function () {
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+    ]);
 
-        $this->server->removeAccount($account);
+    $this->server->removeAccount($account);
 
-        $this->assertCount(0, $this->server->accounts);
-    }
+    $this->assertCount(0, $this->server->accounts);
+});
 
-    /** @test */
-    public function it_will_add_an_account_if_it_does_not_exist()
-    {
-        $accounts = [
-            [
-                'domain'        => 'my-site.com',
-                'user'          => 'mysite',
-                'ip'            => '1.1.1.1',
-                'backup'        => 1,
-                'suspended'     => 0,
-                'suspendreason' => 'not suspended',
-                'suspendtime'   => 0,
-                'startdate'     => '17 Jan 1 10:35',
-                'diskused'      => '300M',
-                'disklimit'     => '2000M',
-                'plan'          => '2 Gig',
-            ]
-        ];
-
-        $this->server->fetchers()->processAccounts($accounts);
-
-        $this->assertCount(1, $this->server->fresh()->accounts);
-    }
-
-    /** @test */
-    public function it_will_update_an_account_if_it_exists()
-    {
-        $account = create('App\Account', [
-            'server_id' => $this->server->id,
-            'domain'    => 'my-site.com',
-            'user'      => 'mysite'
-        ]);
-
-        $accounts = [
-            [
-                'domain'        => 'my-site.com',
-                'user'          => 'mysite',
-                'ip'            => '1.1.1.1',
-                'backup'        => 1,
-                'suspended'     => 0,
-                'suspendreason' => 'not suspended',
-                'suspendtime'   => 0,
-                'startdate'     => '17 Jan 1 10:35',
-                'diskused'      => '300M',
-                'disklimit'     => '2000M',
-                'plan'          => '2 Gig',
-            ]
-        ];
-
-        $this->server->fetchers()->processAccounts($accounts);
-
-        tap($this->server->fresh(), function ($server) {
-            $this->assertCount(1, $server->accounts);
-            $this->assertEquals('my-site.com', $server->accounts->first()->domain);
-            $this->assertEquals('mysite', $server->accounts->first()->user);
-        });
-    }
-
-    /** @test */
-    public function it_will_skip_over_ignored_usernames()
-    {
-        $validAccount = [
-            'domain'        => 'my-site.com',
-            'user'          => 'mysite',
-            'ip'            => '1.1.1.1',
-            'backup'        => 1,
-            'suspended'     => 0,
+it('it will add an account if it does not exist', function () {
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
             'suspendreason' => 'not suspended',
-            'suspendtime'   => 0,
-            'startdate'     => '17 Jan 1 10:35',
-            'diskused'      => '300M',
-            'disklimit'     => '2000M',
-            'plan'          => '2 Gig',
-        ];
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
 
-        $skipAccount = [
-            'domain'        => 'gwscripts.com',
-            'user'          => 'gwscripts',
-            'ip'            => '1.1.1.1',
-            'backup'        => 1,
-            'suspended'     => 0,
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $this->assertCount(1, $this->server->fresh()->accounts);
+});
+
+it('it will update an account if it exists', function () {
+    Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+    ]);
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
             'suspendreason' => 'not suspended',
-            'suspendtime'   => 0,
-            'startdate'     => '17 Jan 20 9:35',
-            'diskused'      => '300M',
-            'disklimit'     => '2000M',
-            'plan'          => '2 Gig',
-        ];
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
 
-        $accounts = [$validAccount, $skipAccount];
+    (new ProcessAccounts)->execute($this->server, $data);
 
-        $this->server->fetchers()->processAccounts($accounts);
+    tap($this->server->fresh(), function ($server) {
+        $this->assertCount(1, $server->accounts);
+        $this->assertEquals('my-site.com', $server->accounts->first()->domain);
+        $this->assertEquals('mysite', $server->accounts->first()->user);
+    });
+});
 
-        tap($this->server->fresh(), function ($server) {
-            $this->assertCount(1, $server->accounts);
-        });
-    }
+it('it will skip over ignored usernames', function () {
+    $validAccount = [
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+        'ip' => '1.1.1.1',
+        'backup' => 1,
+        'suspended' => 0,
+        'suspendreason' => 'not suspended',
+        'suspendtime' => 0,
+        'startdate' => '17 Jan 1 10:35',
+        'diskused' => '300M',
+        'disklimit' => '2000M',
+        'plan' => '2 Gig',
+    ];
 
-    /** @test */
-    public function it_will_remove_accounts_that_no_longer_exists_on_server()
-    {
-        $account1 = create('App\Account', [
-            'server_id' => $this->server->id,
-            'domain'    => 'first-site.com',
-            'user'      => 'firstsite'
-        ]);
+    $skipAccount = [
+        'domain' => 'gwscripts.com',
+        'user' => 'gwscripts',
+        'ip' => '1.1.1.1',
+        'backup' => 1,
+        'suspended' => 0,
+        'suspendreason' => 'not suspended',
+        'suspendtime' => 0,
+        'startdate' => '17 Jan 20 9:35',
+        'diskused' => '300M',
+        'disklimit' => '2000M',
+        'plan' => '2 Gig',
+    ];
 
-        $account2 = create('App\Account', [
-            'server_id' => $this->server->id,
-            'domain'    => 'site-to-remove.com',
-            'user'      => 'sitetoremove'
-        ]);
+    $data['data']['acct'] = [$validAccount, $skipAccount];
 
-        $accounts = [
-            [
-                'domain'        => 'first-site.com',
-                'user'          => 'firstsite',
-                'ip'            => '1.1.1.1',
-                'backup'        => 1,
-                'suspended'     => 0,
-                'suspendreason' => 'not suspended',
-                'suspendtime'   => 0,
-                'startdate'     => '17 Jan 1 10:35',
-                'diskused'      => '300M',
-                'disklimit'     => '2000M',
-                'plan'          => '2 Gig',
-            ]
-        ];
+    (new ProcessAccounts)->execute($this->server, $data);
 
-        $this->server->fetchers()->processAccounts($accounts);
+    tap($this->server->fresh(), function ($server) {
+        $this->assertCount(1, $server->accounts);
+    });
+});
 
-        tap($this->server->fresh(), function ($server) {
-            $this->assertCount(1, $server->accounts);
-        });
-    }
+it('it will remove accounts that no longer exists on server', function () {
+    Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'first-site.com',
+        'user' => 'firstsite',
+    ]);
 
-    /** @test */
-    public function it_will_only_remove_accounts_that_no_longer_exists_on_the_server_that_is_being_processed()
-    {
-        $serverB = create('App\Server');
+    Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'site-to-remove.com',
+        'user' => 'sitetoremove',
+    ]);
 
-        $accountToKeep = create('App\Account', [
-            'server_id' => $serverB->id,
-            'domain'    => 'site-to-remove.com',
-            'user'      => 'sitetoremove'
-        ]);
+    $data['data']['acct'] = [
+        [
+            'domain' => 'first-site.com',
+            'user' => 'firstsite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
 
-        $account1 = create('App\Account', [
-            'server_id' => $this->server->id,
-            'domain'    => 'first-site.com',
-            'user'      => 'firstsite'
-        ]);
+    (new ProcessAccounts)->execute($this->server, $data);
 
-        $account2 = create('App\Account', [
-            'server_id' => $this->server->id,
-            'domain'    => 'site-to-remove.com',
-            'user'      => 'sitetoremove'
-        ]);
+    tap($this->server->fresh(), function ($server) {
+        $this->assertCount(1, $server->accounts);
+    });
+});
 
-        $fetchedAccounts = [
-            [
-                'domain'        => 'first-site.com',
-                'user'          => 'firstsite',
-                'ip'            => '1.1.1.1',
-                'backup'        => 1,
-                'suspended'     => 0,
-                'suspendreason' => 'not suspended',
-                'suspendtime'   => 0,
-                'startdate'     => '17 Jan 1 10:35',
-                'diskused'      => '300M',
-                'disklimit'     => '2000M',
-                'plan'          => '2 Gig',
-            ]
-        ];
+it('will only remove accounts that no longer exists on the server that is being processed', function () {
+    $serverB = Server::factory()->create();
 
-        $this->assertEquals(3, Account::count());
+    // This account should be kept because it is on another server
+    Account::factory()->create([
+        'server_id' => $serverB->id,
+        'domain' => 'site-to-remove.com',
+        'user' => 'sitetoremove',
+    ]);
 
-        $this->server->fetchers()->processAccounts($fetchedAccounts);
+    Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'first-site.com',
+        'user' => 'firstsite',
+    ]);
 
-        tap($this->server->fresh(), function ($server) {
-            $this->assertCount(1, $server->accounts);
-        });
+    Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'site-to-remove.com',
+        'user' => 'sitetoremove',
+    ]);
 
-        $this->assertCount(1, $serverB->fresh()->accounts);
-        $this->assertEquals(2, Account::count());
-    }
+    $data['data']['acct'] = [
+        [
+            'domain' => 'first-site.com',
+            'user' => 'firstsite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
 
-    /** @test */
-    public function can_get_formatted_server_types()
-    {
-        $serverA = make('App\Server', ['server_type' => 'vps']);
-        $serverB = make('App\Server', ['server_type' => 'dedicated']);
-        $serverC = make('App\Server', ['server_type' => 'reseller']);
+    $this->assertEquals(3, Account::count());
 
-        $this->assertEquals('VPS', $serverA->formatted_server_type);
-        $this->assertEquals('Dedicated', $serverB->formatted_server_type);
-        $this->assertEquals('Reseller', $serverC->formatted_server_type);
-    }
-    
-    /** @test */
-    public function can_get_formatted_disk_used()
-    {
-        $serverA = create('App\Server');
-        $serverA->settings()->set('disk_used', '16305616');
+    (new ProcessAccounts)->execute($this->server, $data);
 
-        $serverB = create('App\Server');
-        $serverB->settings()->set('disk_used', '204800');
+    tap($this->server->fresh(), function ($server) {
+        $this->assertCount(1, $server->accounts);
+    });
 
-        $serverC = create('App\Server');
-        $serverC->settings()->set('disk_used', '570');
+    $this->assertCount(1, $serverB->fresh()->accounts);
+    $this->assertEquals(2, Account::count());
+});
 
-        $this->assertEquals('15.55 GB', $serverA->formatted_disk_used);
-        $this->assertEquals('200 MB', $serverB->formatted_disk_used);
-        $this->assertEquals('570 KB', $serverC->formatted_disk_used);
-    }
+it('can get whm url', function () {
+    $serverA = Server::factory()->make(['address' => '1.1.1.1', 'port' => 2087]);
+    $serverB = Server::factory()->make(['address' => '3.3.3.3', 'port' => 2086]);
 
-    /** @test */
-    public function can_get_formatted_disk_available()
-    {
-        $serverA = create('App\Server');
-        $serverA->settings()->set('disk_available', '109523504');
+    $this->assertEquals('https://1.1.1.1:2087', $serverA->whm_url);
+    $this->assertEquals('http://3.3.3.3:2086', $serverB->whm_url);
+});
 
-        $serverB = create('App\Server');
+it('can get formatted server types', function () {
+    $serverA = Server::factory()->make(['server_type' => ServerTypeEnum::Vps]);
+    $serverB = Server::factory()->make(['server_type' => ServerTypeEnum::Dedicated]);
+    $serverC = Server::factory()->make(['server_type' => ServerTypeEnum::Reseller]);
 
-        $this->assertEquals('104.45 GB', $serverA->formatted_disk_available);
-        $this->assertEquals('Unknown', $serverB->formatted_disk_available);
-    }
+    $this->assertEquals('VPS', $serverA->formatted_server_type);
+    $this->assertEquals('Dedicated', $serverB->formatted_server_type);
+    $this->assertEquals('Reseller', $serverC->formatted_server_type);
+});
 
-    /** @test */
-    public function can_get_formatted_disk_total()
-    {
-        $serverA = create('App\Server');
-        $serverA->settings()->set('disk_total', '125829120');
+it('can get formatted disk used', function () {
+    $serverA = Server::factory()->create(['settings' => ['disk_used' => '16305616']]);
+    $serverB = Server::factory()->create(['settings' => ['disk_used' => '204800']]);
+    $serverC = Server::factory()->create(['settings' => ['disk_used' => '570']]);
 
-        $serverB = create('App\Server');
+    $this->assertEquals('15.55 GB', $serverA->formatted_disk_used);
+    $this->assertEquals('200 MB', $serverB->formatted_disk_used);
+    $this->assertEquals('570 KB', $serverC->formatted_disk_used);
+});
 
-        $this->assertEquals('120 GB', $serverA->formatted_disk_total);
-        $this->assertEquals('Unknown', $serverB->formatted_disk_total);
-    }
+it('can get formatted disk available', function () {
+    $serverA = Server::factory()->create(['settings' => ['disk_available' => '109523504']]);
+    $serverB = Server::factory()->create();
 
-    /** @test */
-    public function can_determine_a_missing_api_token()
-    {
-        $serverValidToken = make('App\Server', ['server_type' => 'vps', 'token' => 'valid-token']);
-        $serverNoToken = make('App\Server', ['server_type' => 'vps']);
-        $serverTypeNeedsNoToken = make('App\Server', ['server_type' => 'reseller']);
+    $this->assertEquals('104.45 GB', $serverA->formatted_disk_available);
+    $this->assertEquals('Unknown', $serverB->formatted_disk_available);
+});
 
-        $this->assertFalse($serverValidToken->missing_token);
-        $this->assertTrue($serverNoToken->missing_token);
-        $this->assertFalse($serverTypeNeedsNoToken->missing_token);
-    }
+it('can get formatted disk total', function () {
+    $serverA = Server::factory()->create(['settings' => ['disk_total' => '125829120']]);
+    $serverB = Server::factory()->create();
 
-    /** @test */
-    public function can_determine_if_it_can_refresh_external_data()
-    {
-        $serverValidToken = make('App\Server', ['server_type' => 'vps', 'token' => 'valid-token']);
-        $serverNoToken = make('App\Server', ['server_type' => 'vps']);
-        $serverTypeNeedsNoToken = make('App\Server', ['server_type' => 'reseller']);
+    $this->assertEquals('120 GB', $serverA->formatted_disk_total);
+    $this->assertEquals('Unknown', $serverB->formatted_disk_total);
+});
 
-        $this->assertTrue($serverValidToken->can_refresh_data);
-        $this->assertFalse($serverNoToken->can_refresh_data);
-        $this->assertFalse($serverTypeNeedsNoToken->can_refresh_data);
-    }
+it('can get formatted backup daily days', function () {
+    $serverA = Server::factory()->create(['settings' => ['backup_daily_days' => '0,1,2']]);
+    $serverB = Server::factory()->create(['settings' => ['backup_daily_days' => '3,4,5,6']]);
+    $serverC = Server::factory()->create(['settings' => ['backup_daily_days' => '0,2,4,6']]);
+    $serverD = Server::factory()->create();
 
-    /** @test */
-    public function can_get_whm_external_url()
-    {
-        $serverA = make('App\Server', ['address' => '1.1.1.1', 'port' => 2087]);
-        $serverB = make('App\Server', ['address' => '3.3.3.3', 'port' => 2086]);
+    $this->assertEquals('Sun, Mon, Tue', $serverA->formatted_backup_daily_days);
+    $this->assertEquals('Wed, Thu, Fri, Sat', $serverB->formatted_backup_daily_days);
+    $this->assertEquals('Sun, Tue, Thu, Sat', $serverC->formatted_backup_daily_days);
+    $this->assertEquals('None', $serverD->formatted_backup_daily_days);
+});
 
-        $this->assertEquals('https://1.1.1.1:2087', $serverA->whm_url);
-        $this->assertEquals('http://3.3.3.3:2086', $serverB->whm_url);
-    }
+it('can get formatted backup weekly day', function () {
+    $serverA = Server::factory()->create(['settings' => ['backup_weekly_day' => '0']]);
+    $serverB = Server::factory()->create(['settings' => ['backup_weekly_day' => '3']]);
+    $serverC = Server::factory()->create(['settings' => ['backup_weekly_day' => '6']]);
+    $serverD = Server::factory()->create();
 
-    /** @test */
-    public function the_api_token_should_not_be_included_in_returned_data()
-    {
-        $server = make('App\Server', ['server_type' => 'vps', 'token' => 'valid-token']);
+    $this->assertEquals('Sunday', $serverA->formatted_backup_weekly_day);
+    $this->assertEquals('Wednesday', $serverB->formatted_backup_weekly_day);
+    $this->assertEquals('Saturday', $serverC->formatted_backup_weekly_day);
+    $this->assertEquals('None', $serverD->formatted_backup_weekly_day);
+});
 
-        $this->assertArrayNotHasKey('token', $server->toArray());
-    }
+it('can get formatted backup monthly days', function () {
+    $serverA = Server::factory()->create(['settings' => ['backup_monthly_days' => '1,15']]);
+    $serverB = Server::factory()->create(['settings' => ['backup_monthly_days' => '1']]);
+    $serverC = Server::factory()->create(['settings' => ['backup_monthly_days' => '15']]);
+    $serverD = Server::factory()->create();
 
-    /** @test */
-    public function can_get_formatted_backup_days()
-    {
-        $serverA = create('App\Server');
-        $serverA->settings()->set('backup_days', '0,1,2');
+    $this->assertEquals('1st, 15th', $serverA->formatted_backup_monthly_days);
+    $this->assertEquals('1st', $serverB->formatted_backup_monthly_days);
+    $this->assertEquals('15th', $serverC->formatted_backup_monthly_days);
+    $this->assertEquals('None', $serverD->formatted_backup_monthly_days);
+});
 
-        $serverB = create('App\Server');
-        $serverB->settings()->set('backup_days', '3,4,5,6');
+it('can get formatted php installed versions', function () {
+    $serverA = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php54']]]);
+    $serverB = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php55']]]);
+    $serverC = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php56']]]);
+    $serverD = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php70']]]);
+    $serverE = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php71']]]);
+    $serverF = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php72']]]);
+    $serverG = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php73']]]);
+    $serverH = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php74']]]);
+    $serverI = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php80']]]);
+    $serverJ = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php81']]]);
+    $serverK = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php74', 'ea-php80']]]);
+    $serverL = Server::factory()->create();
 
-        $serverC = create('App\Server');
-        $serverC->settings()->set('backup_days', '0,2,4,6');
+    $this->assertEquals(['5.4'], $serverA->formatted_php_installed_versions);
+    $this->assertEquals(['5.5'], $serverB->formatted_php_installed_versions);
+    $this->assertEquals(['5.6'], $serverC->formatted_php_installed_versions);
+    $this->assertEquals(['7.0'], $serverD->formatted_php_installed_versions);
+    $this->assertEquals(['7.1'], $serverE->formatted_php_installed_versions);
+    $this->assertEquals(['7.2'], $serverF->formatted_php_installed_versions);
+    $this->assertEquals(['7.3'], $serverG->formatted_php_installed_versions);
+    $this->assertEquals(['7.4'], $serverH->formatted_php_installed_versions);
+    $this->assertEquals(['8.0'], $serverI->formatted_php_installed_versions);
+    $this->assertEquals(['8.1'], $serverJ->formatted_php_installed_versions);
+    $this->assertEquals(['7.4', '8.0'], $serverK->formatted_php_installed_versions);
+    $this->assertEquals(['Unknown'], $serverL->formatted_php_installed_versions);
+});
 
-        $serverD = create('App\Server');
+it('can get formatted php system version', function () {
+    $serverA = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php54']]);
+    $serverB = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php55']]);
+    $serverC = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php56']]);
+    $serverD = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php70']]);
+    $serverE = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php71']]);
+    $serverF = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php72']]);
+    $serverG = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php73']]);
+    $serverH = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php74']]);
+    $serverI = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php80']]);
+    $serverJ = Server::factory()->create(['settings' => ['php_system_version' => 'ea-php81']]);
+    $serverK = Server::factory()->create();
 
-        $this->assertEquals('Sun,Mon,Tue', $serverA->formatted_backup_days);
-        $this->assertEquals('Wed,Thu,Fri,Sat', $serverB->formatted_backup_days);
-        $this->assertEquals('Sun,Tue,Thu,Sat', $serverC->formatted_backup_days);
-        $this->assertEquals('None', $serverD->formatted_backup_days);
-    }
+    $this->assertEquals('5.4', $serverA->formatted_php_system_version);
+    $this->assertEquals('5.5', $serverB->formatted_php_system_version);
+    $this->assertEquals('5.6', $serverC->formatted_php_system_version);
+    $this->assertEquals('7.0', $serverD->formatted_php_system_version);
+    $this->assertEquals('7.1', $serverE->formatted_php_system_version);
+    $this->assertEquals('7.2', $serverF->formatted_php_system_version);
+    $this->assertEquals('7.3', $serverG->formatted_php_system_version);
+    $this->assertEquals('7.4', $serverH->formatted_php_system_version);
+    $this->assertEquals('8.0', $serverI->formatted_php_system_version);
+    $this->assertEquals('8.1', $serverJ->formatted_php_system_version);
+    $this->assertEquals('Unknown', $serverK->formatted_php_system_version);
+});
 
-    /** @test */
-    public function can_get_formatted_php_version()
-    {
-        $serverA = create('App\Server');
-        $serverA->settings()->set('php_version', 'ea-php54');
+it('can get formatted whm version', function () {
+    $serverA = Server::factory()->create(['settings' => ['whm_version' => '11.100.0.11']]);
+    $serverB = Server::factory()->create(['settings' => ['whm_version' => '11.88.0.9999']]);
+    $serverC = Server::factory()->create();
 
-        $serverB = create('App\Server');
-        $serverB->settings()->set('php_version', 'ea-php55');
+    $this->assertEquals('v100.0.11', $serverA->formatted_whm_version);
+    $this->assertEquals('v88.0.9999', $serverB->formatted_whm_version);
+    $this->assertEquals('Unknown', $serverC->formatted_whm_version);
+});
 
-        $serverC = create('App\Server');
-        $serverC->settings()->set('php_version', 'ea-php56');
+it('can get if backups are enabled', function () {
+    $serverA = Server::factory()->create(['settings' => ['backup_enabled' => true]]);
+    $serverB = Server::factory()->create(['settings' => ['backup_enabled' => false]]);
+    $serverC = Server::factory()->create();
 
-        $serverD = create('App\Server');
-        $serverD->settings()->set('php_version', 'ea-php70');
+    $this->assertTrue($serverA->backups_enabled);
+    $this->assertFalse($serverB->backups_enabled);
+    $this->assertFalse($serverC->backups_enabled);
+});
 
-        $serverE = create('App\Server');
-        $serverE->settings()->set('php_version', 'ea-php71');
+it('can determine a missing api token', function () {
+    $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps, 'token' => 'valid-token']);
+    $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps]);
 
-        $serverF = create('App\Server');
+    $this->assertFalse($serverValidToken->missing_token);
+    $this->assertTrue($serverNoToken->missing_token);
+});
 
-        $this->assertEquals('PHP 5.4', $serverA->formatted_php_version);
-        $this->assertEquals('PHP 5.5', $serverB->formatted_php_version);
-        $this->assertEquals('PHP 5.6', $serverC->formatted_php_version);
-        $this->assertEquals('PHP 7.0', $serverD->formatted_php_version);
-        $this->assertEquals('PHP 7.1', $serverE->formatted_php_version);
-        $this->assertEquals('Unknown', $serverF->formatted_php_version);
-    }
-}
+it('can determine if it can refresh external data', function () {
+    $serverValidToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps, 'token' => 'valid-token']);
+    $serverNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::Vps]);
+    $serverTypeNeedsNoToken = Server::factory()->make(['server_type' => ServerTypeEnum::Reseller]);
+
+    $this->assertTrue($serverValidToken->can_refresh_data);
+    $this->assertFalse($serverNoToken->can_refresh_data);
+    $this->assertFalse($serverTypeNeedsNoToken->can_refresh_data);
+});
+
+it('the api token should not be included in returned data', function () {
+    $server = Server::factory()->make(['server_type' => ServerTypeEnum::Vps, 'token' => 'valid-token']);
+
+    $this->assertArrayNotHasKey('token', $server->toArray());
+});

@@ -1,147 +1,96 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\User\Create as UserCreate;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\Factories\UserRequestDataFactory;
 
-use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class CreateUserTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->requestData = UserRequestDataFactory::new();
+});
 
-    private function validParams($overrides = [])
-    {
-        return array_merge([
-            'name'     => 'Grant Williams',
-            'email'    => 'grant@example.com',
-            'password' => 'secret',
-        ], $overrides);
-    }
+test('guests cannot view the add user form', function () {
+    $this->get(route('users.create'))
+        ->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function guests_cannot_add_new_users()
-    {
-        $response = $this->postJson('/users', $this->validParams());
+test('an authorized user can view the add user form', function () {
+    $user = User::factory()->create();
 
-        $response->assertStatus(401);
-        $this->assertEquals(0, User::count());
-    }
+    $this->actingAs($user)
+        ->get(route('users.create'))
+        ->assertSuccessful();
+});
 
-    /** @test */
-    public function an_authorized_user_can_add_a_valid_user()
-    {
-        $this->signIn();
+test('an authorized user can add a valid user', function () {
+    $this->actingAs(User::factory()->create());
 
-        $response = $this->postJson('/users', $this->validParams([
-            'name'                  => 'Grant Williams',
-            'email'                 => 'grant@example.com',
-            'password'              => 'secret',
-            'password_confirmation' => 'secret'
-        ]));
-
-        $response->assertJson(['name' => 'Grant Williams']);
-        $response->assertJson(['email' => 'grant@example.com']);
-    }
-
-    /** @test */
-    public function name_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/users', $this->validParams([
-            'name' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('name');
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function email_is_required()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/users', $this->validParams([
-            'email' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function email_must_be_a_valid_email()
-    {
-        $this->signIn();
-
-        $response = $this->postJson('/users', $this->validParams([
-            'email' => 'not-a-valid-email.com',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
-        $this->assertEquals(1, User::count());
-    }
-
-    /** @test */
-    public function email_must_be_unique()
-    {
-        $user = create('App\User', ['email' => 'grant@example.com']);
-
-        $this->signIn($user);
-
-        $response = $this->postJson('/users', $this->validParams([
+    Livewire::test(UserCreate::class)
+        ->set('state', [
+            'name' => 'Grant Williams',
             'email' => 'grant@example.com',
-        ]));
+            'password' => 'NMeHq?Bzr#Nd#bt4',
+            'password_confirmation' => 'NMeHq?Bzr#Nd#bt4',
+        ])
+        ->call('save')
+        ->assertRedirect(route('users.index'));
 
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
-        $this->assertEquals(1, User::count());
-    }
+    $this->assertDatabaseHas('users', [
+        'name' => 'Grant Williams',
+        'email' => 'grant@example.com',
+    ]);
+});
 
-    /** @test */
-    public function password_is_required()
-    {
-        $this->signIn();
+test('email must be unique for user create', function () {
+    $user = User::factory()->create(['email' => 'grant@example.com']);
 
-        $response = $this->postJson('/users', $this->validParams([
-            'password' => '',
-        ]));
+    $this->actingAs($user);
 
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
-        $this->assertEquals(1, User::count());
-    }
+    $response = Livewire::test(UserCreate::class)
+        ->set('state', $this->requestData->create([
+            'email' => 'grant@example.com',
+        ]))
+        ->call('save');
 
-    /** @test */
-    public function password_confirmation_is_required()
-    {
-        $this->signIn();
+    $response->assertHasErrors(['state.email' => 'unique']);
+    $this->assertEquals(1, User::count());
+});
 
-        $response = $this->postJson('/users', $this->validParams([
+test('password confirmation is required for user create', function () {
+    $user = User::factory()->create(['email' => 'grant@example.com']);
+
+    $this->actingAs($user);
+
+    $response = Livewire::test(UserCreate::class)
+        ->set('state', $this->requestData->create([
             'password_confirmation' => '',
-        ]));
+        ]))
+        ->call('save');
 
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
-        $this->assertEquals(1, User::count());
-    }
+    $response->assertHasErrors(['state.password' => 'confirmed']);
+    $this->assertEquals(1, User::count());
+});
 
-    /** @test */
-    public function password_must_be_at_least_6_characters()
-    {
-        $this->signIn();
+it('validates rules for create user form', function ($data) {
+    // This could be fixed in future pest version.
+    $field = $data[0];
+    $value = $data[1];
+    $errorMessage = $data[2];
 
-        $response = $this->postJson('/users', $this->validParams([
-            'password'              => 'four',
-            'password_confirmation' => 'four',
-        ]));
+    $this->actingAs(User::factory()->create());
 
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('password');
-        $this->assertEquals(1, User::count());
-    }
-}
+    $response = Livewire::test(UserCreate::class)
+        ->set('state', $this->requestData->create([$field => $value]))
+        ->call('save');
+
+    $response->assertHasErrors(["state.$field" => $errorMessage]);
+    $this->assertEquals(1, User::count());
+})->with([
+    fn () => ['name', '', 'required'],
+    fn () => ['email', '', 'required'],
+    fn () => ['email', 'not-valid-email', 'email'],
+    fn () => ['password', '', 'required'],
+    fn () => ['password', Str::random(5), 'Illuminate\Validation\Rules\Password'],
+]);

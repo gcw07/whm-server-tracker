@@ -2,25 +2,31 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Event;
+use App\Events\FetchedDataFailedEvent;
+use App\Events\FetchedDataSucceededEvent;
+use App\Listeners\SendFetchedDataFailedNotification;
+use App\Listeners\SendFetchedDataSucceededNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
     /**
      * The event listener mappings for the application.
      *
-     * @var array
+     * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        'App\Events\FetchedServerAccounts' => [
-            'App\Listeners\ServerAccountsUpdated',
+        FetchedDataSucceededEvent::class => [
+            SendFetchedDataSucceededNotification::class,
         ],
-        'App\Events\FetchedServerDetails' => [
-            'App\Listeners\ServerDetailsUpdated',
+
+        FetchedDataFailedEvent::class => [
+            SendFetchedDataFailedNotification::class,
         ],
+
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
@@ -33,8 +39,16 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
-
         //
+    }
+
+    /**
+     * Determine if events and listeners should be automatically discovered.
+     *
+     * @return bool
+     */
+    public function shouldDiscoverEvents()
+    {
+        return false;
     }
 }

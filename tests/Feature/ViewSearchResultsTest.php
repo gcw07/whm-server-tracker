@@ -1,157 +1,106 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\Search;
+use App\Models\Account;
+use App\Models\Server;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class ViewSearchResultsTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    /** @test */
-    public function guests_can_not_view_search_results_page()
-    {
-        $server = create('App\Server');
+test('guests can not view search results page', function () {
+    $this->get(route('search'))
+        ->assertRedirect(route('login'));
+});
 
-        $response = $this->get("/search");
+test('an authorized user can view search results page', function () {
+    $this->actingAs($this->user)
+        ->get(route('search'))
+        ->assertSuccessful();
+});
 
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
+test('the server name can be searched', function () {
+    Server::factory()->create(['name' => 'MyTestServer.com']);
+    Server::factory()->create(['name' => 'NoResults.com']);
 
-    /** @test */
-    public function an_authorized_user_can_view_search_results_page()
-    {
-        $this->signIn();
+    $this->actingAs($this->user);
 
-        $server = create('App\Server');
+    Livewire::test(Search::class)
+        ->set('q', 'test')
+        ->assertViewHas('servers', function ($servers) {
+            return 1 === count($servers);
+        })
+        ->assertSee('MyTestServer.com')
+        ->assertDontSee('NoResults.com');
+});
 
-        $response = $this->get("/search");
+test('the server notes can be searched', function () {
+    Server::factory()->create(['notes' => 'see this note']);
+    Server::factory()->create(['notes' => 'do not see me']);
 
-        $response->assertStatus(200);
-    }
+    $this->actingAs($this->user);
 
-    /** @test */
-    public function the_server_name_can_be_searched()
-    {
-        $this->signIn();
+    Livewire::test(Search::class)
+        ->set('q', 'this')
+        ->assertViewHas('servers', function ($servers) {
+            return 1 === count($servers);
+        })
+        ->assertSee('this')
+        ->assertDontSee('not');
+});
 
-        $server = create('App\Server', [
-            'name'        => 'My Test Server',
-            'address'     => '255.1.1.100',
-            'port'        => 1111,
-            'notes'       => 'some server note',
-        ]);
+test('the account domain can be searched', function () {
+    Server::factory()->has(Account::factory()->count(2)->state(new Sequence(
+        ['domain' => 'mytestsite.com'],
+        ['domain' => 'never-see.com'],
+    )))->create();
 
-        $serverB = create('App\Server', [
-            'name'        => 'No Results',
-            'address'     => '2.1.1.100',
-            'port'        => 2222,
-            'notes'       => 'another note',
-        ]);
+    $this->actingAs($this->user);
 
-        $response = $this->get("/search?q=Test");
+    Livewire::test(Search::class)
+        ->set('q', 'test')
+        ->assertViewHas('accounts', function ($accounts) {
+            return 1 === count($accounts);
+        })
+        ->assertSee('mytestsite')
+        ->assertDontSee('never-see');
+});
 
-        $response->assertStatus(200);
+test('the account ip can be searched', function () {
+    Server::factory()->has(Account::factory()->count(2)->state(new Sequence(
+        ['domain' => 'mytestsite.com', 'ip' => '255.1.1.100'],
+        ['domain' => 'never-see.com', 'ip' => '192.1.1.100'],
+    )))->create();
 
-        $response->data('servers')->assertContains($server);
-        $response->data('servers')->assertNotContains($serverB);
-    }
+    $this->actingAs($this->user);
 
-    /** @test */
-    public function the_server_notes_can_be_searched()
-    {
-        $this->signIn();
+    Livewire::test(Search::class)
+        ->set('q', '255')
+        ->assertViewHas('accounts', function ($accounts) {
+            return 1 === count($accounts);
+        })
+        ->assertSee('mytestsite.com')
+        ->assertDontSee('never-see.com');
+});
 
-        $server = create('App\Server', [
-            'name'        => 'My Test Server',
-            'address'     => '255.1.1.100',
-            'port'        => 1111,
-            'notes'       => 'see this note',
-        ]);
+test('the account username can be searched', function () {
+    Server::factory()->has(Account::factory()->count(2)->state(new Sequence(
+        ['domain' => 'something.com', 'user' => 'mytest'],
+        ['domain' => 'nope.com', 'user' => 'neversee'],
+    )))->create();
 
-        $serverB = create('App\Server', [
-            'name'        => 'No Results',
-            'address'     => '2.1.1.100',
-            'port'        => 2222,
-            'notes'       => 'do not see me',
-        ]);
+    $this->actingAs($this->user);
 
-        $response = $this->get("/search?q=this");
-
-        $response->assertStatus(200);
-
-        $response->data('servers')->assertContains($server);
-        $response->data('servers')->assertNotContains($serverB);
-    }
-
-    /** @test */
-    public function the_account_domain_can_be_searched()
-    {
-        $this->signIn();
-
-        $account = create('App\Account', [
-            'domain' => 'mytestsite.com',
-            'ip'     => '255.1.1.100',
-        ]);
-
-        $accountB = create('App\Account', [
-            'domain' => 'never-see.com',
-            'ip'     => '255.1.1.100',
-        ]);
-
-        $response = $this->get("/search?q=Test");
-
-        $response->assertStatus(200);
-
-        $response->data('accounts')->assertContains($account);
-        $response->data('accounts')->assertNotContains($accountB);
-    }
-
-    /** @test */
-    public function the_account_ip_can_be_searched()
-    {
-        $this->signIn();
-
-        $account = create('App\Account', [
-            'domain' => 'mytestsite.com',
-            'ip'     => '255.1.1.100',
-        ]);
-
-        $accountB = create('App\Account', [
-            'domain' => 'never-see.com',
-            'ip'     => '192.1.1.100',
-        ]);
-
-        $response = $this->get("/search?q=255");
-
-        $response->assertStatus(200);
-
-        $response->data('accounts')->assertContains($account);
-        $response->data('accounts')->assertNotContains($accountB);
-    }
-
-    /** @test */
-    public function the_account_username_can_be_searched()
-    {
-        $this->signIn();
-
-        $account = create('App\Account', [
-            'domain' => 'my-site.com',
-            'user'     => 'mysite',
-        ]);
-
-        $accountB = create('App\Account', [
-            'domain' => 'never-see.com',
-            'user'     => 'neversee',
-        ]);
-
-        $response = $this->get("/search?q=mysite");
-
-        $response->assertStatus(200);
-
-        $response->data('accounts')->assertContains($account);
-        $response->data('accounts')->assertNotContains($accountB);
-    }
-}
+    Livewire::test(Search::class)
+        ->set('q', 'mytest')
+        ->assertViewHas('accounts', function ($accounts) {
+            return 1 === count($accounts);
+        })
+        ->assertSee('something.com')
+        ->assertDontSee('nope.com');
+});

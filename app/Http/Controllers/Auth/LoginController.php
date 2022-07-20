@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -41,15 +42,15 @@ class LoginController extends Controller
     /**
      * The user has been authenticated.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  mixed $user
-     * @return mixed
+     * @param  Request  $request
+     * @param  mixed  $user
+     * @return void
      */
     protected function authenticated(Request $request, $user)
     {
-        $user->update([
-            'last_login_at'         => $user->freshTimestamp(),
-            'last_login_ip_address' => $request->getClientIp()
+        $user->logins()->create([
+            'ip_address' => $request->getClientIp(),
+            'created_at' => now(),
         ]);
     }
 }

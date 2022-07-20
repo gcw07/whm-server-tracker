@@ -1,186 +1,94 @@
 <?php
 
-namespace Tests\Feature;
+use App\Http\Livewire\User\Edit as UserEdit;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\Factories\UserRequestDataFactory;
 
-use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class UpdateUserTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->requestData = UserRequestDataFactory::new();
+});
 
-    private function oldAttributes($overrides = [])
-    {
-        return array_merge([
-            'name'  => 'Old Name',
-            'email' => 'old@example.com',
-        ], $overrides);
-    }
+test('guests cannot view the edit user form', function () {
+    $this->get(route('users.edit', $this->user->id))
+        ->assertRedirect(route('login'));
+});
 
-    private function validParams($overrides = [])
-    {
-        return array_merge([
-            'name'  => 'New Name',
-            'email' => 'new@example.com',
-        ], $overrides);
-    }
+test('an authorized user can view the edit user form', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function guests_cannot_view_the_edit_user_form()
-    {
-        $user = create('App\User');
+    $this->actingAs($user)
+        ->get(route('users.edit', $this->user->id))
+        ->assertSuccessful();
+});
 
-        $response = $this->get("/users/{$user->id}/edit");
+test('an authorized user can edit a user', function () {
+    $this->actingAs(User::factory()->create());
 
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
+    Livewire::test(UserEdit::class, ['user' => $this->user])
+        ->set('state', [
+            'name' => 'Della Duck',
+            'email' => 'della@example.com',
+        ])
+        ->call('save')
+        ->assertRedirect(route('users.index'));
 
-    /** @test */
-    public function an_authorized_user_can_view_the_edit_user_form()
-    {
-        $this->signIn();
-        $user = create('App\User');
+    tap($this->user->fresh(), function (User $user) {
+        $this->assertEquals('Della Duck', $user->name);
+        $this->assertEquals('della@example.com', $user->email);
+    });
+});
 
-        $response = $this->get("/users/{$user->id}/edit");
+test('email must be unique for user edit', function () {
+    $this->actingAs(User::factory()->create(['email' => 'grant@example.com']));
 
-        $response->assertStatus(200);
-        $this->assertTrue($response->data('user')->is($user));
-    }
-
-    /** @test */
-    public function guests_cannot_edit_a_user()
-    {
-        $user = create('App\User', $this->oldAttributes());
-
-        $response = $this->putJson("/users/{$user->id}", $this->validParams());
-
-        $response->assertStatus(401);
-        $this->assertArraySubset($this->oldAttributes(), $user->fresh()->getAttributes());
-    }
-
-    /** @test */
-    function an_authorized_user_can_edit_a_user()
-    {
-        $this->signIn();
-
-        $user = create('App\User', [
-            'name'  => 'John Doe',
-            'email' => 'john@example.com'
-        ]);
-
-        $response = $this->putJson("/users/{$user->id}", $this->validParams([
-            'name'  => 'Jane Doe',
-            'email' => 'jane@example.com'
-        ]));
-
-        $response->assertStatus(200);
-
-        tap($user->fresh(), function ($user) {
-            $this->assertEquals('Jane Doe', $user->name);
-            $this->assertEquals('jane@example.com', $user->email);
-        });
-    }
-
-    /** @test */
-    public function name_is_required()
-    {
-        $this->signIn();
-
-        $user = create('App\User', [
-            'name' => 'John Doe',
-        ]);
-
-        $response = $this->putJson("/users/{$user->id}", $this->validParams([
-            'name' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('name');
-
-        tap($user->fresh(), function ($user) {
-            $this->assertEquals('John Doe', $user->name);
-        });
-    }
-
-    /** @test */
-    public function email_is_required()
-    {
-        $this->signIn();
-
-        $user = create('App\User', [
-            'email' => 'john@example.com',
-        ]);
-
-        $response = $this->putJson("/users/{$user->id}", $this->validParams([
-            'email' => '',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
-
-        tap($user->fresh(), function ($user) {
-            $this->assertEquals('john@example.com', $user->email);
-        });
-    }
-
-    /** @test */
-    public function email_must_be_a_valid_email()
-    {
-        $this->signIn();
-
-        $user = create('App\User', [
-            'email' => 'john@example.com',
-        ]);
-
-        $response = $this->putJson("/users/{$user->id}", $this->validParams([
-            'email' => 'johnexample.com',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
-
-        tap($user->fresh(), function ($user) {
-            $this->assertEquals('john@example.com', $user->email);
-        });
-    }
-
-    /** @test */
-    public function email_must_be_unique()
-    {
-        $this->signIn();
-
-        $userA = create('App\User', ['email' => 'grant@example.com']);
-        $userB = create('App\User', ['email' => 'john@example.com']);
-
-        $response = $this->putJson("/users/{$userA->id}", $this->validParams([
-            'email' => 'john@example.com',
-        ]));
-
-        $response->assertStatus(422);
-        $response->assertJsonHasErrors('email');
-
-        tap($userA->fresh(), function ($user) {
-            $this->assertEquals('grant@example.com', $user->email);
-        });
-    }
-
-    /** @test */
-    public function email_can_be_the_same_for_the_same_user()
-    {
-        $this->signIn();
-
-        $userA = create('App\User', ['email' => 'grant@example.com']);
-
-        $response = $this->putJson("/users/{$userA->id}", $this->validParams([
+    $response = Livewire::test(UserEdit::class, ['user' => $this->user])
+        ->set('state', [
+            'name' => 'Della Duck',
             'email' => 'grant@example.com',
-        ]));
+        ])
+        ->call('save');
 
-        $response->assertStatus(200);
+    $response->assertHasErrors(['state.email' => 'unique']);
+});
 
-        tap($userA->fresh(), function ($user) {
-            $this->assertEquals('grant@example.com', $user->email);
-        });
-    }
-}
+test('email can be the same for the same user for user edit', function () {
+    $user = User::factory()->create(['email' => 'grant@example.com']);
+    $userB = User::factory()->create(['email' => 'mike@example.com']);
+
+    $this->actingAs($user);
+
+    Livewire::test(UserEdit::class, ['user' => $userB])
+        ->set('state', [
+            'name' => 'Mike Smith',
+            'email' => 'mike@example.com',
+        ])
+        ->call('save')
+        ->assertRedirect(route('users.index'));
+
+    tap($userB->fresh(), function (User $user) {
+        $this->assertEquals('mike@example.com', $user->email);
+    });
+});
+
+it('validate rules for user edit', function ($data) {
+    // This could be fixed in future pest version.
+    $field = $data[0];
+    $value = $data[1];
+    $errorMessage = $data[2];
+
+    $this->actingAs(User::factory()->create());
+
+    $response = Livewire::test(UserEdit::class, ['user' => $this->user])
+        ->set('state', $this->requestData->create([$field => $value]))
+        ->call('save');
+
+    $response->assertHasErrors(["state.$field" => $errorMessage]);
+})->with([
+    fn () => ['name', '', 'required'],
+    fn () => ['email', '', 'required'],
+    fn () => ['email', 'not-valid-email', 'email'],
+]);

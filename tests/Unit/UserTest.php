@@ -1,55 +1,14 @@
 <?php
 
-namespace Tests\Unit;
+use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(LazilyRefreshDatabase::class);
 
-class UserTest extends TestCase
-{
-    use RefreshDatabase;
+it('email address should be lowercase', function () {
+    $user = User::factory()->create([
+        'email' => 'JOHN@example.COM',
+    ]);
 
-    /** @test */
-    public function email_address_should_be_lowercase()
-    {
-        $user = make('App\User', [
-            'name'  => 'John Doe',
-            'email' => 'JOHN@example.COM'
-        ]);
-
-        $this->assertEquals('john@example.com', $user->email);
-    }
-
-    /** @test */
-    public function the_password_should_be_encrypted()
-    {
-        $user = make('App\User', [
-            'name'     => 'John Doe',
-            'password' => bcrypt('secret')
-        ]);
-
-        $this->assertNotEquals('secret', $user->password);
-    }
-
-    /** @test */
-    public function the_password_should_not_be_included_in_returned_data()
-    {
-        $user = make('App\User', [
-            'name'     => 'John Doe',
-            'password' => 'secret'
-        ]);
-
-        $this->assertArrayNotHasKey('password', $user->toArray());
-    }
-
-    /** @test */
-    public function the_remember_token_should_not_be_included_in_returned_data()
-    {
-        $user = make('App\User', [
-            'name'           => 'John Doe',
-            'remember_token' => 'some-token'
-        ]);
-
-        $this->assertArrayNotHasKey('remember_token', $user->toArray());
-    }
-}
+    $this->assertEquals('john@example.com', $user->email);
+});
