@@ -346,7 +346,7 @@
                         <div class="flex items-center space-x-3 lg:pl-2">
                           <div>
                             @if($account->suspended)
-                              <x-heroicon-s-ban class="h-5 w-5 text-blue-600" />
+                              <x-heroicon-s-ban class="h-5 w-5 text-blue-600" x-data="{}" x-tooltip.raw="Account Suspended" />
                             @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
                               <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
                             @else
