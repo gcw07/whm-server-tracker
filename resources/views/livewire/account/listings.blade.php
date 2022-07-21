@@ -108,11 +108,11 @@
                     ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex items-center space-x-3 lg:pl-2">
-                        <div>
+                        <div x-data="{}">
                           @if($account->suspended)
-                            <x-heroicon-s-ban class="h-5 w-5 text-blue-600" x-data="{}" x-tooltip.raw="Account Suspended" />
+                            <x-heroicon-s-ban class="h-5 w-5 text-blue-600" x-tooltip.raw="Account Suspended" />
                           @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                            <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
+                            <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" x-tooltip.raw="Disk Warning" />
                           @else
                             <div class="flex-shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
                           @endif
