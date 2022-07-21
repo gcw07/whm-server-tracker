@@ -8,7 +8,7 @@
 
 .tippy-box {
     position: relative;
-    background-color: #333;
+    background-color: #505355;
     color: #fff;
     border-radius: 4px;
     font-size: 14px;
@@ -71,7 +71,7 @@
 .tippy-arrow {
     width: 16px;
     height: 16px;
-    color: #333
+    color: #505355
 }
 
 .tippy-arrow:before {
