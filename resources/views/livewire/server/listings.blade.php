@@ -89,7 +89,7 @@
               <span class="flex items-center space-x-4">
                 <span class="flex-1 flex space-x-2 truncate">
                   <span class="flex flex-col text-gray-500 text-sm truncate">
-                    <span class="truncate">
+                    <span class="truncate text-gray-700 font-semibold">
                       {{ $server->name }}
                     </span>
                     @if($server->missing_token)
@@ -98,7 +98,7 @@
                         no token
                       </span>
                     @else
-                      <span><span class="text-gray-900 font-medium">{{ $server->accounts_count }}</span> accounts</span>
+                      <span><span class="font-medium">{{ $server->accounts_count }}</span> accounts</span>
                       <span>{{ $server->settings->get('disk_percentage') }}%</span>
                     @endif
                   </span>
