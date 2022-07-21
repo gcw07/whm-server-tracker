@@ -1,4 +1,4 @@
-<x-layouts.auth title="Reset Password">
+<x-layouts.guest title="Reset Password">
 
   <div class="flex-grow flex flex-col sm:justify-center p-12">
     <div>
@@ -12,63 +12,33 @@
     @endif
 
     <div class="mt-3 pl-0">
-      <x-form :action="route('password.update')">
-
+      <x-forms.form :action="route('password.update')">
         <input type="hidden" name="token" value="{{ $token }}">
 
         <div>
-          <label for="email">
-            <span class="form-label">
-              E-Mail Address
-            </span>
-            <span class="form-input-group">
-              <span class="form-input-icon">
-                <x-heroicon-s-mail/>
-              </span>
-              <x-email name="email" required autofocus
-                       class="form-input w-full {{ $errors->has('email') ? 'is-invalid' : '' }}"/>
-            </span>
-            <x-error field="email" class="invalid-feedback"/>
-          </label>
-        </div>
-        <div class="mt-4">
-          <label for="password">
-            <span class="form-label">
-              Password
-            </span>
-            <span class="form-input-group">
-              <span class="form-input-icon">
-                <x-heroicon-s-lock-closed/>
-              </span>
-              <x-password name="password" required
-                          class="form-input w-full {{ $errors->has('password') ? 'is-invalid' : '' }}"/>
-            </span>
-            <x-error field="password" class="invalid-feedback"/>
-          </label>
-        </div>
-        <div class="mt-4">
-          <label for="password_confirmation">
-            <span class="form-label">
-              Confirm Password
-            </span>
-            <span class="form-input-group">
-              <span class="form-input-icon">
-                <x-heroicon-s-lock-closed/>
-              </span>
-              <x-password name="password_confirmation" required
-                          class="form-input w-full {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}"/>
-            </span>
-            <x-error field="password_confirmation" class="invalid-feedback"/>
-          </label>
-        </div>
-        <div class="mt-6 flex items-center justify-between">
-          <button class="btn btn-blue w-full" type="submit">
-            Reset Password
-          </button>
+          <x-forms.label for="email" value="E-Mail Address" required></x-forms.label>
+          <x-forms.email-input id="email" name="email" placeholder="you@example.com" required autofocus></x-forms.email-input>
+          <x-forms.error field="email"></x-forms.error>
         </div>
 
-      </x-form>
+        <div class="mt-4">
+          <x-forms.label for="password" value="Password" required></x-forms.label>
+          <x-forms.text-input id="password" type="password" name="password" required></x-forms.text-input>
+          <x-forms.error field="password"></x-forms.error>
+        </div>
+
+        <div class="mt-4">
+          <x-forms.label for="password_confirmation" value="Confirm Password" required></x-forms.label>
+          <x-forms.text-input id="password_confirmation" type="password" name="password_confirmation" required></x-forms.text-input>
+          <x-forms.error field="password_confirmation"></x-forms.error>
+        </div>
+
+        <div class="flex items-center justify-between mt-6">
+          <x-forms.button class="w-full"> Reset Password</x-forms.button>
+        </div>
+      </x-forms.form>
+
     </div>
   </div>
 
-</x-layouts.auth>
+</x-layouts.guest>

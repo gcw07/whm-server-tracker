@@ -1,4 +1,4 @@
-<x-layouts.auth title="Reset Password">
+<x-layouts.guest title="Reset Password">
 
   <div class="flex-grow flex flex-col sm:justify-center p-12">
     <div>
@@ -13,31 +13,19 @@
 
     <div class="mt-3 pl-0">
 
-      <x-form :action="route('password.email')">
+      <x-forms.form :action="route('password.email')">
 
         <div>
-          <label for="email">
-            <span class="form-label">
-              E-Mail Address
-            </span>
-            <span class="form-input-group">
-              <span class="form-input-icon">
-                <x-heroicon-s-mail/>
-              </span>
-              <x-email name="email" required autofocus
-                       class="form-input w-full {{ $errors->has('email') ? 'is-invalid' : '' }}"/>
-            </span>
-            <x-error field="email" class="invalid-feedback"/>
-          </label>
-        </div>
-        <div class="mt-6 flex items-center justify-between">
-          <button class="btn btn-blue w-full" type="submit">
-            Send Password Reset Link
-          </button>
+          <x-forms.label for="email" value="E-Mail Address" required></x-forms.label>
+          <x-forms.email-input id="email" name="email" placeholder="you@example.com" required autofocus></x-forms.email-input>
+          <x-forms.error field="email"></x-forms.error>
         </div>
 
-      </x-form>
+        <div class="flex items-center justify-between mt-6">
+          <x-forms.button class="w-full">Send Password Reset Link</x-forms.button>
+        </div>
+      </x-forms.form>
     </div>
   </div>
 
-</x-layouts.auth>>
+</x-layouts.guest>
