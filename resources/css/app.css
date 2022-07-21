@@ -12,7 +12,7 @@
 /*@import 'components/roles.css';*/
 /*@import 'components/select.css';*/
 /*@import 'components/toasts.css';*/
-/*@import 'components/tooltips.css';*/
+@import 'components/tooltips.css';
 
 @import 'tailwindcss/utilities';
 

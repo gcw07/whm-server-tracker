@@ -1,113 +1,88 @@
-/*.tooltip {*/
-/*    @apply bg-white px-3 py-2 rounded border shadow text-sm leading-normal; !* border-50 *!*/
-/*}*/
-
-.tooltip {
-  display: block !important;
-  z-index: 88888;
+.tippy-box[data-animation=fade][data-state=hidden] {
+    opacity: 0
 }
 
-.tooltip .tooltip-inner {
-  @apply bg-gray-700 text-gray-200 text-xs font-semibold tracking-wide rounded py-1 px-2;
+[data-tippy-root] {
+    max-width: calc(100vw - 10px)
 }
 
-.tooltip .tooltip-arrow {
-  @apply border border-gray-700;
-  width: 0;
-  height: 0;
-  position: absolute;
-  margin: 5px;
-  z-index: 1;
+.tippy-box {
+    position: relative;
+    background-color: #333;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: normal;
+    outline: 0;
+    transition-property: transform, visibility, opacity
 }
 
-.tooltip[x-placement^='top'] {
-  margin-bottom: 5px;
+.tippy-box[data-placement^=top] > .tippy-arrow {
+    bottom: 0
 }
 
-.tooltip[x-placement^='top'] .tooltip-arrow {
-  border-width: 5px 5px 0 5px;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-  border-bottom-color: transparent !important;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
+.tippy-box[data-placement^=top] > .tippy-arrow:before {
+    bottom: -7px;
+    left: 0;
+    border-width: 8px 8px 0;
+    border-top-color: initial;
+    transform-origin: center top
 }
 
-.tooltip[x-placement^='bottom'] {
-  margin-top: 5px;
+.tippy-box[data-placement^=bottom] > .tippy-arrow {
+    top: 0
 }
 
-.tooltip[x-placement^='bottom'] .tooltip-arrow {
-  border-width: 0 5px 5px 5px;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-  border-top-color: transparent !important;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
+.tippy-box[data-placement^=bottom] > .tippy-arrow:before {
+    top: -7px;
+    left: 0;
+    border-width: 0 8px 8px;
+    border-bottom-color: initial;
+    transform-origin: center bottom
 }
 
-.tooltip[x-placement^='right'] {
-  margin-left: 5px;
+.tippy-box[data-placement^=left] > .tippy-arrow {
+    right: 0
 }
 
-.tooltip[x-placement^='right'] .tooltip-arrow {
-  border-width: 5px 5px 5px 0;
-  border-left-color: transparent !important;
-  border-top-color: transparent !important;
-  border-bottom-color: transparent !important;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
+.tippy-box[data-placement^=left] > .tippy-arrow:before {
+    border-width: 8px 0 8px 8px;
+    border-left-color: initial;
+    right: -7px;
+    transform-origin: center left
 }
 
-.tooltip[x-placement^='left'] {
-  margin-right: 5px;
+.tippy-box[data-placement^=right] > .tippy-arrow {
+    left: 0
 }
 
-.tooltip[x-placement^='left'] .tooltip-arrow {
-  border-width: 5px 0 5px 5px;
-  border-top-color: transparent !important;
-  border-right-color: transparent !important;
-  border-bottom-color: transparent !important;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
+.tippy-box[data-placement^=right] > .tippy-arrow:before {
+    left: -7px;
+    border-width: 8px 8px 8px 0;
+    border-right-color: initial;
+    transform-origin: center right
 }
 
-.tooltip.popover .popover-inner {
-  background: #f9f9f9;
-  color: black;
-  padding: 24px;
-  border-radius: 5px;
-  box-shadow: 0 5px 30px rgba(black, 0.1);
+.tippy-box[data-inertia][data-state=visible] {
+    transition-timing-function: cubic-bezier(.54, 1.5, .38, 1.11)
 }
 
-.tooltip.popover .popover-arrow {
-  border-color: #f9f9f9;
+.tippy-arrow {
+    width: 16px;
+    height: 16px;
+    color: #333
 }
 
-.tooltip[aria-hidden='true'] {
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.15s, visibility 0.15s;
+.tippy-arrow:before {
+    content: "";
+    position: absolute;
+    border-color: transparent;
+    border-style: solid
 }
 
-.tooltip[aria-hidden='false'] {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.15s;
-}
-
-.dropdown-alt .dropdown-trigger {
-  @apply flex items-center h-9 px-3 rounded; /* bg-40 */
-}
-
-.dropdown-trigger-active .dropdown-trigger {
-  /*@apply bg-50; !* bg-50 *!*/
+.tippy-content {
+    position: relative;
+    padding: 5px 9px;
+    z-index: 1
 }
