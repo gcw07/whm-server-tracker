@@ -6,10 +6,60 @@
         Servers
       </h3>
       <div class="mt-3 flex md:mt-0 md:absolute md:top-3 md:right-0">
-        <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-          <x-heroicon-s-filter class="-ml-0.5 mr-2 h-4 w-4" />
-          Filters
-        </button>
+        <!-- Sort menu dropdown -->
+        <x-navigation.dropdown>
+          <x-slot name="trigger">
+            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
+              <x-heroicon-s-sort-descending class="-ml-0.5 mr-2 h-4 w-4" />
+              Sort
+            </button>
+          </x-slot>
+
+          <div
+            class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            role="menu" aria-orientation="vertical" aria-labelledby="sort-menu-button" tabindex="-1">
+            <button wire:click.prevent="sortListingsBy(null)" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="sort-menu-item-0">
+              Alphabetically
+            </button>
+            <button wire:click.prevent="sortListingsBy('newest')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="sort-menu-item-1">
+              Newest
+            </button>
+            <button wire:click.prevent="sortListingsBy('accounts')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="sort-menu-item-2">
+              # of Accounts
+            </button>
+            <button wire:click.prevent="sortListingsBy('usage_high')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="sort-menu-item-3">
+              Usage: High to Low
+            </button>
+            <button wire:click.prevent="sortListingsBy('usage_low')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="sort-menu-item-4">
+              Usage: Low to High
+            </button>
+          </div>
+        </x-navigation.dropdown>
+
+        <!-- Filters menu dropdown -->
+        <x-navigation.dropdown class="ml-2">
+          <x-slot name="trigger">
+            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
+              <x-heroicon-s-filter class="-ml-0.5 mr-2 h-4 w-4" />
+              Filters
+            </button>
+          </x-slot>
+
+          <div
+            class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            role="menu" aria-orientation="vertical" aria-labelledby="filters-menu-button" tabindex="-1">
+            <button class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="filters-menu-item-0">
+              Coming Soon
+            </button>
+          </div>
+        </x-navigation.dropdown>
+
         <a href="{{ route('servers.create') }}" class="ml-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
           <x-heroicon-s-plus class="-ml-0.5 mr-2 h-4 w-4" />
           Create Server

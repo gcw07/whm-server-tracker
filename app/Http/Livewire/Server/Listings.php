@@ -13,10 +13,12 @@ class Listings extends Component
     use WithPagination, WithCache;
 
     public string|null $serverType = null;
+    public string|null $sortBy = null;
 
     public function mount()
     {
         $this->serverType = $this->getCache('serverType');
+        $this->sortBy = $this->getCache('sortBy');
     }
 
     public function render()
@@ -48,10 +50,44 @@ class Listings extends Component
         $this->putCache('serverType', $this->serverType);
     }
 
+    public function sortListingsBy($name)
+    {
+        $this->sortBy = match ($name) {
+            'newest' => 'newest',
+            'accounts' => 'accounts',
+            'usage_high' => 'usage_high',
+            'usage_low' => 'usage_low',
+            default => null,
+        };
+
+        $this->putCache('sortBy', $this->sortBy);
+    }
+
     protected function query()
     {
-        return Server::query()->withCount(['accounts'])->when($this->serverType, function ($query) {
-            return $query->where('server_type', $this->serverType);
-        })->orderBy('name')->paginate(50);
+        return Server::query()
+            ->withCount(['accounts'])
+            ->when($this->serverType, function ($query) {
+                return $query->where('server_type', $this->serverType);
+            })
+            ->when($this->sortBy, function ($query) {
+                if ($this->sortBy === 'newest') {
+                    return $query->orderBy('created_at', 'DESC');
+                }
+
+                if ($this->sortBy === 'accounts') {
+                    return $query->orderBy('accounts_count', 'DESC');
+                }
+
+                if ($this->sortBy === 'usage_high') {
+                    return $query->orderBy('settings->disk_percentage', 'DESC');
+                }
+
+                // usage low
+                return $query->orderBy('settings->disk_percentage', 'ASC');
+            }, function($query) {
+                return $query->orderBy('name');
+            })
+            ->paginate(50);
     }
 }
