@@ -17,8 +17,8 @@ class Listings extends Component
 
     public function mount()
     {
-        $this->serverType = $this->getCache('serverType');
-        $this->sortBy = $this->getCache('sortBy');
+        $this->serverType = $this->getCache('servers', 'serverType');
+        $this->sortBy = $this->getCache('servers', 'sortBy');
     }
 
     public function render()
@@ -36,7 +36,7 @@ class Listings extends Component
             $this->serverType = null;
         }
 
-        $this->putCache('serverType', $this->serverType);
+        $this->putCache('servers', 'serverType', $this->serverType);
     }
 
     public function updatedServerType($type)
@@ -47,7 +47,7 @@ class Listings extends Component
             $this->serverType = null;
         }
 
-        $this->putCache('serverType', $this->serverType);
+        $this->putCache('servers','serverType', $this->serverType);
     }
 
     public function sortListingsBy($name)
@@ -60,7 +60,7 @@ class Listings extends Component
             default => null,
         };
 
-        $this->putCache('sortBy', $this->sortBy);
+        $this->putCache('servers','sortBy', $this->sortBy);
     }
 
     protected function query()
