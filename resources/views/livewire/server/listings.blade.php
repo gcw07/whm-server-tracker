@@ -16,7 +16,7 @@
           </x-slot>
 
           <div
-            class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            class="origin-top-left z-50 absolute md:origin-top-right md:right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
             role="menu" aria-orientation="vertical" aria-labelledby="sort-menu-button" tabindex="-1">
             <button wire:click.prevent="sortListingsBy(null)" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem" tabindex="-1" id="sort-menu-item-0">
@@ -51,7 +51,7 @@
           </x-slot>
 
           <div
-            class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            class="origin-top-left z-50 absolute md:origin-top-right md:right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
             role="menu" aria-orientation="vertical" aria-labelledby="filters-menu-button" tabindex="-1">
             <button class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem" tabindex="-1" id="filters-menu-item-0">
