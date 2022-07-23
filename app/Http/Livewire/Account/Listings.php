@@ -34,7 +34,7 @@ class Listings extends Component
             default => null,
         };
 
-        $this->putCache('accounts','sortBy', $this->sortBy);
+        $this->putCache('accounts', 'sortBy', $this->sortBy);
     }
 
     protected function query()
@@ -54,7 +54,7 @@ class Listings extends Component
 
                 // usage low
                 return $query->orderBy('sort_disk_usage', 'ASC');
-            }, function($query) {
+            }, function ($query) {
                 return $query->orderBy('domain');
             })
             ->paginate(50);

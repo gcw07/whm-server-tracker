@@ -13,6 +13,7 @@ class Listings extends Component
     use WithPagination, WithCache;
 
     public string|null $serverType = null;
+
     public string|null $sortBy = null;
 
     public function mount()
@@ -47,7 +48,7 @@ class Listings extends Component
             $this->serverType = null;
         }
 
-        $this->putCache('servers','serverType', $this->serverType);
+        $this->putCache('servers', 'serverType', $this->serverType);
     }
 
     public function sortListingsBy($name)
@@ -60,7 +61,7 @@ class Listings extends Component
             default => null,
         };
 
-        $this->putCache('servers','sortBy', $this->sortBy);
+        $this->putCache('servers', 'sortBy', $this->sortBy);
     }
 
     protected function query()
@@ -85,7 +86,7 @@ class Listings extends Component
 
                 // usage low
                 return $query->orderBy('settings->disk_percentage', 'ASC');
-            }, function($query) {
+            }, function ($query) {
                 return $query->orderBy('name');
             })
             ->paginate(50);
