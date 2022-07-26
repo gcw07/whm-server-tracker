@@ -7,7 +7,7 @@
   </div>
   <form wire:submit.prevent="save">
     <div>
-      <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+      <div class="mt-3 text-center sm:mt-0 sm:mx-4 sm:text-left">
         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Export Accounts</h3>
         <div class="mt-6">
           <fieldset>
@@ -46,11 +46,61 @@
 
               <div class="relative flex items-start py-4">
                 <div class="min-w-0 flex-1 text-sm">
+                  <label for="ip" class="font-medium text-gray-700 select-none">IP Address</label>
+                </div>
+                <div class="ml-3 flex items-center h-5">
+                  <input wire:model="state.ip" id="ip" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  @error('state.ip') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                </div>
+              </div>
+
+              <div class="relative flex items-start py-4">
+                <div class="min-w-0 flex-1 text-sm">
                   <label for="backups" class="font-medium text-gray-700 select-none">Backups</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
                   <input wire:model="state.backups" id="backups" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.backups') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                </div>
+              </div>
+
+              <div class="relative flex items-start py-4">
+                <div class="min-w-0 flex-1 text-sm">
+                  <label for="suspended" class="font-medium text-gray-700 select-none">Suspended</label>
+                </div>
+                <div class="ml-3 flex items-center h-5">
+                  <input wire:model="state.suspended" id="suspended" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  @error('state.suspended') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                </div>
+              </div>
+
+              <div class="relative flex items-start py-4">
+                <div class="min-w-0 flex-1 text-sm">
+                  <label for="suspended_reason" class="font-medium text-gray-700 select-none">Suspended Reason</label>
+                </div>
+                <div class="ml-3 flex items-center h-5">
+                  <input wire:model="state.suspended_reason" id="suspended_reason" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  @error('state.suspended_reason') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                </div>
+              </div>
+
+              <div class="relative flex items-start py-4">
+                <div class="min-w-0 flex-1 text-sm">
+                  <label for="suspended_time" class="font-medium text-gray-700 select-none">Suspended Date</label>
+                </div>
+                <div class="ml-3 flex items-center h-5">
+                  <input wire:model="state.suspended_time" id="suspended_time" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  @error('state.suspended_time') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                </div>
+              </div>
+
+              <div class="relative flex items-start py-4">
+                <div class="min-w-0 flex-1 text-sm">
+                  <label for="setup_date" class="font-medium text-gray-700 select-none">Setup Date</label>
+                </div>
+                <div class="ml-3 flex items-center h-5">
+                  <input wire:model="state.setup_date" id="setup_date" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  @error('state.setup_date') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
 
@@ -81,6 +131,16 @@
                 <div class="ml-3 flex items-center h-5">
                   <input wire:model="state.disk_usage" id="disk_usage" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.disk_usage') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                </div>
+              </div>
+
+              <div class="relative flex items-start py-4">
+                <div class="min-w-0 flex-1 text-sm">
+                  <label for="plan" class="font-medium text-gray-700 select-none">Plan</label>
+                </div>
+                <div class="ml-3 flex items-center h-5">
+                  <input wire:model="state.plan" id="plan" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  @error('state.plan') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
 
