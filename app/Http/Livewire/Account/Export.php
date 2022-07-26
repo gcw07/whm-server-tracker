@@ -81,7 +81,22 @@ class Export extends ModalComponent
             $accountsCsv = SimpleExcelWriter::streamDownload('php://output', 'csv');
 
             Account::with(['server'])
-                ->orderBy('domain')
+                ->select('*')
+                ->selectRaw('(disk_used / disk_limit) * 100 as sort_disk_usage')
+                ->when($this->sortBy, function ($query) {
+                    if ($this->sortBy === 'newest') {
+                        return $query->orderBy('created_at', 'DESC')->orderBy('domain');
+                    }
+
+                    if ($this->sortBy === 'usage_high') {
+                        return $query->orderBy('sort_disk_usage', 'DESC');
+                    }
+
+                    // usage low
+                    return $query->orderBy('sort_disk_usage', 'ASC');
+                }, function ($query) {
+                    return $query->orderBy('domain');
+                })
                 ->each(function (Account $account) use ($accountsCsv, $columns) {
                     $accountsCsv->addRow($account->export($columns));
                 });
