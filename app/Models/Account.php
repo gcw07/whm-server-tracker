@@ -76,6 +76,25 @@ class Account extends Model
         return $this->belongsTo(Server::class);
     }
 
+    public function export($columns): array
+    {
+        return [
+            'domain' => $this->domain,
+            'server' => $this->server->name,
+            'username' => $this->user,
+            'ip' => $this->ip,
+            'backups' => $this->backup,
+            'suspended' => $this->suspended,
+            'suspended_reason' => $this->suspend_reason,
+            'suspended_time' => $this->suspend_time,
+            'setup_date' => $this->setup_date,
+            'disk_used' => $this->disk_used,
+            'disk_limit' => $this->disk_limit,
+            'disk_usage' => $this->formatted_disk_usage,
+            'plan' => $this->plan,
+        ];
+    }
+
     public function scopeFilter($query, AccountFilters $filters)
     {
         return $filters->apply($query);

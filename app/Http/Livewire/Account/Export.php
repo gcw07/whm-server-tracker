@@ -2,8 +2,9 @@
 
 namespace App\Http\Livewire\Account;
 
-use App\Models\Server;
+use App\Models\Account;
 use LivewireUI\Modal\ModalComponent;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 use Usernotnull\Toast\Concerns\WireToast;
 
 class Export extends ModalComponent
@@ -71,10 +72,18 @@ class Export extends ModalComponent
     {
         $this->validate();
 
-
-
-        toast()->success('The download will begin shortly.')->push();
+        toast()->success('The export will begin downloading shortly.')->push();
         $this->closeModal();
+
+        return response()->streamDownload(function () {
+            $accountsCsv = SimpleExcelWriter::streamDownload('php://output', 'csv');
+
+            Account::with(['server'])->orderBy('domain')->each(function (Account $account) use ($accountsCsv) {
+                $accountsCsv->addRow($account->export([$this->state]));
+            });
+
+            $accountsCsv->close();
+        }, 'accounts.csv');
     }
 
     public function cancel()
