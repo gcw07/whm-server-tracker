@@ -45,7 +45,7 @@ class Listings extends Component
             ->selectRaw('(disk_used / disk_limit) * 100 as sort_disk_usage')
             ->when($this->sortBy, function ($query) {
                 if ($this->sortBy === 'newest') {
-                    return $query->orderBy('created_at', 'DESC');
+                    return $query->orderBy('created_at', 'DESC')->orderBy('domain');
                 }
 
                 if ($this->sortBy === 'usage_high') {
