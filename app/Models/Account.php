@@ -78,7 +78,7 @@ class Account extends Model
 
     public function export($columns): array
     {
-        return [
+        return collect([
             'domain' => $this->domain,
             'server' => $this->server->name,
             'username' => $this->user,
@@ -92,7 +92,7 @@ class Account extends Model
             'disk_limit' => $this->disk_limit,
             'disk_usage' => $this->formatted_disk_usage,
             'plan' => $this->plan,
-        ];
+        ])->only($columns)->all();
     }
 
     public function scopeFilter($query, AccountFilters $filters)

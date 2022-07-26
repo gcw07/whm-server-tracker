@@ -75,12 +75,16 @@ class Export extends ModalComponent
         toast()->success('The export will begin downloading shortly.')->push();
         $this->closeModal();
 
-        return response()->streamDownload(function () {
+        $columns = collect($this->state)->filter()->keys()->all();
+
+        return response()->streamDownload(function () use ($columns) {
             $accountsCsv = SimpleExcelWriter::streamDownload('php://output', 'csv');
 
-            Account::with(['server'])->orderBy('domain')->each(function (Account $account) use ($accountsCsv) {
-                $accountsCsv->addRow($account->export([$this->state]));
-            });
+            Account::with(['server'])
+                ->orderBy('domain')
+                ->each(function (Account $account) use ($accountsCsv, $columns) {
+                    $accountsCsv->addRow($account->export($columns));
+                });
 
             $accountsCsv->close();
         }, 'accounts.csv');
