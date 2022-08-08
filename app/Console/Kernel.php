@@ -20,6 +20,12 @@ class Kernel extends ConsoleKernel
 
         // Schedule Server Tracker
         $schedule->command('server-tracker:refresh')->hourly();
+
+        // Schedule Uptime Check
+        $schedule->command('monitor:check-uptime')->everyMinute();
+
+        // Schedule SSL Certificate Check
+        $schedule->command('monitor:check-certificate')->daily();
     }
 
     /**
