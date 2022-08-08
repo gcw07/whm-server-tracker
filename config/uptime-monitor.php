@@ -9,12 +9,12 @@ return [
     'notifications' => [
 
         'notifications' => [
-            \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckFailed::class => ['slack'],
-            \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckRecovered::class => ['slack'],
+            \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckFailed::class => ['mail'],
+            \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckRecovered::class => ['mail'],
             \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckSucceeded::class => [],
 
-            \Spatie\UptimeMonitor\Notifications\Notifications\CertificateCheckFailed::class => ['slack'],
-            \Spatie\UptimeMonitor\Notifications\Notifications\CertificateExpiresSoon::class => ['slack'],
+            \Spatie\UptimeMonitor\Notifications\Notifications\CertificateCheckFailed::class => ['mail'],
+            \Spatie\UptimeMonitor\Notifications\Notifications\CertificateExpiresSoon::class => ['mail'],
             \Spatie\UptimeMonitor\Notifications\Notifications\CertificateCheckSucceeded::class => [],
         ],
 
@@ -31,7 +31,7 @@ return [
         'resend_uptime_check_failed_notification_every_minutes' => 60,
 
         'mail' => [
-            'to' => ['your@email.com'],
+            'to' => [env('SERVER_TRACKER_MAIL_TO_ADDRESS', 'your@email.com')],
         ],
 
         'slack' => [
