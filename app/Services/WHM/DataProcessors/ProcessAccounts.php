@@ -9,6 +9,10 @@ class ProcessAccounts
 {
     public function execute(Server $server, $data)
     {
+        if (! array_key_exists('data', $data)) {
+            return [];
+        }
+
         $accounts = $data['data']['acct'];
         $config = config('server-tracker');
 

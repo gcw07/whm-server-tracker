@@ -69,3 +69,32 @@ it('fetches server accounts', function () {
         $this->assertCount(2, $server->accounts);
     });
 });
+
+it('fetches server accounts when there are no accounts on remote server', function () {
+    $server = Server::factory()->create([
+        'name' => 'my-server-name',
+        'address' => '1.1.1.1',
+        'port' => 1000,
+        'server_type' => 'vps',
+        'token' => 'valid-server-api-token',
+    ]);
+
+    Event::fake();
+
+    $fake = new class extends WhmApiFake {
+        protected function getAccountsData(): array
+        {
+            return [];
+        }
+    };
+
+    $this->app->instance(WhmApi::class, $fake);
+
+    dispatch(new FetchServerDataJob($server));
+
+    tap($server->fresh(), function (Server $server) {
+        $this->assertEquals('my-server-name', $server->name);
+
+        $this->assertCount(0, $server->accounts);
+    });
+});
