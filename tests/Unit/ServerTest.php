@@ -526,6 +526,7 @@ it('it will remove a monitor when updating an account if the account is suspende
         'server_id' => $this->server->id,
         'domain' => 'my-site.com',
         'user' => 'mysite',
+        'suspended' => false,
     ]);
 
     Monitor::create([
