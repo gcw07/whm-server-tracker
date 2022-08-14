@@ -67,6 +67,10 @@ class ProcessAccounts
 
     public function addMonitor($account)
     {
+        if ($account['suspended']) {
+            return;
+        }
+
         $url = trim('https://'.$account['domain'], '/');
 
         Monitor::create([
@@ -78,6 +82,15 @@ class ProcessAccounts
 
     public function updateMonitor($account, $attributes)
     {
+        // If account suspended status has changed
+        if ($account->suspended != $attributes['suspended']) {
+            $this->removeMonitor($account);
+            $this->addMonitor($attributes);
+
+            return;
+        }
+
+        // If account domain name has not changed, do nothing
         if ($account->domain === $attributes['domain']) {
             return;
         }
@@ -88,8 +101,8 @@ class ProcessAccounts
 
     public function removeMonitor($account)
     {
-        $monitor = Monitor::where('url', $account->domain_url)->first();
-
-        $monitor->delete();
+        if ($monitor = Monitor::where('url', $account->domain_url)->first()) {
+            $monitor->delete();
+        }
     }
 }
