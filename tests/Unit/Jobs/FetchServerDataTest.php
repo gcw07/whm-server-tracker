@@ -81,7 +81,8 @@ it('fetches server accounts when there are no accounts on remote server', functi
 
     Event::fake();
 
-    $fake = new class extends WhmApiFake {
+    $fake = new class extends WhmApiFake
+    {
         protected function getAccountsData(): array
         {
             return [];
