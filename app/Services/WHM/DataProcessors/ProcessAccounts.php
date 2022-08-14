@@ -4,6 +4,7 @@ namespace App\Services\WHM\DataProcessors;
 
 use App\Models\Server;
 use Carbon\Carbon;
+use Spatie\UptimeMonitor\Models\Monitor;
 
 class ProcessAccounts
 {
@@ -39,8 +40,12 @@ class ProcessAccounts
     public function addOrUpdateAccount(Server $server, $account)
     {
         if ($foundAccount = $server->findAccount($account['user'])) {
+            $this->updateMonitor($foundAccount, $account);
+
             return $foundAccount->update($account);
         }
+
+        $this->addMonitor($account);
 
         return $server->addAccount($account);
     }
@@ -53,6 +58,38 @@ class ProcessAccounts
             }
 
             return true;
-        })->each(fn ($item) => $server->removeAccount($item));
+        })->each(function ($item) use ($server) {
+            $this->removeMonitor($item);
+
+            return $server->removeAccount($item);
+        });
+    }
+
+    public function addMonitor($account)
+    {
+        $url = trim('https://'.$account['domain'], '/');
+
+        Monitor::create([
+            'url' => $url,
+            'uptime_check_enabled' => true,
+            'certificate_check_enabled' => true,
+        ]);
+    }
+
+    public function updateMonitor($account, $attributes)
+    {
+        if ($account->domain === $attributes['domain']) {
+            return;
+        }
+
+        $this->removeMonitor($account);
+        $this->addMonitor($attributes);
+    }
+
+    public function removeMonitor($account)
+    {
+        $monitor = Monitor::where('url', $account->domain_url)->first();
+
+        $monitor->delete();
     }
 }
