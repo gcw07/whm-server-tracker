@@ -37,7 +37,7 @@ class ProcessAccounts
         $this->removeStaleAccounts($server, $accounts);
     }
 
-    public function addOrUpdateAccount(Server $server, $account)
+    protected function addOrUpdateAccount(Server $server, $account)
     {
         if ($foundAccount = $server->findAccount($account['user'])) {
             $this->updateMonitor($foundAccount, $account);
@@ -50,7 +50,7 @@ class ProcessAccounts
         return $server->addAccount($account);
     }
 
-    public function removeStaleAccounts(Server $server, $accounts)
+    protected function removeStaleAccounts(Server $server, $accounts)
     {
         $server->fresh()->accounts->filter(function ($item) use ($accounts) {
             if (collect($accounts)->firstWhere('user', $item['user'])) {
@@ -65,7 +65,7 @@ class ProcessAccounts
         });
     }
 
-    public function addMonitor($account)
+    protected function addMonitor($account)
     {
         if ($account['suspended']) {
             return;
@@ -80,7 +80,7 @@ class ProcessAccounts
         ]);
     }
 
-    public function updateMonitor($account, $attributes)
+    protected function updateMonitor($account, $attributes)
     {
         // If account suspended status has changed
         if ($account->suspended != $attributes['suspended']) {
@@ -99,7 +99,7 @@ class ProcessAccounts
         $this->addMonitor($attributes);
     }
 
-    public function removeMonitor($account)
+    protected function removeMonitor($account)
     {
         if ($monitor = Monitor::where('url', $account->domain_url)->first()) {
             $monitor->delete();
