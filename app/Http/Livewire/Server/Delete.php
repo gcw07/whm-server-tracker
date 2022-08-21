@@ -31,6 +31,7 @@ class Delete extends ModalComponent
 
     public function delete()
     {
+        $this->server->removeMonitors();
         $this->server->delete();
 
         toast()->success('The server was deleted successfully.')->pushOnNextPage();
