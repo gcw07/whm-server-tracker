@@ -2,6 +2,7 @@
 
 namespace App\Services\WHM\DataProcessors;
 
+use App\Models\Account;
 use App\Models\Server;
 use Carbon\Carbon;
 use Spatie\UptimeMonitor\Models\Monitor;
@@ -73,6 +74,10 @@ class ProcessAccounts
 
         $url = trim('https://'.$account['domain'], '/');
 
+        if (Monitor::where('url', $url)->exists()) {
+            return;
+        }
+
         Monitor::create([
             'url' => $url,
             'uptime_check_enabled' => true,
@@ -101,6 +106,10 @@ class ProcessAccounts
 
     protected function removeMonitor($account)
     {
+        if (Account::where('domain', $account->domain)->count() > 1) {
+            return;
+        }
+
         if ($monitor = Monitor::where('url', $account->domain_url)->first()) {
             $monitor->delete();
         }
