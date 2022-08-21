@@ -25,22 +25,22 @@ class Dashboard extends Component
         ])->layoutData(['title' => 'Dashboard']);
     }
 
-    protected function totalServers()
+    protected function totalServers(): int
     {
         return Server::query()->count();
     }
 
-    protected function totalAccounts()
+    protected function totalAccounts(): int
     {
         return Account::query()->count();
     }
 
-    protected function totalMonitors()
+    protected function totalMonitors(): int
     {
         return Monitor::query()->count();
     }
 
-    protected function totalUsers()
+    protected function totalUsers(): int
     {
         return User::query()->count();
     }
