@@ -44,12 +44,12 @@
         <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
           <dt>
             <div class="absolute bg-green-500 rounded-md p-3">
-              <x-heroicon-o-users class="h-6 w-6 text-white" />
+              <x-heroicon-o-sparkles class="h-6 w-6 text-white" />
             </div>
-            <p class="ml-16 text-sm font-medium text-gray-500 truncate">Total Users</p>
+            <p class="ml-16 text-sm font-medium text-gray-500 truncate">Total Monitors</p>
           </dt>
           <dd class="ml-16 pb-1 flex items-baseline sm:pb-2">
-            <p class="text-2xl font-semibold text-gray-900">{{ $totalUsers }}</p>
+            <p class="text-2xl font-semibold text-gray-900">{{ $totalMonitors }}</p>
           </dd>
         </div>
       </dl>

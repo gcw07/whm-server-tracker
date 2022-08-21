@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
 use Livewire\Component;
+use Spatie\UptimeMonitor\Models\Monitor;
 
 class Dashboard extends Component
 {
@@ -18,7 +19,7 @@ class Dashboard extends Component
         return view('livewire.dashboard', [
             'totalServers' => $this->totalServers(),
             'totalAccounts' => $this->totalAccounts(),
-            'totalUsers' => $this->totalUsers(),
+            'totalMonitors' => $this->totalMonitors(),
             'serverTypes' => $this->serverTypeQuery(),
             'recentAccounts' => $this->recentAccounts(),
         ])->layoutData(['title' => 'Dashboard']);
@@ -32,6 +33,11 @@ class Dashboard extends Component
     protected function totalAccounts()
     {
         return Account::query()->count();
+    }
+
+    protected function totalMonitors()
+    {
+        return Monitor::query()->count();
     }
 
     protected function totalUsers()
