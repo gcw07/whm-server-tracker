@@ -214,7 +214,7 @@
                       @if($monitor->certificate_status === 'invalid')
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
                           <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
-                          <span class="text-gray-900 font-medium">Down</span>
+                          <span class="text-gray-900 font-medium">Invalid</span>
                         </div>
                       @elseif($monitor->certificate_status === 'not yet checked')
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
