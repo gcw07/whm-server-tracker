@@ -13,13 +13,13 @@ class Listings extends Component
 {
     use WithPagination, WithCache;
 
-    public string|null $monitorType = null;
+    public bool $hasIssues = false;
 
     public string|null $sortBy = null;
 
     public function mount()
     {
-        $this->monitorType = $this->getCache('monitors', 'monitorType');
+        $this->hasIssues = $this->getCache('monitors', 'hasIssues');
         $this->sortBy = $this->getCache('monitors', 'sortBy');
     }
 
@@ -30,26 +30,26 @@ class Listings extends Component
         ])->layoutData(['title' => 'Monitors']);
     }
 
-    public function filterType($type)
+    public function filterIssues($type)
     {
-        if ($type === 'issues') {
-            $this->monitorType = $type;
+        if ($type) {
+            $this->hasIssues = true;
         } else {
-            $this->monitorType = null;
+            $this->hasIssues = false;
         }
 
-        $this->putCache('monitors', 'monitorType', $this->monitorType);
+        $this->putCache('monitors', 'hasIssues', $this->hasIssues);
     }
 
-    public function updatedMonitorType($type)
+    public function updatedHasIssues($type)
     {
-        if ($type === 'issues') {
-            $this->monitorType = $type;
+        if ($type) {
+            $this->hasIssues = true;
         } else {
-            $this->monitorType = null;
+            $this->hasIssues = false;
         }
 
-        $this->putCache('monitors', 'monitorType', $this->monitorType);
+        $this->putCache('monitors', 'hasIssues', $this->hasIssues);
     }
 
     public function sortListingsBy($name)
@@ -68,8 +68,10 @@ class Listings extends Component
     protected function query()
     {
         return Monitor::query()
-            ->when($this->monitorType, function ($query) {
-                return $query->where('uptime_status', $this->monitorType);
+            ->when($this->hasIssues, function ($query) {
+                return $query
+                    ->where('uptime_status', 'down')
+                    ->orWhere('certificate_status', 'invalid');
             })
             ->when($this->sortBy, function ($query) {
 //                if ($this->sortBy === 'newest') {

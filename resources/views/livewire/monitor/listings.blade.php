@@ -65,28 +65,28 @@
       <!-- Dropdown menu on small screens -->
       <div class="sm:hidden">
         <label for="current-tab" class="sr-only">Select a tab</label>
-        <select id="current-tab" name="current-tab" wire:model="serverType" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
+        <select id="current-tab" name="current-tab" wire:model="hasIssues" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
           <option value="">All</option>
-          <option value="issues">Sites with issues</option>
+          <option value="true">Sites with issues</option>
         </select>
       </div>
       <!-- Tabs at small breakpoint and up -->
       <div class="hidden sm:block">
         <nav class="-mb-px flex space-x-8">
           <!-- Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
-          <button wire:click.prevent="filterType(null)"
+          <button wire:click.prevent="filterIssues(false)"
             @class([
              'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm',
-             'border-sky-500 text-sky-600' => $monitorType == null,
-             'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $monitorType != null,
+             'border-sky-500 text-sky-600' => $hasIssues == false,
+             'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $hasIssues === true,
             ])>
             All
           </button>
-          <button wire:click.prevent="filterType('issues')"
+          <button wire:click.prevent="filterIssues(true)"
             @class([
              'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm',
-             'border-sky-500 text-sky-600' => $monitorType == 'issues',
-             'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $monitorType != 'issues',
+             'border-sky-500 text-sky-600' => $hasIssues === true,
+             'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $hasIssues === false,
             ])>
             Sites with issues
           </button>
@@ -179,20 +179,50 @@
                       </div>
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                      <span class="text-gray-900 font-medium">uptime</span>
+                      @if($monitor->uptime_status === 'down')
+                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                          <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                          <span class="text-gray-900 font-medium">Down</span>
+                        </div>
+                      @elseif($monitor->uptime_status === 'not yet checked')
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
+                            <span class="text-gray-900 font-medium">Not yet checked</span>
+                          </div>
+                      @else
+                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                          <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                          <span class="text-gray-900 font-medium">Up</span>
+                        </div>
+                      @endif
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                      <span class="text-gray-900 font-medium">failed</span>
+                      @if($monitor->certificate_status === 'invalid')
+                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                          <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                          <span class="text-gray-900 font-medium">Down</span>
+                        </div>
+                      @elseif($monitor->certificate_status === 'not yet checked')
+                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                          <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
+                          <span class="text-gray-900 font-medium">Not yet checked</span>
+                        </div>
+                      @else
+                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                          <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                          <span class="text-gray-900 font-medium">Ok</span>
+                        </div>
+                      @endif
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                      <a href="{{ $monitor->url }}" target="_blank" x-data="{}" x-tooltip.raw="View WHM Panel" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                      <a href="{{ $monitor->url }}" target="_blank" x-data="{}" x-tooltip.raw="Visit Site" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                         <x-heroicon-s-external-link class="-ml-0.5 h-4 w-4" />
                       </a>
                     </td>
                   </tr>
                 @empty
                   <tr class="bg-white">
-                    <td colspan="7" class="py-8 whitespace-nowrap font-semibold text-center text-sm text-gray-700">
+                    <td colspan="4" class="py-8 whitespace-nowrap font-semibold text-center text-sm text-gray-700">
                       No entries found.
                     </td>
                   </tr>
