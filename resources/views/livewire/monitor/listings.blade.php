@@ -173,7 +173,7 @@
                       <div class="flex">
                         <a href="{{ route('servers.show', $monitor->id) }}" class="group inline-flex space-x-2 truncate text-sm">
                           <p class="text-gray-500 truncate font-semibold group-hover:text-gray-900">
-                            {{ ltrim($monitor->url, 'https://') }}
+                            {{ preg_replace("(^https?://)", "", $monitor->url ) }}
                           </p>
                         </a>
                       </div>
@@ -181,7 +181,7 @@
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                       @if($monitor->uptime_status === 'down')
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                          <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
                           <span class="text-gray-900 font-medium">Down</span>
                         </div>
                       @elseif($monitor->uptime_status === 'not yet checked')
@@ -199,7 +199,7 @@
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                       @if($monitor->certificate_status === 'invalid')
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                          <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
                           <span class="text-gray-900 font-medium">Down</span>
                         </div>
                       @elseif($monitor->certificate_status === 'not yet checked')
