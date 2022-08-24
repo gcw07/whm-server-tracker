@@ -66,7 +66,7 @@
       <div class="sm:hidden">
         <label for="current-tab" class="sr-only">Select a tab</label>
         <select id="current-tab" name="current-tab" wire:model="hasIssues" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
-          <option value="">All</option>
+          <option value="false">All</option>
           <option value="true">Sites with issues</option>
         </select>
       </div>
@@ -74,21 +74,35 @@
       <div class="hidden sm:block">
         <nav class="-mb-px flex space-x-8">
           <!-- Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
-          <button wire:click.prevent="filterIssues(false)"
+          <button wire:click.prevent="filterIssues('false')"
             @class([
              'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm',
              'border-sky-500 text-sky-600' => $hasIssues == false,
              'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $hasIssues === true,
             ])>
             All
+            <span @class([
+             'ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block',
+             'bg-gray-400 text-gray-100' => $hasIssues === true,
+             'bg-sky-600 text-white' => $hasIssues === false,
+            ])>
+              {{ $issueTypeCounts['all'] }}
+            </span>
           </button>
-          <button wire:click.prevent="filterIssues(true)"
+          <button wire:click.prevent="filterIssues('true')"
             @class([
              'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm',
              'border-sky-500 text-sky-600' => $hasIssues === true,
              'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' => $hasIssues === false,
             ])>
             Sites with issues
+            <span @class([
+             'ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block',
+             'bg-gray-400 text-gray-100' => $hasIssues === false,
+             'bg-sky-600 text-white' => $hasIssues === true,
+            ])>
+              {{ $issueTypeCounts['issues'] }}
+            </span>
           </button>
         </nav>
       </div>

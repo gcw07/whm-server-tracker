@@ -13,7 +13,7 @@ class Listings extends Component
 {
     use WithPagination, WithCache;
 
-    public bool $hasIssues = false;
+    public string|bool $hasIssues = 'false';
 
     public string|null $sortBy = null;
 
@@ -27,12 +27,13 @@ class Listings extends Component
     {
         return view('livewire.monitor.listings', [
             'monitors' => $this->query(),
+            'issueTypeCounts' => $this->issueTypeCountQuery(),
         ])->layoutData(['title' => 'Monitors']);
     }
 
     public function filterIssues($type)
     {
-        if ($type) {
+        if ($type === 'true') {
             $this->hasIssues = true;
         } else {
             $this->hasIssues = false;
@@ -43,7 +44,7 @@ class Listings extends Component
 
     public function updatedHasIssues($type)
     {
-        if ($type) {
+        if ($type === 'true') {
             $this->hasIssues = true;
         } else {
             $this->hasIssues = false;
@@ -92,5 +93,15 @@ class Listings extends Component
                 return $query->orderBy('url');
             })
             ->paginate(50);
+    }
+
+    protected function issueTypeCountQuery(): array
+    {
+        return [
+            'all' => Monitor::query()->count(),
+            'issues' => Monitor::query()
+                ->where('uptime_status', 'down')
+                ->orWhere('certificate_status', 'invalid')->count(),
+            ];
     }
 }
