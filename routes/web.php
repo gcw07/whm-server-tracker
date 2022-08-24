@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\Monitor\Listings as MonitorListings;
 use App\Http\Livewire\Search;
 use App\Http\Livewire\Server\Create as ServerCreate;
 use App\Http\Livewire\Server\Details as ServerDetails;
@@ -44,6 +45,12 @@ Route::prefix('servers')->middleware('auth')->group(function () {
     Route::get('/create', ServerCreate::class)->name('servers.create');
     Route::get('/{server}', ServerDetails::class)->name('servers.show');
     Route::get('/{server}/edit', ServerEdit::class)->name('servers.edit');
+});
+
+// Monitor Routes...
+Route::prefix('monitors')->middleware('auth')->group(function () {
+    Route::get('/', MonitorListings::class)->name('monitors.index');
+//    Route::get('/{server}', ServerDetails::class)->name('servers.show');
 });
 
 // User Routes...
