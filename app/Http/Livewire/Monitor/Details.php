@@ -17,10 +17,6 @@ class Details extends Component
 
     public function mount(Monitor $monitor)
     {
-//        $server->loadMissing(['accounts' => function ($query) {
-//            return $query->orderBy('domain');
-//        }, 'accounts.server'])->loadCount(['accounts']);
-
         $this->monitor = $monitor;
         $this->domainUrl = preg_replace("(^https?://)", "", $this->monitor->url);
     }
