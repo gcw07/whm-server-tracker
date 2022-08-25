@@ -59,17 +59,49 @@
 
   <div class="mt-6">
     <!-- Begin content -->
-    <div class="hidden text-sm text-gray-500 sm:flex sm:justify-end">
-      Last Updated:
-{{--      @if($server->server_update_last_succeeded_at)--}}
-{{--        {{ $server->server_update_last_succeeded_at->diffForHumans() }}--}}
-{{--      @else--}}
-{{--        Never--}}
-{{--      @endif--}}
+
+    <div>
+      <dl class="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
+          <dt>
+            <div class="absolute bg-sky-500 rounded-md p-3">
+              <x-heroicon-o-globe class="h-6 w-6 text-white" />
+            </div>
+            <p class="ml-16 text-sm font-medium text-gray-500 truncate">Uptime Status</p>
+          </dt>
+          <dd class="ml-16 pb-1 flex items-baseline sm:pb-2">
+            @if($monitor->uptime_status === 'down')
+              <p class="text-2xl font-semibold text-gray-900">Down</p>
+            @elseif($monitor->uptime_status === 'not yet checked')
+              <p class="text-2xl font-semibold text-gray-900">Not yet checked</p>
+            @else
+              <p class="text-2xl font-semibold text-gray-900">Up</p>
+            @endif
+          </dd>
+        </div>
+
+        <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
+          <dt>
+            <div class="absolute bg-purple-500 rounded-md p-3">
+              <x-heroicon-o-badge-check class="h-6 w-6 text-white" />
+            </div>
+            <p class="ml-16 text-sm font-medium text-gray-500 truncate">SSL Certificate</p>
+          </dt>
+          <dd class="ml-16 pb-1 flex items-baseline sm:pb-2">
+            @if($monitor->certificate_status === 'invalid')
+              <p class="text-2xl font-semibold text-gray-900">Invalid</p>
+            @elseif($monitor->certificate_status === 'not yet checked')
+              <p class="text-2xl font-semibold text-gray-900">Not yet checked</p>
+            @else
+              <p class="text-2xl font-semibold text-gray-900">Valid</p>
+            @endif
+          </dd>
+        </div>
+      </dl>
     </div>
 
     <!-- Accounts list (smallest breakpoint only) -->
-    <div class="shadow sm:hidden">
+    <div class="shadow sm:hidden mt-5">
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
         @forelse($accounts as $account)
           <li>
@@ -121,7 +153,7 @@
     </div>
 
     <!-- Accounts table (small breakpoint and up) -->
-    <div class="hidden sm:block">
+    <div class="hidden sm:block mt-5">
       <div class="mx-auto">
         <div class="flex flex-col mt-2">
           <div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
