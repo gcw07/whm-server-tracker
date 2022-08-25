@@ -19,7 +19,7 @@ class Listings extends Component
 
     public function mount()
     {
-        $this->hasIssues = $this->getCache('monitors', 'hasIssues');
+        $this->hasIssues = $this->getCache('monitors', 'hasIssues', false);
         $this->sortBy = $this->getCache('monitors', 'sortBy');
     }
 
