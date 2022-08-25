@@ -118,7 +118,7 @@
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
         @forelse($monitors as $monitor)
           <li>
-            <a href="{{ route('servers.show', $monitor->id) }}"
+            <a href="{{ route('monitors.show', $monitor->id) }}"
               @class([
                'block px-4 py-4 hover:bg-gray-50',
                'bg-yellow-100' => $monitor->uptime_status === 'not yet checked',
@@ -185,7 +185,7 @@
                     ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
-                        <a href="{{ route('servers.show', $monitor->id) }}" class="group inline-flex space-x-2 truncate text-sm">
+                        <a href="{{ route('monitors.show', $monitor->id) }}" class="group inline-flex space-x-2 truncate text-sm">
                           <p class="text-gray-500 truncate font-semibold group-hover:text-gray-900">
                             {{ preg_replace("(^https?://)", "", $monitor->url ) }}
                           </p>
