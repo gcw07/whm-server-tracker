@@ -22,21 +22,9 @@
                     role="menuitem" tabindex="-1" id="sort-menu-item-0">
               Alphabetically
             </button>
-            <button wire:click.prevent="sortListingsBy('newest')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem" tabindex="-1" id="sort-menu-item-1">
-              Newest
-            </button>
-            <button wire:click.prevent="sortListingsBy('accounts')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem" tabindex="-1" id="sort-menu-item-2">
-              # of Accounts
-            </button>
-            <button wire:click.prevent="sortListingsBy('usage_high')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem" tabindex="-1" id="sort-menu-item-3">
-              Usage: High to Low
-            </button>
-            <button wire:click.prevent="sortListingsBy('usage_low')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            <button wire:click.prevent="sortListingsBy('alpha_reversed')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem" tabindex="-1" id="sort-menu-item-4">
-              Usage: Low to High
+              Reversed Alphabetically
             </button>
           </div>
         </x-navigation.dropdown>

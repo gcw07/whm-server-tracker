@@ -56,10 +56,7 @@ class Listings extends Component
     public function sortListingsBy($name)
     {
         $this->sortBy = match ($name) {
-            'newest' => 'newest',
-            'accounts' => 'accounts',
-            'usage_high' => 'usage_high',
-            'usage_low' => 'usage_low',
+            'alpha_reversed' => 'alpha_reversed',
             default => null,
         };
 
@@ -75,20 +72,11 @@ class Listings extends Component
                     ->orWhere('certificate_status', 'invalid');
             })
             ->when($this->sortBy, function ($query) {
-//                if ($this->sortBy === 'newest') {
-//                    return $query->orderBy('created_at', 'DESC');
-//                }
-//
-//                if ($this->sortBy === 'accounts') {
-//                    return $query->orderBy('accounts_count', 'DESC');
-//                }
-//
-//                if ($this->sortBy === 'usage_high') {
-//                    return $query->orderBy('settings->disk_percentage', 'DESC');
-//                }
-//
-//                // usage low
-//                return $query->orderBy('settings->disk_percentage', 'ASC');
+                if ($this->sortBy === 'alpha_reversed') {
+                    return $query->orderBy('url', 'DESC');
+                }
+
+                return $query->orderBy('url');
             }, function ($query) {
                 return $query->orderBy('url');
             })
