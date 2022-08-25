@@ -93,7 +93,7 @@
             @elseif($monitor->certificate_status === 'not yet checked')
               <p class="text-2xl font-semibold text-gray-900">Not yet checked</p>
             @else
-              <p class="text-2xl font-semibold text-gray-900">Valid</p>
+              <p class="text-2xl font-semibold text-gray-900">Ok</p>
             @endif
           </dd>
         </div>
