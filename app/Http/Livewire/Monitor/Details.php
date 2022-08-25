@@ -18,7 +18,7 @@ class Details extends Component
     public function mount(Monitor $monitor)
     {
         $this->monitor = $monitor;
-        $this->domainUrl = preg_replace("(^https?://)", "", $this->monitor->url);
+        $this->domainUrl = preg_replace('(^https?://)', '', $this->monitor->url);
     }
 
     public function render()

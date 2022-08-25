@@ -2,9 +2,7 @@
 
 namespace App\Http\Livewire\Monitor;
 
-use App\Enums\ServerTypeEnum;
 use App\Http\Livewire\WithCache;
-use App\Models\Server;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\UptimeMonitor\Models\Monitor;
@@ -90,6 +88,6 @@ class Listings extends Component
             'issues' => Monitor::query()
                 ->where('uptime_status', 'down')
                 ->orWhere('certificate_status', 'invalid')->count(),
-            ];
+        ];
     }
 }
