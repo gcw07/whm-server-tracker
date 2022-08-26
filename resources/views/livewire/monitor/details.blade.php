@@ -146,11 +146,27 @@
           </div>
           <div>
             @if(!$monitor->certificate_check_enabled)
-                <div class="bg-yellow-100 text-center  p-3">SSL Certificate check is disabled</div>
+              <div class="bg-yellow-100 text-center  p-3">SSL Certificate check is disabled</div>
             @endif
-            <div class="px-4 py-5 sm:p-6">
-              <!-- Content goes here -->
-              <p>details soon</p>
+            <div class="px-4 py-5 sm:p-0">
+              <dl class="sm:divide-y sm:divide-gray-200">
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    @if($monitor->certificate_status === 'invalid')
+                      Invalid
+                    @elseif($monitor->certificate_status === 'not yet checked')
+                      Not Yet Checked
+                    @else
+                      Ok
+                    @endif
+                  </dd>
+                </div>
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->uptime_last_check_date?->diffForHumans() }}</dd>
+                </div>
+              </dl>
             </div>
           </div>
         </div>
