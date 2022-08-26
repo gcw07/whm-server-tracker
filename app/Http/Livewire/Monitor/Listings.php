@@ -66,8 +66,14 @@ class Listings extends Component
         return Monitor::query()
             ->when($this->hasIssues, function ($query) {
                 return $query
-                    ->where('uptime_status', 'down')
-                    ->orWhere('certificate_status', 'invalid');
+                    ->where(function($query) {
+                        $query->where('uptime_check_enabled', true)
+                            ->orWhere('certificate_check_enabled', true);
+                    })
+                    ->where(function($query) {
+                        $query->where('uptime_status', 'down')
+                            ->orWhere('certificate_status', 'invalid');
+                    });
             })
             ->when($this->sortBy, function ($query) {
                 if ($this->sortBy === 'alpha_reversed') {
@@ -86,8 +92,15 @@ class Listings extends Component
         return [
             'all' => Monitor::query()->count(),
             'issues' => Monitor::query()
-                ->where('uptime_status', 'down')
-                ->orWhere('certificate_status', 'invalid')->count(),
+                ->where(function($query) {
+                    $query->where('uptime_check_enabled', true)
+                        ->orWhere('certificate_check_enabled', true);
+                })
+                ->where(function($query) {
+                    $query->where('uptime_status', 'down')
+                        ->orWhere('certificate_status', 'invalid');
+                })
+                ->count(),
         ];
     }
 }
