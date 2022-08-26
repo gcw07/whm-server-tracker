@@ -77,9 +77,14 @@
               </div>
             </div>
           </div>
-          <div class="px-4 py-5 sm:p-6">
-            <!-- Content goes here -->
-            <p>details soon</p>
+          <div>
+            @if(!$monitor->uptime_check_enabled)
+              <div class="bg-yellow-100 text-center  p-3">Uptime check is disabled</div>
+            @endif
+            <div class="px-4 py-5 sm:p-6">
+              <!-- Content goes here -->
+              <p>details soon</p>
+            </div>
           </div>
         </div>
 
@@ -123,9 +128,14 @@
               </div>
             </div>
           </div>
-          <div class="px-4 py-5 sm:p-6">
-            <!-- Content goes here -->
-            <p>details soon</p>
+          <div>
+            @if(!$monitor->certificate_check_enabled)
+                <div class="bg-yellow-100 text-center  p-3">SSL Certificate check is disabled</div>
+            @endif
+            <div class="px-4 py-5 sm:p-6">
+              <!-- Content goes here -->
+              <p>details soon</p>
+            </div>
           </div>
         </div>
       </dl>
