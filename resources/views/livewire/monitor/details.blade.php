@@ -41,12 +41,16 @@
           <div class="bg-gray-50 rounded-lg px-4 py-5 sm:px-6">
             <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
               <div class="ml-4 mt-4 flex items-center">
-                <div @class([
-                 'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
-                 'bg-green-600' => $monitor->uptime_status === 'up',
-                 'bg-red-600' => $monitor->uptime_status === 'down',
-                 'bg-yellow-600' => $monitor->uptime_status === 'not yet checked'
-                  ]) aria-hidden="true"></div>
+                @if($monitor->uptime_check_enabled)
+                  <div @class([
+                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'bg-green-600' => $monitor->uptime_status === 'up',
+                   'bg-red-600' => $monitor->uptime_status === 'down',
+                   'bg-yellow-600' => $monitor->uptime_status === 'not yet checked'
+                    ]) aria-hidden="true"></div>
+                @else
+                  <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                @endif
                 <h3 class="text-lg leading-6 font-medium text-gray-900">Uptime</h3>
               </div>
               <div class="ml-4 mt-4 flex-shrink-0">
@@ -129,12 +133,16 @@
           <div class="bg-gray-50 rounded-lg px-4 py-5 sm:px-6">
             <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
               <div class="ml-4 mt-4 flex items-center">
-                <div @class([
-                 'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
-                 'bg-green-600' => $monitor->certificate_status === 'valid',
-                 'bg-red-600' => $monitor->certificate_status === 'invalid',
-                 'bg-yellow-600' => $monitor->certificate_status === 'not yet checked'
-                  ]) aria-hidden="true"></div>
+                @if($monitor->certificate_check_enabled)
+                  <div @class([
+                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'bg-green-600' => $monitor->certificate_status === 'valid',
+                   'bg-red-600' => $monitor->certificate_status === 'invalid',
+                   'bg-yellow-600' => $monitor->certificate_status === 'not yet checked'
+                    ]) aria-hidden="true"></div>
+                @else
+                  <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                @endif
                 <h3 class="text-lg leading-6 font-medium text-gray-900">SSL Certificate</h3>
               </div>
               <div class="ml-4 mt-4 flex-shrink-0">
