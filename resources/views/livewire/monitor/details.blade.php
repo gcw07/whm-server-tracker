@@ -80,33 +80,48 @@
           <div>
             @if(!$monitor->uptime_check_enabled)
               <div class="bg-yellow-100 text-center  p-3">Uptime check is disabled</div>
-            @endif
-            <div class="px-4 py-5 sm:p-0">
-              <dl class="sm:divide-y sm:divide-gray-200">
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    @if($monitor->uptime_status === 'down')
-                      Down
-                    @elseif($monitor->uptime_status === 'not yet checked')
-                      Not Yet Checked
-                    @else
-                      Up
-                    @endif
-                  </dd>
-                </div>
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->uptime_last_check_date?->diffForHumans() }}</dd>
-                </div>
-                @if($monitor->uptime_status === 'down')
+              <div class="px-4 py-5 sm:p-0 opacity-20">
+                <dl class="sm:divide-y sm:divide-gray-200">
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Failure Reason</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->uptime_check_failure_reason }}</dd>
+                    <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      N/A
+                    </dd>
                   </div>
-                @endif
-              </dl>
-            </div>
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
+                  </div>
+                </dl>
+              </div>
+            @else
+              <div class="px-4 py-5 sm:p-0">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      @if($monitor->uptime_status === 'down')
+                        Down
+                      @elseif($monitor->uptime_status === 'not yet checked')
+                        Not Yet Checked
+                      @else
+                        Up
+                      @endif
+                    </dd>
+                  </div>
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->uptime_last_check_date?->diffForHumans() }}</dd>
+                  </div>
+                  @if($monitor->uptime_status === 'down')
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <dt class="text-sm font-medium text-gray-500">Failure Reason</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->uptime_check_failure_reason }}</dd>
+                    </div>
+                  @endif
+                </dl>
+              </div>
+            @endif
           </div>
         </div>
 
@@ -153,39 +168,54 @@
           <div>
             @if(!$monitor->certificate_check_enabled)
               <div class="bg-yellow-100 text-center  p-3">SSL Certificate check is disabled</div>
-            @endif
-            <div class="px-4 py-5 sm:p-0">
-              <dl class="sm:divide-y sm:divide-gray-200">
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    @if($monitor->certificate_status === 'invalid')
-                      Invalid
-                    @elseif($monitor->certificate_status === 'not yet checked')
-                      Not Yet Checked
-                    @else
-                      Ok
-                    @endif
-                  </dd>
-                </div>
-                @if($monitor->certificate_status === 'valid')
+              <div class="px-4 py-5 sm:p-0 opacity-20">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      N/A
+                    </dd>
+                  </div>
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_expiration_date->format("D, F j, Y, g:i a") }}</dd>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
                   </div>
+                </dl>
+              </div>
+            @else
+              <div class="px-4 py-5 sm:p-0">
+                <dl class="sm:divide-y sm:divide-gray-200">
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Issued By</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_issuer }}</dd>
+                    <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      @if($monitor->certificate_status === 'invalid')
+                        Invalid
+                      @elseif($monitor->certificate_status === 'not yet checked')
+                        Not Yet Checked
+                      @else
+                        Ok
+                      @endif
+                    </dd>
                   </div>
-                @endif
-                @if($monitor->certificate_status === 'invalid')
-                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Failure Reason</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_check_failure_reason }}</dd>
-                  </div>
-                @endif
-              </dl>
-            </div>
+                  @if($monitor->certificate_status === 'valid')
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_expiration_date->format("D, F j, Y, g:i a") }}</dd>
+                    </div>
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <dt class="text-sm font-medium text-gray-500">Issued By</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_issuer }}</dd>
+                    </div>
+                  @endif
+                  @if($monitor->certificate_status === 'invalid')
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <dt class="text-sm font-medium text-gray-500">Failure Reason</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_check_failure_reason }}</dd>
+                    </div>
+                  @endif
+                </dl>
+              </div>
+            @endif
           </div>
         </div>
       </dl>
