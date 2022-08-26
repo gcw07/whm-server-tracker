@@ -37,9 +37,8 @@
 
     <div>
       <dl class="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
-
         <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
-          <div class="bg-white rounded-lg px-4 py-5 sm:px-6">
+          <div class="bg-gray-50 rounded-lg px-4 py-5 sm:px-6">
             <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
               <div class="ml-4 mt-4 flex items-center">
                 <div @class([
@@ -80,7 +79,7 @@
         </div>
 
         <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
-          <div class="bg-white rounded-lg px-4 py-5 sm:px-6">
+          <div class="bg-gray-50 rounded-lg px-4 py-5 sm:px-6">
             <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
               <div class="ml-4 mt-4 flex items-center">
                 <div @class([
