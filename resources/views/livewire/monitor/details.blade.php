@@ -27,31 +27,6 @@
         <x-heroicon-s-external-link class="-ml-0.5 mr-2 h-4 w-4" />
         View
       </a>
-
-      <!-- Details menu dropdown -->
-{{--      <x-navigation.dropdown class="ml-2">--}}
-{{--        <x-slot name="trigger">--}}
-{{--          <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">--}}
-{{--            <x-heroicon-s-dots-vertical class="-ml-0.5 -mr-1 h-4 w-4" />--}}
-{{--            &nbsp;--}}
-{{--          </button>--}}
-{{--        </x-slot>--}}
-
-{{--        <div--}}
-{{--          class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"--}}
-{{--          role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">--}}
-{{--          <a href="{{ route('servers.edit', $monitor) }}" class="flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-{{--             role="menuitem" tabindex="-1" id="details-menu-item-0">--}}
-{{--            <x-heroicon-s-pencil-alt class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />--}}
-{{--            Edit--}}
-{{--          </a>--}}
-{{--          <button wire:click='$emit("openModal", "server.delete", {{ json_encode(["server" => $monitor->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-{{--             role="menuitem" tabindex="-1" id="details-menu-item-2">--}}
-{{--            <x-heroicon-s-trash class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />--}}
-{{--            Delete--}}
-{{--          </button>--}}
-{{--        </div>--}}
-{{--      </x-navigation.dropdown>--}}
     </div>
   </div>
   <!-- / End Page Header -->
@@ -62,40 +37,87 @@
 
     <div>
       <dl class="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
-          <dt>
-            <div class="absolute bg-sky-500 rounded-md p-3">
-              <x-heroicon-o-globe class="h-6 w-6 text-white" />
+
+        <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
+          <div class="bg-white rounded-lg px-4 py-5 sm:px-6">
+            <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
+              <div class="ml-4 mt-4 flex items-center">
+                <div @class([
+                 'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                 'bg-green-600' => $monitor->uptime_status === 'up',
+                 'bg-red-600' => $monitor->uptime_status === 'down',
+                 'bg-yellow-600' => $monitor->uptime_status === 'not yet checked'
+                  ]) aria-hidden="true"></div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Uptime</h3>
+              </div>
+              <div class="ml-4 mt-4 flex-shrink-0">
+                <!-- Uptime menu dropdown -->
+                <x-navigation.dropdown>
+                  <x-slot name="trigger">
+                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
+                      <x-heroicon-s-dots-vertical class="-ml-0.5 -mr-1 h-4 w-4" />
+                      &nbsp;
+                    </button>
+                  </x-slot>
+
+                  <div
+                    class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu" aria-orientation="vertical" aria-labelledby="uptime-menu-button" tabindex="-1">
+                    <button wire:click='$emit("openModal", "server.delete", {{ json_encode(["server" => $monitor->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            role="menuitem" tabindex="-1" id="uptime-menu-item-0">
+                      <x-heroicon-s-ban class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                      Disable
+                    </button>
+                  </div>
+                </x-navigation.dropdown>
+              </div>
             </div>
-            <p class="ml-16 text-sm font-medium text-gray-500 truncate">Uptime Status</p>
-          </dt>
-          <dd class="ml-16 pb-1 flex items-baseline sm:pb-2">
-            @if($monitor->uptime_status === 'down')
-              <p class="text-2xl font-semibold text-gray-900">Down</p>
-            @elseif($monitor->uptime_status === 'not yet checked')
-              <p class="text-2xl font-semibold text-gray-900">Not yet checked</p>
-            @else
-              <p class="text-2xl font-semibold text-gray-900">Up</p>
-            @endif
-          </dd>
+          </div>
+          <div class="px-4 py-5 sm:p-6">
+            <!-- Content goes here -->
+            <p>details soon</p>
+          </div>
         </div>
 
-        <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
-          <dt>
-            <div class="absolute bg-purple-500 rounded-md p-3">
-              <x-heroicon-o-badge-check class="h-6 w-6 text-white" />
+        <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
+          <div class="bg-white rounded-lg px-4 py-5 sm:px-6">
+            <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
+              <div class="ml-4 mt-4 flex items-center">
+                <div @class([
+                 'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                 'bg-green-600' => $monitor->certificate_status === 'valid',
+                 'bg-red-600' => $monitor->certificate_status === 'invalid',
+                 'bg-yellow-600' => $monitor->certificate_status === 'not yet checked'
+                  ]) aria-hidden="true"></div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">SSL Certificate</h3>
+              </div>
+              <div class="ml-4 mt-4 flex-shrink-0">
+                <!-- Certificate menu dropdown -->
+                <x-navigation.dropdown>
+                  <x-slot name="trigger">
+                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
+                      <x-heroicon-s-dots-vertical class="-ml-0.5 -mr-1 h-4 w-4" />
+                      &nbsp;
+                    </button>
+                  </x-slot>
+
+                  <div
+                    class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu" aria-orientation="vertical" aria-labelledby="certificate-menu-button" tabindex="-1">
+                    <button wire:click='$emit("openModal", "server.delete", {{ json_encode(["server" => $monitor->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            role="menuitem" tabindex="-1" id="certificate-menu-item-0">
+                      <x-heroicon-s-ban class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                      Disable
+                    </button>
+                  </div>
+                </x-navigation.dropdown>
+              </div>
             </div>
-            <p class="ml-16 text-sm font-medium text-gray-500 truncate">SSL Certificate</p>
-          </dt>
-          <dd class="ml-16 pb-1 flex items-baseline sm:pb-2">
-            @if($monitor->certificate_status === 'invalid')
-              <p class="text-2xl font-semibold text-gray-900">Invalid</p>
-            @elseif($monitor->certificate_status === 'not yet checked')
-              <p class="text-2xl font-semibold text-gray-900">Not yet checked</p>
-            @else
-              <p class="text-2xl font-semibold text-gray-900">Ok</p>
-            @endif
-          </dd>
+          </div>
+          <div class="px-4 py-5 sm:p-6">
+            <!-- Content goes here -->
+            <p>details soon</p>
+          </div>
         </div>
       </dl>
     </div>
