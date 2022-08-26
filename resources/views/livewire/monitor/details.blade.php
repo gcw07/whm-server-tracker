@@ -62,10 +62,15 @@
                   <div
                     class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                     role="menu" aria-orientation="vertical" aria-labelledby="uptime-menu-button" tabindex="-1">
-                    <button wire:click='$emit("openModal", "server.delete", {{ json_encode(["server" => $monitor->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    <button wire:click="toggleUptimeCheck" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             role="menuitem" tabindex="-1" id="uptime-menu-item-0">
-                      <x-heroicon-s-ban class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
-                      Disable
+                      @if($monitor->uptime_check_enabled)
+                        <x-heroicon-s-ban class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                        Disable
+                      @else
+                        <x-heroicon-s-check class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                        Enable
+                      @endif
                     </button>
                   </div>
                 </x-navigation.dropdown>
@@ -103,10 +108,15 @@
                   <div
                     class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                     role="menu" aria-orientation="vertical" aria-labelledby="certificate-menu-button" tabindex="-1">
-                    <button wire:click='$emit("openModal", "server.delete", {{ json_encode(["server" => $monitor->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    <button wire:click="toggleCertificateCheck" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             role="menuitem" tabindex="-1" id="certificate-menu-item-0">
-                      <x-heroicon-s-ban class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
-                      Disable
+                      @if($monitor->certificate_check_enabled)
+                        <x-heroicon-s-ban class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                        Disable
+                      @else
+                        <x-heroicon-s-check class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                        Enable
+                      @endif
                     </button>
                   </div>
                 </x-navigation.dropdown>

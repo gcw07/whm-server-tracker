@@ -18,11 +18,12 @@ class Details extends Component
     public function mount(Monitor $monitor)
     {
         $this->monitor = $monitor;
-        $this->domainUrl = preg_replace('(^https?://)', '', $this->monitor->url);
     }
 
     public function render()
     {
+        $this->domainUrl = preg_replace('(^https?://)', '', $this->monitor->url);
+
         return view('livewire.monitor.details', [
             'accounts' => $this->accountQuery(),
         ])->layoutData(['title' => 'Monitor Details']);
@@ -34,5 +35,35 @@ class Details extends Component
             ->with(['server'])
             ->where('domain', $this->domainUrl)
             ->get();
+    }
+
+    public function toggleUptimeCheck()
+    {
+        if ($this->monitor->uptime_check_enabled) {
+            $this->monitor->uptime_check_enabled = false;
+            $this->monitor->save();
+
+            toast()->success('Turned OFF uptime checking for this URL.')->push();
+        } else {
+            $this->monitor->uptime_check_enabled = true;
+            $this->monitor->save();
+
+            toast()->success('Turned ON uptime checking for this URL.')->push();
+        }
+    }
+
+    public function toggleCertificateCheck()
+    {
+        if ($this->monitor->certificate_check_enabled) {
+            $this->monitor->certificate_check_enabled = false;
+            $this->monitor->save();
+
+            toast()->success('Turned OFF ssl certificate checking for this URL.')->push();
+        } else {
+            $this->monitor->certificate_check_enabled = true;
+            $this->monitor->save();
+
+            toast()->success('Turned ON ssl certificate checking for this URL.')->push();
+        }
     }
 }
