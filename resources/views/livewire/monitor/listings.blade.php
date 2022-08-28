@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.60s>
   <!-- Page Header -->
   <div class="relative pb-5 border-b border-gray-200 sm:pb-0">
     <div class="md:flex md:items-center md:justify-between">
