@@ -59,8 +59,6 @@ class SyncMonitorsCommand extends Command
             ->each(function ($monitorAttributes) {
                 $this->createOrUpdateMonitor([
                     'url' => $monitorAttributes->domain_url,
-                    'uptime_check_enabled' => true,
-                    'certificate_check_enabled' => true,
                 ]);
             });
 
