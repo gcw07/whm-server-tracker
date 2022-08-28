@@ -107,7 +107,7 @@
                       @if($monitor->uptime_status === 'down')
                         Down
                       @elseif($monitor->uptime_status === 'not yet checked')
-                        Not Yet Checked
+                        Pending
                       @else
                         Up
                       @endif
@@ -199,7 +199,7 @@
                       @if($monitor->certificate_status === 'invalid')
                         Invalid
                       @elseif($monitor->certificate_status === 'not yet checked')
-                        Not Yet Checked
+                        Pending
                       @else
                         Ok
                       @endif

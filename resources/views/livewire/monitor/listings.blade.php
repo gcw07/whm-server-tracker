@@ -185,7 +185,7 @@
                       @elseif($monitor->uptime_status === 'not yet checked')
                           <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
                             <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
-                            <span class="text-gray-900 font-medium">Not yet checked</span>
+                            <span class="text-gray-900 font-medium">Pending</span>
                           </div>
                       @else
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
@@ -203,7 +203,7 @@
                       @elseif($monitor->certificate_status === 'not yet checked')
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
                           <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
-                          <span class="text-gray-900 font-medium">Not yet checked</span>
+                          <span class="text-gray-900 font-medium">Pending</span>
                         </div>
                       @else
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
