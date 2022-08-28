@@ -177,39 +177,53 @@
                       </div>
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                      @if($monitor->uptime_status === 'down')
+                      @if(!$monitor->uptime_check_enabled)
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
-                          <span class="text-gray-900 font-medium">Down</span>
+                          <x-heroicon-s-ban class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
+                          <span class="text-gray-900 font-medium">Disabled</span>
                         </div>
-                      @elseif($monitor->uptime_status === 'not yet checked')
+                      @else
+                        @if($monitor->uptime_status === 'down')
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
+                            <span class="text-gray-900 font-medium">Down</span>
+                          </div>
+                        @elseif($monitor->uptime_status === 'not yet checked')
                           <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
                             <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
                             <span class="text-gray-900 font-medium">Pending</span>
                           </div>
-                      @else
-                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
-                          <span class="text-gray-900 font-medium">Up</span>
-                        </div>
+                        @else
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                            <span class="text-gray-900 font-medium">Up</span>
+                          </div>
+                        @endif
                       @endif
                     </td>
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                      @if($monitor->certificate_status === 'invalid')
+                      @if(!$monitor->certificate_check_enabled)
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
-                          <span class="text-gray-900 font-medium">Invalid</span>
-                        </div>
-                      @elseif($monitor->certificate_status === 'not yet checked')
-                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
-                          <span class="text-gray-900 font-medium">Pending</span>
+                          <x-heroicon-s-ban class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
+                          <span class="text-gray-900 font-medium">Disabled</span>
                         </div>
                       @else
-                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
-                          <span class="text-gray-900 font-medium">Ok</span>
-                        </div>
+                        @if($monitor->certificate_status === 'invalid')
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
+                            <span class="text-gray-900 font-medium">Invalid</span>
+                          </div>
+                        @elseif($monitor->certificate_status === 'not yet checked')
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
+                            <span class="text-gray-900 font-medium">Pending</span>
+                          </div>
+                        @else
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                            <span class="text-gray-900 font-medium">Ok</span>
+                          </div>
+                        @endif
                       @endif
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
