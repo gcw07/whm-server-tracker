@@ -1,15 +1,10 @@
 <?php
 
 use App\Http\Livewire\Monitor\Details as MonitorDetails;
-use App\Jobs\FetchServerDataJob;
-use App\Models\Server;
 use App\Models\User;
-use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
-use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
 use Spatie\UptimeMonitor\Models\Monitor;
-use Tests\Factories\WhmApiFake;
 
 uses(LazilyRefreshDatabase::class);
 

@@ -66,11 +66,11 @@ class Listings extends Component
         return Monitor::query()
             ->when($this->hasIssues, function ($query) {
                 return $query
-                    ->where(function($query) {
+                    ->where(function ($query) {
                         $query->where('uptime_check_enabled', true)
                             ->orWhere('certificate_check_enabled', true);
                     })
-                    ->where(function($query) {
+                    ->where(function ($query) {
                         $query->where('uptime_status', 'down')
                             ->orWhere('certificate_status', 'invalid');
                     });
@@ -92,11 +92,11 @@ class Listings extends Component
         return [
             'all' => Monitor::query()->count(),
             'issues' => Monitor::query()
-                ->where(function($query) {
+                ->where(function ($query) {
                     $query->where('uptime_check_enabled', true)
                         ->orWhere('certificate_check_enabled', true);
                 })
-                ->where(function($query) {
+                ->where(function ($query) {
                     $query->where('uptime_status', 'down')
                         ->orWhere('certificate_status', 'invalid');
                 })
