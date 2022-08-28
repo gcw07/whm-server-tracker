@@ -109,8 +109,6 @@
             <a href="{{ route('monitors.show', $monitor->id) }}"
               @class([
                'block px-4 py-4 hover:bg-gray-50',
-               'bg-yellow-100' => $monitor->uptime_status === 'not yet checked',
-               'bg-red-100' => $monitor->uptime_status === 'down',
                'bg-gray-50' => $loop->even,
                'bg-white' => $loop->odd
               ])>
@@ -166,8 +164,6 @@
               <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($monitors as $monitor)
                   <tr @class([
-                        'bg-yellow-100' => $monitor->uptime_status === 'not yet checked',
-                        'bg-red-100' => $monitor->uptime_status === 'down',
                         'bg-gray-50' => $loop->even,
                         'bg-white' => $loop->odd
                     ])>
