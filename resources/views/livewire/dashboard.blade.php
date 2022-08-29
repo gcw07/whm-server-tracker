@@ -15,6 +15,24 @@
   <div class="mt-6">
     <!-- Begin content -->
 
+    @if($sitesWithIssues > 0)
+      <div class="bg-red-50 border-l-4 border-red-400 p-4 drop-shadow">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <x-heroicon-o-x-circle class="h-5 w-5 text-red-400" />
+          </div>
+          <div class="ml-3 flex-1 md:flex md:justify-between">
+            <p class="text-sm text-red-700">
+              There are {{ $sitesWithIssues }} sites with issues.
+            </p>
+            <p class="mt-3 text-sm md:mt-0 md:ml-6">
+              <a href="{{ route('monitors.index') }}" class="whitespace-nowrap font-medium text-red-700 hover:text-red-600">View <span aria-hidden="true">&rarr;</span></a>
+            </p>
+          </div>
+        </div>
+      </div>
+    @endif
+
     <div>
       <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">

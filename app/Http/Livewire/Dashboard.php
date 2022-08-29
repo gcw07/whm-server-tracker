@@ -21,6 +21,7 @@ class Dashboard extends Component
             'totalAccounts' => $this->totalAccounts(),
             'totalMonitors' => $this->totalMonitors(),
             'serverTypes' => $this->serverTypeQuery(),
+            'sitesWithIssues' => $this->sitesWithIssues(),
             'recentAccounts' => $this->recentAccounts(),
         ])->layoutData(['title' => 'Dashboard']);
     }
@@ -52,6 +53,20 @@ class Dashboard extends Component
             ->selectRaw("count(case when server_type = 'reseller' then 1 end) as reseller")
             ->selectRaw("count(case when server_type = 'vps' then 1 end) as vps")
             ->first();
+    }
+
+    protected function sitesWithIssues(): int
+    {
+        return Monitor::query()
+            ->where(function ($query) {
+                $query->where('uptime_check_enabled', true)
+                    ->orWhere('certificate_check_enabled', true);
+            })
+            ->where(function ($query) {
+                $query->where('uptime_status', 'down')
+                    ->orWhere('certificate_status', 'invalid');
+            })
+            ->count();
     }
 
     protected function recentAccounts()
