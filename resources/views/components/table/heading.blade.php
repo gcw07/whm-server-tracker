@@ -17,7 +17,7 @@
         @elseif ($direction === 'desc')
           <x-heroicon-o-chevron-up class="h-3 w-3"/>
         @else
-          <x-heroicon-o-selector class="h-4 w-4"/>
+          <x-heroicon-o-chevron-up-down class="h-4 w-4"/>
         @endif
       </span>
     </button>
