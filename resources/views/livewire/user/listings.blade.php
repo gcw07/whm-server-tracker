@@ -107,7 +107,7 @@
                       <x-navigation.dropdown class="ml-2">
                         <x-slot name="trigger">
                           <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
-                            <x-heroicon-s-dots-vertical class="-ml-0.5 h-4 w-4" />
+                            <x-heroicon-s-ellipsis-vertical class="-ml-0.5 h-4 w-4" />
                           </button>
                         </x-slot>
 
@@ -116,7 +116,7 @@
                           role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                           <a href="{{ route('users.edit', $user) }}" class="flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                              role="menuitem" tabindex="-1" id="user-menu-item-0">
-                            <x-heroicon-s-pencil-alt class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                            <x-heroicon-s-pencil-square class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
                             Edit
                           </a>
                           <button wire:click='$emit("openModal", "user.change-password", {{ json_encode(["user" => $user->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

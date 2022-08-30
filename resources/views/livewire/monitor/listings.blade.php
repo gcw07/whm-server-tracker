@@ -10,7 +10,7 @@
         <x-navigation.dropdown>
           <x-slot name="trigger">
             <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
-              <x-heroicon-s-sort-descending class="-ml-0.5 mr-2 h-4 w-4" />
+              <x-heroicon-s-bars-arrow-down class="-ml-0.5 mr-2 h-4 w-4" />
               Sort
             </button>
           </x-slot>
@@ -33,7 +33,7 @@
         <x-navigation.dropdown class="ml-2">
           <x-slot name="trigger">
             <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
-              <x-heroicon-s-filter class="-ml-0.5 mr-2 h-4 w-4" />
+              <x-heroicon-s-funnel class="-ml-0.5 mr-2 h-4 w-4" />
               Filters
             </button>
           </x-slot>
@@ -179,7 +179,7 @@
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                       @if(!$monitor->uptime_check_enabled)
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-ban class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
+                          <x-heroicon-s-no-symbol class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
                           <span class="text-gray-900 font-medium">Disabled</span>
                         </div>
                       @else
@@ -190,7 +190,7 @@
                           </div>
                         @elseif($monitor->uptime_status === 'not yet checked')
                           <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                            <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
+                            <x-heroicon-s-exclamation-triangle class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
                             <span class="text-gray-900 font-medium">Pending</span>
                           </div>
                         @else
@@ -204,7 +204,7 @@
                     <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                       @if(!$monitor->certificate_check_enabled)
                         <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                          <x-heroicon-s-ban class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
+                          <x-heroicon-s-no-symbol class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
                           <span class="text-gray-900 font-medium">Disabled</span>
                         </div>
                       @else
@@ -215,7 +215,7 @@
                           </div>
                         @elseif($monitor->certificate_status === 'not yet checked')
                           <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
-                            <x-heroicon-s-exclamation class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
+                            <x-heroicon-s-exclamation-triangle class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
                             <span class="text-gray-900 font-medium">Pending</span>
                           </div>
                         @else
@@ -228,7 +228,7 @@
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                       <a href="{{ $monitor->url }}" target="_blank" x-data="{}" x-tooltip.raw="Visit Site" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                        <x-heroicon-s-external-link class="-ml-0.5 h-4 w-4" />
+                        <x-heroicon-s-arrow-top-right-on-square class="-ml-0.5 h-4 w-4" />
                       </a>
                     </td>
                   </tr>

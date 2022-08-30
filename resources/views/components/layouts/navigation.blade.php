@@ -21,7 +21,7 @@
                  @keydown.meta.k.window.prevent="focusBox()"
                  class="relative text-gray-400 focus-within:text-gray-600">
               <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                <x-heroicon-s-search class="h-5 w-5"/>
+                <x-heroicon-s-magnifying-glass class="h-5 w-5"/>
               </div>
               <input id="search"
                      x-ref="search"
@@ -44,7 +44,7 @@
                 class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
                 aria-expanded="false">
           <span class="sr-only">Open main menu</span>
-          <x-heroicon-o-menu class="block h-6 w-6"/>
+          <x-heroicon-o-bars-3 class="block h-6 w-6"/>
         </button>
       </div>
 
@@ -71,7 +71,7 @@
                   <button @click="open = !open" type="button"
                           class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
                     <span class="sr-only">Close menu</span>
-                    <x-heroicon-o-x class="h-6 w-6"/>
+                    <x-heroicon-o-x-mark class="h-6 w-6"/>
                   </button>
                 </div>
               </div>

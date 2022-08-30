@@ -20,7 +20,7 @@
         <label for="search" class="sr-only">Search</label>
         <div class="relative text-gray-400 focus-within:text-gray-600">
           <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-            <x-heroicon-s-search class="h-5 w-5"/>
+            <x-heroicon-s-magnifying-glass class="h-5 w-5"/>
           </div>
           <input placeholder="Search" type="text" wire:model.debounce.500ms="q" class="block max-w-lg pl-10 w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
         </div>
@@ -74,7 +74,7 @@
                     </span>
                     @if($server->missing_token)
                       <span class="inline-flex items-center px-2.5 py-0.5 mt-3 rounded-full text-sm font-medium bg-red-200 text-red-800 capitalize">
-                        <x-heroicon-s-exclamation class="-ml-0.5 mr-1 h-4 w-4" />
+                        <x-heroicon-s-exclamation-triangle class="-ml-0.5 mr-1 h-4 w-4" />
                         no token
                       </span>
                     @else
@@ -148,7 +148,7 @@
                             </p>
                             @if($server->missing_token)
                               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">
-                              <x-heroicon-s-exclamation class="-ml-0.5 mr-1 h-4 w-4" />
+                              <x-heroicon-s-exclamation-triangle class="-ml-0.5 mr-1 h-4 w-4" />
                               no token
                             </span>
                             @endif
@@ -191,7 +191,7 @@
                       </td>
                       <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                         <a href="{{ $server->whm_url }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                          <x-heroicon-s-external-link class="-ml-0.5 h-4 w-4" />
+                          <x-heroicon-s-arrow-top-right-on-square class="-ml-0.5 h-4 w-4" />
                         </a>
                       </td>
                     </tr>
@@ -238,9 +238,9 @@
                 <span class="flex flex-col text-gray-500 text-sm truncate">
                   <span class="flex items-center truncate space-x-3">
                     @if($account->suspended)
-                      <x-heroicon-s-ban class="h-5 w-5 text-blue-600" />
+                      <x-heroicon-s-no-symbol class="h-5 w-5 text-blue-600" />
                     @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                      <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
+                      <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" />
                     @else
                       <span class="w-3 h-3 m-1 flex-shrink-0 rounded-full bg-green-600" aria-hidden="true"></span>
                     @endif
@@ -314,9 +314,9 @@
                         <div class="flex items-center space-x-3 lg:pl-2">
                           <div>
                             @if($account->suspended)
-                              <x-heroicon-s-ban class="h-5 w-5 text-blue-600" />
+                              <x-heroicon-s-no-symbol class="h-5 w-5 text-blue-600" />
                             @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                              <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
+                              <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" />
                             @else
                               <div class="flex-shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
                             @endif
@@ -365,7 +365,7 @@
                       </td>
                       <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                         <a href="{{ $account->server->whm_url }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                          <x-heroicon-s-external-link class="-ml-0.5 h-4 w-4" />
+                          <x-heroicon-s-arrow-top-right-on-square class="-ml-0.5 h-4 w-4" />
                         </a>
                       </td>
                     </tr>

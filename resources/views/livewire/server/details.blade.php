@@ -24,13 +24,13 @@
 
     <div class="flex mt-3 md:mt-0 md:ml-4">
       <a href="{{ $server->whm_url }}" target="_blank" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-        <x-heroicon-s-external-link class="-ml-0.5 mr-2 h-4 w-4" />
+        <x-heroicon-s-arrow-top-right-on-square class="-ml-0.5 mr-2 h-4 w-4" />
         View
       </a>
 
       @if(!$server->missing_token)
         <button wire:click="refresh" type="button" class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-          <x-heroicon-s-refresh class="-ml-0.5 mr-2 h-4 w-4" />
+          <x-heroicon-s-arrow-path class="-ml-0.5 mr-2 h-4 w-4" />
           Refresh
         </button>
       @endif
@@ -39,7 +39,7 @@
       <x-navigation.dropdown class="ml-2">
         <x-slot name="trigger">
           <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
-            <x-heroicon-s-dots-vertical class="-ml-0.5 -mr-1 h-4 w-4" />
+            <x-heroicon-s-ellipsis-vertical class="-ml-0.5 -mr-1 h-4 w-4" />
             &nbsp;
           </button>
         </x-slot>
@@ -49,7 +49,7 @@
           role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
           <a href="{{ route('servers.edit', $server) }}" class="flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
              role="menuitem" tabindex="-1" id="details-menu-item-0">
-            <x-heroicon-s-pencil-alt class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+            <x-heroicon-s-pencil-square class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
             Edit
           </a>
           @if(!$server->missing_token)
@@ -187,7 +187,7 @@
           <div>
             <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
               <div class="bg-sky-500 rounded-md p-1 mr-2">
-                <x-heroicon-s-archive class="h-5 w-5 text-white" />
+                <x-heroicon-s-archive-box class="h-5 w-5 text-white" />
               </div>
               Backups
             </dt>
@@ -269,9 +269,9 @@
                 <span class="flex flex-col text-gray-500 text-sm truncate">
                   <span class="flex items-center truncate space-x-3">
                     @if($account->suspended)
-                      <x-heroicon-s-ban class="h-5 w-5 text-blue-600" />
+                      <x-heroicon-s-no-symbol class="h-5 w-5 text-blue-600" />
                     @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                      <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
+                      <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" />
                     @else
                       <span class="w-3 h-3 m-1 flex-shrink-0 rounded-full bg-green-600" aria-hidden="true"></span>
                     @endif
@@ -346,9 +346,9 @@
                         <div class="flex items-center space-x-3 lg:pl-2">
                           <div x-data="{}">
                             @if($account->suspended)
-                              <x-heroicon-s-ban class="h-5 w-5 text-blue-600" x-tooltip.raw="Account Suspended" />
+                              <x-heroicon-s-no-symbol class="h-5 w-5 text-blue-600" x-tooltip.raw="Account Suspended" />
                             @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                              <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" x-tooltip.raw="Disk Warning" />
+                              <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" x-tooltip.raw="Disk Warning" />
                             @else
                               <div class="flex-shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
                             @endif
@@ -393,7 +393,7 @@
                       </td>
                       <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                         <a href="{{ $account->server->whm_url }}" target="_blank" x-data="{}" x-tooltip.raw="View WHM Panel" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                          <x-heroicon-s-external-link class="-ml-0.5 h-4 w-4" />
+                          <x-heroicon-s-arrow-top-right-on-square class="-ml-0.5 h-4 w-4" />
                         </a>
                       </td>
                     </tr>

@@ -9,7 +9,7 @@
       <x-navigation.dropdown>
         <x-slot name="trigger">
           <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
-            <x-heroicon-s-sort-descending class="-ml-0.5 mr-2 h-4 w-4" />
+            <x-heroicon-s-bars-arrow-down class="-ml-0.5 mr-2 h-4 w-4" />
             Sort
           </button>
         </x-slot>
@@ -40,7 +40,7 @@
       <x-navigation.dropdown class="ml-2">
         <x-slot name="trigger">
           <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
-            <x-heroicon-s-filter class="-ml-0.5 mr-2 h-4 w-4" />
+            <x-heroicon-s-funnel class="-ml-0.5 mr-2 h-4 w-4" />
             Filters
           </button>
         </x-slot>
@@ -56,7 +56,7 @@
       </x-navigation.dropdown>
 
       <button wire:click='$emit("openModal", "account.export", {{ json_encode(["sortBy" => $sortBy]) }})' type="button" class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
-        <x-heroicon-s-download class="-ml-0.5 mr-2 h-4 w-4" />
+        <x-heroicon-s-arrow-down-tray class="-ml-0.5 mr-2 h-4 w-4" />
         Export
       </button>
     </div>
@@ -87,9 +87,9 @@
                 <span class="flex flex-col text-gray-500 text-sm truncate">
                   <span class="flex items-center truncate space-x-3">
                     @if($account->suspended)
-                      <x-heroicon-s-ban class="h-5 w-5 text-blue-600" />
+                      <x-heroicon-s-no-symbol class="h-5 w-5 text-blue-600" />
                     @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                      <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" />
+                      <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" />
                     @else
                       <span class="w-3 h-3 m-1 flex-shrink-0 rounded-full bg-green-600" aria-hidden="true"></span>
                     @endif
@@ -161,9 +161,9 @@
                       <div class="flex items-center space-x-3 lg:pl-2">
                         <div x-data="{}">
                           @if($account->suspended)
-                            <x-heroicon-s-ban class="h-5 w-5 text-blue-600" x-tooltip.raw="Account Suspended" />
+                            <x-heroicon-s-no-symbol class="h-5 w-5 text-blue-600" x-tooltip.raw="Account Suspended" />
                           @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-                            <x-heroicon-s-exclamation class="h-5 w-5 text-red-500" x-tooltip.raw="Disk Warning" />
+                            <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" x-tooltip.raw="Disk Warning" />
                           @else
                             <div class="flex-shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
                           @endif
@@ -212,7 +212,7 @@
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                       <a href="{{ $account->server->whm_url }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                        <x-heroicon-s-external-link class="-ml-0.5 h-4 w-4" />
+                        <x-heroicon-s-arrow-top-right-on-square class="-ml-0.5 h-4 w-4" />
                       </a>
                     </td>
                   </tr>
