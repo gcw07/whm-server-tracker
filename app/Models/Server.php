@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\UptimeMonitor\Models\Monitor;
 
 /**
  * App\Models\Server
@@ -112,6 +113,19 @@ class Server extends Model
     public function findAccount($username)
     {
         return $this->fresh()->accounts()->where('user', $username)->first();
+    }
+
+    public function removeMonitors()
+    {
+        foreach ($this->accounts as $account) {
+            if (Account::where('domain', $account->domain)->count() > 1) {
+                continue;
+            }
+
+            if ($monitor = Monitor::where('url', $account->domain_url)->first()) {
+                $monitor->delete();
+            }
+        }
     }
 
     public function scopeWithTokens(Builder $query): void

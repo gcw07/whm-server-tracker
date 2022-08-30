@@ -6,6 +6,7 @@ use App\Models\Server;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Spatie\UptimeMonitor\Models\Monitor;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -209,10 +210,16 @@ it('it will remove accounts that no longer exists on server', function () {
         'user' => 'firstsite',
     ]);
 
-    Account::factory()->create([
+    $account = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'site-to-remove.com',
         'user' => 'sitetoremove',
+    ]);
+
+    Monitor::create([
+        'url' => $account->domain_url,
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
     ]);
 
     $data['data']['acct'] = [
@@ -254,10 +261,16 @@ it('will only remove accounts that no longer exists on the server that is being 
         'user' => 'firstsite',
     ]);
 
-    Account::factory()->create([
+    $account = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'site-to-remove.com',
         'user' => 'sitetoremove',
+    ]);
+
+    Monitor::create([
+        'url' => $account->domain_url,
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
     ]);
 
     $data['data']['acct'] = [
@@ -286,6 +299,360 @@ it('will only remove accounts that no longer exists on the server that is being 
 
     $this->assertCount(1, $serverB->fresh()->accounts);
     $this->assertEquals(2, Account::count());
+});
+
+it('it will add a monitor when adding a new account', function () {
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $account = $this->server->fresh()->accounts->first();
+
+    $this->assertDatabaseHas('monitors', [
+        'url' => $account->domain_url,
+    ]);
+});
+
+it('it will update a monitor when updating an account if the url has changed', function () {
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+    ]);
+
+    Monitor::create([
+        'url' => $account->domain_url,
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
+    $this->assertDatabaseHas('monitors', [
+        'url' => 'https://my-site.com',
+    ]);
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-new-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $this->assertDatabaseHas('monitors', [
+        'url' => 'https://my-new-site.com',
+    ]);
+
+    $this->assertDatabaseMissing('monitors', [
+        'url' => 'https://my-site.com',
+    ]);
+});
+
+it('it will skip updating a monitor when updating an account if the url remains the same', function () {
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+        'suspended' => false,
+    ]);
+
+    $monitorToCheck = Monitor::create([
+        'url' => $account->domain_url,
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
+    tap(Monitor::where('url', $account->domain_url)->first(), function ($monitor) {
+        $this->assertEquals('https://my-site.com', $monitor->url);
+    });
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    tap(Monitor::where('url', $account->domain_url)->first(), function ($monitor) use ($monitorToCheck) {
+        $this->assertEquals('https://my-site.com', $monitor->url);
+        $this->assertTrue($monitor->is($monitorToCheck));
+        $this->assertEquals($monitorToCheck->created_at, $monitor->created_at);
+    });
+});
+
+it('it will remove the monitor when an account is removed', function () {
+    Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'first-site.com',
+        'user' => 'firstsite',
+    ]);
+
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'site-to-remove.com',
+        'user' => 'sitetoremove',
+    ]);
+
+    Monitor::create([
+        'url' => $account->domain_url,
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
+    $this->assertDatabaseHas('monitors', [
+        'url' => 'https://site-to-remove.com',
+    ]);
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'first-site.com',
+            'user' => 'firstsite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $this->assertDatabaseMissing('monitors', [
+        'url' => 'https://site-to-remove.com',
+    ]);
+});
+
+it('it will not add a monitor when adding a new account if the account is suspended', function () {
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 1,
+            'suspendreason' => 'suspended',
+            'suspendtime' => '22 Jan 5 10:35',
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $account = $this->server->fresh()->accounts->first();
+
+    $this->assertDatabaseMissing('monitors', [
+        'url' => $account->domain_url,
+    ]);
+});
+
+it('it will add a monitor when updating an account if the account is no longer suspended', function () {
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+        'suspended' => true,
+    ]);
+
+    $this->assertDatabaseMissing('monitors', [
+        'url' => 'https://my-site.com',
+    ]);
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $this->assertDatabaseHas('monitors', [
+        'url' => 'https://my-site.com',
+    ]);
+});
+
+it('it will remove a monitor when updating an account if the account is suspended', function () {
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+        'suspended' => false,
+    ]);
+
+    Monitor::create([
+        'url' => $account->domain_url,
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
+    $this->assertDatabaseHas('monitors', [
+        'url' => 'https://my-site.com',
+    ]);
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 1,
+            'suspendreason' => 'suspended',
+            'suspendtime' => '22 Jan 5 10:35',
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $this->assertDatabaseMissing('monitors', [
+        'url' => 'https://my-site.com',
+    ]);
+});
+
+it('it will only add a monitor when adding a new account, if it does not already exist', function () {
+    $serverB = Server::factory()->create();
+
+    $account = Account::factory()->create([
+        'server_id' => $serverB->id,
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+    ]);
+
+    Monitor::create([
+        'url' => $account->domain_url,
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $account = $this->server->fresh()->accounts->first();
+
+    $this->assertDatabaseHas('monitors', [
+        'url' => $account->domain_url,
+    ]);
+});
+
+it('will only remove a monitor if the account no longer exists on any servers', function () {
+    $serverB = Server::factory()->create();
+
+    // This account should be kept because it is on another server
+    Account::factory()->create([
+        'server_id' => $serverB->id,
+        'domain' => 'site-to-remove.com',
+        'user' => 'sitetoremove',
+    ]);
+
+    Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'first-site.com',
+        'user' => 'firstsite',
+    ]);
+
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'site-to-remove.com',
+        'user' => 'sitetoremove',
+    ]);
+
+    Monitor::create([
+        'url' => $account->domain_url,
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'first-site.com',
+            'user' => 'firstsite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    $this->assertEquals(3, Account::count());
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    $this->assertDatabaseHas('monitors', [
+        'url' => $account->domain_url,
+    ]);
 });
 
 it('can get whm url', function () {

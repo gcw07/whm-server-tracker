@@ -5,6 +5,7 @@ use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Spatie\UptimeMonitor\Models\Monitor;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -51,4 +52,42 @@ test('accounts are deleted when a server is deleted', function () {
 
     $this->assertEquals(2, Server::count());
     $this->assertEquals(1, Account::count());
+});
+
+test('monitors are deleted when a server is deleted', function () {
+    $server = Server::factory()
+        ->has(Account::factory()->count(5))
+        ->create(['name' => 'my-server-name']);
+
+    foreach ($server->accounts as $account) {
+        Monitor::create([
+            'url' => $account->domain_url,
+            'uptime_check_enabled' => true,
+            'certificate_check_enabled' => true,
+        ]);
+    }
+
+    $otherServer = Server::factory()
+        ->has(Account::factory()->count(1))
+        ->create(['name' => 'other-server-name']);
+
+    foreach ($otherServer->accounts as $account) {
+        Monitor::create([
+            'url' => $account->domain_url,
+            'uptime_check_enabled' => true,
+            'certificate_check_enabled' => true,
+        ]);
+    }
+
+    $this->assertEquals(6, Monitor::count());
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test(ServerDelete::class, ['server' => $server])
+        ->call('delete')
+        ->assertRedirect(route('servers.index'));
+
+    $this->assertEquals(2, Server::count());
+    $this->assertEquals(1, Account::count());
+    $this->assertEquals(1, Monitor::count());
 });

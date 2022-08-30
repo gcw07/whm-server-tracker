@@ -51,6 +51,13 @@ class NavigationItems extends Component
                 'active' => $this->isActiveRoute('accounts.*'),
                 'mobileOnly' => false,
             ],
+            [
+                'name' => 'Monitors',
+                'url' => route('monitors.index'),
+                'icon' => 'heroicon-s-sparkles',
+                'active' => $this->isActiveRoute('monitors.*'),
+                'mobileOnly' => false,
+            ],
         ];
     }
 
