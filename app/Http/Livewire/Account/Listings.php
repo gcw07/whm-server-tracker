@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Account;
 
 use App\Http\Livewire\WithCache;
 use App\Models\Account;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,10 +13,12 @@ class Listings extends Component
     use WithPagination, WithCache;
 
     public string|null $sortBy = null;
+    public string|null $filterBy = null;
 
     public function mount()
     {
         $this->sortBy = $this->getCache('accounts', 'sortBy');
+        $this->filterBy = $this->getCache('accounts', 'filterBy');
     }
 
     public function render()
@@ -37,6 +40,16 @@ class Listings extends Component
         $this->putCache('accounts', 'sortBy', $this->sortBy);
     }
 
+    public function filterListingsBy($name)
+    {
+        $this->filterBy = match ($name) {
+            'duplicates' => 'duplicates',
+            default => null,
+        };
+
+        $this->putCache('accounts', 'filterBy', $this->filterBy);
+    }
+
     protected function query()
     {
         return Account::query()
@@ -56,6 +69,19 @@ class Listings extends Component
                 return $query->orderBy('sort_disk_usage', 'ASC');
             }, function ($query) {
                 return $query->orderBy('domain');
+            })
+            ->when($this->filterBy, function ($query) {
+                if ($this->filterBy === 'duplicates') {
+                    return $query->whereExists(function ($query) {
+                        $query->select(DB::raw(1))
+                            ->from('accounts', 'a')
+                            ->whereColumn('a.domain', 'accounts.domain')
+                            ->limit(1)
+                            ->offset(1);
+                    });
+                }
+
+                return $query;
             })
             ->paginate(50);
     }
