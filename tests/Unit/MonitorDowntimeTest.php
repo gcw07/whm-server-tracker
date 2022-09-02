@@ -2,7 +2,6 @@
 
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
-use Spatie\UptimeMonitor\MonitorRepository;
 
 uses(LazilyRefreshDatabase::class);
 
