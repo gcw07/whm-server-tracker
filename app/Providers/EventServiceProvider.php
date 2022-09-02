@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use App\Events\FetchedDataFailedEvent;
 use App\Events\FetchedDataSucceededEvent;
+use App\Listeners\SaveDowntimeStats;
 use App\Listeners\SendFetchedDataFailedNotification;
 use App\Listeners\SendFetchedDataSucceededNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Spatie\UptimeMonitor\Events\UptimeCheckRecovered;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,10 @@ class EventServiceProvider extends ServiceProvider
 
         FetchedDataFailedEvent::class => [
             SendFetchedDataFailedNotification::class,
+        ],
+
+        UptimeCheckRecovered::class => [
+            SaveDowntimeStats::class,
         ],
 
         Registered::class => [
