@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\Monitor;
 
 use App\Models\Account;
+use App\Models\Monitor;
 use Livewire\Component;
-use Spatie\UptimeMonitor\Models\Monitor;
 use Usernotnull\Toast\Concerns\WireToast;
 
 class Details extends Component
@@ -26,6 +26,9 @@ class Details extends Component
 
         return view('livewire.monitor.details', [
             'accounts' => $this->accountQuery(),
+            'uptimeForToday' => $this->monitor->uptime_for_today,
+            'uptimeForLastSevenDays' => $this->monitor->uptime_for_last_seven_days,
+            'uptimeForLastThirtyDays' => $this->monitor->uptime_for_last_thirty_days,
         ])->layoutData(['title' => 'Monitor Details']);
     }
 
