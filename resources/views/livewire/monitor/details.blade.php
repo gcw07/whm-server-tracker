@@ -117,6 +117,28 @@
                     <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->uptime_last_check_date?->diffForHumans() }}</dd>
                   </div>
+                  <div class="py-4 sm:py-5 sm:px-6">
+                    <div class="flex w-full items-center justify-between">
+                      <div>
+                        <dt class="text-xs font-normal text-gray-500">Today</dt>
+                        <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
+                          {{ $uptimeForToday }}%
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="text-xs font-normal text-gray-500">Last 7 Days</dt>
+                        <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
+                          {{ $uptimeForLastSevenDays }}%
+                        </dd>
+                      </div>
+                      <div>
+                        <dt class="text-xs font-normal text-gray-500">Last 30 Days</dt>
+                        <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
+                          {{ $uptimeForLastThirtyDays }}%
+                        </dd>
+                      </div>
+                    </div>
+                  </div>
                   @if($monitor->uptime_status === 'down')
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                       <dt class="text-sm font-medium text-gray-500">Failure Reason</dt>
