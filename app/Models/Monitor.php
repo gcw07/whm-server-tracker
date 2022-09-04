@@ -118,11 +118,9 @@ class Monitor extends BaseMonitor
             ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('date')
             ->get()
-            ->mapWithKeys(function ($item) {
-                return [
-                    $item->date->format('Y-m-d') => $item->downtime,
-                ];
-            });
+            ->mapWithKeys(fn($item) => [
+                $item->date->format('Y-m-d') => $item->downtime,
+            ]);
 
         $uptimePercentage = collect($dates)->mapWithKeys(function ($item) use ($stats) {
             $date = $item->format('Y-m-d');
