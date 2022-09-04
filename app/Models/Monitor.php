@@ -110,12 +110,11 @@ class Monitor extends BaseMonitor
     {
         $dates = CarbonPeriod::create($startDate, '1 day', $endDate);
 
-        $stats = DowntimeStat::query()
+        $stats = $this->downtimeStats()
             ->select([
                 'date',
                 DB::raw('SUM(downtime_period) as downtime'),
             ])
-            ->where('monitor_id', $this->id)
             ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('date')
             ->get()
