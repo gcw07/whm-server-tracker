@@ -30,13 +30,13 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property string $certificate_check_failure_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DowntimeStat[] $downtimeStats
+ * @property-read int|null $downtime_stats_count
  * @property-read string $certificate_status_as_emoji
  * @property-read string $chunked_last_certificate_check_failure_reason
  * @property-read string $chunked_last_failure_reason
  * @property-read string $raw_url
  * @property-read string $uptime_status_as_emoji
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DowntimeStat[] $stats
- * @property-read int|null $stats_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor enabled()
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor newModelQuery()
@@ -68,7 +68,7 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  */
 class Monitor extends BaseMonitor
 {
-    public function stats(): HasMany
+    public function downtimeStats(): HasMany
     {
         return $this->hasMany(DowntimeStat::class);
     }
