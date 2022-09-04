@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\Monitor;
 
 use App\Http\Livewire\WithCache;
+use App\Models\Monitor;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Spatie\UptimeMonitor\Models\Monitor;
 
 class Listings extends Component
 {
