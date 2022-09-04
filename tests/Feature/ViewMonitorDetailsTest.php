@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Livewire\Monitor\Details as MonitorDetails;
+use App\Models\Monitor;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
-use Spatie\UptimeMonitor\Models\Monitor;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -16,7 +16,8 @@ test('guests can not view monitor details page', function () {
 });
 
 test('an authorized user can view monitor details page', function () {
-    $monitor = MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
 
     $this->actingAs(User::factory()->create());
 
@@ -25,10 +26,12 @@ test('an authorized user can view monitor details page', function () {
 });
 
 test('an authorized user can turn off uptime checks from monitor details', function () {
-    $monitor = MonitorFactory::new()->create([
+    MonitorFactory::new()->create([
         'url' => 'https://myserver.com',
         'uptime_check_enabled' => true,
     ]);
+
+    $monitor = Monitor::first();
 
     $this->actingAs(User::factory()->create());
 
@@ -41,10 +44,12 @@ test('an authorized user can turn off uptime checks from monitor details', funct
 });
 
 test('an authorized user can turn on uptime checks from monitor details', function () {
-    $monitor = MonitorFactory::new()->create([
+    MonitorFactory::new()->create([
         'url' => 'https://myserver.com',
         'uptime_check_enabled' => false,
     ]);
+
+    $monitor = Monitor::first();
 
     $this->actingAs(User::factory()->create());
 
@@ -57,10 +62,12 @@ test('an authorized user can turn on uptime checks from monitor details', functi
 });
 
 test('an authorized user can turn off ssl certificate checks from monitor details', function () {
-    $monitor = MonitorFactory::new()->create([
+    MonitorFactory::new()->create([
         'url' => 'https://myserver.com',
         'certificate_check_enabled' => true,
     ]);
+
+    $monitor = Monitor::first();
 
     $this->actingAs(User::factory()->create());
 
@@ -73,10 +80,12 @@ test('an authorized user can turn off ssl certificate checks from monitor detail
 });
 
 test('an authorized user can turn on ssl certificate checks from monitor details', function () {
-    $monitor = MonitorFactory::new()->create([
+    MonitorFactory::new()->create([
         'url' => 'https://myserver.com',
         'certificate_check_enabled' => false,
     ]);
+
+    $monitor = Monitor::first();
 
     $this->actingAs(User::factory()->create());
 
