@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\CarbonPeriod;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
 
 /**
@@ -71,5 +74,67 @@ class Monitor extends BaseMonitor
     public function downtimeStats(): HasMany
     {
         return $this->hasMany(DowntimeStat::class);
+    }
+
+    protected function uptimeForToday(): Attribute
+    {
+        $startDate = today()->format('Y-m-d');
+        $endDate = today()->format('Y-m-d');
+
+        return Attribute::make(
+            get: fn () => $this->calculateUptime($startDate, $endDate),
+        );
+    }
+
+    protected function uptimeForLastSevenDays(): Attribute
+    {
+        $startDate = today()->subDays(6)->format('Y-m-d');
+        $endDate = today()->format('Y-m-d');
+
+        return Attribute::make(
+            get: fn () => $this->calculateUptime($startDate, $endDate),
+        );
+    }
+
+    protected function uptimeForLastThirtyDays(): Attribute
+    {
+        $startDate = today()->subDays(29)->format('Y-m-d');
+        $endDate = today()->format('Y-m-d');
+
+        return Attribute::make(
+            get: fn () => $this->calculateUptime($startDate, $endDate),
+        );
+    }
+
+    public function calculateUptime($startDate, $endDate): float
+    {
+        $dates = CarbonPeriod::create($startDate, '1 day', $endDate);
+
+        $stats = DowntimeStat::query()
+            ->select([
+                'date',
+                DB::raw('SUM(downtime_period) as downtime'),
+            ])
+            ->where('monitor_id', $this->id)
+            ->whereBetween('date', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [
+                    $item->date->format('Y-m-d') => $item->downtime,
+                ];
+            });
+
+        $uptimePercentage = collect($dates)->mapWithKeys(function ($item) use ($stats) {
+            $date = $item->format('Y-m-d');
+
+            if (isset($stats[$date])) {
+                return [$date => 100 - round(($stats[$date] / 86400) * 100, 2)];
+            }
+
+            return [$date => 100];
+        })->average();
+
+        return round($uptimePercentage, 2);
     }
 }
