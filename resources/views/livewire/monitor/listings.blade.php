@@ -116,10 +116,31 @@
                 <span class="flex-1 flex space-x-2 truncate">
                   <span class="flex flex-col text-gray-500 text-sm truncate">
                     <span class="truncate text-gray-700 font-semibold">
-                      {{ $monitor->url }}
+                      {{ preg_replace("(^https?://)", "", $monitor->url ) }}
                     </span>
-                    <span><span class="font-medium">0</span> accounts</span>
-                    <span>8%</span>
+                    @if(!$monitor->uptime_check_enabled)
+                      <span class="font-medium">Uptime - <span class="font-normal">Disabled</span></span>
+                    @else
+                      @if($monitor->uptime_status === 'down')
+                        <span class="font-medium">Uptime - <span class="font-normal">Down</span></span>
+                      @elseif($monitor->uptime_status === 'not yet checked')
+                        <span class="font-medium">Uptime - <span class="font-normal">Pending</span></span>
+                      @else
+                        <span class="font-medium">Uptime - <span class="font-normal">Up</span></span>
+                      @endif
+                    @endif
+
+                    @if(!$monitor->certificate_check_enabled)
+                      <span class="font-medium">Certificate - <span class="font-normal">Disabled</span></span>
+                    @else
+                      @if($monitor->certificate_status === 'invalid')
+                        <span class="font-medium">Certificate - <span class="font-normal">Invalid</span></span>
+                      @elseif($monitor->certificate_status === 'not yet checked')
+                        <span class="font-medium">Certificate - <span class="font-normal">Pending</span></span>
+                      @else
+                        <span class="font-medium">Certificate - <span class="font-normal">Ok</span></span>
+                      @endif
+                    @endif
                   </span>
                 </span>
                 <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
