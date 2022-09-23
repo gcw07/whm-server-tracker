@@ -7,9 +7,15 @@ use App\Events\FetchedDataSucceededEvent;
 use App\Listeners\SaveDowntimeStats;
 use App\Listeners\SendFetchedDataFailedNotification;
 use App\Listeners\SendFetchedDataSucceededNotification;
+use App\Listeners\SendUptimeCheckFailed;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Spatie\UptimeMonitor\Events\CertificateCheckFailed;
+use Spatie\UptimeMonitor\Events\CertificateCheckSucceeded;
+use Spatie\UptimeMonitor\Events\CertificateExpiresSoon;
+use Spatie\UptimeMonitor\Events\UptimeCheckFailed;
 use Spatie\UptimeMonitor\Events\UptimeCheckRecovered;
+use Spatie\UptimeMonitor\Events\UptimeCheckSucceeded;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -25,6 +31,17 @@ class EventServiceProvider extends ServiceProvider
 
         FetchedDataFailedEvent::class => [
             SendFetchedDataFailedNotification::class,
+        ],
+
+//        UptimeCheckFailed::class,
+//        UptimeCheckSucceeded::class,
+//        UptimeCheckRecovered::class,
+//        CertificateCheckSucceeded::class,
+//        CertificateCheckFailed::class,
+//        CertificateExpiresSoon::class,
+
+        UptimeCheckFailed::class => [
+            SendUptimeCheckFailed::class,
         ],
 
         UptimeCheckRecovered::class => [
