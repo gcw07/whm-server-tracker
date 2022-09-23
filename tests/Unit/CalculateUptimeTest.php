@@ -25,7 +25,7 @@ it('calculates uptime percentage over a date span', function () {
         DowntimeStat::factory()->create([
             'monitor_id' => $monitor->id,
             'date' => $date->format('Y-m-d'),
-            'downtime_period' => 120 // 2 minutes
+            'downtime_period' => 120, // 2 minutes
         ]);
     }
 
@@ -33,7 +33,7 @@ it('calculates uptime percentage over a date span', function () {
     DowntimeStat::factory()->create([
         'monitor_id' => $monitor->id,
         'date' => today()->format('Y-m-d'),
-        'downtime_period' => 120 // 2 minutes
+        'downtime_period' => 120, // 2 minutes
     ]);
 
     tap($monitor->fresh(), function ($monitor) {
