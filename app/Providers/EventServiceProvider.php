@@ -8,6 +8,7 @@ use App\Listeners\SaveDowntimeStats;
 use App\Listeners\SendFetchedDataFailedNotification;
 use App\Listeners\SendFetchedDataSucceededNotification;
 use App\Listeners\SendUptimeCheckFailed;
+use App\Listeners\SendUptimeCheckRecovered;
 use App\Listeners\SendUptimeCheckSucceeded;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -50,6 +51,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         UptimeCheckRecovered::class => [
+            SendUptimeCheckRecovered::class,
             SaveDowntimeStats::class,
         ],
     ];

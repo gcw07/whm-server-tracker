@@ -10,7 +10,7 @@ return [
 
         'notifications' => [
             \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckFailed::class => [],
-            \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckRecovered::class => ['mail'],
+            \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckRecovered::class => [],
             \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckSucceeded::class => [],
 
             \Spatie\UptimeMonitor\Notifications\Notifications\CertificateCheckFailed::class => ['mail'],
