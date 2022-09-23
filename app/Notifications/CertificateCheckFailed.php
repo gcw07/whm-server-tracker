@@ -5,7 +5,6 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Spatie\UptimeMonitor\Events\CertificateCheckFailed as InValidCertificateFoundEvent;
-use Spatie\UptimeMonitor\Notifications\BaseNotification;
 
 class CertificateCheckFailed extends BaseNotification
 {

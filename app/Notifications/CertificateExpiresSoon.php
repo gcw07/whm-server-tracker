@@ -5,7 +5,6 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Spatie\UptimeMonitor\Events\CertificateExpiresSoon as SoonExpiringSslCertificateFoundEvent;
-use Spatie\UptimeMonitor\Notifications\BaseNotification;
 
 class CertificateExpiresSoon extends BaseNotification
 {
