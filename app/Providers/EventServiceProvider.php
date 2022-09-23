@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Events\FetchedDataFailedEvent;
 use App\Events\FetchedDataSucceededEvent;
 use App\Listeners\SaveDowntimeStats;
+use App\Listeners\SendCertificateCheckFailed;
 use App\Listeners\SendCertificateCheckSucceeded;
 use App\Listeners\SendFetchedDataFailedNotification;
 use App\Listeners\SendFetchedDataSucceededNotification;
@@ -58,6 +59,10 @@ class EventServiceProvider extends ServiceProvider
 
         CertificateCheckSucceeded::class => [
             SendCertificateCheckSucceeded::class,
+        ],
+
+        CertificateCheckFailed::class => [
+            SendCertificateCheckFailed::class,
         ],
     ];
 
