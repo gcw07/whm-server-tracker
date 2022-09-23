@@ -37,7 +37,7 @@ class EventServiceProvider extends ServiceProvider
         FetchedDataFailedEvent::class => [
             SendFetchedDataFailedNotification::class,
         ],
-        
+
         UptimeCheckFailed::class => [
             SendUptimeCheckFailed::class,
         ],

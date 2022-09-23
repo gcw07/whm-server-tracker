@@ -8,7 +8,6 @@ use Spatie\UptimeMonitor\Events\CertificateExpiresSoon;
 
 class SendCertificateExpiresSoon
 {
-
     public function __construct()
     {
         //

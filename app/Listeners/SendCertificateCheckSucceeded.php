@@ -8,7 +8,6 @@ use Spatie\UptimeMonitor\Events\CertificateCheckSucceeded;
 
 class SendCertificateCheckSucceeded
 {
-
     public function __construct()
     {
         //

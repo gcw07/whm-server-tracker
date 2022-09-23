@@ -8,7 +8,6 @@ use Spatie\UptimeMonitor\Events\UptimeCheckRecovered;
 
 class SendUptimeCheckRecovered
 {
-
     public function __construct()
     {
         //
