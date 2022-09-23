@@ -7,6 +7,7 @@ use App\Events\FetchedDataSucceededEvent;
 use App\Listeners\SaveDowntimeStats;
 use App\Listeners\SendCertificateCheckFailed;
 use App\Listeners\SendCertificateCheckSucceeded;
+use App\Listeners\SendCertificateExpiresSoon;
 use App\Listeners\SendFetchedDataFailedNotification;
 use App\Listeners\SendFetchedDataSucceededNotification;
 use App\Listeners\SendUptimeCheckFailed;
@@ -63,6 +64,10 @@ class EventServiceProvider extends ServiceProvider
 
         CertificateCheckFailed::class => [
             SendCertificateCheckFailed::class,
+        ],
+
+        CertificateExpiresSoon::class => [
+            SendCertificateExpiresSoon::class,
         ],
     ];
 

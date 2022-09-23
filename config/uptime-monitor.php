@@ -14,7 +14,7 @@ return [
             \Spatie\UptimeMonitor\Notifications\Notifications\UptimeCheckSucceeded::class => [],
 
             \Spatie\UptimeMonitor\Notifications\Notifications\CertificateCheckFailed::class => [],
-            \Spatie\UptimeMonitor\Notifications\Notifications\CertificateExpiresSoon::class => ['mail'],
+            \Spatie\UptimeMonitor\Notifications\Notifications\CertificateExpiresSoon::class => [],
             \Spatie\UptimeMonitor\Notifications\Notifications\CertificateCheckSucceeded::class => [],
         ],
 
