@@ -20,7 +20,7 @@ class UptimeCheckSucceeded extends BaseNotification
 
     public function via($notifiable)
     {
-        return ['mail'];
+        return []; // restore mail once selection part is done
     }
 
     /**
