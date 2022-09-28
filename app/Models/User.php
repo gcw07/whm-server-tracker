@@ -17,6 +17,7 @@ use Illuminate\Notifications\Notifiable;
  * @property Lower $email
  * @property string $password
  * @property string|null $remember_token
+ * @property \App\Collections\NotificationsCollection|null $notification_types
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Login|null $lastLogin
@@ -33,6 +34,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereNotificationTypes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
@@ -52,7 +54,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email' => Lower::class,
-        'notifications' => Notifications::class,
+        'notification_types' => Notifications::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

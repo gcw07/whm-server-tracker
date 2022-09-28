@@ -15,6 +15,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property int $downtime_period
  * @property-read Monitor $monitor
  *
+ * @method static \Database\Factories\DowntimeStatFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat query()
