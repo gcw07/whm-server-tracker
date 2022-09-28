@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\Lower;
+use App\Casts\Notifications;
 use App\Models\Concerns\HasLogins;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,6 +52,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email' => Lower::class,
+        'notifications' => Notifications::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
