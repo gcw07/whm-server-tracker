@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
                 'certificate_expires_soon' => false,
                 'fetched_server_data_succeeded' => false,
                 'fetched_server_data_failed' => false,
-            ]
+            ],
         ]);
     }
 }

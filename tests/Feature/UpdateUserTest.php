@@ -41,7 +41,7 @@ test('an authorized user can edit a user', function () {
                 'certificate_expires_soon' => false,
                 'fetched_server_data_succeeded' => false,
                 'fetched_server_data_failed' => false,
-            ]
+            ],
         ])
         ->call('save')
         ->assertRedirect(route('users.index'));
@@ -84,7 +84,7 @@ test('email can be the same for the same user for user edit', function () {
                 'certificate_expires_soon' => false,
                 'fetched_server_data_succeeded' => false,
                 'fetched_server_data_failed' => false,
-            ]
+            ],
         ])
         ->call('save')
         ->assertRedirect(route('users.index'));

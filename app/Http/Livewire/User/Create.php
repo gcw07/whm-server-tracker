@@ -26,7 +26,7 @@ class Create extends Component
             'certificate_expires_soon' => false,
             'fetched_server_data_succeeded' => false,
             'fetched_server_data_failed' => false,
-        ]
+        ],
     ];
 
     protected $validationAttributes = [
