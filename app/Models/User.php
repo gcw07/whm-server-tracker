@@ -28,7 +28,7 @@ use Illuminate\Notifications\Notifiable;
  * @property-read int|null $notifications_count
  *
  * @method static \Database\Factories\UserFactory factory(...$parameters)
- * @method static Builder|User forEvent($event)
+ * @method static Builder|User forNotificationType($type)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
  * @method static Builder|User query()
@@ -71,8 +71,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function scopeForEvent(Builder $query, $event): void
+    public function scopeForNotificationType(Builder $query, $type): void
     {
-        $query->where("notification_types->$event", true);
+        $query->where("notification_types->$type", true);
     }
 }
