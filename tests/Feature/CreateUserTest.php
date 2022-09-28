@@ -33,6 +33,16 @@ test('an authorized user can add a valid user', function () {
             'email' => 'grant@example.com',
             'password' => 'NMeHq?Bzr#Nd#bt4',
             'password_confirmation' => 'NMeHq?Bzr#Nd#bt4',
+            'notification_types' => [
+                'uptime_check_failed' => false,
+                'uptime_check_succeeded' => false,
+                'uptime_check_recovered' => false,
+                'certificate_check_succeeded' => false,
+                'certificate_check_failed' => false,
+                'certificate_expires_soon' => false,
+                'fetched_server_data_succeeded' => false,
+                'fetched_server_data_failed' => false,
+            ]
         ])
         ->call('save')
         ->assertRedirect(route('users.index'));
@@ -78,14 +88,24 @@ it('validates rules for create user form', function ($data) {
     $field = $data[0];
     $value = $data[1];
     $errorMessage = $data[2];
+    $subField = $data[3] ?? false;
 
     $this->actingAs(User::factory()->create());
 
-    $response = Livewire::test(UserCreate::class)
-        ->set('state', $this->requestData->create([$field => $value]))
-        ->call('save');
+    if ($subField) {
+        $response = Livewire::test(UserCreate::class)
+            ->set('state', $this->requestData->create([$field => [$subField => $value]]))
+            ->call('save');
 
-    $response->assertHasErrors(["state.$field" => $errorMessage]);
+        $response->assertHasErrors(["state.$field.$subField" => $errorMessage]);
+    } else {
+        $response = Livewire::test(UserCreate::class)
+            ->set('state', $this->requestData->create([$field => $value]))
+            ->call('save');
+
+        $response->assertHasErrors(["state.$field" => $errorMessage]);
+    }
+
     $this->assertEquals(1, User::count());
 })->with([
     fn () => ['name', '', 'required'],
@@ -93,4 +113,14 @@ it('validates rules for create user form', function ($data) {
     fn () => ['email', 'not-valid-email', 'email'],
     fn () => ['password', '', 'required'],
     fn () => ['password', Str::random(5), 'Illuminate\Validation\Rules\Password'],
+    fn () => ['notification_types', [], 'required'],
+    fn () => ['notification_types', 'not-an-array', 'array'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_failed'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_succeeded'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_recovered'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_check_succeeded'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_check_failed'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_expires_soon'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'fetched_server_data_succeeded'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'fetched_server_data_failed'],
 ]);
