@@ -32,6 +32,16 @@ test('an authorized user can edit a user', function () {
         ->set('state', [
             'name' => 'Della Duck',
             'email' => 'della@example.com',
+            'notification_types' => [
+                'uptime_check_failed' => false,
+                'uptime_check_succeeded' => false,
+                'uptime_check_recovered' => false,
+                'certificate_check_succeeded' => false,
+                'certificate_check_failed' => false,
+                'certificate_expires_soon' => false,
+                'fetched_server_data_succeeded' => false,
+                'fetched_server_data_failed' => false,
+            ]
         ])
         ->call('save')
         ->assertRedirect(route('users.index'));
@@ -65,6 +75,16 @@ test('email can be the same for the same user for user edit', function () {
         ->set('state', [
             'name' => 'Mike Smith',
             'email' => 'mike@example.com',
+            'notification_types' => [
+                'uptime_check_failed' => false,
+                'uptime_check_succeeded' => false,
+                'uptime_check_recovered' => false,
+                'certificate_check_succeeded' => false,
+                'certificate_check_failed' => false,
+                'certificate_expires_soon' => false,
+                'fetched_server_data_succeeded' => false,
+                'fetched_server_data_failed' => false,
+            ]
         ])
         ->call('save')
         ->assertRedirect(route('users.index'));
@@ -79,16 +99,35 @@ it('validate rules for user edit', function ($data) {
     $field = $data[0];
     $value = $data[1];
     $errorMessage = $data[2];
+    $subField = $data[3] ?? false;
 
     $this->actingAs(User::factory()->create());
 
-    $response = Livewire::test(UserEdit::class, ['user' => $this->user])
-        ->set('state', $this->requestData->create([$field => $value]))
-        ->call('save');
+    if ($subField) {
+        $response = Livewire::test(UserEdit::class, ['user' => $this->user])
+            ->set('state', $this->requestData->create([$field => [$subField => $value]]))
+            ->call('save');
 
-    $response->assertHasErrors(["state.$field" => $errorMessage]);
+        $response->assertHasErrors(["state.$field.$subField" => $errorMessage]);
+    } else {
+        $response = Livewire::test(UserEdit::class, ['user' => $this->user])
+            ->set('state', $this->requestData->create([$field => $value]))
+            ->call('save');
+
+        $response->assertHasErrors(["state.$field" => $errorMessage]);
+    }
 })->with([
     fn () => ['name', '', 'required'],
     fn () => ['email', '', 'required'],
     fn () => ['email', 'not-valid-email', 'email'],
+    fn () => ['notification_types', [], 'required'],
+    fn () => ['notification_types', 'not-an-array', 'array'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_failed'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_succeeded'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_recovered'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_check_succeeded'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_check_failed'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_expires_soon'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'fetched_server_data_succeeded'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'fetched_server_data_failed'],
 ]);
