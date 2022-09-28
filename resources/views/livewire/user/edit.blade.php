@@ -40,6 +40,108 @@
           </div>
         </div>
 
+        <div class="space-y-6 divide-y divide-gray-200 pt-8 sm:space-y-5 sm:pt-10">
+          <div>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Notifications</h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">Be notified when events happen to the various sites you track.</p>
+          </div>
+          <div class="space-y-6 divide-y divide-gray-200 sm:space-y-5">
+            <div class="pt-6 sm:pt-5">
+              <div role="group" aria-labelledby="label-email">
+                <div class="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4">
+                  <div>
+                    <div class="text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700" id="label-email">By Email</div>
+                  </div>
+                  <div class="mt-4 sm:col-span-2 sm:mt-0">
+                    <div class="max-w-lg space-y-4">
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="uptime_check_succeeded" wire:model.defer="state.notification_types.uptime_check_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="uptime_check_succeeded" class="font-medium text-gray-700">Uptime Check Succeeded</label>
+                          <p class="text-gray-500">Get notified when an uptime check succeeds.</p>
+                          @error('state.notification_types.uptime_check_succeeded') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="uptime_check_failed" wire:model.defer="state.notification_types.uptime_check_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="uptime_check_failed" class="font-medium text-gray-700">Uptime Check Failed</label>
+                          <p class="text-gray-500">Get notified when an uptime check failed.</p>
+                          @error('state.notification_types.uptime_check_failed') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="uptime_check_recovered" wire:model.defer="state.notification_types.uptime_check_recovered" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="uptime_check_recovered" class="font-medium text-gray-700">Uptime Check Recovered</label>
+                          <p class="text-gray-500">Get notified when an uptime check recovers after a failure.</p>
+                          @error('state.notification_types.uptime_check_recovered') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="certificate_check_succeeded" wire:model.defer="state.notification_types.certificate_check_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="certificate_check_succeeded" class="font-medium text-gray-700">SSL Certificate Check Succeeded</label>
+                          <p class="text-gray-500">Get notified when an SSL certificate check succeeds.</p>
+                          @error('state.notification_types.certificate_check_succeeded') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="certificate_check_failed" wire:model.defer="state.notification_types.certificate_check_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="certificate_check_failed" class="font-medium text-gray-700">SSL Certificate Check Failed</label>
+                          <p class="text-gray-500">Get notified when an SSL certificate check failed.</p>
+                          @error('state.notification_types.certificate_check_failed') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="certificate_expires_soon" wire:model.defer="state.notification_types.certificate_expires_soon" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="certificate_expires_soon" class="font-medium text-gray-700">SSL Certificate Expires Soon</label>
+                          <p class="text-gray-500">Get notified when an SSL certificate is expiring soon.</p>
+                          @error('state.notification_types.certificate_expires_soon') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="fetched_server_data_succeeded" wire:model.defer="state.notification_types.fetched_server_data_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="fetched_server_data_succeeded" class="font-medium text-gray-700">Fetched Remote Server Data Succeeded</label>
+                          <p class="text-gray-500">Get notified when fetching the remote server data succeeds.</p>
+                          @error('state.notification_types.fetched_server_data_succeeded') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="fetched_server_data_failed" wire:model.defer="state.notification_types.fetched_server_data_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="fetched_server_data_failed" class="font-medium text-gray-700">Fetched Remote Server Data Failed</label>
+                          <p class="text-gray-500">Get notified when fetching the remote server data failed.</p>
+                          @error('state.notification_types.fetched_server_data_failed') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="pt-5">
           <div class="flex justify-end">
             <a href="{{ route('users.index') }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">Cancel</a>
