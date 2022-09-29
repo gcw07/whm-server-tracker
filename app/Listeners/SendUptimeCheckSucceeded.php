@@ -15,7 +15,7 @@ class SendUptimeCheckSucceeded
 
     public function handle(UptimeCheckSucceeded $event)
     {
-        $users = User::all();
+        $users = User::forNotificationType('uptime_check_succeeded')->get();
         $notification = new \App\Notifications\UptimeCheckSucceeded($event);
 
         if ($notification->isStillRelevant()) {

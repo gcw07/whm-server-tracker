@@ -15,7 +15,7 @@ class SendCertificateCheckSucceeded
 
     public function handle(CertificateCheckSucceeded $event)
     {
-        $users = User::all();
+        $users = User::forNotificationType('certificate_check_succeeded')->get();
         $notification = new \App\Notifications\CertificateCheckSucceeded($event);
 
         if ($notification->isStillRelevant()) {

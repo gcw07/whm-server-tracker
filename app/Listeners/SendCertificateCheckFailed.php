@@ -15,7 +15,7 @@ class SendCertificateCheckFailed
 
     public function handle(CertificateCheckFailed $event)
     {
-        $users = User::all();
+        $users = User::forNotificationType('certificate_check_failed')->get();
         $notification = new \App\Notifications\CertificateCheckFailed($event);
 
         if ($notification->isStillRelevant()) {

@@ -15,7 +15,7 @@ class SendCertificateExpiresSoon
 
     public function handle(CertificateExpiresSoon $event)
     {
-        $users = User::all();
+        $users = User::forNotificationType('certificate_expires_soon')->get();
         $notification = new \App\Notifications\CertificateExpiresSoon($event);
 
         if ($notification->isStillRelevant()) {
