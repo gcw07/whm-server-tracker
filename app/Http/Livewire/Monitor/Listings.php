@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Monitor;
 
 use App\Http\Livewire\WithCache;
 use App\Models\Monitor;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,10 +16,13 @@ class Listings extends Component
 
     public string|null $sortBy = null;
 
+    public string|null $filterBy = null;
+
     public function mount()
     {
         $this->hasIssues = $this->getCache('monitors', 'hasIssues', false);
         $this->sortBy = $this->getCache('monitors', 'sortBy');
+        $this->filterBy = $this->getCache('monitors', 'filterBy');
     }
 
     public function render()
@@ -61,6 +65,16 @@ class Listings extends Component
         $this->putCache('monitors', 'sortBy', $this->sortBy);
     }
 
+    public function filterListingsBy($name)
+    {
+        $this->filterBy = match ($name) {
+            'disabled' => 'disabled',
+            default => null,
+        };
+
+        $this->putCache('monitors', 'filterBy', $this->filterBy);
+    }
+
     protected function query()
     {
         return Monitor::query()
@@ -83,6 +97,16 @@ class Listings extends Component
                 return $query->orderBy('url');
             }, function ($query) {
                 return $query->orderBy('url');
+            })
+            ->when($this->filterBy, function ($query) {
+                if ($this->filterBy === 'disabled') {
+                    return $query->where(function ($query) {
+                        $query->where('uptime_check_enabled', false)
+                            ->orWhere('certificate_check_enabled', false);
+                    });
+                }
+
+                return $query;
             })
             ->paginate(50);
     }

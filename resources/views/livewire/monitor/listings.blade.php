@@ -41,9 +41,13 @@
           <div
             class="origin-top-left z-50 absolute md:origin-top-right md:right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
             role="menu" aria-orientation="vertical" aria-labelledby="filters-menu-button" tabindex="-1">
-            <button class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            <button wire:click.prevent="filterListingsBy(null)" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem" tabindex="-1" id="filters-menu-item-0">
-              Coming Soon
+              None
+            </button>
+            <button wire:click.prevent="filterListingsBy('disabled')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="filters-menu-item-1">
+              Disabled
             </button>
           </div>
         </x-navigation.dropdown>
