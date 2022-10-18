@@ -134,4 +134,11 @@ class Monitor extends BaseMonitor
 
         return round($uptimePercentage, 2);
     }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('url', 'LIKE', '%'.$search.'%');
+        });
+    }
 }
