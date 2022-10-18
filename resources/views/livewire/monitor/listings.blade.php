@@ -101,7 +101,7 @@
   <div class="mt-6">
     <!-- Begin content -->
 
-    <!-- Server list (smallest breakpoint only) -->
+    <!-- Monitor list (smallest breakpoint only) -->
     <div class="shadow sm:hidden">
       <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
         @forelse($monitors as $monitor)
@@ -160,7 +160,7 @@
       {{ $monitors->links('livewire.pagination.index') }}
     </div>
 
-    <!-- Server table (small breakpoint and up) -->
+    <!-- Monitor table (small breakpoint and up) -->
     <div class="hidden sm:block">
       <div class="mx-auto">
         <div class="flex flex-col mt-2">
