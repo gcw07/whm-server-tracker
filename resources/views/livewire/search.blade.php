@@ -45,7 +45,6 @@
       </div>
 
       <!-- Server Results -->
-
       <div class="sm:flex sm:items-center mt-6">
         <div class="sm:flex-auto">
           <h1 class="text-lg font-semibold text-gray-700">Servers</h1>
@@ -380,6 +379,181 @@
               </table>
               <!-- Pagination -->
               {{--            {{ $accounts->links('livewire.pagination.index') }}--}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monitor Results -->
+      <div class="sm:flex sm:items-center mt-8">
+        <div class="sm:flex-auto">
+          <h1 class="text-lg font-semibold text-gray-700">Monitors</h1>
+        </div>
+      </div>
+
+      <!-- Monitor list (smallest breakpoint only) -->
+      <div class="shadow sm:hidden">
+        <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
+          @forelse($monitors as $monitor)
+            <li>
+              <a href="{{ route('monitors.show', $monitor->id) }}"
+                @class([
+                 'block px-4 py-4 hover:bg-gray-50',
+                 'bg-gray-50' => $loop->even,
+                 'bg-white' => $loop->odd
+                ])>
+              <span class="flex items-center space-x-4">
+                <span class="flex-1 flex space-x-2 truncate">
+                  <span class="flex flex-col text-gray-500 text-sm truncate">
+                    <span class="truncate text-gray-700 font-semibold">
+                      {{ preg_replace("(^https?://)", "", $monitor->url ) }}
+                    </span>
+                    @if(!$monitor->uptime_check_enabled)
+                      <span class="font-medium">Uptime - <span class="font-normal">Disabled</span></span>
+                    @else
+                      @if($monitor->uptime_status === 'down')
+                        <span class="font-medium">Uptime - <span class="font-normal">Down</span></span>
+                      @elseif($monitor->uptime_status === 'not yet checked')
+                        <span class="font-medium">Uptime - <span class="font-normal">Pending</span></span>
+                      @else
+                        <span class="font-medium">Uptime - <span class="font-normal">Up</span></span>
+                      @endif
+                    @endif
+
+                    @if(!$monitor->certificate_check_enabled)
+                      <span class="font-medium">Certificate - <span class="font-normal">Disabled</span></span>
+                    @else
+                      @if($monitor->certificate_status === 'invalid')
+                        <span class="font-medium">Certificate - <span class="font-normal">Invalid</span></span>
+                      @elseif($monitor->certificate_status === 'not yet checked')
+                        <span class="font-medium">Certificate - <span class="font-normal">Pending</span></span>
+                      @else
+                        <span class="font-medium">Certificate - <span class="font-normal">Ok</span></span>
+                      @endif
+                    @endif
+                  </span>
+                </span>
+                <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
+              </span>
+              </a>
+            </li>
+          @empty
+            <li>
+            <span class="block px-4 py-4 bg-white hover:bg-gray-50">
+              No entries found.
+            </span>
+            </li>
+          @endforelse
+        </ul>
+
+        <!-- Pagination -->
+{{--        {{ $monitors->links('livewire.pagination.index') }}--}}
+      </div>
+
+      <!-- Monitor table (small breakpoint and up) -->
+      <div class="hidden sm:block">
+        <div class="mx-auto">
+          <div class="flex flex-col mt-2">
+            <div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Site
+                    </th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Uptime
+                    </th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell">
+                      Certificate
+                    </th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <span class="sr-only">Manage</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  @forelse($monitors as $monitor)
+                    <tr @class([
+                        'bg-gray-50' => $loop->even,
+                        'bg-white' => $loop->odd
+                    ])>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <div class="flex">
+                          <a href="{{ route('monitors.show', $monitor->id) }}" class="group inline-flex space-x-2 truncate text-sm">
+                            <p class="text-gray-500 truncate font-semibold group-hover:text-gray-900">
+                              {{ preg_replace("(^https?://)", "", $monitor->url ) }}
+                            </p>
+                          </a>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
+                        @if(!$monitor->uptime_check_enabled)
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-no-symbol class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
+                            <span class="text-gray-900 font-medium">Disabled</span>
+                          </div>
+                        @else
+                          @if($monitor->uptime_status === 'down')
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
+                              <span class="text-gray-900 font-medium">Down</span>
+                            </div>
+                          @elseif($monitor->uptime_status === 'not yet checked')
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-exclamation-triangle class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
+                              <span class="text-gray-900 font-medium">Pending</span>
+                            </div>
+                          @else
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                              <span class="text-gray-900 font-medium">Up</span>
+                            </div>
+                          @endif
+                        @endif
+                      </td>
+                      <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
+                        @if(!$monitor->certificate_check_enabled)
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-no-symbol class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
+                            <span class="text-gray-900 font-medium">Disabled</span>
+                          </div>
+                        @else
+                          @if($monitor->certificate_status === 'invalid')
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
+                              <span class="text-gray-900 font-medium">Invalid</span>
+                            </div>
+                          @elseif($monitor->certificate_status === 'not yet checked')
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-exclamation-triangle class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
+                              <span class="text-gray-900 font-medium">Pending</span>
+                            </div>
+                          @else
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                              <span class="text-gray-900 font-medium">Ok</span>
+                            </div>
+                          @endif
+                        @endif
+                      </td>
+                      <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
+                        <a href="{{ $monitor->url }}" target="_blank" x-data="{}" x-tooltip.raw="Visit Site" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                          <x-heroicon-m-arrow-top-right-on-square class="-ml-0.5 h-4 w-4" />
+                        </a>
+                      </td>
+                    </tr>
+                  @empty
+                    <tr class="bg-white">
+                      <td colspan="4" class="py-8 whitespace-nowrap font-semibold text-center text-sm text-gray-700">
+                        No entries found.
+                      </td>
+                    </tr>
+                  @endforelse
+                </tbody>
+              </table>
+              <!-- Pagination -->
+{{--              {{ $monitors->links('livewire.pagination.index') }}--}}
             </div>
           </div>
         </div>
