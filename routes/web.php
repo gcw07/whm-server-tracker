@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Livewire\Account\Details as AccountDetails;
 use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Monitor\Details as MonitorDetails;
@@ -38,6 +39,7 @@ Route::middleware('auth')->group(function () {
 // Account Routes...
 Route::prefix('accounts')->middleware('auth')->group(function () {
     Route::get('/', AccountListings::class)->name('accounts.index');
+    Route::get('/{account}', AccountDetails::class)->name('accounts.show');
 });
 
 // Server Routes...
