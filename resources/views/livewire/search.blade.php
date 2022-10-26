@@ -88,9 +88,9 @@
             </li>
           @empty
             <li>
-            <span class="block px-4 py-4 bg-white hover:bg-gray-50">
-              No entries found.
-            </span>
+              <span class="block px-4 py-4 bg-white hover:bg-gray-50">
+                No entries found.
+              </span>
             </li>
           @endforelse
         </ul>
@@ -260,7 +260,11 @@
               </a>
             </li>
           @empty
-            no results
+            <li>
+              <span class="block px-4 py-4 bg-white hover:bg-gray-50">
+                No entries found.
+              </span>
+            </li>
           @endforelse
         </ul>
 
