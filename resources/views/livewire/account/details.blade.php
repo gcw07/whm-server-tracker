@@ -35,7 +35,7 @@
   <div class="mt-6">
     <!-- Begin content -->
 
-    <div class="hidden sm:block">
+    <div class="sm:block">
       <dl class="mt-5 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow lg:grid-cols-3">
         <div class="lg:border-r lg:border-gray-200">
           <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
@@ -44,13 +44,15 @@
             </div>
             Details
           </dt>
-          <dl class="sm:divide-y sm:divide-gray-200 sm:px-5 sm:pt-4 sm:pb-1">
+          <dl class="sm:divide-y sm:divide-gray-200 px-5 sm:pt-4 sm:pb-1">
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt class="text-sm font-medium text-gray-400">
                 Server
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                {{ $account->server->name }}
+                <a href="{{ route('servers.show', $account->server->id) }}" class="text-gray-500 hover:text-gray-900">
+                  {{ $account->server->name }}
+                </a>
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -69,6 +71,14 @@
                 {{ $account->ip }}
               </dd>
             </div>
+            <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt class="text-sm font-medium text-gray-400">
+                Setup Date
+              </dt>
+              <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
+                {{ $account->setup_date->format("D, F j, Y, g:i a") }}
+              </dd>
+            </div>
           </dl>
         </div>
 
@@ -79,7 +89,7 @@
             </div>
             Disk
           </dt>
-          <dl class="sm:divide-y sm:divide-gray-200 sm:px-5 sm:pt-4 sm:pb-1">
+          <dl class="sm:divide-y sm:divide-gray-200 px-5 sm:pt-4 sm:pb-1">
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt class="text-sm font-medium text-gray-400">
                 Usage
@@ -108,29 +118,6 @@
                 {{ $account->disk_limit }}
               </dd>
             </div>
-          </dl>
-        </div>
-
-        <div>
-          <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
-            <div class="bg-sky-500 rounded-md p-1 mr-2">
-              <x-heroicon-s-archive-box class="h-5 w-5 text-white" />
-            </div>
-            Backups
-          </dt>
-          <dl class="sm:divide-y sm:divide-gray-200 sm:px-5 sm:pt-4 sm:pb-1">
-            <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt class="text-sm font-medium text-gray-400">
-                Backups
-              </dt>
-              <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                @if($account->backup)
-                  Yes
-                @else
-                  No
-                @endif
-              </dd>
-            </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt class="text-sm font-medium text-gray-400">
                 Plan
@@ -139,51 +126,67 @@
                 {{ $account->plan }}
               </dd>
             </div>
+          </dl>
+        </div>
+
+        <div>
+          <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
+            <div class="bg-sky-500 rounded-md p-1 mr-2">
+              <x-heroicon-s-archive-box class="h-5 w-5 text-white" />
+            </div>
+            Other
+          </dt>
+          <dl class="sm:divide-y sm:divide-gray-200 px-5 sm:pt-4 sm:pb-1">
+            <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt class="text-sm font-medium text-gray-400">
+                Backups
+              </dt>
+              <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
+                @if($account->backups_enabled)
+                  Yes
+                @else
+                  No
+                @endif
+              </dd>
+            </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt class="text-sm font-medium text-gray-400">
                 Suspended
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                {{ $account->suspended }}
+                @if($account->suspended)
+                  Yes
+                @else
+                  No
+                @endif
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt class="text-sm font-medium text-gray-400">
-                Suspended Reason
+                Reason
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                {{ $account->suspend_reason }}
+                @if($account->suspended)
+                  {{ $account->suspend_reason }}
+                @else
+                  N/A
+                @endif
               </dd>
             </div>
             <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt class="text-sm font-medium text-gray-400">
-                Suspended Time
+                Suspended On
               </dt>
               <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                {{ $account->suspend_time }}
+                @if($account->suspended)
+                  {{ $account->suspend_time->format("D, F j, Y, g:i a") }}
+                @else
+                  N/A
+                @endif
               </dd>
             </div>
-            <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt class="text-sm font-medium text-gray-400">
-                Setup Date
-              </dt>
-              <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                {{ $account->setup_date }}
-              </dd>
-            </div>
-            <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-              <dt class="text-sm font-medium text-gray-400">
-                Setup Date
-              </dt>
-              <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                {{ $account->setup_date }}
-              </dd>
-            </div>
+
           </dl>
-        </div>
-        <div class="col-span-1 lg:col-span-3 text-sm font-normal text-gray-600 p-4 flex sm:border-t sm:border-gray-200">
-          <span class="font-semibold mr-4">Notes</span>
-          <p>notes</p>
         </div>
       </dl>
     </div>
