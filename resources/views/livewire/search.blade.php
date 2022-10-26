@@ -222,7 +222,7 @@
         <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
           @forelse($accounts as $account)
             <li>
-              <a href="#"
+              <a href="{{ route('accounts.show', $account->id) }}"
                 @class([
                  'block px-4 py-4 hover:bg-gray-50',
                  'bg-yellow-100' => $account->is_disk_warning,
@@ -320,7 +320,7 @@
                               <div class="flex-shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
                             @endif
                           </div>
-                          <a href="{{ $account->domain_url }}" target="_blank" class="group inline-flex space-x-2 truncate text-sm">
+                          <a href="{{ route('accounts.show', $account->id) }}" class="group inline-flex space-x-2 truncate text-sm">
                             <p class="text-gray-500 truncate group-hover:text-gray-900">
                               {{ $account->domain }}
                             </p>
