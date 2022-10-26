@@ -132,7 +132,7 @@
         <div>
           <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
             <div class="bg-sky-500 rounded-md p-1 mr-2">
-              <x-heroicon-s-archive-box class="h-5 w-5 text-white" />
+              <x-heroicon-s-computer-desktop class="h-5 w-5 text-white" />
             </div>
             Other
           </dt>
