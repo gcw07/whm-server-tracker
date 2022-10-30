@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Monitor;
 
 use App\Models\Account;
 use App\Models\Monitor;
+use Illuminate\Support\Facades\Artisan;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
 
@@ -68,5 +69,14 @@ class Details extends Component
 
             toast()->success('Turned ON ssl certificate checking for this URL.')->push();
         }
+    }
+
+    public function refreshCertificateCheck()
+    {
+        Artisan::call('monitor:check-certificate', [
+            '--url' => $this->monitor->url,
+        ]);
+
+        toast()->success('The SSL certificate for this URL will be checked shortly.')->push();
     }
 }
