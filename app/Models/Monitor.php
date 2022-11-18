@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\CarbonPeriod;
+use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
@@ -133,6 +134,39 @@ class Monitor extends BaseMonitor
         })->average();
 
         return round($uptimePercentage, 2);
+    }
+
+    public function checkBlacklist()
+    {
+        $blacklistServers = config('server-tracker.blacklist_servers');
+
+        $reverseIp = implode('.', array_reverse(explode('.', $this->url->getHost())));
+
+        $items = [];
+
+        try {
+            foreach ($blacklistServers as $index => $host) {
+                if (checkdnsrr($reverseIp . '.' . $host . '.', 'A')) {
+                    $foundOnList = true;
+                } else {
+                    $foundOnList = false;
+                }
+
+                if ($foundOnList) {
+                    $items[] = [
+                        'host' => $host
+                    ];
+                }
+            }
+
+            ray($items);
+
+//            $certificate = SslCertificate::createForHostName($this->url->getHost());
+//
+//            $this->setCertificate($certificate);
+        } catch (Exception $exception) {
+//            $this->setCertificateException($exception);
+        }
     }
 
     public function scopeSearch($query, $search)
