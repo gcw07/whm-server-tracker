@@ -85,8 +85,6 @@ return [
     'blacklist_servers' => [
         "all.s5h.net",
         "b.barracudacentral.org",
-        #"bl.emailbasura.org",
-        #"bl.spamcannibal.org",
         "bl.spamcop.net",
         "blacklist.woody.ch",
         "bogons.cymru.com",
@@ -142,19 +140,6 @@ return [
         "z.mailspike.net",
         "zen.spamhaus.org",
         "zombie.dnsbl.sorbs.net"
-        /*
-        "dnsbl-1.uceprotect.net",
-        "dnsbl-2.uceprotect.net",
-        "dnsbl-3.uceprotect.net",
-        "dnsbl.dronebl.org",
-        "dnsbl.sorbs.net",
-        "zen.spamhaus.org",
-        "bl.spamcop.net",
-        "list.dsbl.org",
-        "sbl.spamhaus.org",
-        "xbl.spamhaus.org",
-        "relays.osirusoft.com"
-        */
     ],
 
     /*
