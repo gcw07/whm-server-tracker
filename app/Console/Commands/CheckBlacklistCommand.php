@@ -31,7 +31,7 @@ class CheckBlacklistCommand extends Command
     public function handle()
     {
         $monitors = Monitor::query()
-            ->where('certificate_check_enabled', true)
+            ->where('blacklist_check_enabled', true)
             ->orderBy('url')
             ->get();
 
