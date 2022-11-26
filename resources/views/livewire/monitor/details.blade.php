@@ -253,6 +253,100 @@
             @endif
           </div>
         </div>
+
+        <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
+          <div class="bg-gray-50 rounded-lg px-4 py-5 sm:px-6">
+            <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
+              <div class="ml-4 mt-4 flex items-center">
+                @if($monitor->blacklist_check_enabled)
+                  <div @class([
+                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'bg-green-600' => $monitor->blacklist_status === 'valid',
+                   'bg-red-600' => $monitor->blacklist_status === 'invalid',
+                   'bg-yellow-600' => $monitor->blacklist_status === 'not yet checked'
+                    ]) aria-hidden="true"></div>
+                @else
+                  <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                @endif
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Email Blacklist</h3>
+              </div>
+              <div class="ml-4 mt-4 flex-shrink-0">
+                <!-- Blacklist menu dropdown -->
+                <x-navigation.dropdown>
+                  <x-slot name="trigger">
+                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
+                      <x-heroicon-s-ellipsis-vertical class="-ml-0.5 -mr-1 h-4 w-4" />
+                      &nbsp;
+                    </button>
+                  </x-slot>
+
+                  <div
+                    class="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu" aria-orientation="vertical" aria-labelledby="blacklist-menu-button" tabindex="-1">
+                    <button wire:click="toggleBlacklistCheck" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            role="menuitem" tabindex="-1" id="blacklist-menu-item-0">
+                      @if($monitor->blacklist_check_enabled)
+                        <x-heroicon-s-no-symbol class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                        Disable
+                      @else
+                        <x-heroicon-s-check class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
+                        Enable
+                      @endif
+                    </button>
+                  </div>
+                </x-navigation.dropdown>
+              </div>
+            </div>
+          </div>
+          <div>
+            @if(!$monitor->blacklist_check_enabled)
+              <div class="bg-yellow-100 text-center  p-3">Blacklist check is disabled</div>
+              <div class="px-4 py-5 sm:p-0 opacity-20">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      N/A
+                    </dd>
+                  </div>
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">List</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
+                  </div>
+                </dl>
+              </div>
+            @else
+              <div class="px-4 py-5 sm:p-0">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      @if($monitor->blacklist_status === 'invalid')
+                        Invalid
+                      @elseif($monitor->blacklist_status === 'not yet checked')
+                        Pending
+                      @else
+                        Ok
+                      @endif
+                    </dd>
+                  </div>
+                  @if($monitor->blacklist_status === 'valid')
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <dt class="text-sm font-medium text-gray-500">List</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Not found on any blacklist</dd>
+                    </div>
+                  @endif
+                  @if($monitor->blacklist_status === 'invalid')
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <dt class="text-sm font-medium text-gray-500">List</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->blacklist_check_failure_reason }}</dd>
+                    </div>
+                  @endif
+                </dl>
+              </div>
+            @endif
+          </div>
+        </div>
       </dl>
     </div>
 

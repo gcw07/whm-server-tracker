@@ -71,6 +71,21 @@ class Details extends Component
         }
     }
 
+    public function toggleBlacklistCheck()
+    {
+        if ($this->monitor->blacklist_check_enabled) {
+            $this->monitor->blacklist_check_enabled = false;
+            $this->monitor->save();
+
+            toast()->success('Turned OFF blacklist checking for this URL.')->push();
+        } else {
+            $this->monitor->blacklist_check_enabled = true;
+            $this->monitor->save();
+
+            toast()->success('Turned ON blacklist checking for this URL.')->push();
+        }
+    }
+
     public function refreshCertificateCheck()
     {
         Artisan::call('monitor:check-certificate', [
