@@ -160,7 +160,7 @@ class Monitor extends BaseMonitor
 
         try {
             foreach ($blacklistServers as $index => $host) {
-                if (checkdnsrr($reverseIp . '.' . $host . '.', 'A')) {
+                if (checkdnsrr($reverseIp.'.'.$host.'.', 'A')) {
                     $foundOnList = true;
                 } else {
                     $foundOnList = false;
@@ -168,18 +168,14 @@ class Monitor extends BaseMonitor
 
                 if ($foundOnList) {
                     $items[] = [
-                        'host' => $host
+                        'host' => $host,
                     ];
                 }
             }
 
-            ray($items);
-
-//            $certificate = SslCertificate::createForHostName($this->url->getHost());
-//
-//            $this->setCertificate($certificate);
+            $this->setBlacklist($items);
         } catch (Exception $exception) {
-//            $this->setCertificateException($exception);
+            $this->setBlacklistException($exception);
         }
     }
 
@@ -188,5 +184,39 @@ class Monitor extends BaseMonitor
         return $query->where(function ($query) use ($search) {
             $query->where('url', 'LIKE', '%'.$search.'%');
         });
+    }
+
+    public function setBlacklist($items):void
+    {
+        if (sizeof($items) > 0) {
+            $this->blacklist_status = BlacklistStatusEnum::Invalid->value;
+            $this->blacklist_check_failure_reason = $this->getBlacklistFailureReason($items);
+        } else {
+            $this->blacklist_status = BlacklistStatusEnum::Valid->value;
+            $this->blacklist_check_failure_reason = null;
+        }
+
+        $this->save();
+
+//        event(new BlacklistCheckSucceeded($this, $exception->getMessage()));
+    }
+
+    public function setBlacklistException(Exception $exception):void
+    {
+        $this->blacklist_status = BlacklistStatusEnum::Invalid->value;
+        $this->blacklist_check_failure_reason = $exception->getMessage();
+        $this->save();
+
+//        event(new BlacklistCheckFailed($this, $exception->getMessage()));
+    }
+
+    public function getBlacklistFailureReason($items): string
+    {
+        $reason = '';
+        foreach ($items as $item) {
+            $reason .= "Found on {$item['host']} blacklist.\n";
+        }
+
+        return $reason;
     }
 }
