@@ -81,11 +81,13 @@ class Listings extends Component
                 return $query
                     ->where(function ($query) {
                         $query->where('uptime_check_enabled', true)
-                            ->orWhere('certificate_check_enabled', true);
+                            ->orWhere('certificate_check_enabled', true)
+                            ->orWhere('blacklist_check_enabled', true);
                     })
                     ->where(function ($query) {
                         $query->where('uptime_status', 'down')
-                            ->orWhere('certificate_status', 'invalid');
+                            ->orWhere('certificate_status', 'invalid')
+                            ->orWhere('blacklist_status', 'invalid');
                     });
             })
             ->when($this->sortBy, function ($query) {
@@ -101,7 +103,8 @@ class Listings extends Component
                 if ($this->filterBy === 'disabled') {
                     return $query->where(function ($query) {
                         $query->where('uptime_check_enabled', false)
-                            ->orWhere('certificate_check_enabled', false);
+                            ->orWhere('certificate_check_enabled', false)
+                            ->orWhere('blacklist_check_enabled', false);
                     });
                 }
 
@@ -117,11 +120,13 @@ class Listings extends Component
             'issues' => Monitor::query()
                 ->where(function ($query) {
                     $query->where('uptime_check_enabled', true)
-                        ->orWhere('certificate_check_enabled', true);
+                        ->orWhere('certificate_check_enabled', true)
+                        ->orWhere('blacklist_check_enabled', true);
                 })
                 ->where(function ($query) {
                     $query->where('uptime_status', 'down')
-                        ->orWhere('certificate_status', 'invalid');
+                        ->orWhere('certificate_status', 'invalid')
+                        ->orWhere('blacklist_status', 'invalid');
                 })
                 ->count(),
         ];
