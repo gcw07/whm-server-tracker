@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\CheckBlacklistJob;
 use App\Models\Monitor;
 use Illuminate\Console\Command;
 
@@ -43,11 +44,7 @@ class CheckBlacklistCommand extends Command
         $monitors->each(function (Monitor $monitor) {
             $this->info("Checking blacklist for {$monitor->url}");
 
-            $monitor->checkBlacklist();
-//
-//            if ($monitor->certificate_status !== CertificateStatus::VALID) {
-//                $this->error("Could not download certificate of {$monitor->url} because: {$monitor->certificate_check_failure_reason}");
-//            }
+            dispatch(new CheckBlacklistJob($monitor));
         });
 
         $this->info('All done!');
