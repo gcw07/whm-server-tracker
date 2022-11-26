@@ -36,7 +36,7 @@ class CheckBlacklistCommand extends Command
             ->get();
 
         if ($url = $this->option('url')) {
-            $monitors = $monitors->filter(fn(Monitor $monitor) => in_array((string) $monitor->url, explode(',', $url)));
+            $monitors = $monitors->filter(fn (Monitor $monitor) => in_array((string) $monitor->url, explode(',', $url)));
         }
 
         $this->comment('Start checking the blacklist of '.count($monitors).' monitors...');

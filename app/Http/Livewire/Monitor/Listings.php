@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Monitor;
 
 use App\Http\Livewire\WithCache;
 use App\Models\Monitor;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
