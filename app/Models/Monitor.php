@@ -72,6 +72,12 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  */
 class Monitor extends BaseMonitor
 {
+    protected $casts = [
+        'uptime_check_enabled' => 'boolean',
+        'certificate_check_enabled' => 'boolean',
+        'blacklist_check_enabled' => 'boolean',
+    ];
+
     public function downtimeStats(): HasMany
     {
         return $this->hasMany(DowntimeStat::class);
