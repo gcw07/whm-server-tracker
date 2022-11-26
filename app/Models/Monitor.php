@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BlacklistStatusEnum;
 use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -32,6 +33,9 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property \Illuminate\Support\Carbon|null $certificate_expiration_date
  * @property string|null $certificate_issuer
  * @property string $certificate_check_failure_reason
+ * @property bool $blacklist_check_enabled
+ * @property string $blacklist_status
+ * @property string|null $blacklist_check_failure_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DowntimeStat[] $downtimeStats
@@ -46,6 +50,10 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereBlacklistCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereBlacklistCheckFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereBlacklistStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateCheckEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateCheckFailureReason($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateExpirationDate($value)
