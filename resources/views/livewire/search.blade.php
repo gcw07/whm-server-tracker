@@ -435,6 +435,18 @@
                         <span class="font-medium">Certificate - <span class="font-normal">Ok</span></span>
                       @endif
                     @endif
+
+                    @if(!$monitor->blacklist_check_enabled)
+                      <span class="font-medium">Blacklist - <span class="font-normal">Disabled</span></span>
+                    @else
+                      @if($monitor->blacklist_status === 'invalid')
+                        <span class="font-medium">Blacklist - <span class="font-normal">Invalid</span></span>
+                      @elseif($monitor->blacklist_status === 'not yet checked')
+                        <span class="font-medium">Blacklist - <span class="font-normal">Pending</span></span>
+                      @else
+                        <span class="font-medium">Blacklist - <span class="font-normal">Ok</span></span>
+                      @endif
+                    @endif
                   </span>
                 </span>
                 <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
@@ -470,6 +482,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell">
                       Certificate
+                    </th>
+                    <th scope="col" class="hidden px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider md:table-cell">
+                      Blacklist
                     </th>
                     <th scope="col" class="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       <span class="sr-only">Manage</span>
@@ -541,6 +556,31 @@
                           @endif
                         @endif
                       </td>
+                      <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 md:table-cell">
+                        @if(!$monitor->blacklist_check_enabled)
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-no-symbol class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
+                            <span class="text-gray-900 font-medium">Disabled</span>
+                          </div>
+                        @else
+                          @if($monitor->blacklist_status === 'invalid')
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
+                              <span class="text-gray-900 font-medium">Invalid</span>
+                            </div>
+                          @elseif($monitor->blacklist_status === 'not yet checked')
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-exclamation-triangle class="-ml-0.5 mr-2 h-4 w-4 text-yellow-600" />
+                              <span class="text-gray-900 font-medium">Pending</span>
+                            </div>
+                          @else
+                            <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                              <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                              <span class="text-gray-900 font-medium">Ok</span>
+                            </div>
+                          @endif
+                        @endif
+                      </td>
                       <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                         <a href="{{ $monitor->url }}" target="_blank" x-data="{}" x-tooltip.raw="Visit Site" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                           <x-heroicon-m-arrow-top-right-on-square class="-ml-0.5 h-4 w-4" />
@@ -549,7 +589,7 @@
                     </tr>
                   @empty
                     <tr class="bg-white">
-                      <td colspan="4" class="py-8 whitespace-nowrap font-semibold text-center text-sm text-gray-700">
+                      <td colspan="5" class="py-8 whitespace-nowrap font-semibold text-center text-sm text-gray-700">
                         No entries found.
                       </td>
                     </tr>
