@@ -186,9 +186,9 @@ class Monitor extends BaseMonitor
         });
     }
 
-    public function setBlacklist($items):void
+    public function setBlacklist($items): void
     {
-        if (sizeof($items) > 0) {
+        if (count($items) > 0) {
             $this->blacklist_status = BlacklistStatusEnum::Invalid->value;
             $this->blacklist_check_failure_reason = $this->getBlacklistFailureReason($items);
         } else {
@@ -201,7 +201,7 @@ class Monitor extends BaseMonitor
 //        event(new BlacklistCheckSucceeded($this, $exception->getMessage()));
     }
 
-    public function setBlacklistException(Exception $exception):void
+    public function setBlacklistException(Exception $exception): void
     {
         $this->blacklist_status = BlacklistStatusEnum::Invalid->value;
         $this->blacklist_check_failure_reason = $exception->getMessage();
