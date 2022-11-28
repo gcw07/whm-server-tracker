@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Filters\AccountFilters;
 use App\Models\Presenters\AccountPresenter;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -121,9 +122,13 @@ class Account extends Model
             if ($fetch->ok()) {
                 $xml = simplexml_load_file($url);
 
-                if ($xml->channel->generator) {
-                    [, $version] = explode('?v=', $xml->channel->generator);
-                    $this->setWordPressVersion($version);
+                if ($xml === false) {
+                    $this->setWordPressVersion(null);
+                } else {
+                    if ($xml->channel->generator) {
+                        [, $version] = explode('?v=', $xml->channel->generator);
+                        $this->setWordPressVersion($version);
+                    }
                 }
             } else {
                 $this->setWordPressVersion(null);
