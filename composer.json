@@ -15,7 +15,7 @@
         "laravel/ui": "^v3.2.0",
         "livewire/livewire": "^2.0",
         "spatie/laravel-backup": "^8.0",
-        "spatie/laravel-uptime-monitor": "dev-main",
+        "spatie/laravel-uptime-monitor": "^4.0",
         "spatie/simple-excel": "^2.1",
         "usernotnull/tall-toasts": "^1.5",
         "wire-elements/modal": "^1.0",

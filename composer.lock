@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30e9f85b78bc448ed24bb866ead20af6",
+    "content-hash": "1f5876a9ca3750e078c8804230b50137",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -3979,16 +3979,16 @@
         },
         {
             "name": "spatie/laravel-uptime-monitor",
-            "version": "dev-main",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-uptime-monitor.git",
-                "reference": "89c544eacfb6b9210d6beff0ef31de6531047472"
+                "reference": "1e29d8d7d3319f7defc7c3c0a16cee5a8a9c588d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-uptime-monitor/zipball/89c544eacfb6b9210d6beff0ef31de6531047472",
-                "reference": "89c544eacfb6b9210d6beff0ef31de6531047472",
+                "url": "https://api.github.com/repos/spatie/laravel-uptime-monitor/zipball/1e29d8d7d3319f7defc7c3c0a16cee5a8a9c588d",
+                "reference": "1e29d8d7d3319f7defc7c3c0a16cee5a8a9c588d",
                 "shasum": ""
             },
             "require": {
@@ -4016,7 +4016,6 @@
                 "orchestra/testbench": "^6.23|^7.0",
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -4050,7 +4049,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-uptime-monitor/tree/main"
+                "source": "https://github.com/spatie/laravel-uptime-monitor/tree/4.2.0"
             },
             "funding": [
                 {
@@ -4062,7 +4061,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-11-07T14:03:17+00:00"
+            "time": "2022-10-03T14:21:43+00:00"
         },
         {
             "name": "spatie/macroable",
@@ -11018,9 +11017,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "spatie/laravel-uptime-monitor": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
