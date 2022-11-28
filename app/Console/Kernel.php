@@ -29,6 +29,9 @@ class Kernel extends ConsoleKernel
 
         // Schedule Email Blacklist Check
         $schedule->command('server-tracker:check-blacklist')->dailyAt('0:30');
+
+        // Schedule WordPress Check
+        $schedule->command('server-tracker:check-wordpress')->dailyAt('1:15');
     }
 
     /**
