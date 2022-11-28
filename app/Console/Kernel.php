@@ -26,6 +26,9 @@ class Kernel extends ConsoleKernel
 
         // Schedule SSL Certificate Check
         $schedule->command('monitor:check-certificate')->daily();
+
+        // Schedule Email Blacklist Check
+        $schedule->command('server-tracker:check-blacklist')->dailyAt('0:30');
     }
 
     /**
