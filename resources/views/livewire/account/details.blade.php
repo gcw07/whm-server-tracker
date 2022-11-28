@@ -79,6 +79,18 @@
                 {{ $account->setup_date->format("D, F j, Y, g:i a") }}
               </dd>
             </div>
+            <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt class="text-sm font-medium text-gray-400">
+                WordPress
+              </dt>
+              <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
+                @if($account->wordpress_version)
+                  {{ $account->wordpress_version }}
+                @else
+                  WP not detected
+                @endif
+              </dd>
+            </div>
           </dl>
         </div>
 
