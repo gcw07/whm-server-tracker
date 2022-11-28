@@ -116,7 +116,7 @@ class Account extends Model
     public function checkWordPress()
     {
         try {
-            $url = $this->domain_url . '/feed/';
+            $url = $this->domain_url.'/feed/';
             $fetch = Http::get($url);
 
             if ($fetch->ok()) {

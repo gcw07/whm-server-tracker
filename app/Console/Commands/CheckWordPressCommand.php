@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\CheckBlacklistJob;
 use App\Jobs\CheckWordPressJob;
 use App\Models\Account;
-use App\Models\Monitor;
 use Illuminate\Console\Command;
 
 class CheckWordPressCommand extends Command
