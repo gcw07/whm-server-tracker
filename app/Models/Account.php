@@ -7,6 +7,7 @@ use App\Models\Presenters\AccountPresenter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Http;
 
 /**
  * App\Models\Account
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $disk_used
  * @property string $disk_limit
  * @property string $plan
+ * @property string|null $wordpress_version
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Server $server
@@ -49,6 +51,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Account whereSuspended($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Account whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Account whereUser($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereWordpressVersion($value)
  * @mixin \Eloquent
  */
 class Account extends Model
@@ -107,5 +110,32 @@ class Account extends Model
                 ->orWhere('user', 'LIKE', '%'.$search.'%')
                 ->orWhere('ip', 'LIKE', '%'.$search.'%');
         });
+    }
+
+    public function checkWordPress()
+    {
+        try {
+            $url = $this->domain_url . '/feed/';
+            $fetch = Http::get($url);
+
+            if ($fetch->ok()) {
+                $xml = simplexml_load_file($url);
+
+                if ($xml->channel->generator) {
+                    [, $version] = explode('?v=', $xml->channel->generator);
+                    $this->setWordPressVersion($version);
+                }
+            } else {
+                $this->setWordPressVersion(null);
+            }
+        } catch (Exception $exception) {
+            $this->setWordPressVersion(null);
+        }
+    }
+
+    public function setWordPressVersion($version): void
+    {
+        $this->wordpress_version = $version;
+        $this->save();
     }
 }
