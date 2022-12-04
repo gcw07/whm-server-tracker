@@ -96,6 +96,7 @@ class Account extends Model
             'disk_limit' => $this->disk_limit,
             'disk_usage' => $this->formatted_disk_usage,
             'plan' => $this->plan,
+            'wordpress_version' => $this->wordpress_version,
         ])->only($columns)->all();
     }
 

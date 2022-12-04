@@ -144,6 +144,16 @@
                 </div>
               </div>
 
+              <div class="relative flex items-start py-4">
+                <div class="min-w-0 flex-1 text-sm">
+                  <label for="plan" class="font-medium text-gray-700 select-none">WordPress Version</label>
+                </div>
+                <div class="ml-3 flex items-center h-5">
+                  <input wire:model="state.wordpress_version" id="plan" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  @error('state.wordpress_version') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                </div>
+              </div>
+
             </div>
           </fieldset>
 

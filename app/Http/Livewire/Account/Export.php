@@ -30,6 +30,7 @@ class Export extends ModalComponent
         'disk_limit' => true,
         'disk_usage' => true,
         'plan' => true,
+        'wordpress_version' => true,
     ];
 
     public function mount(string|null $sortBy)
@@ -65,6 +66,7 @@ class Export extends ModalComponent
             'state.disk_limit' => ['required', 'boolean'],
             'state.disk_usage' => ['required', 'boolean'],
             'state.plan' => ['required', 'boolean'],
+            'state.wordpress_version' => ['required', 'boolean'],
         ];
     }
 
