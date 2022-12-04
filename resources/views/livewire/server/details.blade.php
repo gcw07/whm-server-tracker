@@ -313,7 +313,7 @@
                       Domain
                     </th>
                     <th scope="col" class="hidden px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell">
-                      Username
+                      WordPress
                     </th>
                     <th scope="col" class="hidden px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell">
                       Backups
@@ -361,7 +361,11 @@
                         </div>
                       </td>
                       <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        {{ $account->user }}
+                        @if($account->wordpress_version)
+                          <span class="text-gray-900 font-medium">{{ $account->wordpress_version }}</span>
+                        @else
+                          <span class="text-gray-900 font-medium">&mdash;</span>
+                        @endif
                       </td>
                       <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
                         @if($account->backups_enabled)
