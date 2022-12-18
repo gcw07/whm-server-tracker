@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f5876a9ca3750e078c8804230b50137",
+    "content-hash": "915a5911a703ed4920460d40954a1980",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -4062,6 +4062,66 @@
                 }
             ],
             "time": "2022-10-03T14:21:43+00:00"
+        },
+        {
+            "name": "spatie/lighthouse-php",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/lighthouse-php.git",
+                "reference": "869c30dcf9709230e9a3c0122b294b50fa9670fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/lighthouse-php/zipball/869c30dcf9709230e9a3c0122b294b50fa9670fd",
+                "reference": "869c30dcf9709230e9a3c0122b294b50fa9670fd",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1",
+                "symfony/process": "^6.1"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.2",
+                "pestphp/pest": "^1.22.1",
+                "spatie/pest-plugin-snapshots": "^1.1",
+                "spatie/ray": "^1.36",
+                "spatie/temporary-directory": "^2.1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Lighthouse\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Run Google Lighthouse using PHP",
+            "homepage": "https://github.com/spatie/lighthouse-php",
+            "keywords": [
+                "lighthouse-php",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/lighthouse-php/issues",
+                "source": "https://github.com/spatie/lighthouse-php/tree/1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-12-14T10:50:30+00:00"
         },
         {
             "name": "spatie/macroable",
