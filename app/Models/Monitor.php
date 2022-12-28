@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Enums\BlacklistStatusEnum;
+use App\Enums\LighthouseStatusEnum;
 use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
+use Spatie\Lighthouse\Lighthouse;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
 
 /**
@@ -93,6 +95,7 @@ class Monitor extends BaseMonitor
         'uptime_check_enabled' => 'boolean',
         'certificate_check_enabled' => 'boolean',
         'blacklist_check_enabled' => 'boolean',
+        'lighthouse_check_enabled' => 'boolean',
     ];
 
     public function downtimeStats(): HasMany
@@ -227,5 +230,21 @@ class Monitor extends BaseMonitor
         }
 
         return $reason;
+    }
+
+    public function checkLighthouse()
+    {
+        try {
+            $result = Lighthouse::url($this->url)->run();
+            $result->scores();
+
+            $this->lighthouse_status = LighthouseStatusEnum::Valid->value;
+            $this->lighthouse_update_last_succeeded_at = now();
+            $this->save();
+        } catch (Exception $exception) {
+            $this->lighthouse_status = LighthouseStatusEnum::Invalid->value;
+            $this->lighthouse_update_last_failed_at = now();
+            $this->save();
+        }
     }
 }
