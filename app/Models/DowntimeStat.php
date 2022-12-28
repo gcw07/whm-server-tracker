@@ -23,6 +23,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat whereDowntimePeriod($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat whereMonitorId($value)
+ *
  * @mixin \Eloquent
  */
 class DowntimeStat extends Model

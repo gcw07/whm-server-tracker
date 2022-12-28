@@ -36,6 +36,10 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property bool $blacklist_check_enabled
  * @property string $blacklist_status
  * @property string|null $blacklist_check_failure_reason
+ * @property int $lighthouse_check_enabled
+ * @property string $lighthouse_status
+ * @property string|null $lighthouse_update_last_failed_at
+ * @property string|null $lighthouse_update_last_succeeded_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DowntimeStat[] $downtimeStats
@@ -61,6 +65,10 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseUpdateLastFailedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseUpdateLastSucceededAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLookForString($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckAdditionalHeaders($value)
@@ -76,6 +84,7 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeStatusLastChangeDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUrl($value)
+ *
  * @mixin \Eloquent
  */
 class Monitor extends BaseMonitor

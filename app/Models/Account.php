@@ -53,6 +53,7 @@ use Illuminate\Support\Facades\Http;
  * @method static \Illuminate\Database\Eloquent\Builder|Account whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Account whereUser($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Account whereWordpressVersion($value)
+ *
  * @mixin \Eloquent
  */
 class Account extends Model

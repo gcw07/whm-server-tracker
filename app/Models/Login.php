@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Login whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Login whereIpAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Login whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Login extends Model

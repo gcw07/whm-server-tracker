@@ -50,6 +50,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @method static Builder|Server whereToken($value)
  * @method static Builder|Server whereUpdatedAt($value)
  * @method static Builder|Server withTokens()
+ *
  * @mixin \Eloquent
  */
 class Server extends Model

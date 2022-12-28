@@ -41,6 +41,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static Builder|User whereRememberToken($value)
  * @method static Builder|User whereUpdatedAt($value)
  * @method static Builder|User withLastLogin()
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable
