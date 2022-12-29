@@ -17,6 +17,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property int $best_practices_score
  * @property int $seo_score
  * @property int $pwa_score
+ * @property int $benchmark_index
  * @property string|null $report
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -27,6 +28,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @method static \Illuminate\Database\Eloquent\Builder|LighthouseAudit newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LighthouseAudit query()
  * @method static \Illuminate\Database\Eloquent\Builder|LighthouseAudit whereAccessibilityScore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LighthouseAudit whereBenchmarkIndex($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LighthouseAudit whereBestPracticesScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LighthouseAudit whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LighthouseAudit whereDate($value)
