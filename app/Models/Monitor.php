@@ -236,7 +236,21 @@ class Monitor extends BaseMonitor
     {
         try {
             $result = Lighthouse::url($this->url)->run();
-            $result->scores();
+            $scores = $result->scores();
+            $benchmark = $result->benchmarkIndex();
+            $report = $result->html();
+
+            LighthouseAudit::create([
+                'monitor_id' => $this->id,
+                'date' => today()->format('Y-m-d'),
+                'performance_score' => $scores['performance'],
+                'accessibility_score' => $scores['accessibility'],
+                'best_practices_score' => $scores['best-practices'],
+                'seo_score' => $scores['seo'],
+                'pwa_score' => $scores['pwa'],
+                'benchmark_index' => $benchmark,
+                'report' => $report,
+            ]);
 
             $this->lighthouse_status = LighthouseStatusEnum::Valid->value;
             $this->lighthouse_update_last_succeeded_at = now();
