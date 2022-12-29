@@ -103,6 +103,11 @@ class Monitor extends BaseMonitor
         return $this->hasMany(DowntimeStat::class);
     }
 
+    public function lighthouseAudits(): HasMany
+    {
+        return $this->hasMany(LighthouseAudit::class);
+    }
+
     protected function uptimeForToday(): Attribute
     {
         $startDate = today()->format('Y-m-d');
