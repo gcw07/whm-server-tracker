@@ -246,7 +246,7 @@ class Monitor extends BaseMonitor
         try {
             $result = Lighthouse::url($this->url)->run();
             $scores = $result->scores();
-            $benchmark = $result->benchmarkIndex();
+            $speed = $result->speedIndexInMs();
             $report = $result->html();
 
             LighthouseAudit::create([
@@ -257,7 +257,7 @@ class Monitor extends BaseMonitor
                 'best_practices_score' => $scores['best-practices'],
                 'seo_score' => $scores['seo'],
                 'pwa_score' => $scores['pwa'],
-                'benchmark_index' => $benchmark,
+                'speed_index' => $speed,
                 'report' => $report,
             ]);
 
@@ -267,6 +267,7 @@ class Monitor extends BaseMonitor
         } catch (Exception $exception) {
             $this->lighthouse_status = LighthouseStatusEnum::Invalid->value;
             $this->lighthouse_update_last_failed_at = now();
+            $this->lighthouse_check_failure_reason = $exception->getMessage();
             $this->save();
         }
     }
