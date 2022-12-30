@@ -40,8 +40,8 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property string|null $blacklist_check_failure_reason
  * @property bool $lighthouse_check_enabled
  * @property string $lighthouse_status
- * @property string|null $lighthouse_update_last_failed_at
- * @property string|null $lighthouse_update_last_succeeded_at
+ * @property \Illuminate\Support\Carbon|null $lighthouse_update_last_failed_at
+ * @property \Illuminate\Support\Carbon|null $lighthouse_update_last_succeeded_at
  * @property string|null $lighthouse_check_failure_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -101,7 +101,7 @@ class Monitor extends BaseMonitor
         'uptime_check_failed_event_fired_on_date',
         'certificate_expiration_date',
         'lighthouse_update_last_failed_at',
-        'lighthouse_update_last_succeeded_at'
+        'lighthouse_update_last_succeeded_at',
     ];
 
     protected $casts = [
