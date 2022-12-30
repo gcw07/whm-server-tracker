@@ -38,10 +38,11 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property bool $blacklist_check_enabled
  * @property string $blacklist_status
  * @property string|null $blacklist_check_failure_reason
- * @property int $lighthouse_check_enabled
+ * @property bool $lighthouse_check_enabled
  * @property string $lighthouse_status
  * @property string|null $lighthouse_update_last_failed_at
  * @property string|null $lighthouse_update_last_succeeded_at
+ * @property string|null $lighthouse_check_failure_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DowntimeStat[] $downtimeStats
@@ -51,6 +52,8 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property-read string $chunked_last_failure_reason
  * @property-read string $raw_url
  * @property-read string $uptime_status_as_emoji
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LighthouseAudit[] $lighthouseAudits
+ * @property-read int|null $lighthouse_audits_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor enabled()
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor newModelQuery()
@@ -68,6 +71,7 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckFailureReason($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseUpdateLastFailedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseUpdateLastSucceededAt($value)
