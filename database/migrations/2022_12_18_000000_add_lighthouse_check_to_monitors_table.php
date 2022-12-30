@@ -15,6 +15,7 @@ return new class extends Migration
                 $table->string('lighthouse_status')->default(LighthouseStatusEnum::NotYetChecked->value);
                 $table->timestamp('lighthouse_update_last_failed_at')->nullable();
                 $table->timestamp('lighthouse_update_last_succeeded_at')->nullable();
+                $table->text('lighthouse_check_failure_reason')->nullable();
             });
         });
     }
