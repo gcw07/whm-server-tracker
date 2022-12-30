@@ -241,34 +241,49 @@ class Monitor extends BaseMonitor
         return $reason;
     }
 
-    public function checkLighthouse()
+    public function checkLighthouse(): void
     {
-        try {
-            $result = Lighthouse::url($this->url)->run();
-            $scores = $result->scores();
-            $speed = $result->speedIndexInMs();
-            $report = $result->html();
+        if ($this->shouldRunLighthouseAudit()) {
+            try {
+                $result = Lighthouse::url($this->url)->run();
+                $scores = $result->scores();
+                $speed = $result->speedIndexInMs();
+                $report = $result->html();
 
-            LighthouseAudit::create([
-                'monitor_id' => $this->id,
-                'date' => today()->format('Y-m-d'),
-                'performance_score' => $scores['performance'],
-                'accessibility_score' => $scores['accessibility'],
-                'best_practices_score' => $scores['best-practices'],
-                'seo_score' => $scores['seo'],
-                'pwa_score' => $scores['pwa'],
-                'speed_index' => $speed,
-                'report' => $report,
-            ]);
+                LighthouseAudit::create([
+                    'monitor_id' => $this->id,
+                    'date' => today()->format('Y-m-d'),
+                    'performance_score' => $scores['performance'],
+                    'accessibility_score' => $scores['accessibility'],
+                    'best_practices_score' => $scores['best-practices'],
+                    'seo_score' => $scores['seo'],
+                    'pwa_score' => $scores['pwa'],
+                    'speed_index' => $speed,
+                    'report' => $report,
+                ]);
 
-            $this->lighthouse_status = LighthouseStatusEnum::Valid->value;
-            $this->lighthouse_update_last_succeeded_at = now();
-            $this->save();
-        } catch (Exception $exception) {
-            $this->lighthouse_status = LighthouseStatusEnum::Invalid->value;
-            $this->lighthouse_update_last_failed_at = now();
-            $this->lighthouse_check_failure_reason = $exception->getMessage();
-            $this->save();
+                $this->lighthouse_status = LighthouseStatusEnum::Valid->value;
+                $this->lighthouse_update_last_succeeded_at = now();
+                $this->save();
+            } catch (Exception $exception) {
+                $this->lighthouse_status = LighthouseStatusEnum::Invalid->value;
+                $this->lighthouse_update_last_failed_at = now();
+                $this->lighthouse_check_failure_reason = $exception->getMessage();
+                $this->save();
+            }
         }
+    }
+
+    protected function shouldRunLighthouseAudit(): bool
+    {
+        if (is_null($this->lighthouse_update_last_succeeded_at)) {
+            return true;
+        }
+
+        if ($this->lighthouse_update_last_succeeded_at->diffInHours() >= config('server-tracker.lighthouse_audits.run_audit_every_hours')) {
+            return true;
+        }
+
+        return false;
     }
 }
