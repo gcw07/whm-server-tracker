@@ -95,6 +95,15 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  */
 class Monitor extends BaseMonitor
 {
+    protected $dates = [
+        'uptime_last_check_date',
+        'uptime_status_last_change_date',
+        'uptime_check_failed_event_fired_on_date',
+        'certificate_expiration_date',
+        'lighthouse_update_last_failed_at',
+        'lighthouse_update_last_succeeded_at'
+    ];
+
     protected $casts = [
         'uptime_check_enabled' => 'boolean',
         'certificate_check_enabled' => 'boolean',
