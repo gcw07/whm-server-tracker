@@ -22,7 +22,7 @@ class CreateLighthouseAuditsTable extends Migration
             $table->integer('best_practices_score');
             $table->integer('seo_score');
             $table->integer('pwa_score');
-            $table->integer('benchmark_index');
+            $table->integer('speed_index');
             $table->longText('report')->nullable();
             $table->timestamps();
 
