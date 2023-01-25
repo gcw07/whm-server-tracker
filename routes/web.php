@@ -7,6 +7,8 @@ use App\Http\Livewire\Account\Details as AccountDetails;
 use App\Http\Livewire\Account\Listings as AccountListings;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Monitor\Details as MonitorDetails;
+use App\Http\Livewire\Monitor\LighthouseReport as MonitorLighthouseReport;
+use App\Http\Livewire\Monitor\LighthouseFrame as MonitorLighthouseFrame;
 use App\Http\Livewire\Monitor\Listings as MonitorListings;
 use App\Http\Livewire\Search;
 use App\Http\Livewire\Server\Create as ServerCreate;
@@ -54,6 +56,8 @@ Route::prefix('servers')->middleware('auth')->group(function () {
 Route::prefix('monitors')->middleware('auth')->group(function () {
     Route::get('/', MonitorListings::class)->name('monitors.index');
     Route::get('/{monitor}', MonitorDetails::class)->name('monitors.show');
+    Route::get('/{monitor}/lighthouse', MonitorLighthouseReport::class)->name('monitors.lighthouse');
+    Route::get('/{monitor}/lighthouse-iframe', MonitorLighthouseFrame::class)->name('monitors.lighthouse-iframe');
 });
 
 // User Routes...
