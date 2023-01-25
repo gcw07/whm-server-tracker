@@ -18,7 +18,7 @@ class LighthouseReport extends Component
 
     public function render()
     {
-        $audit = $this->monitor->lighthouseAudits()->first();
+        $audit = $this->monitor->lighthouseLatestAudit()->first();
 
         return view('livewire.monitor.reports', [
             'audit' => $audit,

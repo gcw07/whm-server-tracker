@@ -22,7 +22,7 @@ class LighthouseFrame extends Component
 
     public function render()
     {
-        $audit = $this->monitor->lighthouseAudits()->first();
+        $audit = $this->monitor->lighthouseLatestAudit()->first();
 
         return view('livewire.monitor.lighthouse-iframe', [
             'audit' => $audit,

@@ -121,6 +121,11 @@ class Monitor extends BaseMonitor
         return $this->hasMany(LighthouseAudit::class);
     }
 
+    public function lighthouseLatestAudit(): HasMany
+    {
+        return $this->hasMany(LighthouseAudit::class)->orderBy('created_at', 'desc');
+    }
+
     protected function uptimeForToday(): Attribute
     {
         $startDate = today()->format('Y-m-d');
