@@ -262,6 +262,7 @@ class Monitor extends BaseMonitor
                 $result = Lighthouse::url($this->url)->run();
                 $scores = $result->scores();
                 $speed = $result->speedIndexInMs();
+                $rawResults = json_encode($result->audits());
                 $report = $result->html();
 
                 LighthouseAudit::create([
@@ -273,6 +274,7 @@ class Monitor extends BaseMonitor
                     'seo_score' => $scores['seo'],
                     'pwa_score' => $scores['pwa'],
                     'speed_index' => $speed,
+                    'raw_results' => $rawResults,
                     'report' => $report,
                 ]);
 
