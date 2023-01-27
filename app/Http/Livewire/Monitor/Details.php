@@ -86,6 +86,21 @@ class Details extends Component
         }
     }
 
+    public function toggleLighthouseCheck()
+    {
+        if ($this->monitor->lighthouse_check_enabled) {
+            $this->monitor->lighthouse_check_enabled = false;
+            $this->monitor->save();
+
+            toast()->success('Turned OFF lighthouse reports for this URL.')->push();
+        } else {
+            $this->monitor->lighthouse_check_enabled = true;
+            $this->monitor->save();
+
+            toast()->success('Turned ON lighthouse reports for this URL.')->push();
+        }
+    }
+
     public function refreshCertificateCheck()
     {
         Artisan::call('monitor:check-certificate', [
