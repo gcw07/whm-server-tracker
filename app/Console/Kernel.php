@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('server-tracker:check-wordpress')->dailyAt('1:15');
 
         // Schedule Lighthouse Check
-        $schedule->command('server-tracker:check-lighthouse')->weeklyOn(1, '3:10');
+        $schedule->command('server-tracker:check-lighthouse')->dailyAt('3:10');
     }
 
     /**
