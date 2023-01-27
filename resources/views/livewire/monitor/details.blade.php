@@ -429,6 +429,37 @@
                       <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
                       <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->lighthouse_update_last_succeeded_at?->diffForHumans() }}</dd>
                     </div>
+                    <div class="py-4 sm:py-5 sm:px-6">
+                      <div class="flex w-full items-center justify-between">
+                        <div>
+                          <dt class="text-xs font-normal text-gray-500">Performance</dt>
+                          <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
+                            {{ $lighthouseStats->performance_score }}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt class="text-xs font-normal text-gray-500">Accessibility</dt>
+                          <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
+                            {{ $lighthouseStats->accessibility_score }}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt class="text-xs font-normal text-gray-500">Best Practices</dt>
+                          <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
+                            {{ $lighthouseStats->best_practices_score }}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt class="text-xs font-normal text-gray-500">SEO</dt>
+                          <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
+                            {{ $lighthouseStats->seo_score }}
+                          </dd>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <a href="{{ route('monitors.lighthouse', $monitor->id) }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">View Full Reports</a>
+                    </div>
                   @endif
                   @if($monitor->lighthouse_status === 'invalid')
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

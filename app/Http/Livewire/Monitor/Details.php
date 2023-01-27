@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Monitor;
 
 use App\Models\Account;
+use App\Models\LighthouseAudit;
 use App\Models\Monitor;
 use Illuminate\Support\Facades\Artisan;
 use Livewire\Component;
@@ -27,6 +28,7 @@ class Details extends Component
 
         return view('livewire.monitor.details', [
             'accounts' => $this->accountQuery(),
+            'lighthouseStats' => $this->lighthouseQuery(),
             'uptimeForToday' => $this->monitor->uptime_for_today,
             'uptimeForLastSevenDays' => $this->monitor->uptime_for_last_seven_days,
             'uptimeForLastThirtyDays' => $this->monitor->uptime_for_last_thirty_days,
@@ -39,6 +41,14 @@ class Details extends Component
             ->with(['server'])
             ->where('domain', $this->domainUrl)
             ->get();
+    }
+
+    protected function lighthouseQuery()
+    {
+        return LighthouseAudit::query()
+            ->where('monitor_id', $this->monitor->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
 
     public function toggleUptimeCheck()
