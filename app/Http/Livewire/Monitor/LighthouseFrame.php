@@ -2,8 +2,7 @@
 
 namespace App\Http\Livewire\Monitor;
 
-use App\Models\Account;
-use App\Models\Monitor;
+use App\Models\LighthouseAudit;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
 
@@ -11,29 +10,19 @@ class LighthouseFrame extends Component
 {
     use WireToast;
 
-    public Monitor $monitor;
+    public LighthouseAudit $audit;
 
     protected string $domainUrl;
 
-    public function mount(Monitor $monitor)
+    public function mount(LighthouseAudit $audit)
     {
-        $this->monitor = $monitor;
+        $this->audit = $audit;
     }
 
     public function render()
     {
-        $audit = $this->monitor->lighthouseLatestAudit()->first();
-
         return view('livewire.monitor.lighthouse-iframe', [
-            'audit' => $audit,
+            'audit' => $this->audit,
         ])->layout('components.layouts.empty');
-    }
-
-    protected function accountQuery()
-    {
-        return Account::query()
-            ->with(['server'])
-            ->where('domain', $this->domainUrl)
-            ->get();
     }
 }
