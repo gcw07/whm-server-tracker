@@ -57,7 +57,7 @@ Route::prefix('monitors')->middleware('auth')->group(function () {
     Route::get('/', MonitorListings::class)->name('monitors.index');
     Route::get('/{monitor}', MonitorDetails::class)->name('monitors.show');
     Route::get('/{monitor}/lighthouse', MonitorLighthouseReport::class)->name('monitors.lighthouse');
-    Route::get('/{monitor}/lighthouse-iframe', MonitorLighthouseFrame::class)->name('monitors.lighthouse-iframe');
+    Route::get('/{audit}/lighthouse-iframe', MonitorLighthouseFrame::class)->name('monitors.lighthouse-iframe');
 });
 
 // User Routes...
