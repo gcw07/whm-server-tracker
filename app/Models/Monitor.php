@@ -54,6 +54,8 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property-read string $uptime_status_as_emoji
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LighthouseAudit[] $lighthouseAudits
  * @property-read int|null $lighthouse_audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LighthouseAudit[] $lighthouseLatestAudit
+ * @property-read int|null $lighthouse_latest_audit_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor enabled()
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor newModelQuery()
