@@ -47,7 +47,7 @@
                     'font-bold' => $audit->id === $selectedAudit->id,
                     'font-medium' => $audit->id !== $selectedAudit->id,
                   ])>
-                  {{$audit->date->format("D, F j, Y") }}
+                  {{ $audit->date->format("D, F j, Y") }}
                 </li>
               @empty
                 <p>There are no recent audits. Please wait for one to be processed.</p>
@@ -60,7 +60,7 @@
     </div>
 
     <div class="mt-6 text-lg font-medium text-gray-700">Report
-      from {{ $selectedAudit->date->format("D, F j, Y") }}</div>
+      from {{ $selectedAudit->date->format("l, F j, Y") }}</div>
 
     <iframe src="{{ route('monitors.lighthouse-iframe', $selectedAudit->id) }}" class="w-full h-screen mt-4" height="100%"></iframe>
 
