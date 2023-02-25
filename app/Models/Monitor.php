@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BlacklistStatusEnum;
+use App\Enums\DomainNameStatusEnum;
 use App\Enums\LighthouseStatusEnum;
 use Carbon\CarbonPeriod;
 use Exception;
@@ -313,5 +314,44 @@ class Monitor extends BaseMonitor
         }
 
         return false;
+    }
+
+    public function checkDomainNameExpiration()
+    {
+        $rdapServer = config('server-tracker.rdap_server');
+
+        $url = "https://$rdapServer/domain/{$this->url->getHost()}";
+
+        try {
+            $results = json_decode(file_get_contents($url));
+
+            foreach ($results->events as $event) {
+                if ($event->eventAction === 'expiration') {
+                    $this->setDomainNameExpiration($event->eventDate);
+                    break;
+                }
+            }
+        } catch (Exception $exception) {
+            $this->setDomainNameException($exception);
+        }
+    }
+
+        public function setDomainNameExpiration($date): void
+    {
+        $this->domain_name_status = DomainNameStatusEnum::Valid->value;
+        $this->domain_name_expiration_date = $date;
+        $this->domain_name_check_failure_reason = null;
+        $this->save();
+
+//        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
+    }
+
+        public function setDomainNameException(Exception $exception): void
+    {
+        $this->domain_name_status = DomainNameStatusEnum::Invalid->value;
+        $this->domain_name_check_failure_reason = $exception->getMessage();
+        $this->save();
+
+//        event(new DomainNameCheckFailed($this, $exception->getMessage()));
     }
 }
