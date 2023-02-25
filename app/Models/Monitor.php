@@ -43,6 +43,10 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property \Illuminate\Support\Carbon|null $lighthouse_update_last_failed_at
  * @property \Illuminate\Support\Carbon|null $lighthouse_update_last_succeeded_at
  * @property string|null $lighthouse_check_failure_reason
+ * @property bool $domain_name_check_enabled
+ * @property string $domain_name_status
+ * @property \Illuminate\Support\Carbon|null $domain_name_expiration_date
+ * @property string|null $domain_name_check_failure_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DowntimeStat[] $downtimeStats
@@ -71,6 +75,10 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateIssuer($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameCheckFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameExpirationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckFailureReason($value)
@@ -104,6 +112,7 @@ class Monitor extends BaseMonitor
         'certificate_expiration_date',
         'lighthouse_update_last_failed_at',
         'lighthouse_update_last_succeeded_at',
+        'domain_name_expiration_date',
     ];
 
     protected $casts = [
@@ -111,6 +120,7 @@ class Monitor extends BaseMonitor
         'certificate_check_enabled' => 'boolean',
         'blacklist_check_enabled' => 'boolean',
         'lighthouse_check_enabled' => 'boolean',
+        'domain_name_check_enabled' => 'boolean',
     ];
 
     public function downtimeStats(): HasMany
