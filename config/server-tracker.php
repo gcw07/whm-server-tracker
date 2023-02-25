@@ -155,6 +155,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Domain Name Expiration RDAP Server
+    |--------------------------------------------------------------------------
+    | This is the RDAP server you are using to do domain name
+    | expiration lookups.
+    */
+
+    'rdap_server' => 'rdap.org',
+
+    /*
+    |--------------------------------------------------------------------------
     | Ignore Usernames
     |--------------------------------------------------------------------------
     | Skip over usernames that are ignored.
