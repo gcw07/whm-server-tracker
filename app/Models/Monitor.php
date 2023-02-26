@@ -332,22 +332,22 @@ class Monitor extends BaseMonitor
         }
     }
 
-        public function setDomainNameExpiration($date): void
-        {
-            $this->domain_name_status = DomainNameStatusEnum::Valid->value;
-            $this->domain_name_expiration_date = $date;
-            $this->domain_name_check_failure_reason = null;
-            $this->save();
+    public function setDomainNameExpiration($date): void
+    {
+        $this->domain_name_status = DomainNameStatusEnum::Valid->value;
+        $this->domain_name_expiration_date = $date;
+        $this->domain_name_check_failure_reason = null;
+        $this->save();
 
 //        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
-        }
+    }
 
-        public function setDomainNameException($reason): void
-        {
-            $this->domain_name_status = DomainNameStatusEnum::Invalid->value;
-            $this->domain_name_check_failure_reason = $reason;
-            $this->save();
+    public function setDomainNameException($reason): void
+    {
+        $this->domain_name_status = DomainNameStatusEnum::Invalid->value;
+        $this->domain_name_check_failure_reason = $reason;
+        $this->save();
 
 //        event(new DomainNameCheckFailed($this, $exception->getMessage()));
-        }
+    }
 }
