@@ -33,6 +33,9 @@ class Kernel extends ConsoleKernel
         // Schedule WordPress Check
         $schedule->command('server-tracker:check-wordpress')->dailyAt('1:15');
 
+        // Schedule Domain Name Expiration Check
+        $schedule->command('server-tracker:check-domain-name')->dailyAt('2:00');
+
         // Schedule Lighthouse Check
         $schedule->command('server-tracker:check-lighthouse')->dailyAt('3:10');
     }
