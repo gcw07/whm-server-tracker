@@ -316,23 +316,19 @@ class Monitor extends BaseMonitor
         return false;
     }
 
-    public function checkDomainNameExpiration()
+    public function processDomainNameExpiration($response)
     {
-        $rdapServer = config('server-tracker.rdap_server');
+        if ($response->failed()) {
+            $this->setDomainNameException($response->reason());
 
-        $url = "https://$rdapServer/domain/{$this->url->getHost()}";
+            return;
+        }
 
-        try {
-            $results = json_decode(file_get_contents($url));
-
-            foreach ($results->events as $event) {
-                if ($event->eventAction === 'expiration') {
-                    $this->setDomainNameExpiration($event->eventDate);
-                    break;
-                }
+        foreach ($response->object()->events as $event) {
+            if ($event->eventAction === 'expiration') {
+                $this->setDomainNameExpiration($event->eventDate);
+                break;
             }
-        } catch (Exception $exception) {
-            $this->setDomainNameException($exception);
         }
     }
 
@@ -346,10 +342,10 @@ class Monitor extends BaseMonitor
 //        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
         }
 
-        public function setDomainNameException(Exception $exception): void
+        public function setDomainNameException($reason): void
         {
             $this->domain_name_status = DomainNameStatusEnum::Invalid->value;
-            $this->domain_name_check_failure_reason = $exception->getMessage();
+            $this->domain_name_check_failure_reason = $reason;
             $this->save();
 
 //        event(new DomainNameCheckFailed($this, $exception->getMessage()));
