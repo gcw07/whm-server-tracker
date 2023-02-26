@@ -529,7 +529,7 @@
                     </dd>
                   </div>
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
+                    <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
                   </div>
                 </dl>
@@ -545,20 +545,20 @@
                       @elseif($monitor->domain_name_status === 'not yet checked')
                         Pending
                       @else
-                        Ok
+                        Valid
                       @endif
                     </dd>
                   </div>
                   @if($monitor->domain_name_status === 'valid')
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                      <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->lighthouse_update_last_succeeded_at?->diffForHumans() }}</dd>
+                      <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->domain_name_expiration_date?->format("D, F j, Y, g:i a") }}</dd>
                     </div>
                   @endif
                   @if($monitor->domain_name_status === 'invalid')
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                      <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->lighthouse_update_last_failed_at }}</dd>
+                      <dt class="text-sm font-medium text-gray-500">Failed Reason</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->domain_name_check_failure_reason }}</dd>
                     </div>
                   @endif
                 </dl>
