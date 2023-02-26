@@ -111,6 +111,21 @@ class Details extends Component
         }
     }
 
+    public function toggleDomainNameExpirationCheck()
+    {
+        if ($this->monitor->domain_name_check_enabled) {
+            $this->monitor->domain_name_check_enabled = false;
+            $this->monitor->save();
+
+            toast()->success('Turned OFF domain name expiration checking for this URL.')->push();
+        } else {
+            $this->monitor->domain_name_check_enabled = true;
+            $this->monitor->save();
+
+            toast()->success('Turned ON domain name expiration checking for this URL.')->push();
+        }
+    }
+
     public function refreshCertificateCheck()
     {
         Artisan::call('monitor:check-certificate', [
