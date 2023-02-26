@@ -42,7 +42,7 @@ class CheckDomainNameJob implements ShouldQueue
 
         $response = Http::acceptJson()
             ->timeout(20)
-            ->get("https://$rdapServer/domain2/{$this->monitor->url->getHost()}");
+            ->get("https://$rdapServer/domain/{$this->monitor->url->getHost()}");
 
         if ($response->failed() && $response->status() == 429) {
             $secondsRemaining = $response->header('Retry-After');
