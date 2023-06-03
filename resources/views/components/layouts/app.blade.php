@@ -11,11 +11,12 @@
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+  @vite('resources/css/app.css')
   @livewireStyles
 
   <!-- Scripts -->
-  <script src="{{ mix('js/app.js') }}" defer></script>
+  @toastScripts
+  @vite('resources/js/app.js')
 </head>
 <body class="h-full font-sans antialiased">
 <livewire:toasts />

@@ -1,10 +1,12 @@
-require('../../vendor/wire-elements/modal/resources/js/modal');
+import '../../vendor/wire-elements/modal/resources/js/modal';
 
 import Alpine from 'alpinejs';
+import focus from '@alpinejs/focus';
 import Tooltip from "@ryangjchandler/alpine-tooltip";
-import ToastComponent from '../../vendor/usernotnull/tall-toasts/dist/js/tall-toasts'
+import ToastComponent from '../../vendor/usernotnull/tall-toasts/resources/js/tall-toasts';
 import SearchComponent from './search';
 
+Alpine.plugin(focus);
 Alpine.plugin(Tooltip);
 
 Alpine.data('ToastComponent', ToastComponent);
