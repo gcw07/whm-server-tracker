@@ -83,6 +83,11 @@ task('npm:run:production', function () {
     run('cd {{release_path}} && {{bin/npm}} run production');
 });
 
+desc('Execute npm run build');
+task('npm:run:build', function () {
+    run('cd {{release_path}} && {{bin/npm}} run build');
+});
+
 /*
  |-------------------------------------------------------------------
  | Deploy tasks
@@ -102,7 +107,7 @@ task('deploy', [
     'deploy:prepare',
     'deploy:vendors',
     'npm:install',
-    'npm:run:production',
+    'npm:run:build',
     'artisan:storage:link',
     'artisan:view:cache',
     'artisan:config:cache',
