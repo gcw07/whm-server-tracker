@@ -18,7 +18,7 @@
         "spatie/laravel-backup": "^8.0",
         "spatie/laravel-uptime-monitor": "^4.0",
         "spatie/lighthouse-php": "^1.0",
-        "spatie/simple-excel": "^2.1",
+        "spatie/simple-excel": "^3.0",
         "usernotnull/tall-toasts": "^1.5",
         "wire-elements/modal": "^1.0"
     },
