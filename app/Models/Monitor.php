@@ -9,6 +9,7 @@ use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Spatie\Lighthouse\Lighthouse;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
@@ -201,13 +202,60 @@ class Monitor extends BaseMonitor
     public function checkBlacklist()
     {
         $blacklistServers = config('server-tracker.blacklist_servers');
+        $cachedSeconds = config('server-tracker.blacklist_cached_seconds');
 
+        try {
+            $items =
+                collect($this->checkBlacklistForIP($blacklistServers, $cachedSeconds))
+                    ->merge($this->checkBlacklistForHostname($blacklistServers));
+
+            $this->setBlacklist($items);
+        } catch (Exception $exception) {
+            $this->setBlacklistException($exception);
+        }
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('url', 'LIKE', '%'.$search.'%');
+        });
+    }
+
+    public function checkBlacklistForHostname($servers)
+    {
         $reverseIp = implode('.', array_reverse(explode('.', $this->url->getHost())));
 
         $items = [];
 
-        try {
-            foreach ($blacklistServers as $index => $host) {
+        foreach ($servers as $host) {
+            if (checkdnsrr($reverseIp.'.'.$host.'.', 'A')) {
+                $foundOnList = true;
+            } else {
+                $foundOnList = false;
+            }
+
+            if ($foundOnList) {
+                $items[] = [
+                    'host' => $host,
+                ];
+            }
+        }
+
+        return $items;
+    }
+
+    public function checkBlacklistForIP($servers, $cachedSeconds)
+    {
+        $mxRecords = dns_get_record($this->url->getHost(), DNS_MX);
+        $mxEntry = collect($mxRecords)->pluck('target')->first();
+        $serverIP = gethostbyname($mxEntry);
+        $reverseIp = implode('.', array_reverse(explode('.', $serverIP)));
+
+        return Cache::remember($serverIP, $cachedSeconds, function () use ($servers, $reverseIp) {
+            $items = [];
+
+            foreach ($servers as $host) {
                 if (checkdnsrr($reverseIp.'.'.$host.'.', 'A')) {
                     $foundOnList = true;
                 } else {
@@ -221,16 +269,7 @@ class Monitor extends BaseMonitor
                 }
             }
 
-            $this->setBlacklist($items);
-        } catch (Exception $exception) {
-            $this->setBlacklistException($exception);
-        }
-    }
-
-    public function scopeSearch($query, $search)
-    {
-        return $query->where(function ($query) use ($search) {
-            $query->where('url', 'LIKE', '%'.$search.'%');
+            return $items;
         });
     }
 
