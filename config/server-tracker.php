@@ -151,7 +151,7 @@ return [
     | no reason to re-run the IP address of the server multiple times.
     */
 
-    'blacklist_cached_time' => 7200,
+    'blacklist_cached_seconds' => 7200,
 
     /*
     |--------------------------------------------------------------------------
