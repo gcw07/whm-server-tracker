@@ -144,6 +144,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Blacklist Cached IP Address Time
+    |--------------------------------------------------------------------------
+    | The amount of time in seconds that the server IP addresses are cached.
+    | This is done because servers contain multiple domains and there is
+    | no reason to re-run the IP address of the server multiple times.
+    */
+
+    'blacklist_cached_time' => 7200,
+
+    /*
+    |--------------------------------------------------------------------------
     | Lighthouse Audit Reports
     |--------------------------------------------------------------------------
     | Limit audits to run only after a certain amount of time.
