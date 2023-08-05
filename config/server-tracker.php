@@ -90,9 +90,9 @@ return [
         'bogons.cymru.com',
         'cbl.abuseat.org',
         'db.wpbl.info',
-        'dnsbl-1.uceprotect.net',
-        'dnsbl-2.uceprotect.net',
-        'dnsbl-3.uceprotect.net',
+//        'dnsbl-1.uceprotect.net', // uceprotect seems like a scam
+//        'dnsbl-2.uceprotect.net',
+//        'dnsbl-3.uceprotect.net',
         'dnsbl.anticaptcha.net',
         'dnsbl.cyberlogic.net',
         'dnsbl.dronebl.org',
