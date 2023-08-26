@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::table('monitors', function (Blueprint $table) {
             $table->after('certificate_check_failure_reason', function (Blueprint $table) {

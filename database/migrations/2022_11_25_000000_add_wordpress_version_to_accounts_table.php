@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::table('accounts', function (Blueprint $table) {
             $table->after('plan', function (Blueprint $table) {

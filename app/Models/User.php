@@ -58,6 +58,7 @@ class User extends Authenticatable
     protected $casts = [
         'email' => Lower::class,
         'notification_types' => Notifications::class,
+        'password' => 'hashed',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

@@ -1,19 +1,19 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "The skeleton application for the Laravel framework.",
+    "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.1",
         "ext-simplexml": "*",
         "blade-ui-kit/blade-heroicons": "^2.0",
-        "doctrine/dbal": "^2.10",
+        "doctrine/dbal": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^v9.0",
+        "laravel/framework": "^10.0",
         "laravel/horizon": "^v5.0",
-        "laravel/tinker": "^v2.7.0",
-        "laravel/ui": "^v3.2.0",
+        "laravel/tinker": "^v2.8.0",
+        "laravel/ui": "^v4.0",
         "livewire/livewire": "^2.0",
         "spatie/laravel-backup": "^8.0",
         "spatie/laravel-uptime-monitor": "^4.0",
@@ -25,17 +25,14 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
         "barryvdh/laravel-ide-helper": "^2.7",
-        "brianium/paratest": "^6.4",
         "deployer/deployer": "^7.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^v6.1",
-        "pestphp/pest": "^1.0",
-        "pestphp/pest-plugin-laravel": "^1.0",
-        "pestphp/pest-plugin-parallel": "^1.0",
-        "phpunit/phpunit": "^9.5",
-        "spatie/laravel-ignition": "^1.0",
+        "nunomaduro/collision": "^v7.0",
+        "pestphp/pest": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0",
+        "spatie/laravel-ignition": "^2.0",
         "spatie/laravel-ray": "^1.29"
     },
     "autoload": {
@@ -82,7 +79,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "dev",
