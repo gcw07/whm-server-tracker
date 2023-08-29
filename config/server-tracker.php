@@ -151,6 +151,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Domain Name Expiration Notification
+    |--------------------------------------------------------------------------
+    | This is the number of given days before a domain name expires when
+    | to send a notification.
+    */
+
+    'domain_name_expires_within_days' => 10,
+
+    /*
+    |--------------------------------------------------------------------------
     | Ignore Usernames
     |--------------------------------------------------------------------------
     | Skip over usernames that are ignored.
