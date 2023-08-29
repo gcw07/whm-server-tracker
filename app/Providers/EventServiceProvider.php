@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\DomainNameExpiresSoonEvent;
 use App\Events\FetchedDataFailedEvent;
 use App\Events\FetchedDataSucceededEvent;
 use App\Listeners\SaveDowntimeStats;
 use App\Listeners\SendCertificateCheckFailed;
 use App\Listeners\SendCertificateCheckSucceeded;
 use App\Listeners\SendCertificateExpiresSoon;
+use App\Listeners\SendDomainNameExpiresSoon;
 use App\Listeners\SendFetchedDataFailedNotification;
 use App\Listeners\SendFetchedDataSucceededNotification;
 use App\Listeners\SendUptimeCheckFailed;
@@ -60,6 +62,10 @@ class EventServiceProvider extends ServiceProvider
 
         CertificateExpiresSoon::class => [
             SendCertificateExpiresSoon::class,
+        ],
+
+        DomainNameExpiresSoonEvent::class => [
+            SendDomainNameExpiresSoon::class,
         ],
     ];
 
