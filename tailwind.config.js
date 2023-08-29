@@ -1,6 +1,7 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
 
-module.exports = {
+export default {
   content: [
     "./vendor/usernotnull/tall-toasts/config/**/*.php",
     "./vendor/usernotnull/tall-toasts/resources/views/**/*.blade.php",
@@ -44,7 +45,5 @@ module.exports = {
     textColor: ['responsive', 'hover', 'focus', 'group-hover'],
     zIndex: ['responsive', 'focus'],
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [forms],
 }
