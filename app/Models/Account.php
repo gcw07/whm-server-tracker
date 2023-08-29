@@ -62,9 +62,12 @@ class Account extends Model
 
     protected $guarded = [];
 
-    protected $casts = ['backup' => 'boolean', 'suspended' => 'boolean'];
-
-    protected $dates = ['suspend_time', 'setup_date'];
+    protected $casts = [
+        'backup' => 'boolean',
+        'suspended' => 'boolean',
+        'suspend_time' => 'datetime',
+        'setup_date' => 'datetime',
+    ];
 
     protected $appends = [
         'domain_url',

@@ -107,22 +107,20 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  */
 class Monitor extends BaseMonitor
 {
-    protected $dates = [
-        'uptime_last_check_date',
-        'uptime_status_last_change_date',
-        'uptime_check_failed_event_fired_on_date',
-        'certificate_expiration_date',
-        'lighthouse_update_last_failed_at',
-        'lighthouse_update_last_succeeded_at',
-        'domain_name_expiration_date',
-    ];
-
     protected $casts = [
         'uptime_check_enabled' => 'boolean',
+        'uptime_last_check_date' => 'datetime',
+        'uptime_status_last_change_date' => 'datetime',
+        'uptime_check_failed_event_fired_on_date' => 'datetime',
         'certificate_check_enabled' => 'boolean',
         'blacklist_check_enabled' => 'boolean',
+        'certificate_expiration_date' => 'datetime',
         'lighthouse_check_enabled' => 'boolean',
+        'lighthouse_update_last_failed_at' => 'datetime',
+        'lighthouse_update_last_succeeded_at' => 'datetime',
         'domain_name_check_enabled' => 'boolean',
+        'domain_name_expiration_date' => 'datetime',
+        'blacklist_check_enabled' => 'boolean',
     ];
 
     public function downtimeStats(): HasMany
