@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\BlacklistStatusEnum;
 use App\Enums\DomainNameStatusEnum;
 use App\Enums\LighthouseStatusEnum;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -363,13 +364,13 @@ class Monitor extends BaseMonitor
 
         foreach ($response->object()->events as $event) {
             if ($event->eventAction === 'expiration') {
-                $this->setDomainNameExpiration($event->eventDate);
+                $this->setDomainNameExpiration(Carbon::parse($event->eventDate));
                 break;
             }
         }
     }
 
-    public function setDomainNameExpiration($date): void
+    public function setDomainNameExpiration(Carbon $date): void
     {
         $this->domain_name_status = DomainNameStatusEnum::Valid->value;
         $this->domain_name_expiration_date = $date;
