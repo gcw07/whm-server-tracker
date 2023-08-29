@@ -157,7 +157,7 @@ return [
     | to send a notification.
     */
 
-    'domain_name_expires_within_days' => 10,
+    'domain_name_expires_within_days' => 14,
 
     /*
     |--------------------------------------------------------------------------
