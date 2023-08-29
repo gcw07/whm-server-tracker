@@ -152,6 +152,16 @@
                           @error('state.notification_types.fetched_server_data_failed') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                         </div>
                       </div>
+                      <div class="relative flex items-start">
+                        <div class="flex h-5 items-center">
+                          <input id="fetched_server_data_failed" wire:model.defer="state.notification_types.domain_name_expires_soon" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="fetched_server_data_failed" class="font-medium text-gray-700">Domain Name Expires Soon</label>
+                          <p class="text-gray-500">Get notified when the domain name is expiring soon.</p>
+                          @error('state.notification_types.domain_name_expires_soon') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
