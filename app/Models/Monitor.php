@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\BlacklistStatusEnum;
 use App\Enums\DomainNameStatusEnum;
 use App\Enums\LighthouseStatusEnum;
+use App\Events\DomainNameExpiresSoonEvent;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Exception;
@@ -114,7 +115,6 @@ class Monitor extends BaseMonitor
         'uptime_status_last_change_date' => 'datetime',
         'uptime_check_failed_event_fired_on_date' => 'datetime',
         'certificate_check_enabled' => 'boolean',
-        'blacklist_check_enabled' => 'boolean',
         'certificate_expiration_date' => 'datetime',
         'lighthouse_check_enabled' => 'boolean',
         'lighthouse_update_last_failed_at' => 'datetime',
@@ -377,7 +377,7 @@ class Monitor extends BaseMonitor
         $this->domain_name_check_failure_reason = null;
         $this->save();
 
-//        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
+        $this->fireEventsForUpdatedMonitorWithDomainName($this, $date);
     }
 
     public function setDomainNameException($reason): void
@@ -387,5 +387,20 @@ class Monitor extends BaseMonitor
         $this->save();
 
 //        event(new DomainNameCheckFailed($this, $exception->getMessage()));
+    }
+
+    public function fireEventsForUpdatedMonitorWithDomainName(Monitor $monitor, Carbon $date): void
+    {
+        if ($this->domain_name_status === DomainNameStatusEnum::Valid->value) {
+            if ($date->diffInDays() <= config('server-tracker.domain_name_expires_within_days')) {
+                event(new DomainNameExpiresSoonEvent($monitor, $date));
+            }
+
+            return;
+        }
+
+        if ($this->domain_name_status === DomainNameStatusEnum::Invalid->value) {
+//        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
+        }
     }
 }
