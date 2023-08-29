@@ -5,8 +5,10 @@ namespace App\Notifications;
 use App\Events\DomainNameExpiresSoonEvent as SoonExpiringDomainNameFoundEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
-class DomainNameExpiresSoon extends BaseNotification
+class DomainNameExpiresSoon extends Notification
 {
     use Queueable;
 
@@ -30,20 +32,23 @@ class DomainNameExpiresSoon extends BaseNotification
      */
     public function toMail($notifiable)
     {
-        $mailMessage = (new MailMessage())
-            ->error()
-            ->subject($this->getMessageText())
-            ->line($this->getMessageText());
+        return (new MailMessage)
+            ->success()
+            ->subject($this->getSubjectText())
+            ->greeting("Domain Name Expiring")
+            ->line("The domain name for {$this->event->monitor->url} expires soon:")
+            ->line("Domain name expires in {$this->event->monitor->domain_name_expiration_date->diffForHumans()} on:")
+            ->line("{$this->event->monitor->domain_name_expiration_date->toDayDateTimeString()}");
 
-        foreach ($this->getMonitorProperties() as $name => $value) {
-            $mailMessage->line($name.': '.$value);
-        }
-
-        return $mailMessage;
     }
 
-    protected function getMessageText(): string
+    protected function getSubjectText(): string
     {
-        return "Domain name for {$this->getMonitor()->url} expires soon";
+        return "Domain name for {$this->event->monitor->url} expires soon";
+    }
+
+    public function isStillRelevant(): bool
+    {
+        return true;
     }
 }
