@@ -64,7 +64,6 @@
         Export
       </button>
     </div>
-{{--    </div>--}}
   </div>
   <!-- / End Page Header -->
 
@@ -83,8 +82,8 @@
              'bg-orange-100' => $account->is_disk_critical,
              'bg-red-100' => $account->is_disk_full,
              'bg-blue-200' => $account->suspended,
-             'bg-gray-50' => $loop->even,
-             'bg-white' => $loop->odd
+             'bg-gray-50' => $loop->even && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended),
+             'bg-white' => $loop->odd && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended)
             ])>
             <span class="flex items-center space-x-4">
               <span class="flex-1 flex space-x-2 truncate">
@@ -158,8 +157,8 @@
                         'bg-orange-100' => $account->is_disk_critical,
                         'bg-red-100' => $account->is_disk_full,
                         'bg-blue-200' => $account->suspended,
-                        'bg-gray-50' => $loop->even,
-                        'bg-white' => $loop->odd
+                        'bg-gray-50' => $loop->even && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended),
+                        'bg-white' => $loop->odd && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended)
                     ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex items-center space-x-3 lg:pl-2">
