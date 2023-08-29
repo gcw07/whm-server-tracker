@@ -16,6 +16,7 @@ class Notifications implements CastsAttributes
         'certificate_expires_soon',
         'fetched_server_data_succeeded',
         'fetched_server_data_failed',
+        'domain_name_expires_soon',
     ];
 
     public function get($model, $key, $value, $attributes): ?NotificationsCollection
