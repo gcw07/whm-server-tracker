@@ -27,6 +27,7 @@ class Edit extends Component
         'state.notification_types.certificate_expires_soon' => 'notification type - certificate expires soon',
         'state.notification_types.fetched_server_data_succeeded' => 'notification type - fetched server data succeeded',
         'state.notification_types.fetched_server_data_failed' => 'notification type - fetched server data failed',
+        'state.notification_types.domain_name_expires_soon' => 'notification type - domain name expires soon',
     ];
 
     public function mount(User $user)
@@ -61,6 +62,7 @@ class Edit extends Component
             'state.notification_types.certificate_expires_soon' => ['required', 'boolean'],
             'state.notification_types.fetched_server_data_succeeded' => ['required', 'boolean'],
             'state.notification_types.fetched_server_data_failed' => ['required', 'boolean'],
+            'state.notification_types.domain_name_expires_soon' => ['required', 'boolean'],
         ];
     }
 
