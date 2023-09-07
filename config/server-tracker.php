@@ -96,7 +96,7 @@ return [
         'dnsbl.anticaptcha.net',
         'dnsbl.cyberlogic.net',
         'dnsbl.dronebl.org',
-        'dnsbl.spfbl.net',
+//        'dnsbl.spfbl.net', // does not seem valid either
         'dnsbl.sorbs.net',
         'all.spamrats.com',
         'ips.backscatterer.org',
