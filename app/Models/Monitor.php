@@ -52,18 +52,20 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property string $domain_name_status
  * @property \Illuminate\Support\Carbon|null $domain_name_expiration_date
  * @property string|null $domain_name_check_failure_reason
+ * @property array|null $nameservers
+ * @property bool $is_on_cloudflare
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DowntimeStat[] $downtimeStats
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DowntimeStat> $downtimeStats
  * @property-read int|null $downtime_stats_count
  * @property-read string $certificate_status_as_emoji
  * @property-read string $chunked_last_certificate_check_failure_reason
  * @property-read string $chunked_last_failure_reason
  * @property-read string $raw_url
  * @property-read string $uptime_status_as_emoji
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LighthouseAudit[] $lighthouseAudits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LighthouseAudit> $lighthouseAudits
  * @property-read int|null $lighthouse_audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LighthouseAudit[] $lighthouseLatestAudit
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LighthouseAudit> $lighthouseLatestAudit
  * @property-read int|null $lighthouse_latest_audit_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor enabled()
@@ -85,12 +87,14 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameExpirationDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereIsOnCloudflare($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckFailureReason($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseUpdateLastFailedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseUpdateLastSucceededAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLookForString($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereNameservers($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckAdditionalHeaders($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckEnabled($value)
@@ -123,6 +127,8 @@ class Monitor extends BaseMonitor
         'domain_name_check_enabled' => 'boolean',
         'domain_name_expiration_date' => 'datetime',
         'blacklist_check_enabled' => 'boolean',
+        'nameservers' => 'array',
+        'is_on_cloudflare' => 'boolean',
     ];
 
     public function downtimeStats(): HasMany
@@ -285,7 +291,7 @@ class Monitor extends BaseMonitor
 
         $this->save();
 
-//        event(new BlacklistCheckSucceeded($this, $exception->getMessage()));
+        //        event(new BlacklistCheckSucceeded($this, $exception->getMessage()));
     }
 
     public function setBlacklistException(Exception $exception): void
@@ -294,7 +300,7 @@ class Monitor extends BaseMonitor
         $this->blacklist_check_failure_reason = $exception->getMessage();
         $this->save();
 
-//        event(new BlacklistCheckFailed($this, $exception->getMessage()));
+        //        event(new BlacklistCheckFailed($this, $exception->getMessage()));
     }
 
     public function getBlacklistFailureReason($items): string
@@ -372,7 +378,7 @@ class Monitor extends BaseMonitor
 
         $nameservers = collect($response->object()->nameservers)
             ->pluck('ldhName')
-            ->map(fn(string $name) => Str::lower($name))
+            ->map(fn (string $name) => Str::lower($name))
             ->toArray();
 
         $this->setNameserverInfo($nameservers);
@@ -394,7 +400,7 @@ class Monitor extends BaseMonitor
         $this->domain_name_check_failure_reason = $reason;
         $this->save();
 
-//        event(new DomainNameCheckFailed($this, $exception->getMessage()));
+        //        event(new DomainNameCheckFailed($this, $exception->getMessage()));
     }
 
     public function fireEventsForUpdatedMonitorWithDomainName(Monitor $monitor, Carbon $date): void
@@ -408,7 +414,7 @@ class Monitor extends BaseMonitor
         }
 
         if ($this->domain_name_status === DomainNameStatusEnum::Invalid->value) {
-//        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
+            //        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
         }
     }
 
