@@ -13,9 +13,9 @@ class Listings extends Component
 
     public string|bool $hasIssues = 'false';
 
-    public string|null $sortBy = null;
+    public ?string $sortBy = null;
 
-    public string|null $filterBy = null;
+    public ?string $filterBy = null;
 
     public function mount()
     {

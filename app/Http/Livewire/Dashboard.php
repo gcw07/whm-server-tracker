@@ -46,7 +46,7 @@ class Dashboard extends Component
         return User::query()->count();
     }
 
-    protected function serverTypeQuery(): object|null
+    protected function serverTypeQuery(): ?object
     {
         return Server::toBase()
             ->selectRaw("count(case when server_type = 'dedicated' then 1 end) as dedicated")

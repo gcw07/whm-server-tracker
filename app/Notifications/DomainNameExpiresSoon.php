@@ -6,7 +6,6 @@ use App\Events\DomainNameExpiresSoonEvent as SoonExpiringDomainNameFoundEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\HtmlString;
 
 class DomainNameExpiresSoon extends Notification
 {
@@ -35,11 +34,10 @@ class DomainNameExpiresSoon extends Notification
         return (new MailMessage)
             ->success()
             ->subject($this->getSubjectText())
-            ->greeting("Domain Name Expiring")
+            ->greeting('Domain Name Expiring')
             ->line("The domain name for {$this->event->monitor->url} expires soon:")
             ->line("Domain name expires in {$this->event->monitor->domain_name_expiration_date->diffForHumans()} on:")
             ->line("{$this->event->monitor->domain_name_expiration_date->toDayDateTimeString()}");
-
     }
 
     protected function getSubjectText(): string

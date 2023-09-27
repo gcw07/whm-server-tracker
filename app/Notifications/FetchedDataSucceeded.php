@@ -44,12 +44,12 @@ class FetchedDataSucceeded extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->success()
-                    ->subject('Server Tracker')
-                    ->greeting('Hello,')
-                    ->line('The following server has successfully updated:')
-                    ->line(new HtmlString('<b>'.$this->event->server->name.'</b>'))
-                    ->line('Thank you for using our application!');
+            ->success()
+            ->subject('Server Tracker')
+            ->greeting('Hello,')
+            ->line('The following server has successfully updated:')
+            ->line(new HtmlString('<b>'.$this->event->server->name.'</b>'))
+            ->line('Thank you for using our application!');
     }
 
     public function toSlack($notifiable)
