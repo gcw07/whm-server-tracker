@@ -29,7 +29,7 @@ class Listings extends Component
         ])->layoutData(['title' => 'Servers']);
     }
 
-    public function filterType($type)
+    public function filterType($type): void
     {
         if (! is_null($type) && ServerTypeEnum::tryFrom($type)) {
             $this->serverType = $type;
@@ -40,7 +40,7 @@ class Listings extends Component
         $this->putCache('servers', 'serverType', $this->serverType);
     }
 
-    public function updatedServerType($type)
+    public function updatedServerType($type): void
     {
         if (! is_null($type) && ServerTypeEnum::tryFrom($type)) {
             $this->serverType = $type;
@@ -51,7 +51,7 @@ class Listings extends Component
         $this->putCache('servers', 'serverType', $this->serverType);
     }
 
-    public function sortListingsBy($name)
+    public function sortListingsBy($name): void
     {
         $this->sortBy = match ($name) {
             'newest' => 'newest',
