@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\Lighthouse\Lighthouse;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
 
@@ -368,6 +369,13 @@ class Monitor extends BaseMonitor
                 break;
             }
         }
+
+        $nameservers = collect($response->object()->nameservers)
+            ->pluck('ldhName')
+            ->map(fn(string $name) => Str::lower($name))
+            ->toArray();
+
+        $this->setNameserverInfo($nameservers);
     }
 
     public function setDomainNameExpiration(Carbon $date): void
@@ -402,5 +410,14 @@ class Monitor extends BaseMonitor
         if ($this->domain_name_status === DomainNameStatusEnum::Invalid->value) {
 //        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
         }
+    }
+
+    public function setNameserverInfo(array $nameservers): void
+    {
+        $isOnCloudflare = Str::contains(collect($nameservers)->first(), 'cloudflare.com');
+
+        $this->nameservers = $nameservers;
+        $this->is_on_cloudflare = $isOnCloudflare;
+        $this->save();
     }
 }
