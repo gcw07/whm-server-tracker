@@ -14,7 +14,7 @@ class Label extends Component
 
     public ?string $value;
 
-    public function __construct(string $for, ?bool $required = false, ?string $value = null)
+    public function __construct(string $for, ?bool $required = false, string $value = null)
     {
         $this->for = $for;
         $this->required = $required;

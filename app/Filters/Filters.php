@@ -27,8 +27,6 @@ abstract class Filters
 
     /**
      * Create a new Filters instance.
-     *
-     * @param  Request  $request
      */
     public function __construct(Request $request)
     {

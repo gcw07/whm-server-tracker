@@ -12,9 +12,9 @@ class Listings extends Component
 {
     use WithPagination, WithCache;
 
-    public string|null $serverType = null;
+    public ?string $serverType = null;
 
-    public string|null $sortBy = null;
+    public ?string $sortBy = null;
 
     public function mount()
     {

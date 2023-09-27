@@ -42,7 +42,6 @@ class LoginController extends Controller
     /**
      * The user has been authenticated.
      *
-     * @param  Request  $request
      * @param  mixed  $user
      * @return void
      */
