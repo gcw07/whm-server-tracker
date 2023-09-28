@@ -158,6 +158,7 @@ trait ServerPresenter
                             'ea-php80' => '8.0',
                             'ea-php81' => '8.1',
                             'ea-php82' => '8.2',
+                            'ea-php83' => '8.3',
                             default => 'Unknown'
                         })->toArray();
                 }
@@ -184,6 +185,7 @@ trait ServerPresenter
                         'ea-php80' => '8.0',
                         'ea-php81' => '8.1',
                         'ea-php82' => '8.2',
+                        'ea-php83' => '8.3',
                     ];
 
                     return Arr::get($versions, $this->settings->get('php_system_version'), 'Unknown');
@@ -279,7 +281,7 @@ trait ServerPresenter
 
     public function isPhpVersionActive($version): bool
     {
-        return $version === '8.1' || $version === '8.2';
+        return $version === '8.1' || $version === '8.2' || $version === '8.3';
     }
 
     public function isPhpVersionSecurityOnly($version): bool
