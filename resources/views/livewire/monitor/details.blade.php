@@ -568,6 +568,77 @@
             @endif
           </div>
         </div>
+
+        <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
+          <div class="bg-gray-50 rounded-lg px-4 py-5 sm:px-6">
+            <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
+              <div class="ml-4 mt-4 flex items-center">
+                @if($monitor->domain_name_check_enabled)
+                  <div @class([
+                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'bg-green-600' => $monitor->domain_name_status === 'valid',
+                   'bg-red-600' => $monitor->domain_name_status === 'invalid',
+                   'bg-yellow-600' => $monitor->domain_name_status === 'not yet checked'
+                    ]) aria-hidden="true"></div>
+                @else
+                  <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                @endif
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Nameservers</h3>
+              </div>
+              <div class="ml-4 mt-4 flex-shrink-0">
+                <span></span>
+              </div>
+            </div>
+          </div>
+          <div>
+            @if(!$monitor->domain_name_check_enabled)
+              <div class="bg-yellow-100 text-center  p-3">Nameserver information check is disabled</div>
+              <div class="px-4 py-5 sm:p-0 opacity-20">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">On Cloudflare</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      N/A
+                    </dd>
+                  </div>
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Nameservers</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
+                  </div>
+                </dl>
+              </div>
+            @else
+              <div class="px-4 py-5 sm:p-0">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">On Cloudflare</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      @if($monitor->is_on_cloudflare)
+                        Yes
+                      @else
+                        No
+                      @endif
+                    </dd>
+                  </div>
+                  @if($monitor->domain_name_status === 'valid')
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <dt class="text-sm font-medium text-gray-500">Nameservers</dt>
+                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        @if($monitor->nameservers)
+                          @foreach($monitor->nameservers as $nameserver)
+                            {{ $nameserver }}<br>
+                          @endforeach
+                        @else
+                          Not fetched
+                        @endif
+                      </dd>
+                    </div>
+                  @endif
+                </dl>
+              </div>
+            @endif
+          </div>
+        </div>
       </dl>
     </div>
 
