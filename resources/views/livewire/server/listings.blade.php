@@ -133,8 +133,8 @@
                'bg-yellow-100' => $server->is_disk_warning,
                'bg-orange-100' => $server->is_disk_critical,
                'bg-red-100' => $server->is_disk_full,
-               'bg-gray-50' => $loop->even,
-               'bg-white' => $loop->odd
+               'bg-gray-50' => $loop->even && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full),
+               'bg-white' => $loop->odd && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full)
               ])>
               <span class="flex items-center space-x-4">
                 <span class="flex-1 flex space-x-2 truncate">
@@ -207,8 +207,8 @@
                         'bg-yellow-100' => $server->is_disk_warning,
                         'bg-orange-100' => $server->is_disk_critical,
                         'bg-red-100' => $server->is_disk_full,
-                        'bg-gray-50' => $loop->even,
-                        'bg-white' => $loop->odd
+                        'bg-gray-50' => $loop->even && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full),
+                        'bg-white' => $loop->odd && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full)
                     ])>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div class="flex">
