@@ -81,11 +81,11 @@ class Listings extends Component
                 }
 
                 if ($this->sortBy === 'usage_high') {
-                    return $query->orderBy('settings->disk_percentage', 'DESC');
+                    return $query->orderByRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) DESC");
                 }
 
                 // usage low
-                return $query->orderBy('settings->disk_percentage', 'ASC');
+                return $query->orderByRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) ASC");
             }, function ($query) {
                 return $query->orderBy('name');
             })
