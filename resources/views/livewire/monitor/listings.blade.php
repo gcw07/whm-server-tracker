@@ -47,7 +47,15 @@
             </button>
             <button wire:click.prevent="filterListingsBy('disabled')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem" tabindex="-1" id="filters-menu-item-1">
-              Disabled
+              Disabled Monitors
+            </button>
+            <button wire:click.prevent="filterListingsBy('on_cloudflare')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="filters-menu-item-1">
+              On Cloudflare
+            </button>
+            <button wire:click.prevent="filterListingsBy('not_on_cloudflare')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem" tabindex="-1" id="filters-menu-item-1">
+              Not on Cloudflare
             </button>
           </div>
         </x-navigation.dropdown>

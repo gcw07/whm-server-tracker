@@ -68,6 +68,8 @@ class Listings extends Component
     {
         $this->filterBy = match ($name) {
             'disabled' => 'disabled',
+            'on_cloudflare' => 'on_cloudflare',
+            'not_on_cloudflare' => 'not_on_cloudflare',
             default => null,
         };
 
@@ -105,6 +107,18 @@ class Listings extends Component
                         $query->where('uptime_check_enabled', false)
                             ->orWhere('certificate_check_enabled', false)
                             ->orWhere('blacklist_check_enabled', false);
+                    });
+                }
+
+                if ($this->filterBy === 'on_cloudflare') {
+                    return $query->where(function ($query) {
+                        $query->where('is_on_cloudflare', true);
+                    });
+                }
+
+                if ($this->filterBy === 'not_on_cloudflare') {
+                    return $query->where(function ($query) {
+                        $query->where('is_on_cloudflare', false);
                     });
                 }
 
