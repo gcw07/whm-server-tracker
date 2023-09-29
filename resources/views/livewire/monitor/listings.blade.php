@@ -196,6 +196,9 @@
                   <th scope="col" class="hidden px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider md:table-cell">
                     Blacklist
                   </th>
+                  <th scope="col" class="hidden px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider md:table-cell">
+                    Cloudflare
+                  </th>
                   <th scope="col" class="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     <span class="sr-only">Manage</span>
                   </th>
@@ -287,6 +290,26 @@
                           <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
                             <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
                             <span class="text-gray-900 font-medium">Ok</span>
+                          </div>
+                        @endif
+                      @endif
+                    </td>
+                    <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 md:table-cell">
+                      @if(!$monitor->domain_name_check_enabled)
+                        <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                          <x-heroicon-s-no-symbol class="-ml-0.5 mr-2 h-4 w-4 text-blue-600" />
+                          <span class="text-gray-900 font-medium">Disabled</span>
+                        </div>
+                      @else
+                        @if($monitor->is_on_cloudflare)
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-check-circle class="-ml-0.5 mr-2 h-4 w-4 text-green-600" />
+                            <span class="text-gray-900 font-medium">Yes</span>
+                          </div>
+                        @else
+                          <div class="inline-flex items-center rounded-md py-2 px-3 text-sm font-medium">
+                            <x-heroicon-s-x-circle class="-ml-0.5 mr-2 h-4 w-4 text-red-600" />
+                            <span class="text-gray-900 font-medium">No</span>
                           </div>
                         @endif
                       @endif
