@@ -157,6 +157,16 @@
                         <span class="font-medium">Blacklist - <span class="font-normal">Ok</span></span>
                       @endif
                     @endif
+
+                    @if(!$monitor->domain_name_check_enabled)
+                      <span class="font-medium">Cloudflare - <span class="font-normal">Disabled</span></span>
+                    @else
+                      @if($monitor->is_on_cloudflare)
+                        <span class="font-medium">Cloudflare - <span class="font-normal">Yes</span></span>
+                      @else
+                        <span class="font-medium">Cloudflare - <span class="font-normal">No</span></span>
+                      @endif
+                    @endif
                   </span>
                 </span>
                 <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
