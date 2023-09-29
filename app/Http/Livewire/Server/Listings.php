@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Server;
 use App\Enums\ServerTypeEnum;
 use App\Http\Livewire\WithCache;
 use App\Models\Server;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,10 +17,13 @@ class Listings extends Component
 
     public ?string $sortBy = null;
 
+    public ?string $filterBy = null;
+
     public function mount()
     {
         $this->serverType = $this->getCache('servers', 'serverType');
         $this->sortBy = $this->getCache('servers', 'sortBy');
+        $this->filterBy = $this->getCache('servers', 'filterBy');
     }
 
     public function render()
@@ -64,14 +68,25 @@ class Listings extends Component
         $this->putCache('servers', 'sortBy', $this->sortBy);
     }
 
+    public function filterListingsBy($name)
+    {
+        $this->filterBy = match ($name) {
+            'no_backups' => 'no_backups',
+            'outdated_php' => 'outdated_php',
+            default => null,
+        };
+
+        $this->putCache('servers', 'filterBy', $this->filterBy);
+    }
+
     protected function query()
     {
         return Server::query()
             ->withCount(['accounts'])
-            ->when($this->serverType, function ($query) {
+            ->when($this->serverType, function (Builder $query) {
                 return $query->where('server_type', $this->serverType);
             })
-            ->when($this->sortBy, function ($query) {
+            ->when($this->sortBy, function (Builder $query) {
                 if ($this->sortBy === 'newest') {
                     return $query->orderBy('created_at', 'DESC');
                 }
@@ -88,6 +103,27 @@ class Listings extends Component
                 return $query->orderByRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) ASC");
             }, function ($query) {
                 return $query->orderBy('name');
+            })
+            ->when($this->filterBy, function (Builder $query) {
+                if ($this->filterBy === 'no_backups') {
+                    return $query->where('settings->backup_enabled', false);
+                }
+
+                if ($this->filterBy === 'outdated_php') {
+                    return $query->where(function (Builder $query) {
+                        $query
+                            ->whereJsonContains('settings->php_installed_versions', 'ea-php54')
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php55')
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php56')
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php70')
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php71')
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php72')
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php73')
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php74');
+                    });
+                }
+
+                return $query;
             })
             ->paginate(50);
     }
