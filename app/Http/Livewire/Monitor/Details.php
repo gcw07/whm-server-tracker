@@ -158,4 +158,31 @@ class Details extends Component
 
         toast()->success('The SSL certificate for this URL will be checked shortly.')->push();
     }
+
+    public function refreshBlacklistCheck(): void
+    {
+        Artisan::call('server-tracker:check-blacklist', [
+            '--url' => $this->monitor->url,
+        ]);
+
+        toast()->success('The email blacklist for this URL will be checked shortly.')->push();
+    }
+
+    public function refreshDomainInfoCheck(): void
+    {
+        Artisan::call('server-tracker:check-domain-name', [
+            '--url' => $this->monitor->url,
+        ]);
+
+        toast()->success('The domain name expiration and nameservers for this URL will be checked shortly.')->push();
+    }
+
+    public function refreshLighthouseCheck(): void
+    {
+        Artisan::call('server-tracker:check-lighthouse', [
+            '--url' => $this->monitor->url,
+        ]);
+
+        toast()->success('The lighthouse report for this URL will be checked shortly.')->push();
+    }
 }
