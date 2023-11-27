@@ -51,7 +51,31 @@ class Details extends Component
             ->first();
     }
 
-    public function toggleUptimeCheck()
+    public function enableAllMonitors(): void
+    {
+        $this->monitor->uptime_check_enabled = true;
+        $this->monitor->certificate_check_enabled = true;
+        $this->monitor->blacklist_check_enabled = true;
+        $this->monitor->lighthouse_check_enabled = true;
+        $this->monitor->domain_name_check_enabled = true;
+        $this->monitor->save();
+
+        toast()->success('Enabled all monitors for this URL.')->push();
+    }
+
+    public function disableAllMonitors(): void
+    {
+        $this->monitor->uptime_check_enabled = false;
+        $this->monitor->certificate_check_enabled = false;
+        $this->monitor->blacklist_check_enabled = false;
+        $this->monitor->lighthouse_check_enabled = false;
+        $this->monitor->domain_name_check_enabled = false;
+        $this->monitor->save();
+
+        toast()->success('Disabled all monitors for this URL.')->push();
+    }
+
+    public function toggleUptimeCheck(): void
     {
         if ($this->monitor->uptime_check_enabled) {
             $this->monitor->uptime_check_enabled = false;
@@ -66,7 +90,7 @@ class Details extends Component
         }
     }
 
-    public function toggleCertificateCheck()
+    public function toggleCertificateCheck(): void
     {
         if ($this->monitor->certificate_check_enabled) {
             $this->monitor->certificate_check_enabled = false;
@@ -81,7 +105,7 @@ class Details extends Component
         }
     }
 
-    public function toggleBlacklistCheck()
+    public function toggleBlacklistCheck(): void
     {
         if ($this->monitor->blacklist_check_enabled) {
             $this->monitor->blacklist_check_enabled = false;
@@ -96,7 +120,7 @@ class Details extends Component
         }
     }
 
-    public function toggleLighthouseCheck()
+    public function toggleLighthouseCheck(): void
     {
         if ($this->monitor->lighthouse_check_enabled) {
             $this->monitor->lighthouse_check_enabled = false;
@@ -111,7 +135,7 @@ class Details extends Component
         }
     }
 
-    public function toggleDomainNameExpirationCheck()
+    public function toggleDomainNameExpirationCheck(): void
     {
         if ($this->monitor->domain_name_check_enabled) {
             $this->monitor->domain_name_check_enabled = false;
@@ -126,7 +150,7 @@ class Details extends Component
         }
     }
 
-    public function refreshCertificateCheck()
+    public function refreshCertificateCheck(): void
     {
         Artisan::call('monitor:check-certificate', [
             '--url' => $this->monitor->url,
