@@ -22,6 +22,7 @@ class Dashboard extends Component
             'totalMonitors' => $this->totalMonitors(),
             'serverTypes' => $this->serverTypeQuery(),
             'sitesWithIssues' => $this->sitesWithIssues(),
+            'serversWithIssues' => $this->serversWithIssues(),
             'recentAccounts' => $this->recentAccounts(),
         ])->layoutData(['title' => 'Dashboard']);
     }
@@ -68,6 +69,13 @@ class Dashboard extends Component
                     ->orWhere('certificate_status', 'invalid');
                 //                    ->orWhere('blacklist_status', 'invalid');
             })
+            ->count();
+    }
+
+    protected function serversWithIssues(): int
+    {
+        return Server::query()
+            ->whereRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) >= 90")
             ->count();
     }
 
