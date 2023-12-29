@@ -30,7 +30,7 @@ class Edit extends Component
         'state.notification_types.domain_name_expires_soon' => 'notification type - domain name expires soon',
     ];
 
-    public function mount(User $user)
+    public function mount(User $user): void
     {
         $this->user = $user;
 
@@ -53,7 +53,6 @@ class Edit extends Component
                 'max:255',
                 Rule::unique('users', 'email')->ignore($this->user->id),
             ],
-            'state.notification_types' => ['required', 'array'],
             'state.notification_types.uptime_check_failed' => ['required', 'boolean'],
             'state.notification_types.uptime_check_succeeded' => ['required', 'boolean'],
             'state.notification_types.uptime_check_recovered' => ['required', 'boolean'],

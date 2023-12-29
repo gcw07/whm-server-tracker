@@ -56,7 +56,7 @@
                     <div class="max-w-lg space-y-4">
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="uptime_check_succeeded" wire:model="state.notification_types.uptime_check_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="uptime_check_succeeded" wire:model.live="state.notification_types.uptime_check_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="uptime_check_succeeded" class="font-medium text-gray-700">Uptime Check Succeeded</label>
@@ -66,7 +66,7 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="uptime_check_failed" wire:model="state.notification_types.uptime_check_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="uptime_check_failed" wire:model.live="state.notification_types.uptime_check_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="uptime_check_failed" class="font-medium text-gray-700">Uptime Check Failed</label>
@@ -76,7 +76,7 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="uptime_check_recovered" wire:model="state.notification_types.uptime_check_recovered" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="uptime_check_recovered" wire:model.live="state.notification_types.uptime_check_recovered" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="uptime_check_recovered" class="font-medium text-gray-700">Uptime Check Recovered</label>
@@ -86,7 +86,7 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="certificate_check_succeeded" wire:model="state.notification_types.certificate_check_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="certificate_check_succeeded" wire:model.live="state.notification_types.certificate_check_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="certificate_check_succeeded" class="font-medium text-gray-700">SSL Certificate Check Succeeded</label>
@@ -96,7 +96,7 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="certificate_check_failed" wire:model="state.notification_types.certificate_check_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="certificate_check_failed" wire:model.live="state.notification_types.certificate_check_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="certificate_check_failed" class="font-medium text-gray-700">SSL Certificate Check Failed</label>
@@ -106,7 +106,7 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="certificate_expires_soon" wire:model="state.notification_types.certificate_expires_soon" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="certificate_expires_soon" wire:model.live="state.notification_types.certificate_expires_soon" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="certificate_expires_soon" class="font-medium text-gray-700">SSL Certificate Expires Soon</label>
@@ -116,7 +116,7 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="fetched_server_data_succeeded" wire:model="state.notification_types.fetched_server_data_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="fetched_server_data_succeeded" wire:model.live="state.notification_types.fetched_server_data_succeeded" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="fetched_server_data_succeeded" class="font-medium text-gray-700">Fetched Remote Server Data Succeeded</label>
@@ -126,7 +126,7 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="fetched_server_data_failed" wire:model="state.notification_types.fetched_server_data_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="fetched_server_data_failed" wire:model.live="state.notification_types.fetched_server_data_failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="fetched_server_data_failed" class="font-medium text-gray-700">Fetched Remote Server Data Failed</label>
@@ -136,7 +136,7 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex h-5 items-center">
-                          <input id="domain_name_expires_soon" wire:model="state.notification_types.domain_name_expires_soon" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
+                          <input id="domain_name_expires_soon" wire:model.live="state.notification_types.domain_name_expires_soon" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="domain_name_expires_soon" class="font-medium text-gray-700">Domain Name Expires Soon</label>
