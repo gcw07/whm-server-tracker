@@ -59,7 +59,7 @@
         </div>
       </x-navigation.dropdown>
 
-      <button wire:click='$dispatch("openModal", "account.export", {{ json_encode(["sortBy" => $sortBy]) }})' type="button" class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
+      <button wire:click="$dispatch('openModal', { component: 'account.export', arguments: { sortBy: {{ $sortBy ?? 'null' }} }})" type="button" class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">
         <x-heroicon-s-arrow-down-tray class="-ml-0.5 mr-2 h-4 w-4" />
         Export
       </button>

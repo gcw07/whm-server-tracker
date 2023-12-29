@@ -119,12 +119,12 @@
                             <x-heroicon-s-pencil-square class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
                             Edit
                           </a>
-                          <button wire:click='$dispatch("openModal", "user.change-password", {{ json_encode(["user" => $user->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          <button wire:click="$dispatch('openModal', { component: 'user.change-password', arguments: { user: {{ $user->id }} }})" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   role="menuitem" tabindex="-1" id="user-menu-item-1">
                             <x-heroicon-s-key class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
                             Change Password
                           </button>
-                          <button wire:click='$dispatch("openModal", "user.delete", {{ json_encode(["user" => $user->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          <button wire:click="$dispatch('openModal', { component: 'user.delete', arguments: { user: {{ $user->id }} }})" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   role="menuitem" tabindex="-1" id="user-menu-item-2">
                             <x-heroicon-s-trash class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
                             Delete
