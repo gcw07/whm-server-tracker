@@ -33,7 +33,7 @@ class Export extends ModalComponent
         'wordpress_version' => true,
     ];
 
-    public function mount(?string $sortBy)
+    public function mount(?string $sortBy): void
     {
         abort_if(auth()->guest(), 401);
 

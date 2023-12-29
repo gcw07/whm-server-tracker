@@ -65,7 +65,7 @@ class NewToken extends ModalComponent
         $this->forceClose()->closeModal();
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->forceClose()->closeModal();
     }

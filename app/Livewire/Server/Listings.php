@@ -19,7 +19,7 @@ class Listings extends Component
 
     public ?string $filterBy = null;
 
-    public function mount()
+    public function mount(): void
     {
         $this->serverType = $this->getCache('servers', 'serverType');
         $this->sortBy = $this->getCache('servers', 'sortBy');
@@ -68,7 +68,7 @@ class Listings extends Component
         $this->putCache('servers', 'sortBy', $this->sortBy);
     }
 
-    public function filterListingsBy($name)
+    public function filterListingsBy($name): void
     {
         $this->filterBy = match ($name) {
             'no_backups' => 'no_backups',

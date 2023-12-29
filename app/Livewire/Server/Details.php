@@ -13,7 +13,7 @@ class Details extends Component
 
     public Server $server;
 
-    public function mount(Server $server)
+    public function mount(Server $server): void
     {
         $server->loadMissing(['accounts' => function ($query) {
             return $query->orderBy('domain');
@@ -27,7 +27,7 @@ class Details extends Component
         return view('livewire.server.details')->layoutData(['title' => 'Server Details']);
     }
 
-    public function refresh()
+    public function refresh(): void
     {
         FetchServerDataJob::dispatch($this->server);
 
