@@ -408,7 +408,7 @@
         </div>
         <div>
           @if(!$monitor->blacklist_check_enabled)
-            <div class="bg-yellow-100 text-center  p-3">Blacklist check is disabled</div>
+            <div class="bg-yellow-100 text-center  p-3">Email Blacklist check is disabled</div>
             <div class="px-4 py-5 sm:p-0 opacity-20">
               <dl class="sm:divide-y sm:divide-gray-200">
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
