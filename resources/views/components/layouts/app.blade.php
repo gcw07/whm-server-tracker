@@ -34,6 +34,6 @@
 </div>
 
 @livewire('wire-elements-modal')
-@livewireScripts
+@livewireScriptConfig
 </body>
 </html>
