@@ -46,7 +46,7 @@ function something()
     // ..
 }
 
-function signIn(User $user = null)
+function signIn(?User $user = null)
 {
     return test()->actingAs($user ?? User::factory()->create());
 }

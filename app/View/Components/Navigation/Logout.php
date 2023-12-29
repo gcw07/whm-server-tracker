@@ -8,7 +8,7 @@ class Logout extends Component
 {
     public string $action;
 
-    public function __construct(string $action = null)
+    public function __construct(?string $action = null)
     {
         $this->action = $action ?? route('logout');
     }

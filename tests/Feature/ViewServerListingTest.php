@@ -26,7 +26,7 @@ test('an authorized user can view server listings page', function () {
 
     Livewire::test(ServerListings::class)
         ->assertViewHas('servers', function ($servers) {
-            return 5 === count($servers);
+            return count($servers) === 5;
         })
         ->assertSee('MyServer.com');
 });
@@ -42,7 +42,7 @@ test('the server listings are in alphabetical order', function () {
 
     Livewire::test(ServerListings::class)
         ->assertViewHas('servers', function ($servers) {
-            return 3 === count($servers);
+            return count($servers) === 3;
         });
 })->skip();
 
@@ -58,7 +58,7 @@ test('the server listings can be filtered by server type', function () {
     Livewire::test(ServerListings::class)
         ->set('serverType', 'vps')
         ->assertViewHas('servers', function ($servers) {
-            return 2 === count($servers);
+            return count($servers) === 2;
         })
         ->assertSee('SomeServer.com');
 });

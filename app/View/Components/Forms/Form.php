@@ -13,7 +13,7 @@ class Form extends Component
 
     public bool $hasFiles;
 
-    public function __construct(string $action = null, string $method = 'POST', bool $hasFiles = false)
+    public function __construct(?string $action = null, string $method = 'POST', bool $hasFiles = false)
     {
         $this->action = $action;
         $this->method = strtoupper($method);

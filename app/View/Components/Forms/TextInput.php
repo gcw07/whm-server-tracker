@@ -19,7 +19,7 @@ class TextInput extends Component
 
     public string $errorBag;
 
-    public function __construct(string $name, string $id = null, string $type = 'text', ?string $value = '', ?string $errorField = '', string $errorBag = 'default')
+    public function __construct(string $name, ?string $id = null, string $type = 'text', ?string $value = '', ?string $errorField = '', string $errorBag = 'default')
     {
         $this->name = $name;
         $this->id = $id ?? $name;

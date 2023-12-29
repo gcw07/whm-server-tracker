@@ -26,7 +26,7 @@ test('an authorized user can view monitor listings page', function () {
 
     Livewire::test(MonitorListings::class)
         ->assertViewHas('monitors', function ($monitors) {
-            return 2 === count($monitors);
+            return count($monitors) === 2;
         })
         ->assertSee('myserver.com');
 });
@@ -42,7 +42,7 @@ test('the monitor listings are in alphabetical order', function () {
 
     Livewire::test(MonitorListings::class)
         ->assertViewHas('monitors', function ($monitors) {
-            return 3 === count($monitors);
+            return count($monitors) === 3;
         });
 })->skip();
 
@@ -58,7 +58,7 @@ test('the monitor listings can be filtered by having issues or not', function ()
     Livewire::test(MonitorListings::class)
         ->set('hasIssues', 'true')
         ->assertViewHas('monitors', function ($monitors) {
-            return 2 === count($monitors);
+            return count($monitors) === 2;
         })
         ->assertSee('https://someserver.com');
 });

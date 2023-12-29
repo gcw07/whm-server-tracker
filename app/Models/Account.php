@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\Http;
  */
 class Account extends Model
 {
-    use HasFactory, AccountPresenter;
+    use AccountPresenter, HasFactory;
 
     protected $guarded = [];
 

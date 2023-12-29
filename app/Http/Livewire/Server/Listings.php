@@ -11,7 +11,7 @@ use Livewire\WithPagination;
 
 class Listings extends Component
 {
-    use WithPagination, WithCache;
+    use WithCache, WithPagination;
 
     public ?string $serverType = null;
 

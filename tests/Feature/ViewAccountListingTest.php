@@ -28,7 +28,7 @@ test('an authorized user can view account listings page', function () {
 
     Livewire::test(AccountListings::class)
         ->assertViewHas('accounts', function ($accounts) {
-            return 1 === count($accounts);
+            return count($accounts) === 1;
         })
         ->assertSee('mytestsite.com');
 });
@@ -44,6 +44,6 @@ test('the account listings are in alphabetical order', function () {
 
     Livewire::test(AccountListings::class)
         ->assertViewHas('accounts', function ($accounts) {
-            return 3 === count($accounts);
+            return count($accounts) === 3;
         });
 })->skip();

@@ -46,7 +46,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class User extends Authenticatable
 {
-    use HasLogins, HasFactory, Notifiable;
+    use HasFactory, HasLogins, Notifiable;
 
     protected $guarded = [];
 

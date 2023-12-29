@@ -29,6 +29,6 @@ test('the user listings are in alphabetical order', function () {
 
     Livewire::test(UserListings::class)
         ->assertViewHas('users', function ($users) {
-            return 3 === count($users);
+            return count($users) === 3;
         });
 })->skip();

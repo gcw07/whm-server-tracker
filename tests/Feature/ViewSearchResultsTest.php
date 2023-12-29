@@ -33,7 +33,7 @@ test('the server name can be searched', function () {
     Livewire::test(Search::class)
         ->set('q', 'test')
         ->assertViewHas('servers', function ($servers) {
-            return 1 === count($servers);
+            return count($servers) === 1;
         })
         ->assertSee('MyTestServer.com')
         ->assertDontSee('NoResults.com');
@@ -48,7 +48,7 @@ test('the server notes can be searched', function () {
     Livewire::test(Search::class)
         ->set('q', 'this')
         ->assertViewHas('servers', function ($servers) {
-            return 1 === count($servers);
+            return count($servers) === 1;
         })
         ->assertSee('this')
         ->assertDontSee('not');
@@ -65,7 +65,7 @@ test('the account domain can be searched', function () {
     Livewire::test(Search::class)
         ->set('q', 'test')
         ->assertViewHas('accounts', function ($accounts) {
-            return 1 === count($accounts);
+            return count($accounts) === 1;
         })
         ->assertSee('mytestsite')
         ->assertDontSee('never-see');
@@ -82,7 +82,7 @@ test('the account ip can be searched', function () {
     Livewire::test(Search::class)
         ->set('q', '255')
         ->assertViewHas('accounts', function ($accounts) {
-            return 1 === count($accounts);
+            return count($accounts) === 1;
         })
         ->assertSee('mytestsite.com')
         ->assertDontSee('never-see.com');
@@ -99,7 +99,7 @@ test('the account username can be searched', function () {
     Livewire::test(Search::class)
         ->set('q', 'mytest')
         ->assertViewHas('accounts', function ($accounts) {
-            return 1 === count($accounts);
+            return count($accounts) === 1;
         })
         ->assertSee('something.com')
         ->assertDontSee('nope.com');
