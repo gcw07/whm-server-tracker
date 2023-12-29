@@ -8,11 +8,8 @@
 
     <div
             x-data="LivewireUIModal()"
-            x-init="init()"
             x-on:close.stop="setShowPropertyTo(false)"
             x-on:keydown.escape.window="closeModalOnEscape()"
-            x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
-            x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
             x-show="show"
             class="fixed inset-0 z-10 overflow-y-auto"
             style="display: none;"
@@ -45,10 +42,12 @@
                     x-bind:class="modalWidth"
                     class="inline-block w-full align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full"
                     id="modal-container"
+                    x-trap.noscroll.inert="show && showActiveComponent"
+                    aria-modal="true"
             >
                 @forelse($components as $id => $component)
                     <div x-show.immediate="activeComponent == '{{ $id }}'" x-ref="{{ $id }}" wire:key="{{ $id }}">
-                        @livewire($component['name'], $component['attributes'], key($id))
+                        @livewire($component['name'], $component['arguments'], key($id))
                     </div>
                 @empty
                 @endforelse
