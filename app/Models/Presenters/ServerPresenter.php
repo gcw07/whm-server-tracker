@@ -281,12 +281,12 @@ trait ServerPresenter
 
     public function isPhpVersionActive($version): bool
     {
-        return $version === '8.1' || $version === '8.2' || $version === '8.3';
+        return $version === '8.2' || $version === '8.3';
     }
 
     public function isPhpVersionSecurityOnly($version): bool
     {
-        return $version === '8.0';
+        return $version === '8.1';
     }
 
     public function isPhpVersionEndOfLife($version): bool
@@ -299,7 +299,8 @@ trait ServerPresenter
             $version === '7.1' ||
             $version === '7.2' ||
             $version === '7.3' ||
-            $version === '7.4';
+            $version === '7.4' ||
+            $version === '8.0';
     }
 
     protected function formatFileSize($kilobytes, $precision = null): string
