@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Search;
+use App\Livewire\Search;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;

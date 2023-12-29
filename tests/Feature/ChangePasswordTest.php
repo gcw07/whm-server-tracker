@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\User\ChangePassword as UserChangePassword;
+use App\Livewire\User\ChangePassword as UserChangePassword;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
@@ -24,7 +24,7 @@ test('an authorized user can change a password', function () {
             'password_confirmation' => 'NMeHq?Bzr#Nd#bt4',
         ])
         ->call('save')
-        ->assertEmitted('closeModal');
+        ->assertDispatched('closeModal');
 });
 
 test('password confirmation is required for user change password', function () {

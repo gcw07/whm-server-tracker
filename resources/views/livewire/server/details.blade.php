@@ -53,13 +53,13 @@
             Edit
           </a>
           @if(!$server->missing_token)
-            <button wire:click='$emit("openModal", "server.reset-token", {{ json_encode(["server" => $server->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            <button wire:click='$dispatch("openModal", "server.reset-token", {{ json_encode(["server" => $server->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem" tabindex="-1" id="details-menu-item-1">
               <x-heroicon-s-key class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
               Reset API Token
             </button>
           @endif
-          <button wire:click='$emit("openModal", "server.delete", {{ json_encode(["server" => $server->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          <button wire:click='$dispatch("openModal", "server.delete", {{ json_encode(["server" => $server->id]) }})' class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
              role="menuitem" tabindex="-1" id="details-menu-item-2">
             <x-heroicon-s-trash class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500" />
             Delete
@@ -75,7 +75,7 @@
     <!-- Begin content -->
 
     @if($server->missing_token)
-      <button wire:click='$emit("openModal", "server.new-token", {{ json_encode(["server" => $server->id]) }})' type="button" class="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      <button wire:click='$dispatch("openModal", "server.new-token", {{ json_encode(["server" => $server->id]) }})' type="button" class="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         <x-heroicon-o-key class="mx-auto h-12 w-12 text-gray-400" />
         <span class="mt-2 block text-sm font-medium text-gray-900"> Add an API token to get started </span>
       </button>

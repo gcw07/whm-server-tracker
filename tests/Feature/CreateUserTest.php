@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\User\Create as UserCreate;
+use App\Livewire\User\Create as UserCreate;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\Factories\UserRequestDataFactory;

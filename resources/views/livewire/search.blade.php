@@ -22,7 +22,7 @@
           <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
             <x-heroicon-s-magnifying-glass class="h-5 w-5"/>
           </div>
-          <input placeholder="Search" type="text" wire:model.debounce.500ms="q" class="block max-w-lg pl-10 w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
+          <input placeholder="Search" type="text" wire:model.live.debounce.500ms="q" class="block max-w-lg pl-10 w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
         </div>
       </div>
       @if($q)

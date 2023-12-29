@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\DataTable;
+namespace App\Livewire\DataTable;
 
 trait WithSorting
 {

@@ -1,40 +1,23 @@
 <?php
 
-namespace App\Http\Livewire\User;
+namespace App\Livewire\User;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 
-class Create extends Component
+class Edit extends Component
 {
+    public User $user;
+
     /**
      * The component's state.
      */
-    public array $state = [
-        'name' => '',
-        'email' => '',
-        'password' => '',
-        'password_confirmation' => '',
-        'notification_types' => [
-            'uptime_check_failed' => false,
-            'uptime_check_succeeded' => false,
-            'uptime_check_recovered' => false,
-            'certificate_check_succeeded' => false,
-            'certificate_check_failed' => false,
-            'certificate_expires_soon' => false,
-            'fetched_server_data_succeeded' => false,
-            'fetched_server_data_failed' => false,
-            'domain_name_expires_soon' => false,
-        ],
-    ];
+    public array $state = [];
 
     protected $validationAttributes = [
         'state.name' => 'name',
         'state.email' => 'email',
-        'state.password' => 'password',
-        'state.password_confirmation' => 'password',
         'state.notification_types' => 'notification types',
         'state.notification_types.uptime_check_failed' => 'notification type - uptime check failed',
         'state.notification_types.uptime_check_succeeded' => 'notification type - uptime check succeeded',
@@ -47,9 +30,16 @@ class Create extends Component
         'state.notification_types.domain_name_expires_soon' => 'notification type - domain name expires soon',
     ];
 
+    public function mount(User $user)
+    {
+        $this->user = $user;
+
+        $this->state = $user->only(['name', 'email', 'notification_types']);
+    }
+
     public function render()
     {
-        return view('livewire.user.create')->layoutData(['title' => 'Create User']);
+        return view('livewire.user.edit')->layoutData(['title' => 'Edit User']);
     }
 
     protected function rules(): array
@@ -61,16 +51,7 @@ class Create extends Component
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email'),
-            ],
-            'state.password' => [
-                'required',
-                'confirmed',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->uncompromised(),
+                Rule::unique('users', 'email')->ignore($this->user->id),
             ],
             'state.notification_types' => ['required', 'array'],
             'state.notification_types.uptime_check_failed' => ['required', 'boolean'],
@@ -89,11 +70,7 @@ class Create extends Component
     {
         $this->validate();
 
-        $data = collect($this->state)->merge([
-            'password' => bcrypt($this->state['password']),
-        ])->except('password_confirmation')->toArray();
-
-        User::create($data);
+        $this->user->update($this->state);
 
         return redirect()->route('users.index');
     }

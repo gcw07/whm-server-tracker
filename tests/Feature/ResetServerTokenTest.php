@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Server\ResetToken as ServerResetToken;
+use App\Livewire\Server\ResetToken as ServerResetToken;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;

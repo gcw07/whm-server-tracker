@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\ServerTypeEnum;
-use App\Http\Livewire\Server\Listings as ServerListings;
+use App\Livewire\Server\Listings as ServerListings;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;

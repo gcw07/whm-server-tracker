@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Server\NewToken as ServerNewToken;
+use App\Livewire\Server\NewToken as ServerNewToken;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -38,7 +38,7 @@ test('an authorized user can update a server token', function () {
             'token' => 'new-api-token',
         ])
         ->call('save')
-        ->assertEmitted('closeModal')
+        ->assertDispatched('closeModal')
         ->assertNoRedirect();
 
     tap($this->server->fresh(), function (Server $server) {

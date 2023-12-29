@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Server\Details as ServerDetails;
+use App\Livewire\Server\Details as ServerDetails;
 use App\Jobs\FetchServerDataJob;
 use App\Models\Server;
 use App\Models\User;

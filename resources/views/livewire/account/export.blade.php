@@ -5,7 +5,7 @@
       <x-heroicon-o-x-mark class="h-6 w-6" />
     </button>
   </div>
-  <form wire:submit.prevent="save">
+  <form wire:submit="save">
     <div>
       <div class="mt-3 text-center sm:mt-0 sm:mx-4 sm:text-left">
         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Export Accounts</h3>
@@ -19,7 +19,7 @@
                   <label for="domain" class="font-medium text-gray-700 select-none">Domain</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.domain" id="domain" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.domain" id="domain" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.domain') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -29,7 +29,7 @@
                   <label for="server" class="font-medium text-gray-700 select-none">Server</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.server" id="server" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.server" id="server" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.server') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -39,7 +39,7 @@
                   <label for="username" class="font-medium text-gray-700 select-none">Username</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.username" id="username" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.username" id="username" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.username') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -49,7 +49,7 @@
                   <label for="ip" class="font-medium text-gray-700 select-none">IP Address</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.ip" id="ip" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.ip" id="ip" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.ip') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -59,7 +59,7 @@
                   <label for="backups" class="font-medium text-gray-700 select-none">Backups</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.backups" id="backups" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.backups" id="backups" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.backups') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -69,7 +69,7 @@
                   <label for="suspended" class="font-medium text-gray-700 select-none">Suspended</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.suspended" id="suspended" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.suspended" id="suspended" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.suspended') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -79,7 +79,7 @@
                   <label for="suspended_reason" class="font-medium text-gray-700 select-none">Suspended Reason</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.suspended_reason" id="suspended_reason" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.suspended_reason" id="suspended_reason" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.suspended_reason') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -89,7 +89,7 @@
                   <label for="suspended_time" class="font-medium text-gray-700 select-none">Suspended Date</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.suspended_time" id="suspended_time" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.suspended_time" id="suspended_time" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.suspended_time') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -99,7 +99,7 @@
                   <label for="setup_date" class="font-medium text-gray-700 select-none">Setup Date</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.setup_date" id="setup_date" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.setup_date" id="setup_date" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.setup_date') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -109,7 +109,7 @@
                   <label for="disk_used" class="font-medium text-gray-700 select-none">Disk Used</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.disk_used" id="disk_used" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.disk_used" id="disk_used" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.disk_used') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -119,7 +119,7 @@
                   <label for="disk_limit" class="font-medium text-gray-700 select-none">Disk Limit</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.disk_limit" id="disk_limit" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.disk_limit" id="disk_limit" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.disk_limit') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -129,7 +129,7 @@
                   <label for="disk_usage" class="font-medium text-gray-700 select-none">Disk Usage</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.disk_usage" id="disk_usage" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.disk_usage" id="disk_usage" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.disk_usage') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -139,7 +139,7 @@
                   <label for="plan" class="font-medium text-gray-700 select-none">Plan</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.plan" id="plan" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.plan" id="plan" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.plan') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -149,7 +149,7 @@
                   <label for="plan" class="font-medium text-gray-700 select-none">WordPress Version</label>
                 </div>
                 <div class="ml-3 flex items-center h-5">
-                  <input wire:model="state.wordpress_version" id="plan" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
+                  <input wire:model.live="state.wordpress_version" id="plan" type="checkbox" class="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 rounded">
                   @error('state.wordpress_version') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>

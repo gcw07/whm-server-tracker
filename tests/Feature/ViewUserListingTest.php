@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\User\Listings as UserListings;
+use App\Livewire\User\Listings as UserListings;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\User\Delete as UserDelete;
+use App\Livewire\User\Delete as UserDelete;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
@@ -30,7 +30,7 @@ test('an authorized user cannot delete themselves', function () {
 
     Livewire::test(UserDelete::class, ['user' => $this->user])
         ->call('delete')
-        ->assertEmitted('closeModal')
+        ->assertDispatched('closeModal')
         ->assertNoRedirect();
 
     $this->assertEquals(1, User::count());

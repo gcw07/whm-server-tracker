@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Account;
+namespace App\Livewire\Account;
 
 use App\Models\Account;
 use LivewireUI\Modal\ModalComponent;

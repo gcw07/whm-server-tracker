@@ -78,7 +78,7 @@
       <!-- Dropdown menu on small screens -->
       <div class="sm:hidden">
         <label for="current-tab" class="sr-only">Select a tab</label>
-        <select id="current-tab" name="current-tab" wire:model="serverType" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
+        <select id="current-tab" name="current-tab" wire:model.live="serverType" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
           <option value="">All</option>
           <option value="dedicated">Dedicated</option>
           <option value="reseller">Reseller</option>

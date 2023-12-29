@@ -14,7 +14,7 @@
 
     <div class="shadow bg-white px-6 py-4 sm:rounded-lg">
 
-      <form wire:submit.prevent="save" class="space-y-8 divide-y divide-gray-200">
+      <form wire:submit="save" class="space-y-8 divide-y divide-gray-200">
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
             <div>
@@ -24,7 +24,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Name </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <input type="text" wire:model="state.name" id="name" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
+                  <input type="text" wire:model.live="state.name" id="name" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
                   @error('state.name') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -32,7 +32,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="address" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Address </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <input type="text" wire:model="state.address" id="address" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
+                  <input type="text" wire:model.live="state.address" id="address" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
                   @error('state.address') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -40,7 +40,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="port" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Port </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <input type="text" wire:model="state.port" id="port" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
+                  <input type="text" wire:model.live="state.port" id="port" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
                   @error('state.port') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -48,7 +48,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="server_type" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Server Type </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <select wire:model="state.server_type" id="server_type" class="max-w-lg block focus:ring-sky-500 focus:border-sky-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
+                  <select wire:model.live="state.server_type" id="server_type" class="max-w-lg block focus:ring-sky-500 focus:border-sky-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
                     <option :value="null">Select Type</option>
                     <option value="dedicated">Dedicated</option>
                     <option value="reseller">Reseller</option>
@@ -61,7 +61,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="notes" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Notes </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <textarea wire:model="state.notes" id="notes" rows="3" class="max-w-lg shadow-sm block w-full focus:ring-sky-500 focus:border-sky-500 sm:text-sm border border-gray-300 rounded-md"></textarea>
+                  <textarea wire:model.live="state.notes" id="notes" rows="3" class="max-w-lg shadow-sm block w-full focus:ring-sky-500 focus:border-sky-500 sm:text-sm border border-gray-300 rounded-md"></textarea>
                   @error('state.notes') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
               </div>
@@ -69,7 +69,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label for="token" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> API Token </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <input type="text" wire:model="state.token" id="token" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
+                  <input type="text" wire:model.live="state.token" id="token" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
                   <p class="text-xs text-gray-500">This is a WHM API Token. Once set this will not be visible again.</p>
                   @error('state.token') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>

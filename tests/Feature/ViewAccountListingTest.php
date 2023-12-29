@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Account\Listings as AccountListings;
+use App\Livewire\Account\Listings as AccountListings;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;

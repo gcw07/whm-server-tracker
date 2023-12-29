@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Account;
+namespace App\Livewire\Account;
 
-use App\Http\Livewire\WithCache;
+use App\Livewire\WithCache;
 use App\Models\Account;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;

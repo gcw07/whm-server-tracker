@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Monitor\Details as MonitorDetails;
+use App\Livewire\Monitor\Details as MonitorDetails;
 use App\Models\Monitor;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;

@@ -14,13 +14,13 @@
         "laravel/horizon": "^v5.0",
         "laravel/tinker": "^v2.8.0",
         "laravel/ui": "^v4.0",
-        "livewire/livewire": "^2.0",
+        "livewire/livewire": "^3.0",
         "spatie/laravel-backup": "^8.0",
         "spatie/laravel-uptime-monitor": "^4.0",
         "spatie/lighthouse-php": "^1.0",
         "spatie/simple-excel": "^3.0",
-        "usernotnull/tall-toasts": "^1.5",
-        "wire-elements/modal": "^1.0"
+        "usernotnull/tall-toasts": "^2.0",
+        "wire-elements/modal": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

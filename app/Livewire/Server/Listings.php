@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Server;
+namespace App\Livewire\Server;
 
 use App\Enums\ServerTypeEnum;
-use App\Http\Livewire\WithCache;
+use App\Livewire\WithCache;
 use App\Models\Server;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;

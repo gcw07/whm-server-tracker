@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Server\Delete as ServerDelete;
+use App\Livewire\Server\Delete as ServerDelete;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;

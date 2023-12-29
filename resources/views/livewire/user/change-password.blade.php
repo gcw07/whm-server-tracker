@@ -5,7 +5,7 @@
       <x-heroicon-o-x-mark class="h-6 w-6" />
     </button>
   </div>
-  <form wire:submit.prevent="save">
+  <form wire:submit="save">
     <div>
       <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Change Password</h3>
@@ -15,7 +15,7 @@
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
               <label for="password" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Password </label>
               <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <input type="password" wire:model="state.password" id="password" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
+                <input type="password" wire:model.live="state.password" id="password" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
                 @error('state.password') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
               </div>
             </div>
@@ -23,7 +23,7 @@
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
               <label for="password_confirmation" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Confirm Password </label>
               <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <input type="password" wire:model="state.password_confirmation" id="password_confirmation" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
+                <input type="password" wire:model.live="state.password_confirmation" id="password_confirmation" class="block max-w-lg w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
                 @error('state.password_confirmation') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
               </div>
             </div>

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Monitor;
+namespace App\Livewire\Monitor;
 
-use App\Http\Livewire\WithCache;
+use App\Livewire\WithCache;
 use App\Models\Monitor;
 use Livewire\Component;
 use Livewire\WithPagination;

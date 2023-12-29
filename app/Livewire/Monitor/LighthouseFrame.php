@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Monitor;
+namespace App\Livewire\Monitor;
 
 use App\Models\LighthouseAudit;
 use Livewire\Component;
