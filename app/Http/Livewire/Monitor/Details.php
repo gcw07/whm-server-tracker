@@ -15,7 +15,9 @@ class Details extends Component
 
     public Monitor $monitor;
 
-    protected string $domainUrl;
+    public string $domainUrl;
+
+    public int $accountsCount;
 
     public function mount(Monitor $monitor)
     {
@@ -25,9 +27,10 @@ class Details extends Component
     public function render()
     {
         $this->domainUrl = preg_replace('(^https?://)', '', $this->monitor->url);
+        $this->accountsCount = $this->accountCountQuery();
 
         return view('livewire.monitor.details', [
-            'accounts' => $this->accountQuery(),
+            'account' => $this->accountQuery(),
             'lighthouseStats' => $this->lighthouseQuery(),
             'uptimeForToday' => $this->monitor->uptime_for_today,
             'uptimeForLastSevenDays' => $this->monitor->uptime_for_last_seven_days,
@@ -35,12 +38,19 @@ class Details extends Component
         ])->layoutData(['title' => 'Monitor Details']);
     }
 
+    protected function accountCountQuery(): int
+    {
+        return Account::query()
+            ->where('domain', $this->domainUrl)
+            ->count();
+    }
+
     protected function accountQuery()
     {
         return Account::query()
             ->with(['server'])
             ->where('domain', $this->domainUrl)
-            ->get();
+            ->first();
     }
 
     protected function lighthouseQuery()
