@@ -42,6 +42,7 @@ test('an authorized user can add a valid user', function () {
                 'certificate_expires_soon' => false,
                 'fetched_server_data_succeeded' => false,
                 'fetched_server_data_failed' => false,
+                'domain_name_expires_soon' => false,
             ],
         ])
         ->call('save')
