@@ -41,6 +41,7 @@ test('an authorized user can edit a user', function () {
                 'certificate_expires_soon' => false,
                 'fetched_server_data_succeeded' => false,
                 'fetched_server_data_failed' => false,
+                'domain_name_expires_soon' => false,
             ],
         ])
         ->call('save')
@@ -84,6 +85,7 @@ test('email can be the same for the same user for user edit', function () {
                 'certificate_expires_soon' => false,
                 'fetched_server_data_succeeded' => false,
                 'fetched_server_data_failed' => false,
+                'domain_name_expires_soon' => false,
             ],
         ])
         ->call('save')
@@ -120,8 +122,6 @@ it('validate rules for user edit', function ($data) {
     fn () => ['name', '', 'required'],
     fn () => ['email', '', 'required'],
     fn () => ['email', 'not-valid-email', 'email'],
-    fn () => ['notification_types', [], 'required'],
-    fn () => ['notification_types', 'not-an-array', 'array'],
     fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_failed'],
     fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_succeeded'],
     fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_recovered'],
@@ -130,4 +130,5 @@ it('validate rules for user edit', function ($data) {
     fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_expires_soon'],
     fn () => ['notification_types', 'not-a-boolean', 'boolean', 'fetched_server_data_succeeded'],
     fn () => ['notification_types', 'not-a-boolean', 'boolean', 'fetched_server_data_failed'],
+    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'domain_name_expires_soon'],
 ]);
