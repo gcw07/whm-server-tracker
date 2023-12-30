@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Monitor\Details as MonitorDetails;
+use App\Models\Account;
 use App\Models\Monitor;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -16,6 +17,7 @@ test('guests can not view monitor details page', function () {
 });
 
 test('an authorized user can view monitor details page', function () {
+    Account::factory()->create(['domain' => 'myserver.com']);
     MonitorFactory::new()->create(['url' => 'https://myserver.com']);
     $monitor = Monitor::first();
 
@@ -26,6 +28,7 @@ test('an authorized user can view monitor details page', function () {
 });
 
 test('an authorized user can turn off uptime checks from monitor details', function () {
+    Account::factory()->create(['domain' => 'myserver.com']);
     MonitorFactory::new()->create([
         'url' => 'https://myserver.com',
         'uptime_check_enabled' => true,
@@ -44,6 +47,7 @@ test('an authorized user can turn off uptime checks from monitor details', funct
 });
 
 test('an authorized user can turn on uptime checks from monitor details', function () {
+    Account::factory()->create(['domain' => 'myserver.com']);
     MonitorFactory::new()->create([
         'url' => 'https://myserver.com',
         'uptime_check_enabled' => false,
@@ -62,6 +66,7 @@ test('an authorized user can turn on uptime checks from monitor details', functi
 });
 
 test('an authorized user can turn off ssl certificate checks from monitor details', function () {
+    Account::factory()->create(['domain' => 'myserver.com']);
     MonitorFactory::new()->create([
         'url' => 'https://myserver.com',
         'certificate_check_enabled' => true,
@@ -80,6 +85,7 @@ test('an authorized user can turn off ssl certificate checks from monitor detail
 });
 
 test('an authorized user can turn on ssl certificate checks from monitor details', function () {
+    Account::factory()->create(['domain' => 'myserver.com']);
     MonitorFactory::new()->create([
         'url' => 'https://myserver.com',
         'certificate_check_enabled' => false,
