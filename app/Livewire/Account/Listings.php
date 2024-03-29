@@ -45,6 +45,7 @@ class Listings extends Component
     {
         $this->filterBy = match ($name) {
             'duplicates' => 'duplicates',
+            'suspended' => 'suspended',
             default => null,
         };
 
@@ -80,6 +81,10 @@ class Listings extends Component
                             ->limit(1)
                             ->offset(1);
                     });
+                }
+
+                if ($this->filterBy === 'suspended') {
+                    return $query->where('suspended', true);
                 }
 
                 return $query;

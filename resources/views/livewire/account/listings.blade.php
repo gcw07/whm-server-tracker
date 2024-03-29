@@ -56,6 +56,10 @@
                   role="menuitem" tabindex="-1" id="filters-menu-item-1">
             Duplicates
           </button>
+          <button wire:click.prevent="filterListingsBy('suspended')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem" tabindex="-1" id="filters-menu-item-2">
+            Suspended
+          </button>
         </div>
       </x-navigation.dropdown>
 
