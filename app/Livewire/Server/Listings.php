@@ -119,7 +119,8 @@ class Listings extends Component
                             ->orWhereJsonContains('settings->php_installed_versions', 'ea-php71')
                             ->orWhereJsonContains('settings->php_installed_versions', 'ea-php72')
                             ->orWhereJsonContains('settings->php_installed_versions', 'ea-php73')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php74');
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php74')
+                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php80');
                     });
                 }
 
