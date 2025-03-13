@@ -283,12 +283,12 @@ trait ServerPresenter
 
     public function isPhpVersionActive($version): bool
     {
-        return $version === '8.2' || $version === '8.3';
+        return $version === '8.3' || $version === '8.4';
     }
 
     public function isPhpVersionSecurityOnly($version): bool
     {
-        return $version === '8.1';
+        return $version === '8.1' || $version === '8.2';
     }
 
     public function isPhpVersionEndOfLife($version): bool
