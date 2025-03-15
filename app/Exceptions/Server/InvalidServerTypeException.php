@@ -2,6 +2,4 @@
 
 namespace App\Exceptions\Server;
 
-class InvalidServerTypeException extends \RuntimeException
-{
-}
+class InvalidServerTypeException extends \RuntimeException {}

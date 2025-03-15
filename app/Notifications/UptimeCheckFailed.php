@@ -31,7 +31,7 @@ class UptimeCheckFailed extends BaseNotification
      */
     public function toMail($notifiable)
     {
-        $mailMessage = (new MailMessage())
+        $mailMessage = (new MailMessage)
             ->error()
             ->subject($this->getMessageText())
             ->line($this->getMessageText())
