@@ -24,7 +24,7 @@ class SyncMonitorsCommand extends Command
      */
     protected $description = 'Sync the uptime checker monitors with accounts in the system.';
 
-    public function handle()
+    public function handle(): void
     {
         $accounts = $this->getAccounts();
 

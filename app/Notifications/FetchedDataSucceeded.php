@@ -30,7 +30,7 @@ class FetchedDataSucceeded extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return config('server-tracker.notifications.notifications.fetched_data_succeeded');
     }
@@ -41,7 +41,7 @@ class FetchedDataSucceeded extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
             ->success()

@@ -13,7 +13,7 @@ class SendUptimeCheckRecovered
         //
     }
 
-    public function handle(UptimeCheckRecovered $event)
+    public function handle(UptimeCheckRecovered $event): void
     {
         $users = User::forNotificationType('uptime_check_recovered')->get();
         $notification = new \App\Notifications\UptimeCheckRecovered($event);

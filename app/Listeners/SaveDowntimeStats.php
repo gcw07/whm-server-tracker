@@ -12,7 +12,7 @@ class SaveDowntimeStats
         //
     }
 
-    public function handle(UptimeCheckRecovered $event)
+    public function handle(UptimeCheckRecovered $event): void
     {
         DowntimeStat::create([
             'monitor_id' => $event->monitor->id,
