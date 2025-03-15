@@ -2,38 +2,40 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "ext-simplexml": "*",
-        "blade-ui-kit/blade-heroicons": "^2.0",
-        "doctrine/dbal": "^3.0",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^10.0",
-        "laravel/horizon": "^v5.0",
-        "laravel/tinker": "^v2.8.0",
-        "laravel/ui": "^v4.0",
-        "livewire/livewire": "^3.0",
-        "spatie/laravel-backup": "^8.0",
-        "spatie/laravel-uptime-monitor": "^4.0",
-        "spatie/lighthouse-php": "^1.0",
-        "spatie/simple-excel": "^3.0",
-        "usernotnull/tall-toasts": "^2.0",
+        "blade-ui-kit/blade-heroicons": "^2.3",
+        "doctrine/dbal": "^3.5",
+        "guzzlehttp/guzzle": "^7.8",
+        "laravel/framework": "^11.44",
+        "laravel/horizon": "^5.22",
+        "laravel/tinker": "^2.9",
+        "laravel/ui": "^4.4",
+        "livewire/livewire": "^3.3",
+        "spatie/laravel-backup": "^8.6",
+        "spatie/laravel-uptime-monitor": "^4.3",
+        "spatie/lighthouse-php": "^1.2",
+        "spatie/simple-excel": "^3.4",
+        "usernotnull/tall-toasts": "^2.1",
         "wire-elements/modal": "^2.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.6",
-        "barryvdh/laravel-ide-helper": "^2.7",
-        "deployer/deployer": "^7.0",
-        "fakerphp/faker": "^1.9.1",
-        "laravel/pint": "^1.0",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^v7.0",
+        "barryvdh/laravel-debugbar": "^3.10",
+        "barryvdh/laravel-ide-helper": "^3.0",
+        "deployer/deployer": "^7.5",
+        "fakerphp/faker": "^1.23",
+        "laravel/pint": "^1.13",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
-        "spatie/laravel-ignition": "^2.0",
-        "spatie/laravel-ray": "^1.29"
+        "spatie/laravel-ray": "^1.35"
     },
     "autoload": {
         "psr-4": {
@@ -83,6 +85,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

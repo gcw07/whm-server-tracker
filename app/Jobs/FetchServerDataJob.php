@@ -23,7 +23,7 @@ class FetchServerDataJob implements ShouldQueue
         $this->server = $server;
     }
 
-    public function handle(WhmApi $whmApi)
+    public function handle(WhmApi $whmApi): void
     {
         $whmApi->setServer($this->server);
         $whmApi->fetch();

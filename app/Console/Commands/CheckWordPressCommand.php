@@ -27,7 +27,7 @@ class CheckWordPressCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $accounts = Account::query()
             ->where('suspended', false)

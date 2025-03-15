@@ -28,7 +28,7 @@ class InstallCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         if (! $this->migratedTables()) {
             $this->warn('The database tables have not been migrated. Please migrate the database.');

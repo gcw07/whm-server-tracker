@@ -17,7 +17,7 @@ class CertificateExpiresSoon extends BaseNotification
         $this->event = $event;
     }
 
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['mail'];
     }
@@ -26,11 +26,10 @@ class CertificateExpiresSoon extends BaseNotification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
-        $mailMessage = (new MailMessage())
+        $mailMessage = (new MailMessage)
             ->error()
             ->subject($this->getMessageText())
             ->line($this->getMessageText());

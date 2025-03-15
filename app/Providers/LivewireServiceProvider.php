@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class LivewireServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         // Livewire components
     }

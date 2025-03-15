@@ -26,7 +26,7 @@ class RefreshCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info('Refreshing remote server data');
 

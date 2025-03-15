@@ -17,7 +17,7 @@ class CertificateCheckSucceeded extends BaseNotification
         $this->event = $event;
     }
 
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return [];  // restore mail once selection part is done
     }
@@ -26,11 +26,10 @@ class CertificateCheckSucceeded extends BaseNotification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
-        $mailMessage = (new MailMessage())
+        $mailMessage = (new MailMessage)
             ->subject($this->getMessageText())
             ->line($this->getMessageText());
 

@@ -2,6 +2,4 @@
 
 namespace App\Exceptions\Server;
 
-class ServerConnectionException extends \RuntimeException
-{
-}
+class ServerConnectionException extends \RuntimeException {}

@@ -13,7 +13,7 @@ class SendUptimeCheckFailed
         //
     }
 
-    public function handle(UptimeCheckFailed $event)
+    public function handle(UptimeCheckFailed $event): void
     {
         $users = User::forNotificationType('uptime_check_failed')->get();
         $notification = new \App\Notifications\UptimeCheckFailed($event);

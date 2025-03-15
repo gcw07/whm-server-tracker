@@ -2,6 +2,4 @@
 
 namespace App\Exceptions\Server;
 
-class ForbiddenAccessException extends \RuntimeException
-{
-}
+class ForbiddenAccessException extends \RuntimeException {}

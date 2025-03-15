@@ -22,7 +22,7 @@ class CheckBlacklistJob implements ShouldQueue
         $this->monitor = $monitor;
     }
 
-    public function handle()
+    public function handle(): void
     {
         $this->monitor->checkBlacklist();
     }

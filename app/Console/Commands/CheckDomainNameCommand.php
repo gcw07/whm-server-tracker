@@ -25,10 +25,8 @@ class CheckDomainNameCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $monitors = Monitor::query()
             ->where('domain_name_check_enabled', true)

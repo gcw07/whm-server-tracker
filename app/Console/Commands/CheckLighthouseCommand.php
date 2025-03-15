@@ -28,7 +28,7 @@ class CheckLighthouseCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $monitors = Monitor::query()
             ->where('lighthouse_check_enabled', true)

@@ -28,7 +28,7 @@ class UpgradeCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         if (! $this->previousDatabaseSettings()) {
             $this->warn('The previous database .env settings have not been set. Please set these to run the upgrade process.');

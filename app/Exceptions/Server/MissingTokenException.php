@@ -2,6 +2,4 @@
 
 namespace App\Exceptions\Server;
 
-class MissingTokenException extends \RuntimeException
-{
-}
+class MissingTokenException extends \RuntimeException {}

@@ -62,13 +62,6 @@ class Account extends Model
 
     protected $guarded = [];
 
-    protected $casts = [
-        'backup' => 'boolean',
-        'suspended' => 'boolean',
-        'suspend_time' => 'datetime',
-        'setup_date' => 'datetime',
-    ];
-
     protected $appends = [
         'domain_url',
         'cpanel_url',
@@ -78,6 +71,16 @@ class Account extends Model
         'is_disk_critical',
         'is_disk_full',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'backup' => 'boolean',
+            'suspended' => 'boolean',
+            'suspend_time' => 'datetime',
+            'setup_date' => 'datetime',
+        ];
+    }
 
     public function server(): BelongsTo
     {

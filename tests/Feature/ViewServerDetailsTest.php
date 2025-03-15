@@ -1,7 +1,7 @@
 <?php
 
-use App\Livewire\Server\Details as ServerDetails;
 use App\Jobs\FetchServerDataJob;
+use App\Livewire\Server\Details as ServerDetails;
 use App\Models\Server;
 use App\Models\User;
 use App\Services\WHM\WhmApi;
