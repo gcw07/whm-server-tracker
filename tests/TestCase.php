@@ -10,7 +10,6 @@ use PHPUnit\Framework\Assert;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
 
     protected function setUp(): void
     {
