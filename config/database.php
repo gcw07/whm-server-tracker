@@ -7,7 +7,7 @@ return [
     'connections' => [
         'mysql_v1_db' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('WHM_V1_DB_HOST', '127.0.0.1'),
             'port' => env('WHM_V1_DB_PORT', '3306'),
             'database' => env('WHM_V1_DB_DATABASE', 'forge'),
