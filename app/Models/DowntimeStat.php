@@ -34,9 +34,12 @@ class DowntimeStat extends Model
 
     public $timestamps = false;
 
-    protected $casts = [
-        'date' => 'date',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'date' => 'date',
+        ];
+    }
 
     public function monitor()
     {

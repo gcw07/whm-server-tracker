@@ -29,9 +29,12 @@ class Login extends Model
 
     public $timestamps = false;
 
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
+    }
 
     public function user()
     {
