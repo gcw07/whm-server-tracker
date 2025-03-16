@@ -41,8 +41,8 @@ set('writable_mode', 'chmod');
 set('bin/composer', 'composer');
 
 // Shared files/dirs between deploys
-//add('shared_files', []);
-//add('shared_dirs', []);
+// add('shared_files', []);
+// add('shared_dirs', []);
 
 // Writable dirs by web server
 add('writable_dirs', [
@@ -64,8 +64,8 @@ host(get('deployment_host'))
  | and building npm assets.
  */
 
-//desc('Execute artisan clear-compiled');
-//task('artisan:clear_compiled', artisan('clear-compiled'));
+// desc('Execute artisan clear-compiled');
+// task('artisan:clear_compiled', artisan('clear-compiled'));
 
 desc('Run artisan backup:run');
 task('artisan:backup:run', artisan('backup:run', ['skipIfNoEnv']));
@@ -96,7 +96,7 @@ task('npm:run:build', function () {
  */
 
 // Run additional artisan commands
-//after('artisan:storage:link', 'artisan:clear_compiled');
+// after('artisan:storage:link', 'artisan:clear_compiled');
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');

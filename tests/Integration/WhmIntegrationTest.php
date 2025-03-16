@@ -16,7 +16,7 @@ beforeEach(function () {
     $this->whmTestServerAddress = getenv('WHM_TEST_SERVER_ADDRESS');
     $this->whmTestServerToken = getenv('WHM_TEST_SERVER_TOKEN');
 
-    $this->whmApi = new WhmApi();
+    $this->whmApi = new WhmApi;
 });
 
 function canTestWHMServerConnector(): bool

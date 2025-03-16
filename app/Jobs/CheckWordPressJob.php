@@ -22,7 +22,7 @@ class CheckWordPressJob implements ShouldQueue
         $this->account = $account;
     }
 
-    public function handle()
+    public function handle(): void
     {
         $this->account->checkWordPress();
     }

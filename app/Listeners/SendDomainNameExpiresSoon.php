@@ -13,7 +13,7 @@ class SendDomainNameExpiresSoon
         //
     }
 
-    public function handle(DomainNameExpiresSoonEvent $event)
+    public function handle(DomainNameExpiresSoonEvent $event): void
     {
         $users = User::forNotificationType('domain_name_expires_soon')->get();
         $notification = new \App\Notifications\DomainNameExpiresSoon($event);

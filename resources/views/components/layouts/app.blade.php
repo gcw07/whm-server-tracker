@@ -15,7 +15,6 @@
   @livewireStyles
 
   <!-- Scripts -->
-  @toastScripts
   @vite('resources/js/app.js')
 </head>
 <body class="h-full font-sans antialiased">

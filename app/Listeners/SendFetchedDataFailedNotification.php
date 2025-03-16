@@ -13,7 +13,7 @@ class SendFetchedDataFailedNotification
         //
     }
 
-    public function handle(FetchedDataFailedEvent $event)
+    public function handle(FetchedDataFailedEvent $event): void
     {
         Notification::route('mail', config('server-tracker.notifications.mail.to'))
             ->route('slack', config('server-tracker.notifications.slack.webhook_url'))

@@ -13,7 +13,7 @@ class SendFetchedDataSucceededNotification
         //
     }
 
-    public function handle(FetchedDataSucceededEvent $event)
+    public function handle(FetchedDataSucceededEvent $event): void
     {
         Notification::route('mail', config('server-tracker.notifications.mail.to'))
             ->route('slack', config('server-tracker.notifications.slack.webhook_url'))

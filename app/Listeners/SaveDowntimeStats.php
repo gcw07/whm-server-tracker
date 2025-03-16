@@ -12,12 +12,12 @@ class SaveDowntimeStats
         //
     }
 
-    public function handle(UptimeCheckRecovered $event)
+    public function handle(UptimeCheckRecovered $event): void
     {
         DowntimeStat::create([
             'monitor_id' => $event->monitor->id,
             'date' => today()->format('Y-m-d'),
-            'downtime_period' => $event->downtimePeriod->startDateTime->diffInSeconds($event->downtimePeriod->endDateTime),
+            'downtime_period' => (int) abs($event->downtimePeriod->startDateTime->diffInSeconds($event->downtimePeriod->endDateTime)),
         ]);
     }
 }

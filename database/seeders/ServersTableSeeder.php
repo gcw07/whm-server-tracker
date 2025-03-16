@@ -10,10 +10,8 @@ class ServersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         Server::factory()
             ->has(Account::factory()->count(15))

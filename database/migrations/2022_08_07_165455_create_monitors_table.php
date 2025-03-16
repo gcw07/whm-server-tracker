@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Spatie\UptimeMonitor\Models\Enums\CertificateStatus;
 use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
 
-class CreateMonitorsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -47,4 +47,4 @@ class CreateMonitorsTable extends Migration
     {
         Schema::drop('monitors');
     }
-}
+};

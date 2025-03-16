@@ -6,8 +6,8 @@ import ToastComponent from '../../vendor/usernotnull/tall-toasts/resources/js/ta
 import SearchComponent from './search';
 
 Alpine.plugin(Tooltip);
+Alpine.plugin(ToastComponent)
 
-Alpine.data('ToastComponent', ToastComponent);
 Alpine.data('SearchComponent', SearchComponent);
 
 Livewire.start();

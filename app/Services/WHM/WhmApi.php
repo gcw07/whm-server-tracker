@@ -127,7 +127,7 @@ class WhmApi
             return true;
         }
 
-        if ($this->server->server_update_last_failed_at->diffInHours() >= config('server-tracker.notifications.resend_failed_notification_every_hours')) {
+        if ((int) abs($this->server->server_update_last_failed_at->diffInHours()) >= config('server-tracker.notifications.resend_failed_notification_every_hours')) {
             return true;
         }
 

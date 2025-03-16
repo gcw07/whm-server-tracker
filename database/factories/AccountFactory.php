@@ -10,7 +10,7 @@ class AccountFactory extends Factory
 {
     public function definition(): array
     {
-        $domain = $this->faker->domainName;
+        $domain = $this->faker->domainName();
         $user = explode('.', $domain)[0];
         $suspended = $this->faker->boolean(10);
 
@@ -18,7 +18,7 @@ class AccountFactory extends Factory
             'server_id' => Server::factory(),
             'domain' => $domain,
             'user' => $user,
-            'ip' => $this->faker->ipv4,
+            'ip' => $this->faker->ipv4(),
             'backup' => $this->faker->boolean(90),
             'suspended' => $suspended,
             'suspend_reason' => $suspended ? 'account unpaid' : 'not suspended',

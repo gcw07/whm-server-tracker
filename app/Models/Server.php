@@ -59,14 +59,6 @@ class Server extends Model
 
     protected $guarded = [];
 
-    protected $casts = [
-        'server_type' => ServerTypeEnum::class,
-        'token' => 'encrypted',
-        'settings' => Settings::class,
-        'server_update_last_failed_at' => 'datetime',
-        'server_update_last_succeeded_at' => 'datetime',
-    ];
-
     protected $appends = [
         'whm_url',
         'formatted_server_type',
@@ -88,6 +80,17 @@ class Server extends Model
     ];
 
     protected $hidden = ['token'];
+
+    protected function casts(): array
+    {
+        return [
+            'server_type' => ServerTypeEnum::class,
+            'token' => 'encrypted',
+            'settings' => Settings::class,
+            'server_update_last_failed_at' => 'datetime',
+            'server_update_last_succeeded_at' => 'datetime',
+        ];
+    }
 
     public static function refreshData(): void
     {

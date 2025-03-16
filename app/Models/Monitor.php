@@ -354,7 +354,7 @@ class Monitor extends BaseMonitor
             return true;
         }
 
-        if ($this->lighthouse_update_last_succeeded_at->diffInHours() >= config('server-tracker.lighthouse_audits.run_audit_every_hours')) {
+        if ((int) abs($this->lighthouse_update_last_succeeded_at->diffInHours()) >= config('server-tracker.lighthouse_audits.run_audit_every_hours')) {
             return true;
         }
 
@@ -406,7 +406,7 @@ class Monitor extends BaseMonitor
     public function fireEventsForUpdatedMonitorWithDomainName(Monitor $monitor, Carbon $date): void
     {
         if ($this->domain_name_status === DomainNameStatusEnum::Valid->value) {
-            if ($date->diffInDays() <= config('server-tracker.domain_name_expires_within_days')) {
+            if ((int) abs($date->diffInDays()) <= config('server-tracker.domain_name_expires_within_days')) {
                 event(new DomainNameExpiresSoonEvent($monitor, $date));
             }
 
