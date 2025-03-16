@@ -6,7 +6,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@ryangjchandler/alpine-tooltip": "^1.2.0",
+    "@ryangjchandler/alpine-tooltip": "^2.0.1",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.5.6",
     "@tailwindcss/typography": "^0.5.0",
