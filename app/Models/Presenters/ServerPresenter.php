@@ -146,6 +146,7 @@ trait ServerPresenter
             get: function () {
                 if ($this->settings?->has('php_installed_versions')) {
                     return collect($this->settings->get('php_installed_versions'))
+                        ->reject(fn($item) => $item == 'nf-php74')
                         ->map(fn ($item) => match ($item) {
                             'ea-php54' => '5.4',
                             'ea-php55' => '5.5',
@@ -154,7 +155,7 @@ trait ServerPresenter
                             'ea-php71' => '7.1',
                             'ea-php72' => '7.2',
                             'ea-php73' => '7.3',
-                            'ea-php74', 'nf-php74' => '7.4',
+                            'ea-php74' => '7.4',
                             'ea-php80' => '8.0',
                             'ea-php81' => '8.1',
                             'ea-php82' => '8.2',
