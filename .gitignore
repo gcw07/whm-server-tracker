@@ -5,9 +5,11 @@
 /public/hot
 /public/storage
 /storage/*.key
+/storage/pail
 /vendor
 /.fleet
 /.idea
+/.nova
 /.vagrant
 /.vscode
 .env
