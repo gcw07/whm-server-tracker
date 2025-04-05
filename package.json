@@ -1,24 +1,27 @@
 {
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build"
-  },
-  "dependencies": {
-    "@ryangjchandler/alpine-tooltip": "^2.0.1",
-    "@tailwindcss/aspect-ratio": "^0.4.0",
-    "@tailwindcss/forms": "^0.5.6",
-    "@tailwindcss/typography": "^0.5.0",
-    "autoprefixer": "^10.4.4",
-    "axios": "^1.8.3",
-    "chrome-launcher": "^1.0.0",
-    "cross-env": "^7.0.3",
-    "laravel-vite-plugin": "^1.2.0",
-    "lighthouse": "^12.0.0",
-    "lodash": "^4.17.21",
-    "postcss": "^8.4.12",
-    "tailwindcss": "^3.0.23",
-    "vite": "^6.2.2"
-  }
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "dependencies": {
+        "@ryangjchandler/alpine-tooltip": "^2.0.1",
+        "@tailwindcss/aspect-ratio": "^0.4.0",
+        "@tailwindcss/forms": "^0.5.6",
+        "@tailwindcss/typography": "^0.5.0",
+        "autoprefixer": "^10.4.4",
+        "axios": "^1.8.3",
+        "chrome-launcher": "^1.0.0",
+        "cross-env": "^7.0.3",
+        "laravel-vite-plugin": "^1.2.0",
+        "lighthouse": "^12.0.0",
+        "lodash": "^4.17.21",
+        "postcss": "^8.4.12",
+        "tailwindcss": "^3.0.23",
+        "vite": "^6.2.2"
+    },
+    "devDependencies": {
+        "concurrently": "^9.0.1"
+    }
 }
