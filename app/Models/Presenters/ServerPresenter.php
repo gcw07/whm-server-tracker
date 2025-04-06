@@ -146,7 +146,7 @@ trait ServerPresenter
             get: function () {
                 if ($this->settings?->has('php_installed_versions')) {
                     return collect($this->settings->get('php_installed_versions'))
-                        ->reject(fn($item) => $item == 'nf-php74')
+                        ->reject(fn ($item) => $item == 'nf-php74')
                         ->map(fn ($item) => match ($item) {
                             'ea-php54' => '5.4',
                             'ea-php55' => '5.5',
