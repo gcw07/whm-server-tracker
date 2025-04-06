@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Casts\Settings;
 use App\Enums\ServerTypeEnum;
 use App\Filters\ServerFilters;
@@ -148,17 +149,20 @@ class Server extends Model
         }
     }
 
-    public function scopeWithTokens(Builder $query): void
+    #[Scope]
+    protected function withTokens(Builder $query): void
     {
         $query->whereNotNull('token');
     }
 
-    public function scopeFilter($query, ServerFilters $filters)
+    #[Scope]
+    protected function filter($query, ServerFilters $filters)
     {
         return $filters->apply($query);
     }
 
-    public function scopeSearch($query, $search)
+    #[Scope]
+    protected function search($query, $search)
     {
         return $query->where(function ($query) use ($search) {
             $query->where('name', 'LIKE', '%'.$search.'%')
