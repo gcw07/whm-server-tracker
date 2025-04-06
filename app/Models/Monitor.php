@@ -18,8 +18,6 @@ use Spatie\Lighthouse\Lighthouse;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
 
 /**
- * App\Models\Monitor
- *
  * @property int $id
  * @property \Spatie\Url\Url|null $url
  * @property bool $uptime_check_enabled
@@ -52,7 +50,7 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property string $domain_name_status
  * @property \Illuminate\Support\Carbon|null $domain_name_expiration_date
  * @property string|null $domain_name_check_failure_reason
- * @property array|null $nameservers
+ * @property array<array-key, mixed>|null $nameservers
  * @property bool $is_on_cloudflare
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -67,48 +65,51 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property-read int|null $lighthouse_audits_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LighthouseAudit> $lighthouseLatestAudit
  * @property-read int|null $lighthouse_latest_audit_count
+ * @property-read mixed $uptime_for_last_seven_days
+ * @property-read mixed $uptime_for_last_thirty_days
+ * @property-read mixed $uptime_for_today
  *
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor enabled()
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor query()
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor search($search)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereBlacklistCheckEnabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereBlacklistCheckFailureReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereBlacklistStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateCheckEnabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateCheckFailureReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateExpirationDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateIssuer($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCertificateStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameCheckEnabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameCheckFailureReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameExpirationDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereDomainNameStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereIsOnCloudflare($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckEnabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseCheckFailureReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseUpdateLastFailedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLighthouseUpdateLastSucceededAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereLookForString($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereNameservers($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckAdditionalHeaders($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckEnabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckFailedEventFiredOnDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckFailureReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckIntervalInMinutes($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckMethod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckPayload($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckResponseChecker($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeCheckTimesFailedInARow($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeLastCheckDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUptimeStatusLastChangeDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Monitor whereUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor enabled()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereBlacklistCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereBlacklistCheckFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereBlacklistStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereCertificateCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereCertificateCheckFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereCertificateExpirationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereCertificateIssuer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereCertificateStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereDomainNameCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereDomainNameCheckFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereDomainNameExpirationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereDomainNameStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereIsOnCloudflare($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereLighthouseCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereLighthouseCheckFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereLighthouseStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereLighthouseUpdateLastFailedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereLighthouseUpdateLastSucceededAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereLookForString($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereNameservers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckAdditionalHeaders($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckFailedEventFiredOnDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckIntervalInMinutes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckPayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckResponseChecker($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeCheckTimesFailedInARow($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeLastCheckDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUptimeStatusLastChangeDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor whereUrl($value)
  *
  * @mixin \Eloquent
  */

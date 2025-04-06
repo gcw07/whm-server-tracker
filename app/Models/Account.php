@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Http;
 
 /**
- * App\Models\Account
- *
  * @property int $id
  * @property int $server_id
  * @property string $domain
@@ -29,30 +27,37 @@ use Illuminate\Support\Facades\Http;
  * @property string|null $wordpress_version
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $backups_enabled
+ * @property-read mixed $cpanel_url
+ * @property-read mixed $domain_url
+ * @property-read mixed $formatted_disk_usage
+ * @property-read mixed $is_disk_critical
+ * @property-read mixed $is_disk_full
+ * @property-read mixed $is_disk_warning
  * @property-read \App\Models\Server $server
  *
- * @method static \Database\Factories\AccountFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|Account filter(\App\Filters\AccountFilters $filters)
- * @method static \Illuminate\Database\Eloquent\Builder|Account newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Account newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Account query()
- * @method static \Illuminate\Database\Eloquent\Builder|Account search($search)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereBackup($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereDiskLimit($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereDiskUsed($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereDomain($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereIp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account wherePlan($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereServerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereSetupDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereSuspendReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereSuspendTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereSuspended($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereUser($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Account whereWordpressVersion($value)
+ * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account filter(\App\Filters\AccountFilters $filters)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereBackup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereDiskLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereDiskUsed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereDomain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereIp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account wherePlan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereServerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereSetupDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereSuspendReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereSuspendTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereSuspended($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereUser($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereWordpressVersion($value)
  *
  * @mixin \Eloquent
  */

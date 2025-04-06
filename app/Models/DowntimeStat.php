@@ -8,22 +8,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\UptimeMonitor\Models\Monitor;
 
 /**
- * App\Models\DowntimeStat
- *
  * @property int $id
  * @property int $monitor_id
  * @property \Illuminate\Support\Carbon $date
  * @property int $downtime_period
  * @property-read Monitor $monitor
  *
- * @method static \Database\Factories\DowntimeStatFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat query()
- * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat whereDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat whereDowntimePeriod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DowntimeStat whereMonitorId($value)
+ * @method static \Database\Factories\DowntimeStatFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DowntimeStat newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DowntimeStat newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DowntimeStat query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DowntimeStat whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DowntimeStat whereDowntimePeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DowntimeStat whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DowntimeStat whereMonitorId($value)
  *
  * @mixin \Eloquent
  */

@@ -14,8 +14,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\UptimeMonitor\Models\Monitor;
 
 /**
- * App\Models\Server
- *
  * @property int $id
  * @property string $name
  * @property string $address
@@ -28,28 +26,46 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property \Illuminate\Support\Carbon|null $server_update_last_succeeded_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Account[] $accounts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
  * @property-read int|null $accounts_count
+ * @property-read mixed $backups_enabled
+ * @property-read mixed $can_refresh_data
+ * @property-read mixed $formatted_backup_daily_days
+ * @property-read mixed $formatted_backup_monthly_days
+ * @property-read mixed $formatted_backup_weekly_day
+ * @property-read mixed $formatted_disk_available
+ * @property-read mixed $formatted_disk_total
+ * @property-read mixed $formatted_disk_used
+ * @property-read mixed $formatted_php_installed_versions
+ * @property-read mixed $formatted_php_system_version
+ * @property-read mixed $formatted_server_type
+ * @property-read mixed $formatted_whm_version
+ * @property-read mixed $is_disk_critical
+ * @property-read mixed $is_disk_full
+ * @property-read mixed $is_disk_warning
+ * @property-read mixed $missing_token
+ * @property-read mixed $whm_base_api_url
+ * @property-read mixed $whm_url
  *
- * @method static \Database\Factories\ServerFactory factory(...$parameters)
- * @method static Builder|Server filter(\App\Filters\ServerFilters $filters)
- * @method static Builder|Server newModelQuery()
- * @method static Builder|Server newQuery()
- * @method static Builder|Server query()
- * @method static Builder|Server search($search)
- * @method static Builder|Server whereAddress($value)
- * @method static Builder|Server whereCreatedAt($value)
- * @method static Builder|Server whereId($value)
- * @method static Builder|Server whereName($value)
- * @method static Builder|Server whereNotes($value)
- * @method static Builder|Server wherePort($value)
- * @method static Builder|Server whereServerType($value)
- * @method static Builder|Server whereServerUpdateLastFailedAt($value)
- * @method static Builder|Server whereServerUpdateLastSucceededAt($value)
- * @method static Builder|Server whereSettings($value)
- * @method static Builder|Server whereToken($value)
- * @method static Builder|Server whereUpdatedAt($value)
- * @method static Builder|Server withTokens()
+ * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Server filter(\App\Filters\ServerFilters $filters)
+ * @method static Builder<static>|Server newModelQuery()
+ * @method static Builder<static>|Server newQuery()
+ * @method static Builder<static>|Server query()
+ * @method static Builder<static>|Server search($search)
+ * @method static Builder<static>|Server whereAddress($value)
+ * @method static Builder<static>|Server whereCreatedAt($value)
+ * @method static Builder<static>|Server whereId($value)
+ * @method static Builder<static>|Server whereName($value)
+ * @method static Builder<static>|Server whereNotes($value)
+ * @method static Builder<static>|Server wherePort($value)
+ * @method static Builder<static>|Server whereServerType($value)
+ * @method static Builder<static>|Server whereServerUpdateLastFailedAt($value)
+ * @method static Builder<static>|Server whereServerUpdateLastSucceededAt($value)
+ * @method static Builder<static>|Server whereSettings($value)
+ * @method static Builder<static>|Server whereToken($value)
+ * @method static Builder<static>|Server whereUpdatedAt($value)
+ * @method static Builder<static>|Server withTokens()
  *
  * @mixin \Eloquent
  */
