@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Casts\Lower;
 use App\Casts\Notifications;
 use App\Models\Concerns\HasLogins;
@@ -74,7 +75,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function scopeForNotificationType(Builder $query, $type): void
+    #[Scope]
+    protected function forNotificationType(Builder $query, $type): void
     {
         $query->where("notification_types->$type", true);
     }

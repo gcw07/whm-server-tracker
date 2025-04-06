@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Filters\AccountFilters;
 use App\Models\Presenters\AccountPresenter;
 use Exception;
@@ -112,12 +113,14 @@ class Account extends Model
         ])->only($columns)->all();
     }
 
-    public function scopeFilter($query, AccountFilters $filters)
+    #[Scope]
+    protected function filter($query, AccountFilters $filters)
     {
         return $filters->apply($query);
     }
 
-    public function scopeSearch($query, $search)
+    #[Scope]
+    protected function search($query, $search)
     {
         return $query->where(function ($query) use ($search) {
             $query->where('domain', 'LIKE', '%'.$search.'%')
