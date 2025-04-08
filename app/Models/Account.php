@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Filters\AccountFilters;
 use App\Models\Presenters\AccountPresenter;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -120,13 +121,13 @@ class Account extends Model
     }
 
     #[Scope]
-    protected function search($query, $search)
+    public function search(Builder $query, string $term): void
     {
-        return $query->where(function ($query) use ($search) {
-            $query->where('domain', 'LIKE', '%'.$search.'%')
-                ->orWhere('user', 'LIKE', '%'.$search.'%')
-                ->orWhere('ip', 'LIKE', '%'.$search.'%');
-        });
+        $query->whereAny([
+            'domain',
+            'user',
+            'ip'
+        ], 'LIKE', "%$term%");
     }
 
     public function checkWordPress()

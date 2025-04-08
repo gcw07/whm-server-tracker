@@ -9,6 +9,8 @@ use App\Events\DomainNameExpiresSoonEvent;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
@@ -222,11 +224,12 @@ class Monitor extends BaseMonitor
         }
     }
 
-    public function scopeSearch($query, $search)
+    #[Scope]
+    public function search(Builder $query, string $term): void
     {
-        return $query->where(function ($query) use ($search) {
-            $query->where('url', 'LIKE', '%'.$search.'%');
-        });
+        $query->whereAny([
+            'url'
+        ], 'LIKE', "%$term%");
     }
 
     public function checkBlacklistForHostname($servers)

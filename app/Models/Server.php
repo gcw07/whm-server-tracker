@@ -150,23 +150,23 @@ class Server extends Model
     }
 
     #[Scope]
-    protected function withTokens(Builder $query): void
+    public function withTokens(Builder $query): void
     {
         $query->whereNotNull('token');
     }
 
     #[Scope]
-    protected function filter($query, ServerFilters $filters)
+    public function filter($query, ServerFilters $filters)
     {
         return $filters->apply($query);
     }
 
     #[Scope]
-    protected function search($query, $search)
+    public function search(Builder $query, string $term): void
     {
-        return $query->where(function ($query) use ($search) {
-            $query->where('name', 'LIKE', '%'.$search.'%')
-                ->orWhere('notes', 'LIKE', '%'.$search.'%');
-        });
+        $query->whereAny([
+            'name',
+            'notes'
+        ], 'LIKE', "%$term%");
     }
 }
