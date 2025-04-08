@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Casts\Settings;
 use App\Enums\ServerTypeEnum;
 use App\Filters\ServerFilters;
 use App\Jobs\FetchServerDataJob;
 use App\Models\Presenters\ServerPresenter;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -166,7 +166,7 @@ class Server extends Model
     {
         $query->whereAny([
             'name',
-            'notes'
+            'notes',
         ], 'LIKE', "%$term%");
     }
 }

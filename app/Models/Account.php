@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Filters\AccountFilters;
 use App\Models\Presenters\AccountPresenter;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -126,7 +126,7 @@ class Account extends Model
         $query->whereAny([
             'domain',
             'user',
-            'ip'
+            'ip',
         ], 'LIKE', "%$term%");
     }
 

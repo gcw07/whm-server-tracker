@@ -228,7 +228,7 @@ class Monitor extends BaseMonitor
     public function search(Builder $query, string $term): void
     {
         $query->whereAny([
-            'url'
+            'url',
         ], 'LIKE', "%$term%");
     }
 
