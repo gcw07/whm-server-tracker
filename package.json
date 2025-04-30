@@ -19,7 +19,7 @@
         "lodash": "^4.17.21",
         "postcss": "^8.4.12",
         "tailwindcss": "^3.0.23",
-        "vite": "^6.2.2"
+        "vite": "^6.3.4"
     },
     "devDependencies": {
         "concurrently": "^9.0.1"
