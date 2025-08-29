@@ -40,7 +40,9 @@ class AppServiceProvider extends ServiceProvider
         $key = $this->databaseEncryptionKey();
         $cipher = config('app.cipher');
 
-        Model::encryptUsing(new Encrypter($key, $cipher));
+        if (! empty($key)) {
+            Model::encryptUsing(new Encrypter($key, $cipher));
+        }
 
         $this->bootRoute();
     }
