@@ -13,7 +13,7 @@
         "blade-ui-kit/blade-heroicons": "^2.6",
         "doctrine/dbal": "^3.5",
         "guzzlehttp/guzzle": "^7.10",
-        "laravel/framework": "^12.26",
+        "laravel/framework": "^12.33",
         "laravel/horizon": "^5.33",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
