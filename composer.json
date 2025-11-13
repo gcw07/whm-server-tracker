@@ -14,7 +14,7 @@
         "doctrine/dbal": "^3.5",
         "guzzlehttp/guzzle": "^7.10",
         "laravel/framework": "^12.38",
-        "laravel/horizon": "^5.33",
+        "laravel/horizon": "^5.39",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
         "livewire/livewire": "^3.6",
