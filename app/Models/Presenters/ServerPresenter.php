@@ -3,6 +3,7 @@
 namespace App\Models\Presenters;
 
 use App\Enums\ServerTypeEnum;
+use App\Services\PhpVersions;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Arr;
 
@@ -144,25 +145,15 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
+                $phpVersions = collect(PhpVersions::filtered('version'));
+
                 if ($this->settings?->has('php_installed_versions')) {
                     return collect($this->settings->get('php_installed_versions'))
                         ->reject(fn ($item) => $item == 'nf-php74')
-                        ->map(fn ($item) => match ($item) {
-                            'ea-php54' => '5.4',
-                            'ea-php55' => '5.5',
-                            'ea-php56' => '5.6',
-                            'ea-php70' => '7.0',
-                            'ea-php71' => '7.1',
-                            'ea-php72' => '7.2',
-                            'ea-php73' => '7.3',
-                            'ea-php74' => '7.4',
-                            'ea-php80' => '8.0',
-                            'ea-php81' => '8.1',
-                            'ea-php82' => '8.2',
-                            'ea-php83' => '8.3',
-                            'ea-php84' => '8.4',
-                            default => 'Unknown'
-                        })->toArray();
+                        ->map(function ($version) use ($phpVersions) {
+                            return $phpVersions->get(substr($version, 3), 'Unknown');
+                        })
+                        ->toArray();
                 }
 
                 return ['Unknown'];
@@ -175,23 +166,9 @@ trait ServerPresenter
         return Attribute::make(
             get: function () {
                 if ($this->settings?->has('php_system_version')) {
-                    $versions = [
-                        'ea-php54' => '5.4',
-                        'ea-php55' => '5.5',
-                        'ea-php56' => '5.6',
-                        'ea-php70' => '7.0',
-                        'ea-php71' => '7.1',
-                        'ea-php72' => '7.2',
-                        'ea-php73' => '7.3',
-                        'ea-php74' => '7.4',
-                        'ea-php80' => '8.0',
-                        'ea-php81' => '8.1',
-                        'ea-php82' => '8.2',
-                        'ea-php83' => '8.3',
-                        'ea-php84' => '8.4',
-                    ];
+                    $phpVersions = PhpVersions::filtered('version');
 
-                    return Arr::get($versions, $this->settings->get('php_system_version'), 'Unknown');
+                    return Arr::get($phpVersions, substr($this->settings->get('php_system_version'), 3), 'Unknown');
                 }
 
                 return 'Unknown';
@@ -284,26 +261,23 @@ trait ServerPresenter
 
     public function isPhpVersionActive($version): bool
     {
-        return $version === '8.3' || $version === '8.4';
+        $phpVersions = collect(PhpVersions::active('version'));
+
+        return $phpVersions->contains($version);
     }
 
     public function isPhpVersionSecurityOnly($version): bool
     {
-        return $version === '8.1' || $version === '8.2';
+        $phpVersions = collect(PhpVersions::security('version'));
+
+        return $phpVersions->contains($version);
     }
 
     public function isPhpVersionEndOfLife($version): bool
     {
-        return
-            $version === '5.4' ||
-            $version === '5.5' ||
-            $version === '5.6' ||
-            $version === '7.0' ||
-            $version === '7.1' ||
-            $version === '7.2' ||
-            $version === '7.3' ||
-            $version === '7.4' ||
-            $version === '8.0';
+        $phpVersions = collect(PhpVersions::endOfLife('version'));
+
+        return $phpVersions->contains($version);
     }
 
     protected function formatFileSize($kilobytes, $precision = null): string
