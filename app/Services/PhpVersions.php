@@ -108,18 +108,35 @@ class PhpVersions
         ];
     }
 
-    public static function active()
+    public static function filtered($field): array
     {
-        return collect(self::all())->filter(fn($version) => $version['status'] === 'active')->all();
+        return collect(self::all())->map(fn($version) => $version[$field])->all();
     }
 
-    public static function security()
+    public static function active($field = null): array
     {
-        return collect(self::all())->filter(fn($version) => $version['status'] === 'security')->all();
+        return collect(self::all())
+            ->filter(fn($version) => $version['status'] === 'active')
+            ->when($field, function ($collection) use ($field) {
+                return $collection->map(fn($version) => $version[$field]);
+            })->all();
     }
 
-    public static function endOfLife()
+    public static function security($field = null): array
     {
-        return collect(self::all())->filter(fn($version) => $version['status'] === 'ended')->all();
+        return collect(self::all())
+            ->filter(fn($version) => $version['status'] === 'security')
+            ->when($field, function ($collection) use ($field) {
+                return $collection->map(fn($version) => $version[$field]);
+            })->all();
+    }
+
+    public static function endOfLife($field = null): array
+    {
+        return collect(self::all())
+            ->filter(fn($version) => $version['status'] === 'ended')
+            ->when($field, function ($collection) use ($field) {
+                return $collection->map(fn($version) => $version[$field]);
+            })->all();
     }
 }
