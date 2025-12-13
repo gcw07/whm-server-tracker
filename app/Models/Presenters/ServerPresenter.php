@@ -145,7 +145,7 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                $phpVersions = collect(PhpVersions::filtered('version'));
+                $phpVersions = PhpVersions::filtered('version');
 
                 if ($this->settings?->has('php_installed_versions')) {
                     return collect($this->settings->get('php_installed_versions'))
@@ -261,21 +261,21 @@ trait ServerPresenter
 
     public function isPhpVersionActive($version): bool
     {
-        $phpVersions = collect(PhpVersions::active('version'));
+        $phpVersions = PhpVersions::active('version');
 
         return $phpVersions->contains($version);
     }
 
     public function isPhpVersionSecurityOnly($version): bool
     {
-        $phpVersions = collect(PhpVersions::security('version'));
+        $phpVersions = PhpVersions::security('version');
 
         return $phpVersions->contains($version);
     }
 
     public function isPhpVersionEndOfLife($version): bool
     {
-        $phpVersions = collect(PhpVersions::endOfLife('version'));
+        $phpVersions = PhpVersions::endOfLife('version');
 
         return $phpVersions->contains($version);
     }

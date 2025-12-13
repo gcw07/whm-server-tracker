@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Collection;
+
 class PhpVersions
 {
-    public static function all(): array
+    public static function all(): Collection
     {
-        return [
+        return collect([
             'php54' => [
                 'name' => 'PHP 5.4',
                 'version' => '5.4',
@@ -105,38 +107,38 @@ class PhpVersions
                 'releaseDate' => '2025-11-20',
                 'endDate' => '2029-12-31'
             ],
-        ];
+        ]);
     }
 
-    public static function filtered($field): array
+    public static function filtered($field): Collection
     {
-        return collect(self::all())->map(fn($version) => $version[$field])->all();
+        return self::all()->map(fn($version) => $version[$field]);
     }
 
-    public static function active($field = null): array
+    public static function active($field = null): Collection
     {
-        return collect(self::all())
+        return self::all()
             ->filter(fn($version) => $version['status'] === 'active')
             ->when($field, function ($collection) use ($field) {
                 return $collection->map(fn($version) => $version[$field]);
-            })->all();
+            });
     }
 
-    public static function security($field = null): array
+    public static function security($field = null): Collection
     {
-        return collect(self::all())
+        return self::all()
             ->filter(fn($version) => $version['status'] === 'security')
             ->when($field, function ($collection) use ($field) {
                 return $collection->map(fn($version) => $version[$field]);
-            })->all();
+            });
     }
 
-    public static function endOfLife($field = null): array
+    public static function endOfLife($field = null): Collection
     {
-        return collect(self::all())
+        return self::all()
             ->filter(fn($version) => $version['status'] === 'ended')
             ->when($field, function ($collection) use ($field) {
                 return $collection->map(fn($version) => $version[$field]);
-            })->all();
+            });
     }
 }
