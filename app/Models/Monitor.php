@@ -75,6 +75,7 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @method static Builder<static>|Monitor newModelQuery()
  * @method static Builder<static>|Monitor newQuery()
  * @method static Builder<static>|Monitor query()
+ * @method static Builder<static>|Monitor search(string $term)
  * @method static Builder<static>|Monitor whereBlacklistCheckEnabled($value)
  * @method static Builder<static>|Monitor whereBlacklistCheckFailureReason($value)
  * @method static Builder<static>|Monitor whereBlacklistStatus($value)

@@ -20,7 +20,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property string $address
  * @property int $port
  * @property ServerTypeEnum $server_type
- * @property mixed|null $token
+ * @property string|null $token
  * @property string|null $notes
  * @property \App\Collections\SettingsCollection|null $settings
  * @property \Illuminate\Support\Carbon|null $server_update_last_failed_at
@@ -49,9 +49,11 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property-read mixed $whm_url
  *
  * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Server filter(\App\Filters\ServerFilters $filters)
  * @method static Builder<static>|Server newModelQuery()
  * @method static Builder<static>|Server newQuery()
  * @method static Builder<static>|Server query()
+ * @method static Builder<static>|Server search(string $term)
  * @method static Builder<static>|Server whereAddress($value)
  * @method static Builder<static>|Server whereCreatedAt($value)
  * @method static Builder<static>|Server whereId($value)
@@ -64,6 +66,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @method static Builder<static>|Server whereSettings($value)
  * @method static Builder<static>|Server whereToken($value)
  * @method static Builder<static>|Server whereUpdatedAt($value)
+ * @method static Builder<static>|Server withTokens()
  *
  * @mixin \Eloquent
  */

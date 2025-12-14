@@ -39,9 +39,11 @@ use Illuminate\Support\Facades\Http;
  * @property-read \App\Models\Server $server
  *
  * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Account filter(\App\Filters\AccountFilters $filters)
  * @method static Builder<static>|Account newModelQuery()
  * @method static Builder<static>|Account newQuery()
  * @method static Builder<static>|Account query()
+ * @method static Builder<static>|Account search(string $term)
  * @method static Builder<static>|Account whereBackup($value)
  * @method static Builder<static>|Account whereCreatedAt($value)
  * @method static Builder<static>|Account whereDiskLimit($value)
