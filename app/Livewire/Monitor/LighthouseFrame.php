@@ -3,26 +3,11 @@
 namespace App\Livewire\Monitor;
 
 use App\Models\LighthouseAudit;
-use Livewire\Component;
-use Usernotnull\Toast\Concerns\WireToast;
 
-class LighthouseFrame extends Component
+class LighthouseFrame
 {
-    use WireToast;
-
-    public LighthouseAudit $audit;
-
-    protected string $domainUrl;
-
-    public function mount(LighthouseAudit $audit)
+    public function __invoke(LighthouseAudit $audit): ?string
     {
-        $this->audit = $audit;
-    }
-
-    public function render()
-    {
-        return view('livewire.monitor.lighthouse-iframe', [
-            'audit' => $this->audit,
-        ])->layout('components.layouts.empty');
+        return $audit->report;
     }
 }
