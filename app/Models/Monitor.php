@@ -334,7 +334,6 @@ class Monitor extends BaseMonitor
                     'accessibility_score' => $scores['accessibility'],
                     'best_practices_score' => $scores['best-practices'],
                     'seo_score' => $scores['seo'],
-                    'pwa_score' => $scores['pwa'],
                     'speed_index' => $speed,
                     'raw_results' => $rawResults,
                     'report' => $report,
