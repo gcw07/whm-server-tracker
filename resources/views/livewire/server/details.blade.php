@@ -277,7 +277,7 @@
                     @endif
                     <span class="text-gray-900 font-medium truncate">{{ $account->domain }}</span>
                   </span>
-                  <span class="truncate">{{ $account->server->name }}</span>
+                  <span class="truncate">{{ $server->name }}</span>
                   @if($account->formatted_disk_usage === 'Unknown')
                     <span>&mdash;</span>
                   @else
@@ -396,7 +396,7 @@
                         </div>
                       </td>
                       <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                        <a href="{{ $account->server->whm_url }}" target="_blank" x-data="{}" x-tooltip.raw="View WHM Panel" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                        <a href="{{ $server->whm_url }}" target="_blank" x-data="{}" x-tooltip.raw="View WHM Panel" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                           <x-heroicon-m-arrow-top-right-on-square class="-ml-0.5 h-4 w-4" />
                         </a>
                       </td>
