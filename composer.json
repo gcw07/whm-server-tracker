@@ -20,7 +20,7 @@
         "livewire/livewire": "^3.6",
         "spatie/laravel-backup": "^9.3",
         "spatie/laravel-uptime-monitor": "^4.5",
-        "spatie/lighthouse-php": "^1.2",
+        "spatie/lighthouse-php": "^2.0",
         "spatie/simple-excel": "^3.8",
         "usernotnull/tall-toasts": "^2.2",
         "wire-elements/modal": "^2.0"
