@@ -50,6 +50,7 @@ class Details extends Component
         return Account::query()
             ->with(['server'])
             ->where('domain', $this->domainUrl)
+            ->where('suspended', false)
             ->first();
     }
 
