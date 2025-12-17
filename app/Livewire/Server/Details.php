@@ -5,7 +5,6 @@ namespace App\Livewire\Server;
 use App\Jobs\FetchServerDataJob;
 use App\Models\Monitor;
 use App\Models\Server;
-use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Usernotnull\Toast\Concerns\WireToast;
 
