@@ -180,12 +180,15 @@ return [
     */
 
     'defaults' => [
-        'supervisor-1' => [
+        'supervisor-high-priority' => [
             'connection' => 'redis',
-            'queue' => ['default'],
+            'queue' => ['high'],
             'balance' => 'auto',
-            'autoScalingStrategy' => 'time',
-            'maxProcesses' => 1,
+            'autoScalingStrategy' => 'size',
+            'minProcesses' => 1,
+            'maxProcesses' => 10,
+            'balanceMaxShift' => 3,
+            'balanceCooldown' => 2,
             'maxTime' => 0,
             'maxJobs' => 0,
             'memory' => 128,
@@ -193,21 +196,53 @@ return [
             'timeout' => 60,
             'nice' => 0,
         ],
+        'supervisor-low-priority' => [
+            'connection' => 'redis',
+            'queue' => ['low', 'default'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'size',
+            'minProcesses' => 1,
+            'maxProcesses' => 3,
+            'balanceMaxShift' => 1,
+            'balanceCooldown' => 3,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 60,
+            'nice' => 0,
+        ],
+        'supervisor-long-timeout' => [
+            'connection' => 'redis',
+            'queue' => ['long-timeout'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'size',
+            'minProcesses' => 1,
+            'maxProcesses' => 3,
+            'balanceMaxShift' => 1,
+            'balanceCooldown' => 3,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 300,
+            'nice' => 0,
+        ],
     ],
 
     'environments' => [
         'production' => [
-            'supervisor-1' => [
-                'maxProcesses' => 10,
-                'balanceMaxShift' => 1,
-                'balanceCooldown' => 3,
-            ],
+            'supervisor-high-priority' => [],
+            'supervisor-low-priority' => [],
+            'supervisor-long-timeout' => [],
         ],
 
         'local' => [
-            'supervisor-1' => [
+            'supervisor-high-priority' => [
                 'maxProcesses' => 3,
             ],
+            'supervisor-low-priority' => [],
+            'supervisor-long-timeout' => [],
         ],
     ],
 ];
