@@ -113,7 +113,7 @@ class Server extends Model
     {
         $servers = static::query()->withTokens()->get();
 
-        $servers->each(fn ($server) => dispatch(new FetchServerDataJob($server)));
+        $servers->each(fn ($server) => dispatch(new FetchServerDataJob($server))->onQueue('high'));
     }
 
     public function accounts(): HasMany

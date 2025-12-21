@@ -47,7 +47,7 @@ class Details extends Component
 
     public function refresh(): void
     {
-        FetchServerDataJob::dispatch($this->server);
+        FetchServerDataJob::dispatch($this->server)->onQueue('high');
 
         toast()->success('The server details will be refreshed shortly.')->push();
     }

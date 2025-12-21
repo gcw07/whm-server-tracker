@@ -42,7 +42,7 @@ class CheckDomainNameCommand extends Command
         $monitors->each(function (Monitor $monitor) {
             $this->info("Checking domain name expiration for {$monitor->url}");
 
-            dispatch(new CheckDomainNameJob($monitor));
+            dispatch(new CheckDomainNameJob($monitor))->onQueue('low');
         });
 
         $this->info('All done!');

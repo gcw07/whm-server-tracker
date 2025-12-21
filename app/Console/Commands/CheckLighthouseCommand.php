@@ -44,7 +44,7 @@ class CheckLighthouseCommand extends Command
         $monitors->each(function (Monitor $monitor) {
             $this->info("Checking lighthouse for {$monitor->url}");
 
-            dispatch(new CheckLighthouseJob($monitor));
+            dispatch(new CheckLighthouseJob($monitor))->onQueue('long-timeout');
         });
 
         $this->info('All done!');
