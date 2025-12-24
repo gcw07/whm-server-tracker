@@ -321,7 +321,7 @@ class Monitor extends BaseMonitor
     {
         if ($this->shouldRunLighthouseAudit()) {
             try {
-                $result = Lighthouse::url($this->url)->run();
+                $result = Lighthouse::url($this->url)->timeoutInSeconds(120)->run();
                 $scores = $result->scores();
                 $speed = $result->speedIndexInMs();
                 $rawResults = json_encode($result->audits());
