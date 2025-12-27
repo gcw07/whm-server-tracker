@@ -320,8 +320,10 @@ class Monitor extends BaseMonitor
     public function checkLighthouse(): void
     {
         if ($this->shouldRunLighthouseAudit()) {
+            $timeout = config('server-tracker.lighthouse_audits.audit_timeout');
+
             try {
-                $result = Lighthouse::url($this->url)->timeoutInSeconds(120)->run();
+                $result = Lighthouse::url($this->url)->timeoutInSeconds($timeout)->run();
                 $scores = $result->scores();
                 $speed = $result->speedIndexInMs();
                 $rawResults = json_encode($result->audits());

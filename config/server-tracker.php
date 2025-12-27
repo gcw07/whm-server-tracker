@@ -133,10 +133,12 @@ return [
     | Lighthouse Audit Reports
     |--------------------------------------------------------------------------
     | Limit audits to run only after a certain amount of time.
+    | The number of seconds for how long to run the audits for.
     */
 
     'lighthouse_audits' => [
         'run_audit_every_hours' => 160,
+        'audit_timeout' => env('SERVER_TRACKER_LIGHTHOUSE_AUDIT_TIMEOUT', 120),
     ],
 
     /*
