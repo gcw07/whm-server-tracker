@@ -15,7 +15,7 @@ beforeEach(function () {
 
 test('guests can not view search results page', function () {
     $this->get(route('search'))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view search results page', function () {

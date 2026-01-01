@@ -13,7 +13,7 @@ beforeEach(function () {
 
 test('guests cannot view the add user form', function () {
     $this->get(route('users.create'))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view the add user form', function () {
@@ -46,7 +46,7 @@ test('an authorized user can add a valid user', function () {
             ],
         ])
         ->call('save')
-        ->assertRedirect(route('users.index'));
+        ->assertRedirectToRoute('users.index');
 
     $this->assertDatabaseHas('users', [
         'name' => 'Grant Williams',

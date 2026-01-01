@@ -15,7 +15,7 @@ beforeEach(function () {
 
 test('guests can not view account listings page', function () {
     $this->get(route('accounts.index'))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view account listings page', function () {

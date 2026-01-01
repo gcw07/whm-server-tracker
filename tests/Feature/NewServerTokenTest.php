@@ -27,7 +27,7 @@ test('an authorized user can add a new server token', function () {
             'token' => 'new-api-token',
         ])
         ->call('save')
-        ->assertRedirect(route('servers.show', $server->id));
+        ->assertRedirectToRoute('servers.show', $server->id);
 });
 
 test('an authorized user can update a server token', function () {

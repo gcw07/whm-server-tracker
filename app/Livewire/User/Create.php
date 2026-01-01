@@ -95,6 +95,6 @@ class Create extends Component
 
         User::create($data);
 
-        return redirect()->route('users.index');
+        return to_route('users.index');
     }
 }

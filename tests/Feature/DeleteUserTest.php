@@ -20,7 +20,7 @@ test('an authorized user can delete a user', function () {
 
     Livewire::test(UserDelete::class, ['user' => $this->user])
         ->call('delete')
-        ->assertRedirect(route('users.index'));
+        ->assertRedirectToRoute('users.index');
 
     $this->assertEquals(1, User::count());
 });

@@ -7,7 +7,7 @@ uses(LazilyRefreshDatabase::class);
 
 test('guests can not view dashboard page', function () {
     $this->get(route('dashboard'))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view dashboard page', function () {

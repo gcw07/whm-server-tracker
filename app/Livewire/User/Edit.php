@@ -71,6 +71,6 @@ class Edit extends Component
 
         $this->user->update($this->state);
 
-        return redirect()->route('users.index');
+        return to_route('users.index');
     }
 }

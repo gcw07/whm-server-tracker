@@ -24,7 +24,7 @@ test('an authorized user can delete a server', function () {
 
     Livewire::test(ServerDelete::class, ['server' => $this->server])
         ->call('delete')
-        ->assertRedirect(route('servers.index'));
+        ->assertRedirectToRoute('servers.index');
 
     $this->assertEquals(0, Server::count());
 });
@@ -48,7 +48,7 @@ test('accounts are deleted when a server is deleted', function () {
 
     Livewire::test(ServerDelete::class, ['server' => $server])
         ->call('delete')
-        ->assertRedirect(route('servers.index'));
+        ->assertRedirectToRoute('servers.index');
 
     $this->assertEquals(2, Server::count());
     $this->assertEquals(1, Account::count());
@@ -85,7 +85,7 @@ test('monitors are deleted when a server is deleted', function () {
 
     Livewire::test(ServerDelete::class, ['server' => $server])
         ->call('delete')
-        ->assertRedirect(route('servers.index'));
+        ->assertRedirectToRoute('servers.index');
 
     $this->assertEquals(2, Server::count());
     $this->assertEquals(1, Account::count());

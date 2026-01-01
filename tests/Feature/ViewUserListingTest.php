@@ -8,7 +8,7 @@ uses(LazilyRefreshDatabase::class);
 
 test('guests can not view user listings page', function () {
     $this->get(route('users.index'))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view user listings page', function () {

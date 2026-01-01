@@ -16,7 +16,7 @@ beforeEach(function () {
 
 test('guests cannot view the add server form', function () {
     $this->get(route('servers.create'))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view the add server form', function () {
@@ -41,7 +41,7 @@ test('an authorized user can add a valid server', function () {
 
     $server = Server::first();
 
-    $response->assertRedirect(route('servers.show', $server->id));
+    $response->assertRedirectToRoute('servers.show', $server->id);
 
     $this->assertDatabaseHas('servers', [
         'name' => 'My Test Server',

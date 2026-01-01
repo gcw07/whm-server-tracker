@@ -58,7 +58,7 @@ class NewToken extends ModalComponent
         if ($hadMissingToken) {
             toast()->success('The server api token was updated successfully.')->pushOnNextPage();
 
-            return redirect()->route('servers.show', $this->server);
+            return to_route('servers.show', $this->server);
         }
 
         toast()->success('The server api token was updated successfully.')->push();
