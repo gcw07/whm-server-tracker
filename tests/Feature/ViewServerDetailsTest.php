@@ -14,7 +14,7 @@ test('guests can not view server details page', function () {
     $server = Server::factory()->create();
 
     $this->get(route('servers.show', $server->id))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view server details page', function () {

@@ -16,7 +16,7 @@ beforeEach(function () {
 
 test('guests cannot view the edit server form', function () {
     $this->get(route('servers.edit', $this->server->id))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view the edit server form', function () {
@@ -33,7 +33,7 @@ test('an authorized user can edit a server', function () {
             'name' => 'My Server',
         ]))
         ->call('save')
-        ->assertRedirect(route('servers.show', $this->server->id));
+        ->assertRedirectToRoute('servers.show', $this->server->id);
 
     tap($this->server->fresh(), function (Server $server) {
         $this->assertEquals('My Server', $server->name);
