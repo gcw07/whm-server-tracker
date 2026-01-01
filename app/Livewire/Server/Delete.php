@@ -36,6 +36,6 @@ class Delete extends ModalComponent
 
         toast()->success('The server was deleted successfully.')->pushOnNextPage();
 
-        return redirect()->route('servers.index');
+        return to_route('servers.index');
     }
 }
