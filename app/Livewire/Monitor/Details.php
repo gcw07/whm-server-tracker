@@ -45,7 +45,7 @@ class Details extends Component
             ->count();
     }
 
-    protected function accountQuery()
+    protected function accountQuery(): \Eloquent|\Illuminate\Database\Eloquent\Builder|Account|null
     {
         return Account::query()
             ->with(['server'])
@@ -54,7 +54,7 @@ class Details extends Component
             ->first();
     }
 
-    protected function lighthouseQuery()
+    protected function lighthouseQuery(): LighthouseAudit|\Illuminate\Database\Eloquent\Builder|null
     {
         return LighthouseAudit::query()
             ->where('monitor_id', $this->monitor->id)
