@@ -50,7 +50,7 @@ class Edit extends Component
         ];
     }
 
-    public function save()
+    public function save(): \Illuminate\Http\RedirectResponse
     {
         $this->validate();
 
