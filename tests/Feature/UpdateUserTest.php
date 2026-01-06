@@ -14,7 +14,7 @@ beforeEach(function () {
 
 test('guests cannot view the edit user form', function () {
     $this->get(route('users.edit', $this->user->id))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view the edit user form', function () {
@@ -45,7 +45,7 @@ test('an authorized user can edit a user', function () {
             ],
         ])
         ->call('save')
-        ->assertRedirect(route('users.index'));
+        ->assertRedirectToRoute('users.index');
 
     tap($this->user->fresh(), function (User $user) {
         $this->assertEquals('Della Duck', $user->name);
@@ -89,7 +89,7 @@ test('email can be the same for the same user for user edit', function () {
             ],
         ])
         ->call('save')
-        ->assertRedirect(route('users.index'));
+        ->assertRedirectToRoute('users.index');
 
     tap($userB->fresh(), function (User $user) {
         $this->assertEquals('mike@example.com', $user->email);

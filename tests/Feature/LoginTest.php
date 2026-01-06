@@ -18,7 +18,7 @@ test('logging in with valid credentials', function () {
         'password' => 'super-secret-password',
     ]);
 
-    $response->assertRedirect(route('dashboard'));
+    $response->assertRedirectToRoute('dashboard');
 
     $this->assertTrue(Auth::check());
     $this->assertTrue(Auth::user()->is($user));
@@ -77,7 +77,7 @@ test('logging in updates last login at and last ip address', function () {
         'password' => 'secret-password',
     ]);
 
-    $response->assertRedirect(route('dashboard'));
+    $response->assertRedirectToRoute('dashboard');
 
     $this->assertTrue(Auth::check());
     $this->assertTrue(Auth::user()->is($user));

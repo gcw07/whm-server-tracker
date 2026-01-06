@@ -15,7 +15,7 @@ beforeEach(function () {
 
 test('guests can not view monitor listings page', function () {
     $this->get(route('monitors.index'))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view monitor listings page', function () {

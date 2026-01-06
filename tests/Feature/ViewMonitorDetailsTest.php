@@ -13,7 +13,7 @@ test('guests can not view monitor details page', function () {
     $monitor = MonitorFactory::new()->create(['url' => 'https://myserver.com']);
 
     $this->get(route('monitors.show', $monitor->id))
-        ->assertRedirect(route('login'));
+        ->assertRedirectToRoute('login');
 });
 
 test('an authorized user can view monitor details page', function () {

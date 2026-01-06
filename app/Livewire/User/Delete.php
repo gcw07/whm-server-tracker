@@ -43,6 +43,6 @@ class Delete extends ModalComponent
 
         toast()->success('The user was deleted successfully.')->pushOnNextPage();
 
-        return redirect()->route('users.index');
+        return to_route('users.index');
     }
 }

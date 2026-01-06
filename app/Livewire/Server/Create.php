@@ -53,6 +53,6 @@ class Create extends Component
 
         $server = Server::create($this->state);
 
-        return redirect()->route('servers.show', $server->id);
+        return to_route('servers.show', $server->id);
     }
 }
