@@ -323,7 +323,14 @@ class Monitor extends BaseMonitor
             $timeout = config('server-tracker.lighthouse_audits.audit_timeout');
 
             try {
-                $result = Lighthouse::url($this->url)->timeoutInSeconds($timeout)->run();
+                $result = Lighthouse::url($this->url)
+                    ->timeoutInSeconds($timeout)
+                    ->withChromeOptions([
+                        'chromeFlags' => [
+                            '--headless=new',
+                        ]
+                    ])
+                    ->run();
                 $scores = $result->scores();
                 $speed = $result->speedIndexInMs();
                 $rawResults = json_encode($result->audits());
