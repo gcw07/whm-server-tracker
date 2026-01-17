@@ -29,7 +29,7 @@ class Delete extends ModalComponent
         return 'xl';
     }
 
-    public function delete(): \Illuminate\Http\RedirectResponse
+    public function delete()
     {
         $this->server->removeMonitors();
         $this->server->delete();
