@@ -328,6 +328,7 @@ class Monitor extends BaseMonitor
                     ->withChromeOptions([
                         'chromeFlags' => [
                             '--headless=new',
+                            '--no-sandbox',
                         ]
                     ])
                     ->run();
