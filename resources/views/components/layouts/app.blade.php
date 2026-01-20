@@ -8,7 +8,7 @@
   <title>{{ isset($title) ? $title . ' | ' . config('app.name') : '' }}</title>
 
   <!-- Fonts -->
-  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
   <!-- Styles -->
   @vite('resources/css/app.css')

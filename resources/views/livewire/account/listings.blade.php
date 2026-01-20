@@ -98,7 +98,7 @@
                     @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
                       <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" />
                     @else
-                      <span class="w-3 h-3 m-1 flex-shrink-0 rounded-full bg-green-600" aria-hidden="true"></span>
+                      <span class="w-3 h-3 m-1 shrink-0 rounded-full bg-green-600" aria-hidden="true"></span>
                     @endif
                     <span class="text-gray-900 font-medium truncate">{{ $account->domain }}</span>
                   </span>
@@ -112,7 +112,7 @@
                   @endif
                 </span>
               </span>
-              <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
+              <x-heroicon-s-chevron-right class="shrink-0 h-5 w-5 text-gray-400" />
             </span>
           </a>
         </li>
@@ -172,7 +172,7 @@
                           @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
                             <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" x-tooltip.raw="Disk Warning" />
                           @else
-                            <div class="flex-shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
+                            <div class="shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
                           @endif
                         </div>
                         <a href="{{ route('accounts.show', $account->id) }}" class="group inline-flex space-x-2 truncate text-sm">

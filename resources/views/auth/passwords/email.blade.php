@@ -1,6 +1,6 @@
 <x-layouts.guest title="Reset Password">
 
-  <div class="flex-grow flex flex-col sm:justify-center p-12">
+  <div class="grow flex flex-col sm:justify-center p-12">
     <div>
       <h1 class="text-gray-600 font-bold tracking-wide text-4xl text-center pb-5">Reset Password</h1>
     </div>

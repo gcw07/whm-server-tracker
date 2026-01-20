@@ -11,7 +11,7 @@
           </li>
           <li>
             <div class="flex items-center">
-              <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400"/>
+              <x-heroicon-s-chevron-right class="shrink-0 h-5 w-5 text-gray-400"/>
               <span class="ml-4 text-sm font-medium text-gray-500">Lighthouse Report</span>
             </div>
           </li>

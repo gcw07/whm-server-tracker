@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
     <div class="flex justify-between h-16">
       <div class="flex px-2 lg:px-0">
-        <div class="flex-shrink-0 flex items-center">
+        <div class="shrink-0 flex items-center">
           <a href="{{ route('dashboard') }}">
             <img class="h-10 sm:h-14" src="/img/logo.svg" alt="{{ config('app.name') }}">
           </a>
@@ -102,7 +102,7 @@
 
       <div class="hidden lg:ml-4 lg:flex lg:items-center">
         <!-- Profile dropdown -->
-        <x-navigation.dropdown class="ml-3 flex-shrink-0">
+        <x-navigation.dropdown class="ml-3 shrink-0">
           <x-slot name="trigger">
             <button type="button"
                     class="max-w-xs bg-sky-600 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-sky-500"
@@ -110,7 +110,7 @@
               <x-heroicon-s-user-circle class="h-5 w-5 text-white"/>
               <span class="hidden ml-2 text-white text-sm font-medium lg:block"><span
                   class="sr-only">Open user menu for </span>{{ auth()->user()->name }}</span>
-              <x-heroicon-s-chevron-down class="hidden flex-shrink-0 ml-1 h-5 w-5 text-white lg:block"/>
+              <x-heroicon-s-chevron-down class="hidden shrink-0 ml-1 h-5 w-5 text-white lg:block"/>
             </button>
           </x-slot>
 

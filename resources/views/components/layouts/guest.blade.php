@@ -27,7 +27,7 @@
   </div>
   <div class="relative max-w-xl mx-auto">
     <div class="flex flex-col min-h-screen sm:flex-row sm:items-center sm:p-8">
-      <div class="flex flex-col flex-grow bg-white sm:shadow-2xl sm:rounded-lg sm:overflow-hidden">
+      <div class="flex flex-col grow bg-white sm:shadow-2xl sm:rounded-lg sm:overflow-hidden">
         {{ $slot }}
       </div>
     </div>

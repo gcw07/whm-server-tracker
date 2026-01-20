@@ -34,7 +34,7 @@
                     <span>{{ $user->email }}</span>
                   </span>
                 </span>
-                <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400"/>
+                <x-heroicon-s-chevron-right class="shrink-0 h-5 w-5 text-gray-400"/>
               </span>
             </a>
           </li>

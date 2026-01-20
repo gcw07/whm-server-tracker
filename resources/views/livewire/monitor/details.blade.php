@@ -11,7 +11,7 @@
           </li>
           <li>
             <div class="flex items-center">
-              <x-heroicon-s-chevron-right class="flex-shrink-0 h-5 w-5 text-gray-400" />
+              <x-heroicon-s-chevron-right class="shrink-0 h-5 w-5 text-gray-400" />
               <span class="ml-4 text-sm font-medium text-gray-500">Details</span>
             </div>
           </li>
@@ -156,17 +156,17 @@
             <div class="ml-4 mt-4 flex items-center">
               @if($monitor->uptime_check_enabled)
                 <div @class([
-                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
                    'bg-green-600' => $monitor->uptime_status === 'up',
                    'bg-red-600' => $monitor->uptime_status === 'down',
                    'bg-yellow-600' => $monitor->uptime_status === 'not yet checked'
                     ]) aria-hidden="true"></div>
               @else
-                <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                <div class="shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
               @endif
               <h3 class="text-lg leading-6 font-medium text-gray-900">Uptime Checks</h3>
             </div>
-            <div class="ml-4 mt-4 flex-shrink-0">
+            <div class="ml-4 mt-4 shrink-0">
               <!-- Uptime menu dropdown -->
               <x-navigation.dropdown>
                 <x-slot name="trigger">
@@ -270,17 +270,17 @@
             <div class="ml-4 mt-4 flex items-center">
               @if($monitor->certificate_check_enabled)
                 <div @class([
-                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
                    'bg-green-600' => $monitor->certificate_status === 'valid',
                    'bg-red-600' => $monitor->certificate_status === 'invalid',
                    'bg-yellow-600' => $monitor->certificate_status === 'not yet checked'
                     ]) aria-hidden="true"></div>
               @else
-                <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                <div class="shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
               @endif
               <h3 class="text-lg leading-6 font-medium text-gray-900">SSL Certificate</h3>
             </div>
-            <div class="ml-4 mt-4 flex-shrink-0">
+            <div class="ml-4 mt-4 shrink-0">
               <!-- Certificate menu dropdown -->
               <x-navigation.dropdown>
                 <x-slot name="trigger">
@@ -368,17 +368,17 @@
             <div class="ml-4 mt-4 flex items-center">
               @if($monitor->blacklist_check_enabled)
                 <div @class([
-                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
                    'bg-green-600' => $monitor->blacklist_status === 'valid',
                    'bg-red-600' => $monitor->blacklist_status === 'invalid',
                    'bg-yellow-600' => $monitor->blacklist_status === 'not yet checked'
                     ]) aria-hidden="true"></div>
               @else
-                <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                <div class="shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
               @endif
               <h3 class="text-lg leading-6 font-medium text-gray-900">Email Blacklist</h3>
             </div>
-            <div class="ml-4 mt-4 flex-shrink-0">
+            <div class="ml-4 mt-4 shrink-0">
               <!-- Blacklist menu dropdown -->
               <x-navigation.dropdown>
                 <x-slot name="trigger">
@@ -464,17 +464,17 @@
             <div class="ml-4 mt-4 flex items-center">
               @if($monitor->domain_name_check_enabled)
                 <div @class([
-                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
                    'bg-green-600' => $monitor->domain_name_status === 'valid',
                    'bg-red-600' => $monitor->domain_name_status === 'invalid',
                    'bg-yellow-600' => $monitor->domain_name_status === 'not yet checked'
                     ]) aria-hidden="true"></div>
               @else
-                <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                <div class="shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
               @endif
               <h3 class="text-lg leading-6 font-medium text-gray-900">Domain Information</h3>
             </div>
-            <div class="ml-4 mt-4 flex-shrink-0">
+            <div class="ml-4 mt-4 shrink-0">
               <!-- Domain Name Expiration menu dropdown -->
               <x-navigation.dropdown>
                 <x-slot name="trigger">
@@ -592,17 +592,17 @@
             <div class="ml-4 mt-4 flex items-center">
               @if($monitor->lighthouse_check_enabled)
                 <div @class([
-                   'flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
+                   'shrink-0 w-3 h-3 m-1 mr-2 rounded-full ',
                    'bg-green-600' => $monitor->lighthouse_status === 'valid',
                    'bg-red-600' => $monitor->lighthouse_status === 'invalid',
                    'bg-yellow-600' => $monitor->lighthouse_status === 'not yet checked'
                     ]) aria-hidden="true"></div>
               @else
-                <div class="flex-shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
+                <div class="shrink-0 w-3 h-3 m-1 mr-2 rounded-full bg-gray-50 border border-black" aria-hidden="true"></div>
               @endif
               <h3 class="text-lg leading-6 font-medium text-gray-900">Lighthouse Reports</h3>
             </div>
-            <div class="ml-4 mt-4 flex-shrink-0">
+            <div class="ml-4 mt-4 shrink-0">
               <!-- Lighthouse Reports menu dropdown -->
               <x-navigation.dropdown>
                 <x-slot name="trigger">

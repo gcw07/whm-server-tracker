@@ -1,5 +1,5 @@
 <x-layouts.guest title="Sign In">
-  <div class="flex flex-col flex-grow p-12 sm:justify-center">
+  <div class="flex flex-col grow p-12 sm:justify-center">
     <div>
       <h1 class="pb-5 text-4xl font-bold tracking-wide text-center text-gray-600">Sign In</h1>
     </div>

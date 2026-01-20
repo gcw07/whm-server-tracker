@@ -18,7 +18,7 @@
     @if($sitesWithIssues > 0)
       <div class="bg-red-50 border-l-4 border-red-400 p-4 drop-shadow">
         <div class="flex">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <x-heroicon-s-x-circle class="h-5 w-5 text-red-400" />
           </div>
           <div class="ml-3 flex-1 md:flex md:justify-between">
@@ -36,7 +36,7 @@
     @if($serversWithIssues > 0)
       <div class="bg-red-50 border-l-4 border-red-400 p-4 drop-shadow">
         <div class="flex">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <x-heroicon-s-x-circle class="h-5 w-5 text-red-400" />
           </div>
           <div class="ml-3 flex-1 md:flex md:justify-between">
