@@ -6,7 +6,7 @@
       'bg-sky-700 text-white' => $route['active'],
       'text-white hover:bg-sky-500 hover:bg-opacity-75' => !$route['active']
       ])>
-      <x-dynamic-component :component="$route['icon']" class="-ml-0.5 mr-2 h-4 w-4" />
+{{--      <x-dynamic-component :component="$route['icon']" class="-ml-0.5 mr-2 h-4 w-4" />--}}
       {{ $route['name'] }}
     </a>
   @endunless
