@@ -329,7 +329,7 @@ class Monitor extends BaseMonitor
                         'chromeFlags' => [
                             '--headless=new',
                             '--no-sandbox',
-                        ]
+                        ],
                     ])
                     ->run();
                 $scores = $result->scores();

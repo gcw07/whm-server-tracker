@@ -29,7 +29,7 @@ class Delete extends ModalComponent
         return 'xl';
     }
 
-    public function delete(): false|\Livewire\Features\SupportRedirects\Redirector | \Illuminate\Http\RedirectResponse
+    public function delete(): false|\Livewire\Features\SupportRedirects\Redirector|\Illuminate\Http\RedirectResponse
     {
         if ($this->user->id === auth()->user()->id) {
             toast()->danger('You may not delete yourself.')->push();

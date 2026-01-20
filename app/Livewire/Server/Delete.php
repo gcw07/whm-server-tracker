@@ -29,7 +29,7 @@ class Delete extends ModalComponent
         return 'xl';
     }
 
-    public function delete(): \Livewire\Features\SupportRedirects\Redirector | \Illuminate\Http\RedirectResponse
+    public function delete(): \Livewire\Features\SupportRedirects\Redirector|\Illuminate\Http\RedirectResponse
     {
         $this->server->removeMonitors();
         $this->server->delete();
