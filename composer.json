@@ -15,6 +15,7 @@
         "laravel/framework": "^12.47",
         "laravel/horizon": "^5.43",
         "laravel/tinker": "^2.10.1",
+        "livewire/flux": "^2.10",
         "livewire/livewire": "^3.7",
         "spatie/laravel-backup": "^9.3",
         "spatie/laravel-uptime-monitor": "^4.5",
