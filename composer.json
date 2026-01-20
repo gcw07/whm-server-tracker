@@ -11,7 +11,6 @@
     "require": {
         "php": "^8.4",
         "ext-simplexml": "*",
-        "doctrine/dbal": "^3.5",
         "guzzlehttp/guzzle": "^7.10",
         "laravel/framework": "^12.47",
         "laravel/horizon": "^5.43",
