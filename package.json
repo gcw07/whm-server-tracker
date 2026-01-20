@@ -7,7 +7,6 @@
     "dev": "vite"
   },
   "devDependencies": {
-    "@ryangjchandler/alpine-tooltip": "^2.0.1",
     "@tailwindcss/vite": "^4.0.0",
     "axios": "^1.11.0",
     "chrome-launcher": "^1.0.0",
