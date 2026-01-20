@@ -23,7 +23,7 @@ class NewToken extends ModalComponent
         'state.token' => 'token',
     ];
 
-    public function mount(Server $server)
+    public function mount(Server $server): void
     {
         abort_if(auth()->guest(), 401);
 

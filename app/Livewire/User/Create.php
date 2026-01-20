@@ -85,7 +85,7 @@ class Create extends Component
         ];
     }
 
-    public function save(): \Illuminate\Http\RedirectResponse
+    public function save(): \Livewire\Features\SupportRedirects\Redirector | \Illuminate\Http\RedirectResponse
     {
         $this->validate();
 

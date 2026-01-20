@@ -27,7 +27,7 @@ class Edit extends Component
         'state.notes' => 'notes',
     ];
 
-    public function mount(Server $server)
+    public function mount(Server $server): void
     {
         $this->server = $server;
 
@@ -50,7 +50,7 @@ class Edit extends Component
         ];
     }
 
-    public function save(): \Illuminate\Http\RedirectResponse
+    public function save(): \Livewire\Features\SupportRedirects\Redirector | \Illuminate\Http\RedirectResponse
     {
         $this->validate();
 
