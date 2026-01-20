@@ -21,7 +21,7 @@
                  @keydown.meta.k.window.prevent="focusBox()"
                  class="relative text-gray-400 focus-within:text-gray-600">
               <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                <x-heroicon-s-magnifying-glass class="h-5 w-5"/>
+{{--                <x-heroicon-s-magnifying-glass class="h-5 w-5"/>--}}
               </div>
               <input id="search"
                      x-ref="search"
@@ -44,7 +44,7 @@
                 class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
                 aria-expanded="false">
           <span class="sr-only">Open main menu</span>
-          <x-heroicon-o-bars-3 class="block h-6 w-6"/>
+{{--          <x-heroicon-o-bars-3 class="block h-6 w-6"/>--}}
         </button>
       </div>
 
@@ -71,7 +71,7 @@
                   <button @click="open = !open" type="button"
                           class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
                     <span class="sr-only">Close menu</span>
-                    <x-heroicon-o-x-mark class="h-6 w-6"/>
+{{--                    <x-heroicon-o-x-mark class="h-6 w-6"/>--}}
                   </button>
                 </div>
               </div>
@@ -81,7 +81,7 @@
             </div>
             <div class="pt-4 pb-2">
               <div class="flex items-center px-5">
-                <x-heroicon-s-user-circle class="h-10 w-10 text-gray-800"/>
+{{--                <x-heroicon-s-user-circle class="h-10 w-10 text-gray-800"/>--}}
                 <div class="ml-3">
                   <div class="text-base font-medium text-gray-800">{{ auth()->user()->name }}</div>
                 </div>
@@ -107,10 +107,10 @@
             <button type="button"
                     class="max-w-xs bg-sky-600 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-sky-500"
                     id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-              <x-heroicon-s-user-circle class="h-5 w-5 text-white"/>
+{{--              <x-heroicon-s-user-circle class="h-5 w-5 text-white"/>--}}
               <span class="hidden ml-2 text-white text-sm font-medium lg:block"><span
                   class="sr-only">Open user menu for </span>{{ auth()->user()->name }}</span>
-              <x-heroicon-s-chevron-down class="hidden shrink-0 ml-1 h-5 w-5 text-white lg:block"/>
+{{--              <x-heroicon-s-chevron-down class="hidden shrink-0 ml-1 h-5 w-5 text-white lg:block"/>--}}
             </button>
           </x-slot>
 

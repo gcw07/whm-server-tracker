@@ -4,13 +4,9 @@ namespace App\Livewire\User;
 
 use App\Models\User;
 use Illuminate\Validation\Rules\Password;
-use LivewireUI\Modal\ModalComponent;
-use Usernotnull\Toast\Concerns\WireToast;
 
-class ChangePassword extends ModalComponent
+class ChangePassword
 {
-    use WireToast;
-
     public $user;
 
     /**
@@ -73,7 +69,7 @@ class ChangePassword extends ModalComponent
 
         $this->user->update($data);
 
-        toast()->success('The users password was updated successfully.')->push();
+//        toast()->success('The users password was updated successfully.')->push();
         $this->closeModal();
     }
 

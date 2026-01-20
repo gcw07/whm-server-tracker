@@ -3,13 +3,9 @@
 namespace App\Livewire\Server;
 
 use App\Models\Server;
-use LivewireUI\Modal\ModalComponent;
-use Usernotnull\Toast\Concerns\WireToast;
 
-class Delete extends ModalComponent
+class Delete
 {
-    use WireToast;
-
     public $server;
 
     public function mount(Server $server): void

@@ -19,7 +19,7 @@
       <div class="bg-red-50 border-l-4 border-red-400 p-4 drop-shadow">
         <div class="flex">
           <div class="shrink-0">
-            <x-heroicon-s-x-circle class="h-5 w-5 text-red-400" />
+{{--            <x-heroicon-s-x-circle class="h-5 w-5 text-red-400" />--}}
           </div>
           <div class="ml-3 flex-1 md:flex md:justify-between">
             <p class="text-sm text-red-700">
@@ -37,7 +37,7 @@
       <div class="bg-red-50 border-l-4 border-red-400 p-4 drop-shadow">
         <div class="flex">
           <div class="shrink-0">
-            <x-heroicon-s-x-circle class="h-5 w-5 text-red-400" />
+{{--            <x-heroicon-s-x-circle class="h-5 w-5 text-red-400" />--}}
           </div>
           <div class="ml-3 flex-1 md:flex md:justify-between">
             <p class="text-sm text-red-700">
@@ -56,7 +56,7 @@
         <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
           <dt>
             <div class="absolute bg-sky-500 rounded-md p-3">
-              <x-heroicon-o-server class="h-6 w-6 text-white" />
+{{--              <x-heroicon-o-server class="h-6 w-6 text-white" />--}}
             </div>
             <p class="ml-16 text-sm font-medium text-gray-500 truncate">Total Servers</p>
           </dt>
@@ -68,7 +68,7 @@
         <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
           <dt>
             <div class="absolute bg-red-500 rounded-md p-3">
-              <x-heroicon-o-globe-alt class="h-6 w-6 text-white" />
+{{--              <x-heroicon-o-globe-alt class="h-6 w-6 text-white" />--}}
             </div>
             <p class="ml-16 text-sm font-medium text-gray-500 truncate">Total Accounts</p>
           </dt>
@@ -80,7 +80,7 @@
         <div class="relative bg-white pt-5 px-4 pb-3 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
           <dt>
             <div class="absolute bg-green-500 rounded-md p-3">
-              <x-heroicon-o-sparkles class="h-6 w-6 text-white" />
+{{--              <x-heroicon-o-sparkles class="h-6 w-6 text-white" />--}}
             </div>
             <p class="ml-16 text-sm font-medium text-gray-500 truncate">Total Monitors</p>
           </dt>

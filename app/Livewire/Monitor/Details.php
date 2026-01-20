@@ -7,12 +7,9 @@ use App\Models\LighthouseAudit;
 use App\Models\Monitor;
 use Illuminate\Support\Facades\Artisan;
 use Livewire\Component;
-use Usernotnull\Toast\Concerns\WireToast;
 
 class Details extends Component
 {
-    use WireToast;
-
     public Monitor $monitor;
 
     public string $domainUrl;

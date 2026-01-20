@@ -3,14 +3,10 @@
 namespace App\Livewire\Account;
 
 use App\Models\Account;
-use LivewireUI\Modal\ModalComponent;
 use Spatie\SimpleExcel\SimpleExcelWriter;
-use Usernotnull\Toast\Concerns\WireToast;
 
-class Export extends ModalComponent
+class Export
 {
-    use WireToast;
-
     public $sortBy;
 
     /**

@@ -18,7 +18,6 @@
   @vite('resources/js/app.js')
 </head>
 <body class="h-full font-sans antialiased">
-<livewire:toasts />
 
 <div class="min-h-full">
   <x-layouts.navigation />
@@ -32,7 +31,6 @@
   </main>
 </div>
 
-@livewire('wire-elements-modal')
 @livewireScriptConfig
 </body>
 </html>

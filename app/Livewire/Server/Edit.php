@@ -6,12 +6,9 @@ use App\Enums\ServerTypeEnum;
 use App\Models\Server;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Component;
-use Usernotnull\Toast\Concerns\WireToast;
 
 class Edit extends Component
 {
-    use WireToast;
-
     public Server $server;
 
     /**

@@ -3,13 +3,9 @@
 namespace App\Livewire\Server;
 
 use App\Models\Server;
-use LivewireUI\Modal\ModalComponent;
-use Usernotnull\Toast\Concerns\WireToast;
 
-class NewToken extends ModalComponent
+class NewToken
 {
-    use WireToast;
-
     public $server;
 
     /**

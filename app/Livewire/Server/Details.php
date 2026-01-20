@@ -6,12 +6,9 @@ use App\Jobs\FetchServerDataJob;
 use App\Models\Monitor;
 use App\Models\Server;
 use Livewire\Component;
-use Usernotnull\Toast\Concerns\WireToast;
 
 class Details extends Component
 {
-    use WireToast;
-
     public Server $server;
 
     public array $monitoredAccounts;
