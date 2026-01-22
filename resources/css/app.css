@@ -42,6 +42,16 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Override navbar items colors */
 [data-flux-navbar-items] {
     @apply text-white hover:bg-cyan-500;
+}
+
+/* Override profile colors */
+[data-flux-profile] * {
+    @apply text-white;
+}
+
+[data-flux-profile] > div:first-child * {
+    @apply text-gray-500;
 }
