@@ -40,15 +40,28 @@
           <flux:spacer />
 
           <flux:navbar class="me-8">
-            <flux:input kbd="⌘K" icon="magnifying-glass" placeholder="Search..."/>
+            <flux:input as="button" placeholder="Search..." icon="magnifying-glass" kbd="⌘K" class="hover:bg-gray-100" />
           </flux:navbar>
 
-          <flux:dropdown position="bottom" align="end">
+          <flux:dropdown position="bottom" align="end" class="max-lg:hidden">
             <flux:profile name="{{ auth()->user()->name }}" class="hover:bg-cyan-500!" />
 
             <flux:menu>
               <flux:menu.item href="{{ route('users.index') }}" icon="users">Manage Users</flux:menu.item>
-              <flux:menu.item href="{{ route('logout') }}" icon="arrow-right-start-on-rectangle">Sign out</flux:menu.item>
+
+              <form method="POST" action="{{ route('logout') }}" class="w-full">
+                @csrf
+                <flux:menu.item
+                  as="button"
+                  type="submit"
+                  icon="arrow-right-start-on-rectangle"
+                  class="w-full cursor-pointer"
+                  data-test="logout-button"
+                >
+                  Sign out
+                </flux:menu.item>
+              </form>
+{{--              <flux:menu.item href="{{ route('logout') }}" icon="arrow-right-start-on-rectangle">Sign out</flux:menu.item>--}}
             </flux:menu>
           </flux:dropdown>
         </flux:header>
@@ -66,18 +79,29 @@
           </flux:sidebar.header>
 
           <flux:sidebar.nav>
-            <flux:sidebar.item icon="home" href="">Dashboard</flux:sidebar.item>
-            <flux:sidebar.item icon="server" href="">Servers</flux:sidebar.item>
-            <flux:sidebar.item icon="globe-alt" href="">Accounts</flux:sidebar.item>
-            <flux:sidebar.item icon="sparkles" href="">Monitors</flux:sidebar.item>
-            <flux:sidebar.item icon="users" href="">Manage Users</flux:sidebar.item>
+            <flux:sidebar.item icon="home" href="{{ route('dashboard') }}">Dashboard</flux:sidebar.item>
+            <flux:sidebar.item icon="server" href="{{ route('servers.index') }}">Servers</flux:sidebar.item>
+            <flux:sidebar.item icon="globe-alt" href="{{ route('accounts.index') }}">Accounts</flux:sidebar.item>
+            <flux:sidebar.item icon="sparkles" href="{{ route('monitors.index') }}">Monitors</flux:sidebar.item>
+            <flux:sidebar.item icon="users" href="{{ route('users.index') }}">Manage Users</flux:sidebar.item>
           </flux:sidebar.nav>
 
           <flux:sidebar.spacer />
 
           <flux:sidebar.nav>
-            <flux:sidebar.item icon="cog-6-tooth" href="#">Settings</flux:sidebar.item>
-            <flux:sidebar.item icon="information-circle" href="#">Help</flux:sidebar.item>
+            <form method="POST" action="{{ route('logout') }}" class="w-full">
+              @csrf
+              <flux:sidebar.item
+                as="button"
+                type="submit"
+                icon="arrow-right-start-on-rectangle"
+                class="w-full cursor-pointer"
+                data-test="logout-button"
+              >
+                Sign out
+              </flux:sidebar.item>
+            </form>
+{{--            <flux:sidebar.item icon="arrow-right-start-on-rectangle" href="{{ route('logout') }}">Sign out</flux:sidebar.item>--}}
           </flux:sidebar.nav>
         </flux:sidebar>
 
