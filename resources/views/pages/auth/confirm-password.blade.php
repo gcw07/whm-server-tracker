@@ -9,7 +9,7 @@
     <div class="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
       <form action="{{ route('password.confirm.store') }}" method="POST" class="space-y-6">
         @csrf
-        
+
         <flux:input
           name="password"
           label="Password"
