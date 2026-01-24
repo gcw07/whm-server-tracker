@@ -61,7 +61,6 @@
                   Sign out
                 </flux:menu.item>
               </form>
-{{--              <flux:menu.item href="{{ route('logout') }}" icon="arrow-right-start-on-rectangle">Sign out</flux:menu.item>--}}
             </flux:menu>
           </flux:dropdown>
         </flux:header>
