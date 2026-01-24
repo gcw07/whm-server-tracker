@@ -68,12 +68,12 @@
 
         <flux:sidebar sticky collapsible="mobile" class="lg:hidden bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-700">
           <flux:sidebar.header>
-            <flux:sidebar.brand
-              href="#"
-              logo="https://fluxui.dev/img/demo/logo.png"
-              logo:dark="https://fluxui.dev/img/demo/dark-mode-logo.png"
-              name="Acme Inc."
-            />
+            <flux:sidebar.brand href="{{ route('dashboard') }}">
+              <x-slot name="logo" class="px-0 h-10!">
+                <img src="/images/logo-solid.svg" alt="{{ config('app.name') }}" class="h-10 dark:hidden" />
+                <img src="/images/logo.svg" alt="{{ config('app.name') }}" class="h-10 hidden dark:block" />
+              </x-slot>
+            </flux:sidebar.brand>
 
             <flux:sidebar.collapse class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
           </flux:sidebar.header>
