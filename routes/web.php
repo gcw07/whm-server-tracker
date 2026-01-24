@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/dashboard');
 
 // Dashboard Routes...
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::livewire('/dashboard', Dashboard::class)->name('dashboard');
 });
 
 // Account Routes...
@@ -32,7 +32,7 @@ Route::prefix('accounts')->middleware('auth')->group(function () {
 
 // Server Routes...
 Route::prefix('servers')->middleware('auth')->group(function () {
-    Route::get('/', ServerListings::class)->name('servers.index');
+    Route::livewire('/', ServerListings::class)->name('servers.index');
     Route::get('/create', ServerCreate::class)->name('servers.create');
     Route::get('/{server}', ServerDetails::class)->name('servers.show');
     Route::get('/{server}/edit', ServerEdit::class)->name('servers.edit');
