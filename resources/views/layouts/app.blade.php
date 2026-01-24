@@ -100,7 +100,6 @@
                 Sign out
               </flux:sidebar.item>
             </form>
-{{--            <flux:sidebar.item icon="arrow-right-start-on-rectangle" href="{{ route('logout') }}">Sign out</flux:sidebar.item>--}}
           </flux:sidebar.nav>
         </flux:sidebar>
 
