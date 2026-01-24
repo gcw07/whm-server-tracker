@@ -32,22 +32,6 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();
-
-//        Fortify::createUsersUsing(CreateNewUser::class);
-//        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
-//        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
-//        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-//        Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
-//
-//        RateLimiter::for('login', function (Request $request) {
-//            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
-//
-//            return Limit::perMinute(5)->by($throttleKey);
-//        });
-//
-//        RateLimiter::for('two-factor', function (Request $request) {
-//            return Limit::perMinute(5)->by($request->session()->get('login.id'));
-//        });
     }
 
     /**
@@ -57,6 +41,9 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
+        // Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+        // Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+        // Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
     }
 
     /**
@@ -65,7 +52,6 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureViews(): void
     {
         Fortify::loginView(fn () => view('pages::auth.login'));
-        Fortify::verifyEmailView(fn () => view('pages::auth.verify-email'));
         Fortify::twoFactorChallengeView(fn () => view('pages::auth.two-factor-challenge'));
         Fortify::confirmPasswordView(fn () => view('pages::auth.confirm-password'));
         Fortify::resetPasswordView(fn () => view('pages::auth.reset-password'));
