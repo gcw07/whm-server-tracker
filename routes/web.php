@@ -21,7 +21,7 @@ Route::redirect('/', '/dashboard');
 
 // Dashboard Routes...
 Route::middleware(['auth'])->group(function () {
-    Route::livewire('/dashboard', Dashboard::class)->name('dashboard');
+    Route::livewire('dashboard', 'pages::dashboard')->name('dashboard');
 });
 
 // Account Routes...
