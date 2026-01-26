@@ -84,61 +84,76 @@
         </flux:tabs>
 
         <flux:tab.panel name="all">
-          <flux:table :paginate="$this->servers">
-            <flux:table.columns>
-              <flux:table.column sortable :sorted="$sortBy === 'name'" :direction="$sortDirection" wire:click="sort('name')">Name</flux:table.column>
-              <flux:table.column>&nbsp;</flux:table.column>
-              <flux:table.column sortable :sorted="$sortBy === 'accounts'" :direction="$sortDirection" wire:click="sort('accounts')">Accounts</flux:table.column>
-              <flux:table.column>Backups</flux:table.column>
-              <flux:table.column>PHP</flux:table.column>
-              <flux:table.column sortable :sorted="$sortBy === 'usage'" :direction="$sortDirection" wire:click="sort('usage')">Usage</flux:table.column>
-            </flux:table.columns>
 
-            <flux:table.rows>
-              @foreach ($this->servers as $server)
-                <flux:table.row :key="$server->id">
-                  <flux:table.cell class="flex items-center gap-3">
-                    {{ $server->name }}
-                  </flux:table.cell>
+          <flux:card class="p-0 overflow-hidden">
+            <flux:table :paginate="$this->servers">
+              <flux:table.columns>
+                <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'name'" :direction="$sortDirection" wire:click="sort('name')">NAME</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">
+                  <span class="sr-only">Server Type</span>
+                </flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'accounts'" :direction="$sortDirection" wire:click="sort('accounts')">ACCOUNTS</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PHP</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'usage'" :direction="$sortDirection" wire:click="sort('usage')">USAGE</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">
+                  <span class="sr-only">Manage</span>
+                </flux:table.column>
+              </flux:table.columns>
 
-                  <flux:table.cell class="whitespace-nowrap">
-                    <flux:badge size="sm" inset="top bottom">{{ $server->formatted_server_type }}</flux:badge>
-                  </flux:table.cell>
+              <flux:table.rows>
+                @foreach ($this->servers as $server)
+                  <flux:table.row :key="$server->id" @class([
+                        'bg-yellow-100' => $server->is_disk_warning,
+                        'bg-orange-100' => $server->is_disk_critical,
+                        'bg-red-100' => $server->is_disk_full,
+                        'bg-gray-50' => $loop->even && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full),
+                        'bg-white' => $loop->odd && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full)
+                    ])>
+                    <flux:table.cell class="px-6!">
+                      <flux:link variant="subtle" :href="route('servers.show', $server->id)">{{ $server->name }}</flux:link>
+                      @if($server->missing_token)
+                        <flux:badge size="sm" color="red" icon="exclamation-triangle" inset="top bottom">Missing token</flux:badge>
+                      @endif
+                    </flux:table.cell>
 
-                  <flux:table.cell class="whitespace-nowrap">{{ $server->accounts_count }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-nowrap">
+                      <flux:badge size="sm" inset="top bottom">{{ $server->formatted_server_type }}</flux:badge>
+                    </flux:table.cell>
 
-                  <flux:table.cell>
-                    <flux:badge size="sm" :color="$server->backups_enabled ? 'green' : 'red'" inset="top bottom">{{ $server->backups_enabled ? 'Yes' : 'No'}}</flux:badge>
-                  </flux:table.cell>
+                    <flux:table.cell class="whitespace-nowrap">{{ $server->accounts_count }}</flux:table.cell>
 
-                  <flux:table.cell>
-                    @foreach($server->formatted_php_installed_versions as $version)
-                      <flux:badge size="sm" :color="$server->backups_enabled ? 'green' : 'red'" inset="top bottom">{{ $version }}</flux:badge>
+                    <flux:table.cell>
+                      <flux:badge size="sm" :color="$server->backups_enabled ? 'green' : 'red'" inset="top bottom">{{ $server->backups_enabled ? 'Yes' : 'No'}}</flux:badge>
+                    </flux:table.cell>
 
-{{--                      <span @class([--}}
-{{--                                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize',--}}
-{{--                                'bg-red-200 text-red-800' => $server->isPhpVersionEndOfLife($version),--}}
-{{--                                'bg-amber-300 text-amber-700' => $server->isPhpVersionSecurityOnly($version),--}}
-{{--                                'bg-green-200 text-green-800' => $server->isPhpVersionActive($version),--}}
-{{--                              ])>--}}
-{{--                          {{ $version }}--}}
-{{--                        </span>--}}
-                    @endforeach
-                  </flux:table.cell>
+                    <flux:table.cell>
+                      @foreach($server->formatted_php_installed_versions as $version)
+                        @php
+                          if ($server->isPhpVersionEndOfLife($version)) {
+                            $versionColor = 'red';
+                          } elseif ($server->isPhpVersionSecurityOnly($version)) {
+                            $versionColor = 'amber';
+                          } else {
+                            $versionColor = 'green';
+                          }
+                        @endphp
+                        <flux:badge size="sm" :color="$versionColor" inset="top bottom">{{ $version }}</flux:badge>
+                      @endforeach
+                    </flux:table.cell>
 
-                  <flux:table.cell class="whitespace-nowrap">{{ $server->settings->get('disk_percentage') }}%</flux:table.cell>
+                    <flux:table.cell class="whitespace-nowrap">{{ $server->settings->get('disk_percentage') }}%</flux:table.cell>
 
-                  <flux:table.cell>
-                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" inset="top bottom"></flux:button>
-                  </flux:table.cell>
-                </flux:table.row>
-              @endforeach
-            </flux:table.rows>
-          </flux:table>
-
-
-
-
+                    <flux:table.cell>
+                      <flux:tooltip content="View WHM Panel">
+                        <flux:button href="{{ $server->whm_url }}" size="sm" icon="arrow-top-right-on-square" target="_blank"></flux:button>
+                      </flux:tooltip>
+                    </flux:table.cell>
+                  </flux:table.row>
+                @endforeach
+              </flux:table.rows>
+            </flux:table>
+          </flux:card>
 
         </flux:tab.panel>
         <flux:tab.panel name="dedicated">
@@ -148,6 +163,9 @@
 
         </flux:tab.panel>
         <flux:tab.panel name="vps">
+
+
+          <!-- old design, keeping for reference atm -->
           <div class="hidden sm:block">
             <div class="mx-auto">
               <div class="flex flex-col mt-2">
