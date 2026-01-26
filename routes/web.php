@@ -32,7 +32,7 @@ Route::prefix('accounts')->middleware('auth')->group(function () {
 
 // Server Routes...
 Route::prefix('servers')->middleware('auth')->group(function () {
-    Route::livewire('/', ServerListings::class)->name('servers.index');
+    Route::livewire('/', 'pages::server.listings')->name('servers.index');
     Route::get('/create', ServerCreate::class)->name('servers.create');
     Route::get('/{server}', ServerDetails::class)->name('servers.show');
     Route::get('/{server}/edit', ServerEdit::class)->name('servers.edit');
