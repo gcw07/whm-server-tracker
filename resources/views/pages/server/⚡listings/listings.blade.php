@@ -68,10 +68,7 @@
         {{--          </div>--}}
         {{--        </x-navigation.dropdown>--}}
 
-        <a href="{{ route('servers.create') }}" class="ml-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-          {{--          <x-heroicon-s-plus class="-ml-0.5 mr-2 h-4 w-4" />--}}
-          Create Server
-        </a>
+        <flux:button :href="route('servers.create')" variant="primary" icon="plus">Create Server</flux:button>
       </div>
     </div>
     <div class="mt-4">
@@ -280,61 +277,4 @@
     </div>
   </div>
   <!-- / End Page Header -->
-
-{{--  <div class="mt-6">--}}
-{{--    <!-- Begin content -->--}}
-
-{{--    <!-- Server list (smallest breakpoint only) -->--}}
-{{--    <div class="shadow sm:hidden">--}}
-{{--      <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">--}}
-{{--        @forelse($this->servers as $server)--}}
-{{--          <li>--}}
-{{--            <a href="{{ route('servers.show', $server->id) }}"--}}
-{{--              @class([--}}
-{{--               'block px-4 py-4 hover:bg-gray-50',--}}
-{{--               'bg-yellow-100' => $server->is_disk_warning,--}}
-{{--               'bg-orange-100' => $server->is_disk_critical,--}}
-{{--               'bg-red-100' => $server->is_disk_full,--}}
-{{--               'bg-gray-50' => $loop->even && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full),--}}
-{{--               'bg-white' => $loop->odd && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full)--}}
-{{--              ])>--}}
-{{--              <span class="flex items-center space-x-4">--}}
-{{--                <span class="flex-1 flex space-x-2 truncate">--}}
-{{--                  <span class="flex flex-col text-gray-500 text-sm truncate">--}}
-{{--                    <span class="truncate text-gray-700 font-semibold">--}}
-{{--                      {{ $server->name }}--}}
-{{--                    </span>--}}
-{{--                    @if($server->missing_token)--}}
-{{--                      <span class="inline-flex items-center px-2.5 py-0.5 mt-3 rounded-full text-sm font-medium bg-red-200 text-red-800 capitalize">--}}
-{{--                        <x-heroicon-s-exclamation-triangle class="-ml-0.5 mr-1 h-4 w-4" />--}}
-{{--                        no token--}}
-{{--                      </span>--}}
-{{--                    @else--}}
-{{--                      <span><span class="font-medium">{{ $server->accounts_count }}</span> accounts</span>--}}
-{{--                      <span>{{ $server->settings->get('disk_percentage') }}%</span>--}}
-{{--                    @endif--}}
-{{--                  </span>--}}
-{{--                </span>--}}
-{{--                <x-heroicon-s-chevron-right class="shrink-0 h-5 w-5 text-gray-400" />--}}
-{{--              </span>--}}
-{{--            </a>--}}
-{{--          </li>--}}
-{{--        @empty--}}
-{{--          <li>--}}
-{{--            <span class="block px-4 py-4 bg-white hover:bg-gray-50">--}}
-{{--              No entries found.--}}
-{{--            </span>--}}
-{{--          </li>--}}
-{{--        @endforelse--}}
-{{--      </ul>--}}
-
-{{--      <!-- Pagination -->--}}
-{{--      {{ $this->servers->links('livewire.pagination.index') }}--}}
-{{--    </div>--}}
-
-{{--    <!-- Server table (small breakpoint and up) -->--}}
-
-
-{{--    <!-- /End Content -->--}}
-{{--  </div>--}}
 </div>

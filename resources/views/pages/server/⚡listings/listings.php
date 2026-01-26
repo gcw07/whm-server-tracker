@@ -16,7 +16,7 @@ new #[Title('Servers')] class extends Component
 
     public string $sortBy = 'name';
 
-    public string $sortDirection = 'desc';
+    public string $sortDirection = 'asc';
 
     public ?string $filterBy = null;
 
@@ -24,6 +24,7 @@ new #[Title('Servers')] class extends Component
     {
         $this->serverType = $this->getCache('servers', 'serverType', 'all');
         $this->sortBy = $this->getCache('servers', 'sortBy', 'name');
+        $this->sortDirection = $this->getCache('servers', 'sortDirection', 'asc');
         $this->filterBy = $this->getCache('servers', 'filterBy');
     }
 
@@ -32,26 +33,17 @@ new #[Title('Servers')] class extends Component
         $this->putCache('servers', 'serverType', $type);
     }
 
-    public function sort($column) {
+    public function sort($column): void
+    {
         if ($this->sortBy === $column) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
             $this->sortBy = $column;
             $this->sortDirection = 'asc';
         }
-    }
-
-    public function sortListingsBy($name): void
-    {
-        $this->sortBy = match ($name) {
-            'newest' => 'newest',
-            'accounts' => 'accounts',
-            'usage_high' => 'usage_high',
-            'usage_low' => 'usage_low',
-            default => null,
-        };
 
         $this->putCache('servers', 'sortBy', $this->sortBy);
+        $this->putCache('servers', 'sortDirection', $this->sortDirection);
     }
 
     public function filterListingsBy($name): void
@@ -75,21 +67,19 @@ new #[Title('Servers')] class extends Component
             })
             ->when($this->sortBy, function (Builder $query) {
                 if ($this->sortBy === 'newest') {
-                    return $query->orderBy('created_at', 'DESC');
+                    return $query->orderBy('created_at', $this->sortDirection);
                 }
 
                 if ($this->sortBy === 'accounts') {
-                    return $query->orderBy('accounts_count', 'DESC');
+                    return $query->orderBy('accounts_count', $this->sortDirection);
                 }
 
-                if ($this->sortBy === 'usage_high') {
-                    return $query->orderByRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) DESC");
+                if ($this->sortBy === 'usage') {
+                    $direction = $this->sortDirection === 'asc' ? 'asc' : 'desc';
+                    return $query->orderByRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) $direction");
                 }
 
-                // usage low
-                return $query->orderByRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) ASC");
-            }, function ($query) {
-                return $query->orderBy('name');
+                return $query->orderBy('name', $this->sortDirection);
             })
             ->when($this->filterBy, function (Builder $query) {
                 if ($this->filterBy === 'no_backups') {
