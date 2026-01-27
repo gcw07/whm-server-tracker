@@ -29,10 +29,8 @@
           <flux:tab name="vps" class="hover:border-gray-300">VPS</flux:tab>
         </flux:tabs>
 
-        <flux:tab.panel name="all">
-
+        <div class="pt-8">
           <flux:card class="p-0 overflow-hidden bg-gray-50">
-
             @if($this->filterBy !== 'none')
               <div class="px-6 py-4 flex justify-between items-center border-b border-zinc-800/10 dark:border-white/20 text-sm">
                 <div class="flex items-center gap-3">
@@ -131,17 +129,7 @@
               </flux:table.rows>
             </flux:table>
           </flux:card>
-
-        </flux:tab.panel>
-        <flux:tab.panel name="dedicated">
-
-        </flux:tab.panel>
-        <flux:tab.panel name="reseller">
-
-        </flux:tab.panel>
-        <flux:tab.panel name="vps">
-          
-        </flux:tab.panel>
+        </div>
       </flux:tab.group>
     </div>
   </div>
