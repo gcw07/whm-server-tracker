@@ -2,6 +2,7 @@
 
 use App\Livewire\WithCache;
 use App\Models\Server;
+use App\Services\PhpVersions;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Session;
@@ -22,11 +23,11 @@ new #[Title('Servers')] class extends Component
     #[Session]
     public string $sortDirection = 'asc';
 
-    public ?string $filterBy = null;
+    public string $filterBy = 'none';
 
     public function mount(): void
     {
-        $this->filterBy = $this->getCache('servers', 'filterBy');
+        $this->filterBy = $this->getCache('servers', 'filterBy', 'none');
     }
 
     public function sort($column): void
@@ -39,13 +40,9 @@ new #[Title('Servers')] class extends Component
         }
     }
 
-    public function filterListingsBy($name): void
+    public function filter($name): void
     {
-        $this->filterBy = match ($name) {
-            'no_backups' => 'no_backups',
-            'outdated_php' => 'outdated_php',
-            default => null,
-        };
+        $this->filterBy = $name;
 
         $this->putCache('servers', 'filterBy', $this->filterBy);
     }

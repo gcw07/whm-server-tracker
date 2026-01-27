@@ -5,68 +5,15 @@
       <h3 class="text-2xl leading-6 font-medium text-gray-900">
         Servers
       </h3>
-      <div class="mt-3 flex md:mt-0 md:absolute md:top-3 md:right-0">
-        <!-- Sort menu dropdown -->
-        {{--        <x-navigation.dropdown>--}}
-        {{--          <x-slot name="trigger">--}}
-        {{--            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">--}}
-        {{--              <x-heroicon-s-bars-arrow-down class="-ml-0.5 mr-2 h-4 w-4" />--}}
-        {{--              Sort--}}
-        {{--            </button>--}}
-        {{--          </x-slot>--}}
+      <div class="mt-3 flex md:mt-0 md:absolute md:top-3 md:right-0 space-x-2">
+        <flux:dropdown>
+          <flux:button icon="adjustments-horizontal" icon:trailing="chevron-down">Filters</flux:button>
 
-        {{--          <div--}}
-        {{--            class="origin-top-left z-50 absolute md:origin-top-right md:right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"--}}
-        {{--            role="menu" aria-orientation="vertical" aria-labelledby="sort-menu-button" tabindex="-1">--}}
-        {{--            <button wire:click.prevent="sortListingsBy(null)" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-        {{--                    role="menuitem" tabindex="-1" id="sort-menu-item-0">--}}
-        {{--              Alphabetically--}}
-        {{--            </button>--}}
-        {{--            <button wire:click.prevent="sortListingsBy('newest')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-        {{--                    role="menuitem" tabindex="-1" id="sort-menu-item-1">--}}
-        {{--              Newest--}}
-        {{--            </button>--}}
-        {{--            <button wire:click.prevent="sortListingsBy('accounts')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-        {{--                    role="menuitem" tabindex="-1" id="sort-menu-item-2">--}}
-        {{--              # of Accounts--}}
-        {{--            </button>--}}
-        {{--            <button wire:click.prevent="sortListingsBy('usage_high')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-        {{--                    role="menuitem" tabindex="-1" id="sort-menu-item-3">--}}
-        {{--              Usage: High to Low--}}
-        {{--            </button>--}}
-        {{--            <button wire:click.prevent="sortListingsBy('usage_low')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-        {{--                    role="menuitem" tabindex="-1" id="sort-menu-item-4">--}}
-        {{--              Usage: Low to High--}}
-        {{--            </button>--}}
-        {{--          </div>--}}
-        {{--        </x-navigation.dropdown>--}}
-
-        <!-- Filters menu dropdown -->
-        {{--        <x-navigation.dropdown class="ml-2">--}}
-        {{--          <x-slot name="trigger">--}}
-        {{--            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" aria-expanded="false" aria-haspopup="true">--}}
-        {{--              <x-heroicon-s-funnel class="-ml-0.5 mr-2 h-4 w-4" />--}}
-        {{--              Filters--}}
-        {{--            </button>--}}
-        {{--          </x-slot>--}}
-
-        {{--          <div--}}
-        {{--            class="origin-top-left z-50 absolute md:origin-top-right md:right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"--}}
-        {{--            role="menu" aria-orientation="vertical" aria-labelledby="filters-menu-button" tabindex="-1">--}}
-        {{--            <button wire:click.prevent="filterListingsBy(null)" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-        {{--                    role="menuitem" tabindex="-1" id="filters-menu-item-0">--}}
-        {{--              None--}}
-        {{--            </button>--}}
-        {{--            <button wire:click.prevent="filterListingsBy('no_backups')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-        {{--                    role="menuitem" tabindex="-1" id="filters-menu-item-1">--}}
-        {{--              No Backups--}}
-        {{--            </button>--}}
-        {{--            <button wire:click.prevent="filterListingsBy('outdated_php')" class="w-full flex items-center group px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"--}}
-        {{--                    role="menuitem" tabindex="-1" id="filters-menu-item-1">--}}
-        {{--              Outdated PHP--}}
-        {{--            </button>--}}
-        {{--          </div>--}}
-        {{--        </x-navigation.dropdown>--}}
+          <flux:menu>
+            <flux:menu.item wire:click="filter('no_backups')">No Backups</flux:menu.item>
+            <flux:menu.item wire:click="filter('outdated_php')">Outdated PHP</flux:menu.item>
+          </flux:menu>
+        </flux:dropdown>
 
         <flux:button :href="route('servers.create')" variant="primary" icon="plus">Create Server</flux:button>
       </div>
