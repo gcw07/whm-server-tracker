@@ -59,9 +59,6 @@
             <flux:table :paginate="$this->servers">
               <flux:table.columns>
                 <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'name'" :direction="$sortDirection" wire:click="sort('name')">NAME</flux:table.column>
-                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">
-                  <span class="sr-only">Server Type</span>
-                </flux:table.column>
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'accounts'" :direction="$sortDirection" wire:click="sort('accounts')">ACCOUNTS</flux:table.column>
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PHP</flux:table.column>
@@ -86,10 +83,6 @@
                       @if($server->missing_token)
                         <flux:badge size="sm" color="red" icon="exclamation-triangle" inset="top bottom">Missing token</flux:badge>
                       @endif
-                    </flux:table.cell>
-
-                    <flux:table.cell class="whitespace-nowrap">
-                      <flux:badge size="sm" inset="top bottom">{{ $server->formatted_server_type }}</flux:badge>
                     </flux:table.cell>
 
                     <flux:table.cell class="whitespace-nowrap">{{ $server->accounts_count }}</flux:table.cell>
@@ -125,7 +118,7 @@
                   </flux:table.row>
                 @empty
                   <flux:table.row>
-                    <flux:table.cell colspan="9" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+                    <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
                       <div class="text-center">
                         <div class="flex items-center justify-center">
                           <flux:icon.magnifying-glass class="size-12" />
