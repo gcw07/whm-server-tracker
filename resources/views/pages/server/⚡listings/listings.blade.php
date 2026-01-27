@@ -66,6 +66,7 @@
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PHP</flux:table.column>
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'usage'" :direction="$sortDirection" wire:click="sort('usage')">USAGE</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'newest'" :direction="$sortDirection" wire:click="sort('newest')">SETUP DATE</flux:table.column>
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">
                   <span class="sr-only">Manage</span>
                 </flux:table.column>
@@ -114,6 +115,8 @@
 
                     <flux:table.cell class="whitespace-nowrap">{{ $server->settings->get('disk_percentage') }}%</flux:table.cell>
 
+                    <flux:table.cell class="whitespace-nowrap">{{ $server->created_at->format('M d, Y') }}</flux:table.cell>
+
                     <flux:table.cell>
                       <flux:tooltip content="View WHM Panel">
                         <flux:button href="{{ $server->whm_url }}" size="sm" icon="arrow-top-right-on-square" target="_blank"></flux:button>
@@ -122,7 +125,7 @@
                   </flux:table.row>
                 @empty
                   <flux:table.row>
-                    <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+                    <flux:table.cell colspan="9" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
                       <div class="text-center">
                         <div class="flex items-center justify-center">
                           <flux:icon.magnifying-glass class="size-12" />
