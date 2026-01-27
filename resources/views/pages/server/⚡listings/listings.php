@@ -23,12 +23,8 @@ new #[Title('Servers')] class extends Component
     #[Session]
     public string $sortDirection = 'asc';
 
+    #[Session]
     public string $filterBy = 'none';
-
-    public function mount(): void
-    {
-        $this->filterBy = $this->getCache('servers', 'filterBy', 'none');
-    }
 
     public function sort($column): void
     {
@@ -43,8 +39,6 @@ new #[Title('Servers')] class extends Component
     public function filter($name): void
     {
         $this->filterBy = $name;
-
-        $this->putCache('servers', 'filterBy', $this->filterBy);
     }
 
     #[Computed]
