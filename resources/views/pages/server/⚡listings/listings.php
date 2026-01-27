@@ -4,6 +4,7 @@ use App\Livewire\WithCache;
 use App\Models\Server;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Session;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,25 +13,20 @@ new #[Title('Servers')] class extends Component
 {
     use WithCache, WithPagination;
 
+    #[Session]
     public string $serverType = 'all';
 
+    #[Session]
     public string $sortBy = 'name';
 
+    #[Session]
     public string $sortDirection = 'asc';
 
     public ?string $filterBy = null;
 
     public function mount(): void
     {
-        $this->serverType = $this->getCache('servers', 'serverType', 'all');
-        $this->sortBy = $this->getCache('servers', 'sortBy', 'name');
-        $this->sortDirection = $this->getCache('servers', 'sortDirection', 'asc');
         $this->filterBy = $this->getCache('servers', 'filterBy');
-    }
-
-    public function updatedServerType($type): void
-    {
-        $this->putCache('servers', 'serverType', $type);
     }
 
     public function sort($column): void
@@ -41,9 +37,6 @@ new #[Title('Servers')] class extends Component
             $this->sortBy = $column;
             $this->sortDirection = 'asc';
         }
-
-        $this->putCache('servers', 'sortBy', $this->sortBy);
-        $this->putCache('servers', 'sortDirection', $this->sortDirection);
     }
 
     public function filterListingsBy($name): void
