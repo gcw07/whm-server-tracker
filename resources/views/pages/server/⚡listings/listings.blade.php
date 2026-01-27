@@ -6,7 +6,14 @@
       </h3>
       <div class="mt-3 flex md:mt-0 md:absolute md:top-3 md:right-0 space-x-2">
         <flux:dropdown>
-          <flux:button icon="adjustments-horizontal" icon:trailing="chevron-down">Filters</flux:button>
+          <flux:button icon="adjustments-horizontal" icon:trailing="chevron-down">
+            Filters
+            @if($this->filterBy !== 'none')
+              <flux:badge size="sm" class="ml-1">
+                <span x-text="1" class="tabular-nums">&nbsp;</span>
+              </flux:badge>
+            @endif
+          </flux:button>
 
           <flux:menu>
             <flux:menu.radio.group wire:model.live="filterBy">
