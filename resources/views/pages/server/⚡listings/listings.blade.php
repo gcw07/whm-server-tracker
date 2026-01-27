@@ -46,7 +46,7 @@
               </flux:table.columns>
 
               <flux:table.rows>
-                @foreach ($this->servers as $server)
+                @forelse ($this->servers as $server)
                   <flux:table.row :key="$server->id" @class([
                         'bg-yellow-100' => $server->is_disk_warning,
                         'bg-orange-100' => $server->is_disk_critical,
@@ -94,7 +94,18 @@
                       </flux:tooltip>
                     </flux:table.cell>
                   </flux:table.row>
-                @endforeach
+                @empty
+                  <flux:table.row>
+                    <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+                      <div class="text-center">
+                        <div class="flex items-center justify-center">
+                          <flux:icon.magnifying-glass class="size-12" />
+                        </div>
+                        <p class="text-lg mt-6">No servers matched your search.</p>
+                      </div>
+                    </flux:table.cell>
+                  </flux:table.row>
+                @endforelse
               </flux:table.rows>
             </flux:table>
           </flux:card>
