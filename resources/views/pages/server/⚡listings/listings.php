@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\WithCache;
 use App\Models\Server;
 use App\Services\PhpVersions;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,7 +11,7 @@ use Livewire\WithPagination;
 
 new #[Title('Servers')] class extends Component
 {
-    use WithCache, WithPagination;
+    use WithPagination;
 
     #[Session]
     public string $serverType = 'all';

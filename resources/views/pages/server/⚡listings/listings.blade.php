@@ -1,5 +1,4 @@
 <div>
-  <!-- Page Header -->
   <div class="relative pb-5 sm:pb-0">
     <div class="md:flex md:items-center md:justify-between">
       <h3 class="text-2xl leading-6 font-medium text-gray-900">
@@ -133,5 +132,4 @@
       </flux:tab.group>
     </div>
   </div>
-  <!-- / End Page Header -->
 </div>
