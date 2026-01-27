@@ -103,7 +103,7 @@
           </flux:sidebar.nav>
         </flux:sidebar>
 
-        <flux:main container>
+        <flux:main container class="mt-1">
           {{ $slot }}
         </flux:main>
 
