@@ -47,6 +47,10 @@
     @apply text-white hover:bg-cyan-500;
 }
 
+[data-flux-navbar-items][data-current] {
+    @apply text-white bg-cyan-700;
+}
+
 /* Override profile colors */
 [data-flux-profile] * {
     @apply text-white;
