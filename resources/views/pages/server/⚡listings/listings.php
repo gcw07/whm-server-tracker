@@ -80,17 +80,12 @@ new #[Title('Servers')] class extends Component
                 }
 
                 if ($this->filterBy === 'outdated_php') {
-                    return $query->where(function (Builder $query) {
-                        $query
-                            ->whereJsonContains('settings->php_installed_versions', 'ea-php54')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php55')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php56')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php70')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php71')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php72')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php73')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php74')
-                            ->orWhereJsonContains('settings->php_installed_versions', 'ea-php80');
+                    $phpVersions = PhpVersions::outdated('version');
+
+                    return $query->where(function (Builder $query) use ($phpVersions) {
+                        foreach ($phpVersions as $key => $version) {
+                            $query->orWhereJsonContains('settings->php_installed_versions', "ea-$key");
+                        }
                     });
                 }
 
