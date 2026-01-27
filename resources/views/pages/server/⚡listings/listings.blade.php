@@ -1,6 +1,6 @@
 <div>
   <!-- Page Header -->
-  <div class="relative pb-5 border-b border-gray-200 sm:pb-0">
+  <div class="relative pb-5 sm:pb-0">
     <div class="md:flex md:items-center md:justify-between">
       <h3 class="text-2xl leading-6 font-medium text-gray-900">
         Servers
@@ -10,8 +10,10 @@
           <flux:button icon="adjustments-horizontal" icon:trailing="chevron-down">Filters</flux:button>
 
           <flux:menu>
-            <flux:menu.item wire:click="filter('no_backups')">No Backups</flux:menu.item>
-            <flux:menu.item wire:click="filter('outdated_php')">Outdated PHP</flux:menu.item>
+            <flux:menu.radio.group wire:model.live="filterBy">
+              <flux:menu.radio value="no_backups">No Backups</flux:menu.radio>
+              <flux:menu.radio value="outdated_php">Outdated PHP</flux:menu.radio>
+            </flux:menu.radio.group>
           </flux:menu>
         </flux:dropdown>
 
@@ -29,7 +31,27 @@
 
         <flux:tab.panel name="all">
 
-          <flux:card class="p-0 overflow-hidden">
+          <flux:card class="p-0 overflow-hidden bg-gray-50">
+
+            @if($this->filterBy !== 'none')
+              <div class="px-6 py-4 flex justify-between items-center border-b border-zinc-800/10 dark:border-white/20 text-sm">
+                <div class="flex items-center gap-3">
+                  Active filters
+                  @if($this->filterBy === 'no_backups')
+                    <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">No Backups</flux:badge>
+                  @endif
+                  @if($this->filterBy === 'outdated_php')
+                    <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">Outdated PHP</flux:badge>
+                  @endif
+                </div>
+                <div>
+                  <flux:tooltip content="Remove all filters">
+                    <flux:button variant="subtle" size="sm" icon="x-mark" wire:click="removeAllFilters" />
+                  </flux:tooltip>
+                </div>
+              </div>
+            @endif
+
             <flux:table :paginate="$this->servers">
               <flux:table.columns>
                 <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'name'" :direction="$sortDirection" wire:click="sort('name')">NAME</flux:table.column>

@@ -36,9 +36,9 @@ new #[Title('Servers')] class extends Component
         }
     }
 
-    public function filter($name): void
+    public function removeAllFilters(): void
     {
-        $this->filterBy = $name;
+        $this->filterBy = 'none';
     }
 
     #[Computed]
