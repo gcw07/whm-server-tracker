@@ -303,6 +303,15 @@
                   @endif
                 </flux:table.cell>
               </flux:table.row>
+              @if($account->suspended)
+                <flux:table.row>
+                  <flux:table.cell colspan="8" class="py-2! whitespace-nowrap text-center bg-blue-200 text-sm border-t-transparent">
+                    <flux:badge size="sm" color="blue" inset="top bottom">
+                      Suspended on {{ $account->suspend_time->format('F d, Y \a\t g:ia') }}. {{ $account->suspend_reason }}
+                    </flux:badge>
+                  </flux:table.cell>
+                </flux:table.row>
+              @endif
             @empty
               <flux:table.row>
                 <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
