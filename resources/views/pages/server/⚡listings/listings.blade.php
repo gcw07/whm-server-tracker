@@ -78,7 +78,7 @@
                         'bg-gray-50' => $loop->even && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full),
                         'bg-white' => $loop->odd && !($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full)
                     ])>
-                    <flux:table.cell class="px-6!">
+                    <flux:table.cell class="px-6! py-5!">
                       <flux:link variant="subtle" :href="route('servers.show', $server->id)">{{ $server->name }}</flux:link>
                       @if($server->missing_token)
                         <flux:badge size="sm" color="red" icon="exclamation-triangle" inset="top bottom">Missing token</flux:badge>
