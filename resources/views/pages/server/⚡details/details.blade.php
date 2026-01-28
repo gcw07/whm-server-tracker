@@ -275,7 +275,15 @@
                 <flux:table.cell class="px-6! py-5!">
                   <flux:link variant="subtle" :href="route('accounts.show', $account->id)">{{ $account->domain }}</flux:link>
                   @if($account->suspended)
-                    <flux:badge size="sm" color="blue" inset="top bottom" class="ml-1">Suspended</flux:badge>
+                    <flux:dropdown position="bottom" align="start">
+                      <flux:badge as="button" size="sm" color="blue" inset="top bottom" icon:trailing="information-circle" class="ml-1">Suspended</flux:badge>
+
+                      <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
+                        <div>
+                          This account was suspended on {{ $account->suspend_time->format('F d, Y \a\t g:ia') }}. It was suspended for "{{ $account->suspend_reason }}".
+                        </div>
+                      </flux:popover>
+                    </flux:dropdown>
                   @endif
                 </flux:table.cell>
 
@@ -303,15 +311,6 @@
                   @endif
                 </flux:table.cell>
               </flux:table.row>
-              @if($account->suspended)
-                <flux:table.row>
-                  <flux:table.cell colspan="8" class="py-2! whitespace-nowrap text-center bg-blue-200 text-sm border-t-transparent">
-                    <flux:badge size="sm" color="blue" inset="top bottom">
-                      Suspended on {{ $account->suspend_time->format('F d, Y \a\t g:ia') }}. {{ $account->suspend_reason }}
-                    </flux:badge>
-                  </flux:table.cell>
-                </flux:table.row>
-              @endif
             @empty
               <flux:table.row>
                 <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
