@@ -14,17 +14,24 @@
     </div>
 
     <div class="flex mt-3 md:mt-0 md:ml-4">
-      <a href="{{ $server->whm_url }}" target="_blank" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-{{--        <x-heroicon-m-arrow-top-right-on-square class="-ml-0.5 mr-2 h-4 w-4" />--}}
-        View
-      </a>
+      <flux:button :href="$server->whm_url" icon="arrow-top-right-on-square" target="_blank">View</flux:button>
 
       @if(!$server->missing_token)
-        <button wire:click="refresh" type="button" class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-{{--          <x-heroicon-s-arrow-path class="-ml-0.5 mr-2 h-4 w-4" />--}}
-          Refresh
-        </button>
+        <flux:button wire:click="refresh" icon="arrow-path">Refresh</flux:button>
       @endif
+
+      <flux:dropdown position="bottom" align="end">
+        <flux:button icon="ellipsis-vertical" />
+
+        <flux:menu>
+          <flux:menu.item :href="route('servers.edit', $server)" icon="pencil-square">Edit</flux:menu.item>
+          <flux:menu.item icon="key">Reset API Token</flux:menu.item>
+
+          <flux:menu.separator />
+
+          <flux:menu.item variant="danger" icon="trash">Delete</flux:menu.item>
+        </flux:menu>
+      </flux:dropdown>
 
       <!-- Details menu dropdown -->
 {{--      <x-navigation.dropdown class="ml-2">--}}
@@ -240,92 +247,24 @@
         </dl>
       </div>
 
-      <!-- Accounts list (smallest breakpoint only) -->
-      <div class="shadow sm:hidden mt-8">
-        <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden rounded-lg">
-          @forelse($server->accounts as $account)
-            <li>
-              <a href="{{ route('accounts.show', $account->id) }}"
-                @class([
-                 'block px-4 py-4 hover:bg-gray-50',
-                 'bg-yellow-100' => $account->is_disk_warning,
-                 'bg-orange-100' => $account->is_disk_critical,
-                 'bg-red-100' => $account->is_disk_full,
-                 'bg-blue-200' => $account->suspended,
-                 'bg-gray-50' => $loop->even && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended),
-                 'bg-white' => $loop->odd && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended)
-                ])>
-            <span class="flex items-center space-x-4">
-              <span class="flex-1 flex space-x-2 truncate">
-                <span class="flex flex-col text-gray-500 text-sm truncate">
-                  <span class="flex items-center truncate space-x-3">
-                    @if($account->suspended)
-{{--                      <x-heroicon-s-no-symbol class="h-5 w-5 text-blue-600" />--}}
-                    @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-{{--                      <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" />--}}
-                    @else
-                      <span class="w-3 h-3 m-1 shrink-0 rounded-full bg-green-600" aria-hidden="true"></span>
-                    @endif
-                    <span class="text-gray-900 font-medium truncate">{{ $account->domain }}</span>
-                  </span>
-                  <span class="truncate">{{ $server->name }}</span>
-                  @if($account->formatted_disk_usage === 'Unknown')
-                    <span>&mdash;</span>
-                  @else
-                    <span class="flex items-center">
-                      <span>{{ $account->formatted_disk_usage }}</span>
-                    </span>
-                  @endif
-                </span>
-              </span>
-{{--              <x-heroicon-s-chevron-right class="shrink-0 h-5 w-5 text-gray-400" />--}}
-            </span>
-              </a>
-            </li>
-          @empty
-            <li>
-            <span class="block px-4 py-4 bg-white hover:bg-gray-50">
-              No accounts found.
-            </span>
-            </li>
-          @endforelse
-        </ul>
-      </div>
+      <flux:card class="p-0 overflow-hidden bg-gray-50 mt-8">
+        <flux:table>
+          <flux:table.columns>
+            <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">DOMAIN</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">WORDPRESS</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PLAN</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USAGE</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">SETUP DATE</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">
+              <span class="sr-only">Manage</span>
+            </flux:table.column>
+          </flux:table.columns>
 
-      <!-- Accounts table (small breakpoint and up) -->
-      <div class="hidden sm:block mt-8">
-        <div class="mx-auto">
-          <div class="flex flex-col mt-2">
-            <div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead>
-                  <tr>
-                    <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Domain
-                    </th>
-                    <th scope="col" class="hidden px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell">
-                      WordPress
-                    </th>
-                    <th scope="col" class="hidden px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell">
-                      Backups
-                    </th>
-                    <th scope="col" class="hidden px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell">
-                      Plan
-                    </th>
-                    <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Used / Limit
-                    </th>
-                    <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Usage
-                    </th>
-                    <th scope="col" class="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      <span class="sr-only">Manage</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  @forelse($server->accounts as $account)
-                    <tr @class([
+          <flux:table.rows>
+            @forelse ($this->server->accounts as $account)
+              <flux:table.row :key="$account->id" @class([
                         'bg-yellow-100' => $account->is_disk_warning,
                         'bg-orange-100' => $account->is_disk_critical,
                         'bg-red-100' => $account->is_disk_full,
@@ -333,80 +272,53 @@
                         'bg-gray-50' => $loop->even && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended),
                         'bg-white' => $loop->odd && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended)
                     ])>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <div class="flex items-center space-x-3 lg:pl-2">
-                          <div x-data="{}">
-                            @if($account->suspended)
-{{--                              <x-heroicon-s-no-symbol class="h-5 w-5 text-blue-600" x-tooltip.raw="Account Suspended" />--}}
-                            @elseif($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full)
-{{--                              <x-heroicon-s-exclamation-triangle class="h-5 w-5 text-red-500" x-tooltip.raw="Disk Warning" />--}}
-                            @else
-                              <div class="shrink-0 w-3 h-3 m-1 rounded-full bg-green-600" aria-hidden="true"></div>
-                            @endif
-                          </div>
-                          <a href="{{ route('accounts.show', $account->id) }}" class="group inline-flex space-x-2 truncate text-sm">
-                            <p class="text-gray-500 truncate group-hover:text-gray-900">
-                              {{ $account->domain }}
-                            </p>
-                          </a>
-                        </div>
-                      </td>
-                      <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        @if($account->wordpress_version)
-                          <span class="text-gray-900 font-medium">{{ $account->wordpress_version }}</span>
-                        @else
-                          <span class="text-gray-900 font-medium">&mdash;</span>
-                        @endif
-                      </td>
-                      <td class="hidden px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500 lg:table-cell">
-                        @if($account->backups_enabled)
-                          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-200 text-green-800 capitalize">
-                          yes
-                        </span>
-                        @else
-                          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">
-                          no
-                        </span>
-                        @endif
-                      </td>
-                      <td class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-900 lg:table-cell">
-                        <div class="flex">
-                          {{ $account->plan }}
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                        {{ $account->disk_used }} / {{ $account->disk_limit }}
-                      </td>
-                      <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                        <div class="flex items-center justify-center">
-                          @if($account->formatted_disk_usage === 'Unknown')
-                            <span class="text-gray-900 font-medium">&mdash;</span>
-                          @else
-                            <span class="text-gray-900 font-medium">{{ $account->formatted_disk_usage }}</span>
-                          @endif
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                        @if($id = $this->getMonitorId($account->domain))
-                          <a href="{{ route('monitors.show', $id) }}" x-data="{}" x-tooltip.raw="View Monitor" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-{{--                            <x-heroicon-m-magnifying-glass class="-ml-0.5 h-4 w-4" />--}}
-                          </a>
-                        @endif
-                      </td>
-                    </tr>
-                  @empty
-                    <tr class="bg-white">
-                      <td colspan="7" class="py-8 whitespace-nowrap font-semibold text-center text-sm text-gray-700">
-                        No accounts found.
-                      </td>
-                    </tr>
-                  @endforelse
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+                <flux:table.cell class="px-6! py-5!">
+                  <flux:link variant="subtle" :href="route('accounts.show', $account->id)">{{ $account->domain }}</flux:link>
+                  @if($account->suspended)
+                    <flux:badge size="sm" color="blue" inset="top bottom" class="ml-1">Suspended</flux:badge>
+                  @endif
+                </flux:table.cell>
+
+                <flux:table.cell class="whitespace-nowrap">{{ $account->wordpress_version ?? '—' }}</flux:table.cell>
+
+                <flux:table.cell>
+                  <flux:badge size="sm" :color="$account->backups_enabled ? 'green' : 'red'" inset="top bottom">{{ $account->backups_enabled ? 'Yes' : 'No'}}</flux:badge>
+                </flux:table.cell>
+
+                <flux:table.cell class="whitespace-nowrap">{{ $account->plan }}</flux:table.cell>
+
+                <flux:table.cell class="whitespace-nowrap">{{ $account->disk_used }} / {{ $account->disk_limit }}</flux:table.cell>
+
+                <flux:table.cell class="whitespace-nowrap">
+                  {{ $account->formatted_disk_usage !== 'Unknown' ? $account->formatted_disk_usage : '—' }}
+                </flux:table.cell>
+
+                <flux:table.cell class="whitespace-nowrap">{{ $account->created_at->format('M d, Y') }}</flux:table.cell>
+
+                <flux:table.cell>
+                  @if($id = $this->getMonitorId($account->domain))
+                    <flux:tooltip content="View Monitor">
+                      <flux:button :href="route('monitors.show', $id)" size="sm" icon="magnifying-glass"></flux:button>
+                    </flux:tooltip>
+                  @endif
+                </flux:table.cell>
+              </flux:table.row>
+            @empty
+              <flux:table.row>
+                <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+                  <div class="text-center">
+                    <div class="flex items-center justify-center">
+                      <flux:icon.magnifying-glass class="size-12" />
+                    </div>
+                    <p class="text-lg mt-6">No accounts were found.</p>
+                  </div>
+                </flux:table.cell>
+              </flux:table.row>
+            @endforelse
+          </flux:table.rows>
+        </flux:table>
+      </flux:card>
+
     @endif
 
     <!-- /End Content -->
