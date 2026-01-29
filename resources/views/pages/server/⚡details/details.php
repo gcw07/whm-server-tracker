@@ -36,15 +36,14 @@ new #[Title('Server Details')] class extends Component
         return $this->monitoredAccounts[$domain] ?? null;
     }
 
-//    public function render()
-//    {
-//        return view('livewire.server.details')->layoutData(['title' => 'Server Details']);
-//    }
-
     public function refresh(): void
     {
         FetchServerDataJob::dispatch($this->server)->onQueue('high');
 
-//        toast()->success('The server details will be refreshed shortly.')->push();
+        Flux::toast(
+            text: 'The server details will be refreshed shortly.',
+            heading: 'Refreshing...',
+            variant: 'success',
+        );
     }
 };
