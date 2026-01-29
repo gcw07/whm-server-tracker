@@ -32,9 +32,9 @@
           </flux:brand>
 
           <flux:navbar class="-mb-px gap-6 max-lg:hidden">
-            <flux:navbar.item icon="server" iconVariant="solid" :href="route('servers.index')">Servers</flux:navbar.item>
-            <flux:navbar.item icon="globe-alt" iconVariant="solid" :href="route('accounts.index')">Accounts</flux:navbar.item>
-            <flux:navbar.item icon="sparkles" iconVariant="solid" :href="route('monitors.index')">Monitors</flux:navbar.item>
+            <flux:navbar.item icon="server" iconVariant="solid" :href="route('servers.index')" :current="request()->routeIs('servers.*')">Servers</flux:navbar.item>
+            <flux:navbar.item icon="globe-alt" iconVariant="solid" :href="route('accounts.index')" :current="request()->routeIs('accounts.*')">Accounts</flux:navbar.item>
+            <flux:navbar.item icon="sparkles" iconVariant="solid" :href="route('monitors.index')" :current="request()->routeIs('monitors.*')">Monitors</flux:navbar.item>
           </flux:navbar>
 
           <flux:spacer />
