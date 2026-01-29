@@ -107,6 +107,8 @@
           {{ $slot }}
         </flux:main>
 
+        <flux:toast position="top end" />
+
         @livewireScriptConfig
         @fluxScripts
     </body>
