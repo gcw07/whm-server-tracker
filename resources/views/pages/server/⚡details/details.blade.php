@@ -13,7 +13,7 @@
       </h3>
     </div>
 
-    <div class="flex mt-3 md:mt-0 md:ml-4">
+    <div class="flex mt-3 md:mt-0 md:ml-4 gap-2">
       <flux:button :href="$server->whm_url" icon="arrow-top-right-on-square" target="_blank">View</flux:button>
 
       @if(!$server->missing_token)
@@ -89,11 +89,10 @@
       </div>
       <div class="hidden sm:block">
         <dl class="mt-5 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow lg:grid-cols-3">
-          <!--          <dl class="mt-5 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 lg:grid-cols-3 lg:divide-x lg:divide-y-0">-->
           <div class="lg:border-r lg:border-gray-200">
             <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
               <div class="bg-sky-500 rounded-md p-1 mr-2">
-{{--                <x-heroicon-s-information-circle class="h-5 w-5 text-white" />--}}
+                <flux:icon.information-circle variant="solid" class="text-white" />
               </div>
               Details
             </dt>
@@ -142,7 +141,7 @@
           <div class="lg:border-r lg:border-gray-200">
             <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
               <div class="bg-sky-500 rounded-md p-1 mr-2">
-{{--                <x-heroicon-s-server class="h-5 w-5 text-white" />--}}
+                <flux:icon.server variant="solid" class="text-white" />
               </div>
               Disk
             </dt>
@@ -185,7 +184,7 @@
           <div>
             <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
               <div class="bg-sky-500 rounded-md p-1 mr-2">
-{{--                <x-heroicon-s-archive-box class="h-5 w-5 text-white" />--}}
+                <flux:icon.archive-box variant="solid" class="text-white" />
               </div>
               Backups
             </dt>
