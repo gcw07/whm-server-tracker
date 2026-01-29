@@ -4,7 +4,7 @@
       <h3 class="text-2xl leading-6 font-medium text-gray-900">
         Servers
       </h3>
-      <div class="mt-3 flex md:mt-0 md:absolute md:top-3 md:right-0 space-x-2">
+      <div class="mt-3 flex md:mt-0 md:absolute md:top-3 md:right-0 gap-2">
         <flux:dropdown>
           <flux:button icon="adjustments-horizontal" icon:trailing="chevron-down">
             Filters
