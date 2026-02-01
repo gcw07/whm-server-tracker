@@ -107,7 +107,9 @@
           {{ $slot }}
         </flux:main>
 
-        <flux:toast position="top end" />
+        @persist('toast')
+          <flux:toast position="top end" />
+        @endpersist
 
         @livewireScriptConfig
         @fluxScripts
