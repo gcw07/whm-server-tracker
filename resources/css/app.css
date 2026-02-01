@@ -64,3 +64,19 @@
 [data-flux-pagination] {
     @apply px-6 py-4;
 }
+
+/* Add asterisk to required fields */
+ui-label:has(+ div > input[required]),
+ui-label:has(+ ui-description + div > input[required]),
+ui-label:has(+ select[required]),
+ui-label:has(+ ui-description + select[required]),
+ui-label:has(+ ui-select[required]),
+ui-label:has(+ ui-description + ui-select[required]),
+ui-label:has(+ textarea[required]),
+ui-label:has(+ ui-description + textarea[required]),
+ui-label:has(+ [data-flux-input-group] input[required]),
+ui-label:has(+ [data-flux-radio-group-cards][required]),
+ui-label:has(+ div input[required]),
+ui-label:has(+ div [data-flux-input][required]) {
+    @apply after:ml-0.5 after:text-red-500 after:content-['*'];
+}

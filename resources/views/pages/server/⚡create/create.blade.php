@@ -27,11 +27,11 @@
       <form wire:submit="save" class="space-y-8">
         <flux:input wire:model="form.name" label="Name" required />
 
-        <flux:input wire:model="form.address" label="IP Address" />
+        <flux:input wire:model="form.address" label="IP Address" required />
 
-        <flux:input wire:model="form.port" label="Port" />
+        <flux:input wire:model="form.port" label="Port" required />
 
-        <flux:radio.group wire:model="form.serverType" label="Server Type" variant="cards" class="max-sm:flex-col">
+        <flux:radio.group wire:model="form.serverType" label="Server Type" variant="cards" class="max-sm:flex-col" required>
           <flux:radio value="dedicated" label="Dedicated" />
           <flux:radio value="reseller" label="Reseller" />
           <flux:radio value="vps" label="VPS" />
