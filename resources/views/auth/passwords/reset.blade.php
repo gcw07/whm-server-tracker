@@ -5,11 +5,11 @@
       <h1 class="text-gray-600 font-bold tracking-wide text-4xl text-center pb-5">Reset Password</h1>
     </div>
 
-    @if (session('status'))
+    @session('status')
       <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-        <span class="block sm:inline">{{ session('status') }}</span>
+        <span class="block sm:inline">{{ $value }}</span>
       </div>
-    @endif
+    @endsession
 
     <div class="mt-3 pl-0">
       <x-forms.form :action="route('password.update')">
