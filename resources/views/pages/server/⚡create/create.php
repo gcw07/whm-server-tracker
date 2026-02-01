@@ -1,12 +1,12 @@
 <?php
 
-use App\Livewire\Forms\ServerForm;
+use App\Livewire\Forms\CreateServerForm;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
 new #[Title('Create Server')] class extends Component
 {
-    public ServerForm $form;
+    public CreateServerForm $form;
 
     public function save()
     {

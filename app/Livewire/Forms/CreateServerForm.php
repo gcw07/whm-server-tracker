@@ -7,7 +7,7 @@ use App\Models\Server;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Form;
 
-class ServerForm extends Form
+class CreateServerForm extends Form
 {
     public string $name = '';
 
