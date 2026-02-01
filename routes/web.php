@@ -35,7 +35,7 @@ Route::prefix('servers')->middleware('auth')->group(function () {
     Route::livewire('/', 'pages::server.listings')->name('servers.index');
     Route::livewire('/create', 'pages::server.create')->name('servers.create');
     Route::livewire('/{server}', 'pages::server.details')->name('servers.show');
-    Route::get('/{server}/edit', ServerEdit::class)->name('servers.edit');
+    Route::livewire('/{server}/edit', 'pages::server.edit')->name('servers.edit');
 });
 
 // Monitor Routes...
