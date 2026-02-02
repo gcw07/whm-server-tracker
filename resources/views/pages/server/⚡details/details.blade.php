@@ -257,7 +257,7 @@
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PLAN</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USAGE</flux:table.column>
-            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">SETUP DATE</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">DATE ADDED</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">
               <span class="sr-only">Manage</span>
             </flux:table.column>
