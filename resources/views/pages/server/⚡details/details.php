@@ -46,4 +46,19 @@ new #[Title('Server Details')] class extends Component
             variant: 'success',
         );
     }
+
+    public function delete(): void {
+        $this->server->removeMonitors();
+        $this->server->delete();
+
+        $this->modal('delete-server')->close();
+
+        Flux::toast(
+            text: 'The server was deleted successfully.',
+            heading: 'Deleted...',
+            variant: 'success',
+        );
+
+        $this->redirectRoute('servers.index', [],true, true);
+    }
 };
