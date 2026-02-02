@@ -19,7 +19,7 @@ class CreateServerForm extends Form
 
     public $notes = '';
 
-    public $token = '';
+    public $token = null;
 
     protected function rules(): array
     {
