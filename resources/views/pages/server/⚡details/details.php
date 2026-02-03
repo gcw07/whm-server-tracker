@@ -81,6 +81,12 @@ new #[Title('Server Details')] class extends Component
         $this->modal('new-token-modal')->close();
     }
 
+    public function resetApiToken(): void
+    {
+        $this->modal('reset-token-modal')->close();
+        $this->modal('new-token-modal')->show();
+    }
+
     public function delete(): void {
         $this->server->removeMonitors();
         $this->server->delete();
