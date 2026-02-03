@@ -25,7 +25,10 @@
 
         <flux:menu>
           <flux:menu.item :href="route('servers.edit', $server)" icon="pencil-square">Edit</flux:menu.item>
-          <flux:menu.item icon="key">Reset API Token</flux:menu.item>
+
+          @if(!$server->missing_token)
+            <flux:menu.item icon="key">Reset API Token</flux:menu.item>
+          @endif
 
           <flux:menu.separator />
 
@@ -75,11 +78,12 @@
     <!-- Begin content -->
 
     @if($server->missing_token)
-      <button wire:click="$dispatch('openModal', { component: 'server.new-token', arguments: { server: {{ $server->id }} }})" type="button" class="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-{{--        <x-heroicon-o-key class="mx-auto h-12 w-12 text-gray-400" />--}}
-        <span class="mt-2 block text-sm font-medium text-gray-900"> Add an API token to get started </span>
-      </button>
-
+      <flux:modal.trigger name="new-token-modal">
+        <button type="button" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-2 focus:outline-offset-2 focus:outline-blue-300 dark:border-white/15 dark:hover:border-white/25 dark:focus:outline-blue-500">
+          <flux:icon.key class="mx-auto size-12 text-zinc-400 dark:text-gray-500" />
+          <span class="mt-2 block text-sm font-semibold text-gray-900 dark:text-white">Add an API token to get started</span>
+        </button>
+      </flux:modal.trigger>
     @else
       <div class="hidden text-sm text-gray-500 sm:flex sm:justify-end">
         Last Updated:
@@ -332,6 +336,32 @@
 
     <!-- /End Content -->
   </div>
+
+  <!--New Token Modal -->
+  <flux:modal name="new-token-modal" class="md:w-3xl">
+    <form wire:submit="saveNewApiToken">
+      <div class="space-y-6">
+        <div class="sm:flex sm:items-start">
+          <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:size-10 dark:bg-green-500/10">
+            <flux:icon.key class="text-green-500" />
+          </div>
+          <div class="ml-4 w-full">
+            <flux:heading size="lg">New API Token</flux:heading>
+            <flux:input wire:model="newToken" placeholder="WHM Token" class="mt-6" />
+            <flux:error name="newToken" />
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <flux:spacer />
+          <flux:modal.close>
+            <flux:button>Cancel</flux:button>
+          </flux:modal.close>
+          <flux:button type="submit" icon="check" variant="primary">Save token</flux:button>
+        </div>
+      </div>
+    </form>
+  </flux:modal>
+  <!-- /End New Token Modal -->
 
   <!-- Delete Server Modal -->
   <flux:modal name="delete-server">

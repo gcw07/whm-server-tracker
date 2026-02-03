@@ -4,6 +4,7 @@ use App\Jobs\FetchServerDataJob;
 use App\Models\Monitor;
 use App\Models\Server;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new #[Title('Server Details')] class extends Component
@@ -11,6 +12,9 @@ new #[Title('Server Details')] class extends Component
     public Server $server;
 
     public array $monitoredAccounts;
+
+    #[Validate(['required', 'string'])]
+    public ?string $newToken = null;
 
     public function mount(Server $server): void
     {
@@ -45,6 +49,36 @@ new #[Title('Server Details')] class extends Component
             heading: 'Refreshing...',
             variant: 'success',
         );
+    }
+
+    public function saveNewApiToken(): void
+    {
+        $this->validate();
+
+        $hadMissingToken = $this->server->missing_token;
+
+        $this->server->update([
+            'token' => $this->newToken,
+        ]);
+
+        if ($hadMissingToken) {
+            Flux::toast(
+                text: 'The server api token was added successfully.',
+                heading: 'Updated...',
+                variant: 'success',
+            );
+
+            $this->redirectRoute('servers.show', ['server' => $this->server->id],true, true);
+            return;
+        }
+
+        Flux::toast(
+            text: 'The server api token was updated successfully.',
+            heading: 'Updated...',
+            variant: 'success',
+        );
+
+        $this->modal('new-token-modal')->close();
     }
 
     public function delete(): void {
