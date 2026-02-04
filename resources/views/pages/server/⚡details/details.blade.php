@@ -34,7 +34,7 @@
 
           <flux:menu.separator />
 
-          <flux:modal.trigger name="delete-server">
+          <flux:modal.trigger name="delete-server-modal">
             <flux:menu.item variant="danger" icon="trash">Delete</flux:menu.item>
           </flux:modal.trigger>
         </flux:menu>
@@ -360,7 +360,7 @@
   <!-- /End Delete Server Modal -->
 
   <!-- Delete Server Modal -->
-  <flux:modal name="delete-server">
+  <flux:modal name="delete-server-modal">
     <div class="space-y-6">
       <div class="sm:flex sm:items-start">
         <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10 dark:bg-red-500/10">

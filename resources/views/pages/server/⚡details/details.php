@@ -93,7 +93,7 @@ new #[Title('Server Details')] class extends Component
         $this->server->removeMonitors();
         $this->server->delete();
 
-        $this->modal('delete-server')->close();
+        $this->modal('delete-server-modal')->close();
 
         Flux::toast(
             text: 'The server was deleted successfully.',
