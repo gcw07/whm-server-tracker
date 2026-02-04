@@ -36,7 +36,7 @@ new #[Title('Accounts')] class extends Component
     {
         $this->filterBy = 'none';
     }
-    
+
 //
 //    public function filterListingsBy($name)
 //    {

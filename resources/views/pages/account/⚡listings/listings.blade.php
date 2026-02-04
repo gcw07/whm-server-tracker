@@ -17,8 +17,8 @@
 
         <flux:menu>
           <flux:menu.radio.group wire:model.live="filterBy">
-            <flux:menu.radio value="no_backups">No Backups</flux:menu.radio>
-            <flux:menu.radio value="outdated_php">Outdated PHP</flux:menu.radio>
+            <flux:menu.radio value="duplicates">Duplicates</flux:menu.radio>
+            <flux:menu.radio value="suspended">Suspended</flux:menu.radio>
           </flux:menu.radio.group>
         </flux:menu>
       </flux:dropdown>
@@ -34,11 +34,11 @@
         <div class="px-6 py-4 flex justify-between items-center border-b border-zinc-800/10 dark:border-white/20 text-sm">
           <div class="flex items-center gap-3">
             Active filters
-            @if($this->filterBy === 'no_backups')
-              <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">No Backups</flux:badge>
+            @if($this->filterBy === 'duplicates')
+              <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">Duplicates</flux:badge>
             @endif
-            @if($this->filterBy === 'outdated_php')
-              <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">Outdated PHP</flux:badge>
+            @if($this->filterBy === 'suspended')
+              <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">Suspended</flux:badge>
             @endif
           </div>
           <div>
