@@ -84,6 +84,8 @@ new #[Title('Server Details')] class extends Component
     public function resetApiToken(): void
     {
         $this->modal('reset-token-modal')->close();
+        $this->reset('newToken');
+
         $this->modal('new-token-modal')->show();
     }
 
