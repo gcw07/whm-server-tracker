@@ -80,7 +80,9 @@
 {{--                      @endif--}}
               </flux:table.cell>
 
-              <flux:table.cell class="whitespace-nowrap">{{ $account->server->name }}</flux:table.cell>
+              <flux:table.cell>
+                <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">{{ $account->server->name }}</flux:link>
+              </flux:table.cell>
 
               <flux:table.cell class="whitespace-nowrap">
                 {{ $account->wordpress_version ?: '—' }}
