@@ -37,18 +37,6 @@ new #[Title('Accounts')] class extends Component
         $this->filterBy = 'none';
     }
 
-//
-//    public function filterListingsBy($name)
-//    {
-//        $this->filterBy = match ($name) {
-//            'duplicates' => 'duplicates',
-//            'suspended' => 'suspended',
-//            default => null,
-//        };
-//
-//        $this->putCache('accounts', 'filterBy', $this->filterBy);
-//    }
-
     #[Computed]
     public function accounts()
     {
