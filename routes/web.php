@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Account Routes...
 Route::prefix('accounts')->middleware('auth')->group(function () {
-    Route::get('/', AccountListings::class)->name('accounts.index');
+    Route::livewire('/', 'pages::account.listings')->name('accounts.index');
     Route::get('/{account}', AccountDetails::class)->name('accounts.show');
 });
 
