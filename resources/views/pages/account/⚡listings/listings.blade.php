@@ -19,6 +19,7 @@
           <flux:menu.radio.group wire:model.live="filterBy">
             <flux:menu.radio value="duplicates">Duplicates</flux:menu.radio>
             <flux:menu.radio value="suspended">Suspended</flux:menu.radio>
+            <flux:menu.radio value="noBackups">No Backups</flux:menu.radio>
           </flux:menu.radio.group>
         </flux:menu>
       </flux:dropdown>
@@ -38,6 +39,9 @@
           @endif
           @if($this->filterBy === 'suspended')
             <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">Suspended</flux:badge>
+          @endif
+          @if($this->filterBy === 'noBackups')
+            <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">No Backups</flux:badge>
           @endif
         </div>
         <div>
@@ -119,12 +123,12 @@
           </flux:table.row>
         @empty
           <flux:table.row>
-            <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+            <flux:table.cell colspan="7" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
               <div class="text-center">
                 <div class="flex items-center justify-center">
                   <flux:icon.magnifying-glass class="size-12" />
                 </div>
-                <p class="text-lg mt-6">No servers matched your search.</p>
+                <p class="text-lg mt-6">No accounts matched your search.</p>
               </div>
             </flux:table.cell>
           </flux:table.row>

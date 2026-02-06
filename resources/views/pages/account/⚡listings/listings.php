@@ -74,6 +74,10 @@ new #[Title('Accounts')] class extends Component
                     return $query->where('suspended', true);
                 }
 
+                if ($this->filterBy === 'noBackups') {
+                    return $query->where('backup', false);
+                }
+
                 return $query;
             })
             ->paginate(50);
