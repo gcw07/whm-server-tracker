@@ -51,7 +51,6 @@
     <flux:table :paginate="$this->accounts">
       <flux:table.columns>
         <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'domain'" :direction="$sortDirection" wire:click="sort('domain')">DOMAIN</flux:table.column>
-{{--        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'server'" :direction="$sortDirection" wire:click="sort('server')">SERVER</flux:table.column>--}}
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">WP</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
@@ -72,10 +71,6 @@
                 'bg-gray-50' => $loop->even && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended),
                 'bg-white' => $loop->odd && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended)
             ])>
-{{--            <flux:table.cell class="px-6! py-5!">--}}
-{{--              <flux:link variant="subtle" :href="route('accounts.show', $account->id)">{{ $account->domain }}</flux:link>--}}
-{{--            </flux:table.cell>--}}
-
             <flux:table.cell class="px-6! py-5!">
               <div class="flex-auto">
                 <div>
@@ -97,10 +92,6 @@
                 </div>
               </div>
             </flux:table.cell>
-
-{{--            <flux:table.cell>--}}
-{{--              <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">{{ $account->server->name }}</flux:link>--}}
-{{--            </flux:table.cell>--}}
 
             <flux:table.cell class="whitespace-nowrap">
               {{ $account->wordpress_version ?: '—' }}
