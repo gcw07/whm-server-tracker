@@ -51,7 +51,7 @@
     <flux:table :paginate="$this->accounts">
       <flux:table.columns>
         <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'domain'" :direction="$sortDirection" wire:click="sort('domain')">DOMAIN</flux:table.column>
-        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">WP</flux:table.column>
+        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">WORDPRESS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'usage'" :direction="$sortDirection" wire:click="sort('usage')">USAGE</flux:table.column>
