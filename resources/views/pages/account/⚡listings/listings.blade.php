@@ -24,7 +24,9 @@
         </flux:menu>
       </flux:dropdown>
 
-      <flux:button :href="route('servers.create')" icon="arrow-down-tray">Export</flux:button>
+      <flux:modal.trigger name="export-accounts-modal">
+        <flux:button icon="arrow-down-tray">Export</flux:button>
+      </flux:modal.trigger>
     </div>
   </div>
   <!-- / End Page Header -->
@@ -136,4 +138,53 @@
       </flux:table.rows>
     </flux:table>
   </flux:card>
+
+  <!-- Export Accounts Modal -->
+  <flux:modal name="export-accounts-modal" class="md:w-3xl">
+    <form wire:submit="exportAccounts">
+      <div class="space-y-6">
+        <div class="sm:flex sm:items-start">
+          <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:size-10 dark:bg-green-500/10">
+            <flux:icon.arrow-down-tray class="text-green-500" />
+          </div>
+          <div class="ml-4 w-full">
+            <flux:heading size="lg">Export Accounts</flux:heading>
+            <flux:text>Select the columns you wish to include in this export.</flux:text>
+
+            <div class="mt-4">
+              <flux:checkbox.group wire:model="exportColumns">
+                <flux:checkbox.all label="Select Columns" />
+                <flux:separator class="mb-3" />
+
+                <flux:checkbox label="Domain" value="domain" />
+                <flux:checkbox label="Server" value="server" />
+                <flux:checkbox label="Username" value="username" />
+                <flux:checkbox label="IP Address" value="ip" />
+                <flux:checkbox label="Backups" value="backups" />
+                <flux:checkbox label="Suspended" value="suspended" />
+                <flux:checkbox label="Suspended Reason" value="suspended_reason" />
+                <flux:checkbox label="Suspended Date" value="suspended_time" />
+                <flux:checkbox label="Setup Date" value="setup_date" />
+                <flux:checkbox label="Disk Used" value="disk_used" />
+                <flux:checkbox label="Disk Limit" value="disk_limit" />
+                <flux:checkbox label="Disk Usage" value="disk_usage" />
+                <flux:checkbox label="Plan" value="plan" />
+                <flux:checkbox label="WordPress Version" value="wordpress_version" />
+              </flux:checkbox.group>
+
+              <flux:error name="exportColumns" />
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <flux:spacer />
+          <flux:modal.close>
+            <flux:button>Cancel</flux:button>
+          </flux:modal.close>
+          <flux:button type="submit" icon="check" variant="primary">Export</flux:button>
+        </div>
+      </div>
+    </form>
+  </flux:modal>
+  <!-- /End Export Accounts Modal -->
 </div>
