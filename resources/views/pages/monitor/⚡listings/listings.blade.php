@@ -42,6 +42,10 @@
           </flux:tab>
         </flux:tabs>
 
+        <!-- Must be added to avoid javascript error -->
+        <flux:tab.panel name="all" class="hidden"></flux:tab.panel>
+        <flux:tab.panel name="issues" class="hidden"></flux:tab.panel>
+
         <div class="pt-8">
           <flux:card class="p-0 overflow-hidden bg-gray-50">
             @if($this->filterBy !== 'none')
