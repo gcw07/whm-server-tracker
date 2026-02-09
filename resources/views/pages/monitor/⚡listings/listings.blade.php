@@ -90,19 +90,64 @@
                       </flux:link>
                     </flux:table.cell>
 
-                    <flux:table.cell class="whitespace-nowrap">0</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">0</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">0</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">0</flux:table.cell>
+                    <!-- Uptime Status -->
+                    <flux:table.cell class="whitespace-nowrap">
+                      @if(!$monitor->uptime_check_enabled)
+                        <flux:badge size="sm" icon="no-symbol" color="zinc">Disabled</flux:badge>
+                      @else
+                        @if($monitor->uptime_status === 'down')
+                          <flux:badge size="sm" icon="arrow-down" color="red">Down</flux:badge>
+                        @elseif($monitor->uptime_status === 'not yet checked')
+                          <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Pending</flux:badge>
+                        @else
+                          <flux:badge size="sm" icon="check" color="green">Up</flux:badge>
+                        @endif
+                      @endif
+                    </flux:table.cell>
 
-{{--                    <flux:table.cell>--}}
-{{--                      <flux:badge size="sm" :color="$server->backups_enabled ? 'green' : 'red'" inset="top bottom">{{ $server->backups_enabled ? 'Yes' : 'No'}}</flux:badge>--}}
-{{--                    </flux:table.cell>--}}
-{{--                    --}}
-{{--                    <flux:table.cell class="whitespace-nowrap">{{ $server->settings->get('disk_percentage') }}%</flux:table.cell>--}}
-{{--                    --}}
-{{--                    <flux:table.cell class="whitespace-nowrap">{{ $server->created_at->format('M d, Y') }}</flux:table.cell>--}}
-{{--                    --}}
+                    <!-- Certificate Status -->
+                    <flux:table.cell class="whitespace-nowrap">
+                      @if(!$monitor->certificate_check_enabled)
+                        <flux:badge size="sm" icon="no-symbol" color="zinc">Disabled</flux:badge>
+                      @else
+                        @if($monitor->certificate_status === 'invalid')
+                          <flux:badge size="sm" icon="arrow-down" color="red">Invalid</flux:badge>
+                        @elseif($monitor->certificate_status === 'not yet checked')
+                          <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Pending</flux:badge>
+                        @else
+                          <flux:badge size="sm" icon="check" color="green">Ok</flux:badge>
+                        @endif
+                      @endif
+                    </flux:table.cell>
+
+                    <!-- Blacklist Status -->
+                    <flux:table.cell class="whitespace-nowrap">
+                      @if(!$monitor->blacklist_check_enabled)
+                        <flux:badge size="sm" icon="no-symbol" color="zinc">Disabled</flux:badge>
+                      @else
+                        @if($monitor->blacklist_status === 'invalid')
+                          <flux:badge size="sm" icon="exclamation-triangle" color="red">Found</flux:badge>
+                        @elseif($monitor->blacklist_status === 'not yet checked')
+                          <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Pending</flux:badge>
+                        @else
+                          <flux:badge size="sm" icon="check" color="green">Ok</flux:badge>
+                        @endif
+                      @endif
+                    </flux:table.cell>
+
+                    <!-- Cloudflare Status -->
+                    <flux:table.cell class="whitespace-nowrap">
+                      @if(!$monitor->domain_name_check_enabled)
+                        <flux:badge size="sm" icon="no-symbol" color="zinc">Disabled</flux:badge>
+                      @else
+                        @if($monitor->is_on_cloudflare)
+                          <flux:badge size="sm" icon="check" color="green">Yes</flux:badge>
+                        @else
+                          <flux:badge size="sm" icon="x-mark" color="red">No</flux:badge>
+                        @endif
+                      @endif
+                    </flux:table.cell>
+
                     <flux:table.cell>
                       <flux:tooltip content="Visit Site">
                         <flux:button href="{{ $monitor->url }}" size="sm" icon="arrow-top-right-on-square" target="_blank"></flux:button>
