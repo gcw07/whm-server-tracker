@@ -1,17 +1,10 @@
 <?php
 
-use App\Livewire\Account\Details as AccountDetails;
-use App\Livewire\Account\Listings as AccountListings;
-use App\Livewire\Dashboard;
 use App\Livewire\Monitor\Details as MonitorDetails;
 use App\Livewire\Monitor\LighthouseFrame as MonitorLighthouseFrame;
 use App\Livewire\Monitor\LighthouseReport as MonitorLighthouseReport;
 use App\Livewire\Monitor\Listings as MonitorListings;
 use App\Livewire\Search;
-use App\Livewire\Server\Create as ServerCreate;
-use App\Livewire\Server\Details as ServerDetails;
-use App\Livewire\Server\Edit as ServerEdit;
-use App\Livewire\Server\Listings as ServerListings;
 use App\Livewire\User\Create as UserCreate;
 use App\Livewire\User\Edit as UserEdit;
 use App\Livewire\User\Listings as UserListings;
