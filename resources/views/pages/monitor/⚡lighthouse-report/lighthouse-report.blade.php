@@ -5,7 +5,7 @@
       <flux:breadcrumbs>
         <flux:breadcrumbs.item :href="route('dashboard')">Home</flux:breadcrumbs.item>
         <flux:breadcrumbs.item :href="route('monitors.index')">Monitors</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item :href="route('monitors.index')">Details</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item :href="route('monitors.show', $monitor->id)">Details</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Lighthouse Reports</flux:breadcrumbs.item>
       </flux:breadcrumbs>
 
@@ -15,7 +15,7 @@
     </div>
   </div>
   <!-- / End Page Header -->
-  
+
   <div class="mt-6 h-full">
     <!-- Begin content -->
 
