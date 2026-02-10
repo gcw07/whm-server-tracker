@@ -138,54 +138,54 @@ new #[Title('Monitor Details')] class extends Component
     {
         if ($this->monitor->uptime_check_enabled) {
             $this->monitor->uptime_check_enabled = false;
-            $this->monitor->save();
         } else {
             $this->monitor->uptime_check_enabled = true;
-            $this->monitor->save();
         }
+
+        $this->monitor->save();
     }
 
     public function toggleCertificateCheck(): void
     {
         if ($this->monitor->certificate_check_enabled) {
             $this->monitor->certificate_check_enabled = false;
-            $this->monitor->save();
         } else {
             $this->monitor->certificate_check_enabled = true;
-            $this->monitor->save();
         }
+
+        $this->monitor->save();
     }
 
     public function toggleBlacklistCheck(): void
     {
         if ($this->monitor->blacklist_check_enabled) {
             $this->monitor->blacklist_check_enabled = false;
-            $this->monitor->save();
         } else {
             $this->monitor->blacklist_check_enabled = true;
-            $this->monitor->save();
         }
+
+        $this->monitor->save();
     }
 
     public function toggleLighthouseCheck(): void
     {
         if ($this->monitor->lighthouse_check_enabled) {
             $this->monitor->lighthouse_check_enabled = false;
-            $this->monitor->save();
         } else {
             $this->monitor->lighthouse_check_enabled = true;
-            $this->monitor->save();
         }
+
+        $this->monitor->save();
     }
 
     public function toggleDomainNameExpirationCheck(): void
     {
         if ($this->monitor->domain_name_check_enabled) {
             $this->monitor->domain_name_check_enabled = false;
-            $this->monitor->save();
         } else {
             $this->monitor->domain_name_check_enabled = true;
-            $this->monitor->save();
         }
+        
+        $this->monitor->save();
     }
 };
