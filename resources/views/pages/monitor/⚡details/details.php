@@ -185,7 +185,7 @@ new #[Title('Monitor Details')] class extends Component
         } else {
             $this->monitor->domain_name_check_enabled = true;
         }
-        
+
         $this->monitor->save();
     }
 };
