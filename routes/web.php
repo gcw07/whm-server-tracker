@@ -34,7 +34,7 @@ Route::prefix('servers')->middleware('auth')->group(function () {
 // Monitor Routes...
 Route::prefix('monitors')->middleware('auth')->group(function () {
     Route::livewire('/', 'pages::monitor.listings')->name('monitors.index');
-    Route::get('/{monitor}', MonitorDetails::class)->name('monitors.show');
+    Route::livewire('/{monitor}', 'pages::monitor.details')->name('monitors.show');
     Route::get('/{monitor}/lighthouse', MonitorLighthouseReport::class)->name('monitors.lighthouse');
     Route::get('/{audit}/lighthouse-iframe', MonitorLighthouseFrame::class)->name('monitors.lighthouse-iframe');
 });
