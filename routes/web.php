@@ -1,9 +1,6 @@
 <?php
 
-use App\Livewire\Monitor\Details as MonitorDetails;
 use App\Livewire\Monitor\LighthouseFrame as MonitorLighthouseFrame;
-use App\Livewire\Monitor\LighthouseReport as MonitorLighthouseReport;
-use App\Livewire\Monitor\Listings as MonitorListings;
 use App\Livewire\Search;
 use App\Livewire\User\Create as UserCreate;
 use App\Livewire\User\Edit as UserEdit;
