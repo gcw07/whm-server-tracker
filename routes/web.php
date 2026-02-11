@@ -39,7 +39,7 @@ Route::prefix('monitors')->middleware('auth')->group(function () {
 // User Routes...
 Route::prefix('users')->middleware('auth')->group(function () {
     Route::livewire('/', 'pages::user.listings')->name('users.index');
-    Route::get('/create', UserCreate::class)->name('users.create');
+    Route::livewire('/create', 'pages::user.create')->name('users.create');
     Route::get('/{user}/edit', UserEdit::class)->name('users.edit');
 });
 
