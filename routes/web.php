@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Monitor\LighthouseFrame as MonitorLighthouseFrame;
+use App\Livewire\Monitor\LighthouseFrame;
 use App\Livewire\Search;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +30,7 @@ Route::prefix('monitors')->middleware('auth')->group(function () {
     Route::livewire('/', 'pages::monitor.listings')->name('monitors.index');
     Route::livewire('/{monitor}', 'pages::monitor.details')->name('monitors.show');
     Route::livewire('/{monitor}/lighthouse', 'pages::monitor.lighthouse-report')->name('monitors.lighthouse');
-    Route::get('/{audit}/lighthouse-iframe', MonitorLighthouseFrame::class)->name('monitors.lighthouse-iframe');
+    Route::get('/{audit}/lighthouse-iframe', LighthouseFrame::class)->name('monitors.lighthouse-iframe');
 });
 
 // User Routes...
