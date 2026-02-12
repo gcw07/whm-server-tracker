@@ -41,6 +41,7 @@ Route::prefix('users')->middleware('auth')->group(function () {
     Route::livewire('/', 'pages::user.listings')->name('users.index');
     Route::livewire('/create', 'pages::user.create')->name('users.create');
     Route::livewire('/{user}/edit', 'pages::user.edit')->name('users.edit');
+    Route::livewire('/{user}/change-password', 'pages::user.change-password')->name('users.change-password');
 });
 
 // Search Routes...

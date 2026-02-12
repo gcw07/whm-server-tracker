@@ -51,7 +51,7 @@
                 <flux:menu>
                   <flux:menu.item :href="route('users.edit', $user)" icon="pencil-square">Edit</flux:menu.item>
 
-                  <flux:menu.item icon="key">Change Password</flux:menu.item>
+                  <flux:menu.item :href="route('users.change-password', $user)" icon="key">Change Password</flux:menu.item>
 
                   <flux:modal.trigger :name="'delete-user-modal-'.$user->id">
                     <flux:menu.item variant="danger" icon="trash">Delete</flux:menu.item>
