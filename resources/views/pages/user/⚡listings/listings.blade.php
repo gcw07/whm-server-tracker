@@ -53,11 +53,37 @@
 
                   <flux:menu.item icon="key">Change Password</flux:menu.item>
 
-                  <flux:modal.trigger name="delete-user-modal">
+                  <flux:modal.trigger :name="'delete-user-modal-'.$user->id">
                     <flux:menu.item variant="danger" icon="trash">Delete</flux:menu.item>
                   </flux:modal.trigger>
                 </flux:menu>
               </flux:dropdown>
+
+              <!-- Delete User Modal -->
+              <flux:modal :name="'delete-user-modal-'.$user->id">
+                <div class="space-y-6">
+                  <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10 dark:bg-red-500/10">
+                      <flux:icon.exclamation-triangle class="text-red-500" />
+                    </div>
+                    <div class="ml-4">
+                      <flux:heading size="lg">Delete user?</flux:heading>
+                      <flux:text class="mt-2">
+                        Are you sure you want to delete the user <span class="text-zinc-800 font-semibold">"{{ $user->name }}"</span>?
+                        This action cannot be undone.
+                      </flux:text>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <flux:spacer />
+                    <flux:modal.close>
+                      <flux:button>Cancel</flux:button>
+                    </flux:modal.close>
+                    <flux:button wire:click="delete({{ $user->id }})" icon="trash" variant="danger">Delete user</flux:button>
+                  </div>
+                </div>
+              </flux:modal>
+              <!-- /End Delete Server Modal -->
             </flux:table.cell>
           </flux:table.row>
         @empty
@@ -75,30 +101,4 @@
       </flux:table.rows>
     </flux:table>
   </flux:card>
-
-  <!-- Delete User Modal -->
-  <flux:modal name="delete-user-modal">
-    <div class="space-y-6">
-      <div class="sm:flex sm:items-start">
-        <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10 dark:bg-red-500/10">
-          <flux:icon.exclamation-triangle class="text-red-500" />
-        </div>
-        <div class="ml-4">
-          <flux:heading size="lg">Delete user?</flux:heading>
-          <flux:text class="mt-2">
-            Are you sure you want to delete the user <span class="text-zinc-800 font-semibold">"user name"</span>?
-            The server information and all associated accounts will be permanently removed. This action cannot be undone.
-          </flux:text>
-        </div>
-      </div>
-      <div class="flex gap-2">
-        <flux:spacer />
-        <flux:modal.close>
-          <flux:button>Cancel</flux:button>
-        </flux:modal.close>
-        <flux:button wire:click="delete" icon="trash" variant="danger">Delete server</flux:button>
-      </div>
-    </div>
-  </flux:modal>
-  <!-- /End Delete Server Modal -->
 </div>
