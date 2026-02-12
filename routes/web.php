@@ -2,9 +2,6 @@
 
 use App\Livewire\Monitor\LighthouseFrame as MonitorLighthouseFrame;
 use App\Livewire\Search;
-use App\Livewire\User\Create as UserCreate;
-use App\Livewire\User\Edit as UserEdit;
-use App\Livewire\User\Listings as UserListings;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
