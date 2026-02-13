@@ -11,8 +11,14 @@ use Livewire\Component;
 
 new #[Title('Search')] class extends Component
 {
-    #[Url]
+    #[Url(except: '')]
     public ?string $search;
+
+    public function updatedSearch($value): void
+    {
+        // Sanitize input: remove tags, trim whitespace
+        $this->search = strip_tags(trim($value));
+    }
 
     #[Computed]
     public function servers(): \Illuminate\Database\Eloquent\Collection|Collection
