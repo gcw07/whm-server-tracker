@@ -12,7 +12,7 @@ class ServerRequestDataFactory
 
     protected string $port = '2087';
 
-    protected ServerTypeEnum $serverType;
+    protected string $serverType;
 
     protected string $notes = 'a server note';
 
@@ -25,7 +25,7 @@ class ServerRequestDataFactory
 
     public function __construct()
     {
-        $this->serverType = ServerTypeEnum::Vps;
+        $this->serverType = ServerTypeEnum::Vps->value;
     }
 
     public function withName(string $name): self
@@ -76,7 +76,7 @@ class ServerRequestDataFactory
             'name' => $this->name,
             'address' => $this->address,
             'port' => $this->port,
-            'server_type' => $this->serverType,
+            'serverType' => $this->serverType,
             'notes' => $this->notes,
             'token' => $this->token,
         ], $overrides);

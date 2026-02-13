@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Monitor\Details as MonitorDetails;
 use App\Models\Account;
 use App\Models\Monitor;
 use App\Models\User;
@@ -23,7 +22,7 @@ test('an authorized user can view monitor details page', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(MonitorDetails::class, ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
         ->assertSee('myserver.com');
 });
 
@@ -38,7 +37,7 @@ test('an authorized user can turn off uptime checks from monitor details', funct
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(MonitorDetails::class, ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
         ->call('toggleUptimeCheck');
 
     tap($monitor->fresh(), function (Monitor $monitor) {
@@ -57,7 +56,7 @@ test('an authorized user can turn on uptime checks from monitor details', functi
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(MonitorDetails::class, ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
         ->call('toggleUptimeCheck');
 
     tap($monitor->fresh(), function (Monitor $monitor) {
@@ -76,7 +75,7 @@ test('an authorized user can turn off ssl certificate checks from monitor detail
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(MonitorDetails::class, ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
         ->call('toggleCertificateCheck');
 
     tap($monitor->fresh(), function (Monitor $monitor) {
@@ -95,7 +94,7 @@ test('an authorized user can turn on ssl certificate checks from monitor details
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(MonitorDetails::class, ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
         ->call('toggleCertificateCheck');
 
     tap($monitor->fresh(), function (Monitor $monitor) {

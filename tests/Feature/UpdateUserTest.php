@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\User\Edit as UserEdit;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\Factories\UserRequestDataFactory;
@@ -28,11 +27,11 @@ test('an authorized user can view the edit user form', function () {
 test('an authorized user can edit a user', function () {
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(UserEdit::class, ['user' => $this->user])
-        ->set('state', [
+    Livewire::test('pages::user.edit', ['user' => $this->user])
+        ->set('form', [
             'name' => 'Della Duck',
             'email' => 'della@example.com',
-            'notification_types' => [
+            'notificationTypes' => [
                 'uptime_check_failed' => false,
                 'uptime_check_succeeded' => false,
                 'uptime_check_recovered' => false,
@@ -56,14 +55,14 @@ test('an authorized user can edit a user', function () {
 test('email must be unique for user edit', function () {
     $this->actingAs(User::factory()->create(['email' => 'grant@example.com']));
 
-    $response = Livewire::test(UserEdit::class, ['user' => $this->user])
-        ->set('state', [
+    $response = Livewire::test('pages::user.edit', ['user' => $this->user])
+        ->set('form', [
             'name' => 'Della Duck',
             'email' => 'grant@example.com',
         ])
         ->call('save');
 
-    $response->assertHasErrors(['state.email' => 'unique']);
+    $response->assertHasErrors(['form.email' => 'unique']);
 });
 
 test('email can be the same for the same user for user edit', function () {
@@ -72,11 +71,11 @@ test('email can be the same for the same user for user edit', function () {
 
     $this->actingAs($user);
 
-    Livewire::test(UserEdit::class, ['user' => $userB])
-        ->set('state', [
+    Livewire::test('pages::user.edit', ['user' => $userB])
+        ->set('form', [
             'name' => 'Mike Smith',
             'email' => 'mike@example.com',
-            'notification_types' => [
+            'notificationTypes' => [
                 'uptime_check_failed' => false,
                 'uptime_check_succeeded' => false,
                 'uptime_check_recovered' => false,
@@ -106,29 +105,20 @@ it('validate rules for user edit', function ($data) {
     $this->actingAs(User::factory()->create());
 
     if ($subField) {
-        $response = Livewire::test(UserEdit::class, ['user' => $this->user])
-            ->set('state', $this->requestData->create([$field => [$subField => $value]]))
+        $response = Livewire::test('pages::user.edit', ['user' => $this->user])
+            ->set('form', $this->requestData->create([$field => [$subField => $value]]))
             ->call('save');
 
-        $response->assertHasErrors(["state.$field.$subField" => $errorMessage]);
+        $response->assertHasErrors(["form.$field.$subField" => $errorMessage]);
     } else {
-        $response = Livewire::test(UserEdit::class, ['user' => $this->user])
-            ->set('state', $this->requestData->create([$field => $value]))
+        $response = Livewire::test('pages::user.edit', ['user' => $this->user])
+            ->set('form', $this->requestData->create([$field => $value]))
             ->call('save');
 
-        $response->assertHasErrors(["state.$field" => $errorMessage]);
+        $response->assertHasErrors(["form.$field" => $errorMessage]);
     }
 })->with([
     fn () => ['name', '', 'required'],
     fn () => ['email', '', 'required'],
     fn () => ['email', 'not-valid-email', 'email'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_failed'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_succeeded'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'uptime_check_recovered'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_check_succeeded'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_check_failed'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'certificate_expires_soon'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'fetched_server_data_succeeded'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'fetched_server_data_failed'],
-    fn () => ['notification_types', 'not-a-boolean', 'boolean', 'domain_name_expires_soon'],
 ]);

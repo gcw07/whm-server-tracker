@@ -24,10 +24,8 @@ test('an authorized user can view monitor listings page', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(MonitorListings::class)
-        ->assertViewHas('monitors', function ($monitors) {
-            return count($monitors) === 2;
-        })
+    Livewire::test('pages::monitor.listings')
+        ->assertCount('monitors', 2)
         ->assertSee('myserver.com');
 });
 
@@ -40,7 +38,7 @@ test('the monitor listings are in alphabetical order', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(MonitorListings::class)
+    Livewire::test('pages::monitor.listings')
         ->assertViewHas('monitors', function ($monitors) {
             return count($monitors) === 3;
         });
@@ -55,10 +53,8 @@ test('the monitor listings can be filtered by having issues or not', function ()
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(MonitorListings::class)
-        ->set('hasIssues', 'true')
-        ->assertViewHas('monitors', function ($monitors) {
-            return count($monitors) === 2;
-        })
+    Livewire::test('pages::monitor.listings')
+        ->set('monitorType', 'issues')
+        ->assertcount('monitors', 2)
         ->assertSee('https://someserver.com');
 });
