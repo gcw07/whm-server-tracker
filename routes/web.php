@@ -1,7 +1,6 @@
 <?php
 
 use App\Livewire\Monitor\LighthouseFrame;
-use App\Livewire\Search;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -43,5 +42,5 @@ Route::prefix('users')->middleware('auth')->group(function () {
 
 // Search Routes...
 Route::middleware('auth')->group(function () {
-    Route::get('/search', Search::class)->name('search');
+    Route::livewire('/search', 'pages::search')->name('search');
 });
