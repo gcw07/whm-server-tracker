@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Monitor\Listings as MonitorListings;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;

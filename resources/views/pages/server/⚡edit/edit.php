@@ -24,6 +24,6 @@ new #[Title('Edit Server')] class extends Component
             variant: 'success',
         );
 
-        $this->redirectRoute('servers.show', $this->form->server->id,true, true);
+        $this->redirectRoute('servers.show', $this->form->server->id, true, true);
     }
 };

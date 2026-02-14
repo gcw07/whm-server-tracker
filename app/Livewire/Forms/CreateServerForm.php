@@ -38,12 +38,12 @@ class CreateServerForm extends Form
         $this->validate();
 
         return Server::create([
-            'name'        => $this->name,
-            'address'     => $this->address,
-            'port'        => $this->port,
+            'name' => $this->name,
+            'address' => $this->address,
+            'port' => $this->port,
             'server_type' => $this->serverType,
-            'notes'       => $this->notes,
-            'token'       => $this->token,
+            'notes' => $this->notes,
+            'token' => $this->token,
         ]);
     }
 }

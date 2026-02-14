@@ -68,7 +68,8 @@ new #[Title('Server Details')] class extends Component
                 variant: 'success',
             );
 
-            $this->redirectRoute('servers.show', ['server' => $this->server->id],true, true);
+            $this->redirectRoute('servers.show', ['server' => $this->server->id], true, true);
+
             return;
         }
 
@@ -89,7 +90,8 @@ new #[Title('Server Details')] class extends Component
         $this->modal('new-token-modal')->show();
     }
 
-    public function delete(): void {
+    public function delete(): void
+    {
         $this->server->removeMonitors();
         $this->server->delete();
 
@@ -101,6 +103,6 @@ new #[Title('Server Details')] class extends Component
             variant: 'success',
         );
 
-        $this->redirectRoute('servers.index', [],true, true);
+        $this->redirectRoute('servers.index', [], true, true);
     }
 };

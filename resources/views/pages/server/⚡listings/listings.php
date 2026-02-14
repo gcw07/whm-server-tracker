@@ -59,6 +59,7 @@ new #[Title('Servers')] class extends Component
 
                 if ($this->sortBy === 'usage') {
                     $direction = $this->sortDirection === 'asc' ? 'asc' : 'desc';
+
                     return $query->orderByRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) $direction");
                 }
 

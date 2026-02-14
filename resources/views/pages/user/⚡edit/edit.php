@@ -24,6 +24,6 @@ new #[Title('Edit User')] class extends Component
             variant: 'success',
         );
 
-        $this->redirectRoute('users.index', [],true, true);
+        $this->redirectRoute('users.index', [], true, true);
     }
 };

@@ -57,9 +57,9 @@ new #[Title('Monitors')] class extends Component
                     });
             })
             ->when($this->sortBy, function (Builder $query) {
-//                if ($this->sortBy === 'newest') {
-//                    return $query->orderBy('created_at', $this->sortDirection);
-//                }
+                //                if ($this->sortBy === 'newest') {
+                //                    return $query->orderBy('created_at', $this->sortDirection);
+                //                }
 
                 return $query->orderBy('url', $this->sortDirection);
             })

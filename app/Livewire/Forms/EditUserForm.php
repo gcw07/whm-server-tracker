@@ -42,7 +42,7 @@ class EditUserForm extends Form
 
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->notification_types = $user->notification_types->filter(fn($value) => $value === true)->keys()->toArray();
+        $this->notification_types = $user->notification_types->filter(fn ($value) => $value === true)->keys()->toArray();
     }
 
     public function store()

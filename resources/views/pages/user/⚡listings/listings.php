@@ -16,7 +16,8 @@ new #[Title('Users')] class extends Component
             ->paginate(50);
     }
 
-    public function delete($id): void {
+    public function delete($id): void
+    {
         $user = User::findOrFail($id);
 
         if ($user->id === auth()->user()->id) {
@@ -41,6 +42,6 @@ new #[Title('Users')] class extends Component
             variant: 'success',
         );
 
-        $this->redirectRoute('users.index', [],true, true);
+        $this->redirectRoute('users.index', [], true, true);
     }
 };
