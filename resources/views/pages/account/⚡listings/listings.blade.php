@@ -92,6 +92,39 @@
                       </flux:popover>
                     </flux:dropdown>
                   @endif
+                  @if($account->is_disk_warning && !$account->suspended)
+                    <flux:dropdown position="bottom" align="start">
+                      <flux:badge as="button" size="sm" color="yellow" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">Disk warning</flux:badge>
+
+                      <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
+                        <div>
+                          This account has reached 80% of its disk limit.
+                        </div>
+                      </flux:popover>
+                    </flux:dropdown>
+                  @endif
+                  @if($account->is_disk_critical && !$account->suspended)
+                    <flux:dropdown position="bottom" align="start">
+                      <flux:badge as="button" size="sm" color="orange" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">Disk critical</flux:badge>
+
+                      <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
+                        <div>
+                          This account has reached 90% of its disk limit.
+                        </div>
+                      </flux:popover>
+                    </flux:dropdown>
+                  @endif
+                  @if($account->is_disk_full && !$account->suspended)
+                    <flux:dropdown position="bottom" align="start">
+                      <flux:badge as="button" size="sm" color="orange" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">Disk full</flux:badge>
+
+                      <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
+                        <div>
+                          This account has reached 100% of its disk limit.
+                        </div>
+                      </flux:popover>
+                    </flux:dropdown>
+                  @endif
                 </div>
                 <div class="mt-1">
                   <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">{{ $account->server->name }}</flux:link>
