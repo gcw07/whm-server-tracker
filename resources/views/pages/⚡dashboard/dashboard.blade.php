@@ -23,7 +23,7 @@
           </div>
           <div class="ml-3 flex-1 md:flex md:justify-between">
             <p class="text-sm text-red-700">
-              There are {{ $this->sitesWithIssues }} sites with issues.
+              There {{ $this->sitesWithIssues === 1 ? 'is' : 'are' }} {{ Str::plural('site', $this->sitesWithIssues, prependCount: true) }} with issues.
             </p>
             <p class="mt-3 text-sm md:mt-0 md:ml-6">
               <a href="{{ route('monitors.index') }}" class="whitespace-nowrap font-medium text-red-700 hover:text-red-600">View <span aria-hidden="true">&rarr;</span></a>
@@ -41,7 +41,7 @@
           </div>
           <div class="ml-3 flex-1 md:flex md:justify-between">
             <p class="text-sm text-red-700">
-              There are {{ $this->serversWithIssues }} servers running out of disk space.
+              There {{ $this->serversWithIssues === 1 ? 'is' : 'are' }} {{ Str::plural('server', $this->serversWithIssues, prependCount: true) }} running out of disk space.
             </p>
             <p class="mt-3 text-sm md:mt-0 md:ml-6">
               <a href="{{ route('servers.index') }}" class="whitespace-nowrap font-medium text-red-700 hover:text-red-600">View <span aria-hidden="true">&rarr;</span></a>
@@ -102,36 +102,41 @@
               <h1 class="text-lg font-semibold text-gray-700">Server Types</h1>
             </div>
           </div>
-          <div class="mt-2 flex flex-col">
-            <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                  <table class="min-w-full divide-y divide-gray-300">
-                    <thead class="bg-gray-50">
-                      <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Type</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">#</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white">
-                      <tr>
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Dedicated</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ $this->serverTypes->dedicated }} </td>
-                      </tr>
-                      <tr>
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Reseller</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">  {{ $this->serverTypes->reseller }} </td>
-                      </tr>
-                      <tr>
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">VPS</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">  {{ $this->serverTypes->vps }} </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+          <flux:card class="p-0 overflow-hidden bg-gray-50 mt-4">
+            <flux:table>
+              <flux:table.columns>
+                <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">TYPE</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">#</flux:table.column>
+              </flux:table.columns>
+
+              <flux:table.rows>
+                <flux:table.row class="bg-white">
+                  <flux:table.cell class="px-6! py-3.5!">
+                    Dedicated
+                  </flux:table.cell>
+                  <flux:table.cell class="whitespace-nowrap">
+                    {{ $this->serverTypes->dedicated }}
+                  </flux:table.cell>
+                </flux:table.row>
+                <flux:table.row class="bg-gray-50">
+                  <flux:table.cell class="px-6! py-3.5!">
+                    Reseller
+                  </flux:table.cell>
+                  <flux:table.cell class="whitespace-nowrap">
+                    {{ $this->serverTypes->reseller }}
+                  </flux:table.cell>
+                </flux:table.row>
+                <flux:table.row class="bg-white">
+                  <flux:table.cell class="px-6! py-3.5!">
+                    VPS
+                  </flux:table.cell>
+                  <flux:table.cell class="whitespace-nowrap">
+                    {{ $this->serverTypes->vps }}
+                  </flux:table.cell>
+                </flux:table.row>
+              </flux:table.rows>
+            </flux:table>
+          </flux:card>
         </div>
 
       </div>
@@ -142,50 +147,45 @@
               <h1 class="text-lg font-semibold text-gray-700">Latest Accounts</h1>
             </div>
           </div>
-          <div class="mt-2 flex flex-col">
-            <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                  <table class="min-w-full divide-y divide-gray-300">
-                    <thead class="bg-gray-50">
-                      <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Domain</th>
-                        <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Server</th>
-                        <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Date Added</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white">
-                      @forelse($this->recentAccounts as $account)
-                        <tr>
-                          <td class="whitespace-nowrap py-3 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                            <a href="{{ $account->domain_url }}" target="_blank" class="group inline-flex space-x-2 truncate text-sm">
-                              <p class="text-gray-500 truncate group-hover:text-gray-900">
-                                {{ $account->domain }}
-                              </p>
-                            </a>
-                          </td>
-                          <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500">
-                            <a href="{{ route('servers.show', $account->server->id) }}" class="group inline-flex space-x-2 truncate text-sm">
-                              <p class="text-gray-500 truncate group-hover:text-gray-900">
-                                {{ $account->server->name }}
-                              </p>
-                            </a>
-                          </td>
-                          <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500"> {{ $account->created_at?->diffForHumans() }} </td>
-                        </tr>
-                      @empty
-                        <tr>
-                          <td colspan="3" class="whitespace-nowrap py-3 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                            <p class="text-center">No accounts found. Please add valid servers to start importing accounts.</p>
-                          </td>
-                        </tr>
-                      @endforelse
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+          <flux:card class="p-0 overflow-hidden bg-gray-50 mt-4">
+            <flux:table>
+              <flux:table.columns>
+                <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">DOMAIN</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">SERVER</flux:table.column>
+                <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">DATE ADDED</flux:table.column>
+              </flux:table.columns>
+
+              <flux:table.rows>
+                @forelse ($this->recentAccounts as $account)
+                  <flux:table.row :key="$account->id" @class([
+                      'bg-gray-50' => $loop->even,
+                      'bg-white' => $loop->odd
+                  ])>
+                    <flux:table.cell class="px-6! py-3.5!">
+                      <flux:link variant="subtle" :href="route('accounts.show', $account->id)">{{ $account->domain }}</flux:link>
+                    </flux:table.cell>
+
+                    <flux:table.cell class="whitespace-nowrap">
+                      <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">{{ $account->server->name }}</flux:link>
+                    </flux:table.cell>
+
+                    <flux:table.cell class="whitespace-nowrap">{{ $account->created_at->diffForHumans() }}</flux:table.cell>
+                  </flux:table.row>
+                @empty
+                  <flux:table.row>
+                    <flux:table.cell colspan="3" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+                      <div class="text-center">
+                        <div class="flex items-center justify-center">
+                          <flux:icon.magnifying-glass class="size-12" />
+                        </div>
+                        <p class="text-lg mt-6">No accounts found. Please add valid servers to start importing accounts.</p>
+                      </div>
+                    </flux:table.cell>
+                  </flux:table.row>
+                @endforelse
+              </flux:table.rows>
+            </flux:table>
+          </flux:card>
         </div>
 
       </div>
