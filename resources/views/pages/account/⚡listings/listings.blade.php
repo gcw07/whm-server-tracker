@@ -116,7 +116,7 @@
                   @endif
                   @if($account->is_disk_full && !$account->suspended)
                     <flux:dropdown position="bottom" align="start">
-                      <flux:badge as="button" size="sm" color="orange" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">Disk full</flux:badge>
+                      <flux:badge as="button" size="sm" color="red" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">Disk full</flux:badge>
 
                       <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
                         <div>
