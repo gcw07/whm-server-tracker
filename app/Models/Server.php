@@ -166,6 +166,7 @@ class Server extends Model
     {
         $query->whereAny([
             'name',
+            'address',
             'notes',
         ], 'LIKE', "%$term%");
     }

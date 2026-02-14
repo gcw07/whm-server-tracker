@@ -39,6 +39,19 @@ test('the server name can be searched', function () {
         ->assertDontSee('NoResults.com');
 });
 
+test('the server address can be searched', function () {
+    Server::factory()->create(['name' => 'MyTestServer.com', 'address' => '1.1.1.1']);
+    Server::factory()->create(['name' => 'NoResults.com', 'address' => '2.2.2.2']);
+
+    $this->actingAs($this->user);
+
+    Livewire::test('pages::search')
+        ->set('search', '1.1.1')
+        ->assertCount('servers', 1)
+        ->assertSee('MyTestServer.com')
+        ->assertDontSee('NoResults.com');
+});
+
 test('the server notes can be searched', function () {
     Server::factory()->create(['notes' => 'magic sully']);
     Server::factory()->create(['notes' => 'big world']);
