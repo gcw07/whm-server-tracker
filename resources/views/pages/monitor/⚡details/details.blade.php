@@ -47,7 +47,7 @@
       <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5">Details</flux:heading>
       <div class="px-4 py-5 sm:p-0">
         <dl class="sm:divide-y sm:divide-gray-200">
-          @if($this->account->suspended)
+          @if($this->account?->suspended)
             <div class="py-4 flex justify-center items-center text-base font-medium text-red-700 bg-red-50">
               <flux:icon.exclamation-triangle variant="solid" class="text-white" />
               This account is suspended
