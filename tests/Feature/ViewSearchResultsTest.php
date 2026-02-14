@@ -2,10 +2,12 @@
 
 use App\Livewire\Search;
 use App\Models\Account;
+use App\Models\Monitor;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -30,28 +32,24 @@ test('the server name can be searched', function () {
 
     $this->actingAs($this->user);
 
-    Livewire::test(Search::class)
-        ->set('q', 'test')
-        ->assertViewHas('servers', function ($servers) {
-            return count($servers) === 1;
-        })
+    Livewire::test('pages::search')
+        ->set('search', 'test')
+        ->assertCount('servers', 1)
         ->assertSee('MyTestServer.com')
         ->assertDontSee('NoResults.com');
 });
 
 test('the server notes can be searched', function () {
-    Server::factory()->create(['notes' => 'see this note']);
-    Server::factory()->create(['notes' => 'do not see me']);
+    Server::factory()->create(['notes' => 'magic sully']);
+    Server::factory()->create(['notes' => 'big world']);
 
     $this->actingAs($this->user);
 
-    Livewire::test(Search::class)
-        ->set('q', 'this')
-        ->assertViewHas('servers', function ($servers) {
-            return count($servers) === 1;
-        })
-        ->assertSee('this')
-        ->assertDontSee('not');
+    Livewire::test('pages::search')
+        ->set('search', 'magic')
+        ->assertCount('servers', 1)
+        ->assertSee('magic')
+        ->assertDontSee('big');
 });
 
 test('the account domain can be searched', function () {
@@ -62,11 +60,9 @@ test('the account domain can be searched', function () {
 
     $this->actingAs($this->user);
 
-    Livewire::test(Search::class)
-        ->set('q', 'test')
-        ->assertViewHas('accounts', function ($accounts) {
-            return count($accounts) === 1;
-        })
+    Livewire::test('pages::search')
+        ->set('search', 'test')
+        ->assertCount('accounts', 1)
         ->assertSee('mytestsite')
         ->assertDontSee('never-see');
 });
@@ -79,11 +75,9 @@ test('the account ip can be searched', function () {
 
     $this->actingAs($this->user);
 
-    Livewire::test(Search::class)
-        ->set('q', '255')
-        ->assertViewHas('accounts', function ($accounts) {
-            return count($accounts) === 1;
-        })
+    Livewire::test('pages::search')
+        ->set('search', '255')
+        ->assertCount('accounts', 1)
         ->assertSee('mytestsite.com')
         ->assertDontSee('never-see.com');
 });
@@ -96,11 +90,22 @@ test('the account username can be searched', function () {
 
     $this->actingAs($this->user);
 
-    Livewire::test(Search::class)
-        ->set('q', 'mytest')
-        ->assertViewHas('accounts', function ($accounts) {
-            return count($accounts) === 1;
-        })
+    Livewire::test('pages::search')
+        ->set('search', 'mytest')
+        ->assertCount('accounts', 1)
         ->assertSee('something.com')
         ->assertDontSee('nope.com');
+});
+
+test('the monitor url can be searched', function () {
+    MonitorFactory::new()->create(['url' => 'https://something.com']);
+    MonitorFactory::new()->create(['url' => 'https://pizza.com']);
+
+    $this->actingAs($this->user);
+
+    Livewire::test('pages::search')
+        ->set('search', 'something')
+        ->assertCount('monitors', 1)
+        ->assertSee('something.com')
+        ->assertDontSee('pizza.com');
 });
