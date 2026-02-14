@@ -89,6 +89,32 @@
                       @if($server->missing_token)
                         <flux:badge size="sm" color="red" icon="exclamation-triangle" inset="top bottom">Missing token</flux:badge>
                       @endif
+                      @if($server->is_disk_warning || $server->is_disk_critical || $server->is_disk_full)
+                        <flux:dropdown position="bottom" align="start">
+                          @php
+                            if ($server->is_disk_warning) {
+                              $warningColor = 'yellow';
+                              $warningMessage = 'Disk warning';
+                              $warningPercent = '80%';
+                            } elseif ($server->is_disk_critical) {
+                              $warningColor = 'orange';
+                              $warningMessage = 'Disk critical';
+                              $warningPercent = '90%';
+                            } else {
+                              $warningColor = 'red';
+                              $warningMessage = 'Disk full';
+                              $warningPercent = '100%';
+                            }
+                          @endphp
+                          <flux:badge as="button" size="sm" :color="$warningColor" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">{{ $warningMessage }}</flux:badge>
+
+                          <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
+                            <div>
+                              This server has reached {{ $warningPercent }} of its disk total.
+                            </div>
+                          </flux:popover>
+                        </flux:dropdown>
+                      @endif
                     </flux:table.cell>
 
                     <flux:table.cell class="whitespace-nowrap">{{ $server->accounts_count }}</flux:table.cell>
