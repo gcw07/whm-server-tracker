@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Casts\Settings;
 use App\Enums\ServerTypeEnum;
-use App\Filters\ServerFilters;
 use App\Jobs\FetchServerDataJob;
 use App\Models\Presenters\ServerPresenter;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -153,12 +152,6 @@ class Server extends Model
     public function withTokens(Builder $query): void
     {
         $query->whereNotNull('token');
-    }
-
-    #[Scope]
-    public function filter($query, ServerFilters $filters)
-    {
-        return $filters->apply($query);
     }
 
     #[Scope]

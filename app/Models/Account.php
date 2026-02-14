@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Filters\AccountFilters;
 use App\Models\Presenters\AccountPresenter;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -112,12 +111,6 @@ class Account extends Model
             'plan' => $this->plan,
             'wordpress_version' => $this->wordpress_version,
         ])->only($columns)->all();
-    }
-
-    #[Scope]
-    protected function filter($query, AccountFilters $filters)
-    {
-        return $filters->apply($query);
     }
 
     #[Scope]
