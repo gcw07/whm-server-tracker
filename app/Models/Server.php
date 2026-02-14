@@ -22,10 +22,10 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property string|null $token
  * @property string|null $notes
  * @property \App\Collections\SettingsCollection|null $settings
- * @property \Illuminate\Support\Carbon|null $server_update_last_failed_at
- * @property \Illuminate\Support\Carbon|null $server_update_last_succeeded_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Carbon\CarbonImmutable|null $server_update_last_failed_at
+ * @property \Carbon\CarbonImmutable|null $server_update_last_succeeded_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
  * @property-read int|null $accounts_count
  * @property-read mixed $backups_enabled
@@ -48,7 +48,6 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property-read mixed $whm_url
  *
  * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
- * @method static Builder<static>|Server filter(\App\Filters\ServerFilters $filters)
  * @method static Builder<static>|Server newModelQuery()
  * @method static Builder<static>|Server newQuery()
  * @method static Builder<static>|Server query()

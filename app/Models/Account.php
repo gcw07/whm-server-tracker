@@ -20,14 +20,14 @@ use Illuminate\Support\Facades\Http;
  * @property bool $backup
  * @property bool $suspended
  * @property string $suspend_reason
- * @property \Illuminate\Support\Carbon|null $suspend_time
- * @property \Illuminate\Support\Carbon|null $setup_date
+ * @property \Carbon\CarbonImmutable|null $suspend_time
+ * @property \Carbon\CarbonImmutable|null $setup_date
  * @property string $disk_used
  * @property string $disk_limit
  * @property string $plan
  * @property string|null $wordpress_version
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read mixed $backups_enabled
  * @property-read mixed $cpanel_url
  * @property-read mixed $domain_url
@@ -38,7 +38,6 @@ use Illuminate\Support\Facades\Http;
  * @property-read \App\Models\Server $server
  *
  * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
- * @method static Builder<static>|Account filter(\App\Filters\AccountFilters $filters)
  * @method static Builder<static>|Account newModelQuery()
  * @method static Builder<static>|Account newQuery()
  * @method static Builder<static>|Account query()

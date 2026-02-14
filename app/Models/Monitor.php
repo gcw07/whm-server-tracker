@@ -28,16 +28,16 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property string $uptime_status
  * @property string|null $uptime_check_failure_reason
  * @property int $uptime_check_times_failed_in_a_row
- * @property \Illuminate\Support\Carbon|null $uptime_status_last_change_date
- * @property \Illuminate\Support\Carbon|null $uptime_last_check_date
- * @property \Illuminate\Support\Carbon|null $uptime_check_failed_event_fired_on_date
+ * @property \Carbon\CarbonImmutable|null $uptime_status_last_change_date
+ * @property \Carbon\CarbonImmutable|null $uptime_last_check_date
+ * @property \Carbon\CarbonImmutable|null $uptime_check_failed_event_fired_on_date
  * @property string $uptime_check_method
  * @property string|null $uptime_check_payload
  * @property array $uptime_check_additional_headers
  * @property string|null $uptime_check_response_checker
  * @property bool $certificate_check_enabled
  * @property string $certificate_status
- * @property \Illuminate\Support\Carbon|null $certificate_expiration_date
+ * @property \Carbon\CarbonImmutable|null $certificate_expiration_date
  * @property string|null $certificate_issuer
  * @property string $certificate_check_failure_reason
  * @property bool $blacklist_check_enabled
@@ -45,17 +45,17 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property string|null $blacklist_check_failure_reason
  * @property bool $lighthouse_check_enabled
  * @property string $lighthouse_status
- * @property \Illuminate\Support\Carbon|null $lighthouse_update_last_failed_at
- * @property \Illuminate\Support\Carbon|null $lighthouse_update_last_succeeded_at
+ * @property \Carbon\CarbonImmutable|null $lighthouse_update_last_failed_at
+ * @property \Carbon\CarbonImmutable|null $lighthouse_update_last_succeeded_at
  * @property string|null $lighthouse_check_failure_reason
  * @property bool $domain_name_check_enabled
  * @property string $domain_name_status
- * @property \Illuminate\Support\Carbon|null $domain_name_expiration_date
+ * @property \Carbon\CarbonImmutable|null $domain_name_expiration_date
  * @property string|null $domain_name_check_failure_reason
  * @property array<array-key, mixed>|null $nameservers
  * @property bool $is_on_cloudflare
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DowntimeStat> $downtimeStats
  * @property-read int|null $downtime_stats_count
  * @property-read string $certificate_status_as_emoji

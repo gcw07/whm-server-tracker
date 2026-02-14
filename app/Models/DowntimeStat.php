@@ -10,7 +10,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
 /**
  * @property int $id
  * @property int $monitor_id
- * @property \Illuminate\Support\Carbon $date
+ * @property \Carbon\CarbonImmutable $date
  * @property int $downtime_period
  * @property-read Monitor $monitor
  *
