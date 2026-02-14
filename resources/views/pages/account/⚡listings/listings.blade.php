@@ -70,9 +70,9 @@
       <flux:table.rows>
         @forelse ($this->accounts as $account)
           <flux:table.row :key="$account->id" @class([
-                'bg-yellow-100' => $account->is_disk_warning,
-                'bg-orange-100' => $account->is_disk_critical,
-                'bg-red-100' => $account->is_disk_full,
+                'bg-yellow-100' => $account->is_disk_warning && !$account->suspended,
+                'bg-orange-100' => $account->is_disk_critical && !$account->suspended,
+                'bg-red-100' => $account->is_disk_full && !$account->suspended,
                 'bg-blue-200' => $account->suspended,
                 'bg-gray-50' => $loop->even && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended),
                 'bg-white' => $loop->odd && !($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full || $account->suspended)
@@ -92,35 +92,28 @@
                       </flux:popover>
                     </flux:dropdown>
                   @endif
-                  @if($account->is_disk_warning && !$account->suspended)
+                  @if(!$account->suspended && ($account->is_disk_warning || $account->is_disk_critical || $account->is_disk_full))
                     <flux:dropdown position="bottom" align="start">
-                      <flux:badge as="button" size="sm" color="yellow" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">Disk warning</flux:badge>
+                      @php
+                        if ($account->is_disk_warning) {
+                          $warningColor = 'yellow';
+                          $warningMessage = 'Disk warning';
+                          $warningPercent = '80%';
+                        } elseif ($account->is_disk_critical) {
+                          $warningColor = 'orange';
+                          $warningMessage = 'Disk critical';
+                          $warningPercent = '90%';
+                        } else {
+                          $warningColor = 'red';
+                          $warningMessage = 'Disk full';
+                          $warningPercent = '100%';
+                        }
+                      @endphp
+                      <flux:badge as="button" size="sm" :color="$warningColor" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">{{ $warningMessage }}</flux:badge>
 
                       <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
                         <div>
-                          This account has reached 80% of its disk limit.
-                        </div>
-                      </flux:popover>
-                    </flux:dropdown>
-                  @endif
-                  @if($account->is_disk_critical && !$account->suspended)
-                    <flux:dropdown position="bottom" align="start">
-                      <flux:badge as="button" size="sm" color="orange" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">Disk critical</flux:badge>
-
-                      <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
-                        <div>
-                          This account has reached 90% of its disk limit.
-                        </div>
-                      </flux:popover>
-                    </flux:dropdown>
-                  @endif
-                  @if($account->is_disk_full && !$account->suspended)
-                    <flux:dropdown position="bottom" align="start">
-                      <flux:badge as="button" size="sm" color="red" inset="top bottom" icon:trailing="exclamation-triangle" class="ml-1">Disk full</flux:badge>
-
-                      <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
-                        <div>
-                          This account has reached 100% of its disk limit.
+                          This acount has reached {{ $warningPercent }} of its disk limit.
                         </div>
                       </flux:popover>
                     </flux:dropdown>
