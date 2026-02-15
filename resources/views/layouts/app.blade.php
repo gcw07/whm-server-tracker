@@ -40,7 +40,7 @@
           <flux:spacer />
 
           <flux:navbar class="me-8">
-            <flux:input as="button" placeholder="Search..." icon="magnifying-glass" kbd="⌘K" class="hover:bg-gray-100" />
+            <livewire:site-search />
           </flux:navbar>
 
           <flux:dropdown position="bottom" align="end" class="max-lg:hidden">
