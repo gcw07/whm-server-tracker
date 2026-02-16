@@ -39,11 +39,14 @@
             <div class="grid grid-cols-1 gap-2 mt-1">
               @foreach ($this->accounts as $account)
                 <a href="{{ route('accounts.show', $account) }}">
-                  <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                  <flux:card size="sm" @class(['hover:bg-zinc-100 dark:hover:bg-zinc-700', 'bg-blue-200' => $account->suspended])>
                     <flux:heading class="flex items-center gap-2">
                       <div class="flex items-center gap-2.5">
                         <flux:icon name="globe-alt" class="ml-auto size-5 text-zinc-400" />
                         {{ $account->domain }}
+                        @if($account->suspended)
+                          <flux:badge as="button" size="sm" color="blue" inset="top bottom" icon:trailing="information-circle">Suspended</flux:badge>
+                        @endif
                       </div>
                       <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
                     </flux:heading>
