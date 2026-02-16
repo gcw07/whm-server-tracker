@@ -9,25 +9,76 @@
         <flux:input wire:model.live.debounce.800ms="siteSearch" icon="magnifying-glass" placeholder="Search site" autofocus autocomplete="off" clearable class:input="focus:outline-none" />
       </div>
 
-      <div class="block max-h-96 transform-gpu scroll-py-3 overflow-y-auto p-3">
+      <div class="block max-h-96 transform-gpu scroll-py-3 overflow-y-auto p-3 space-y-5">
         @if($this->servers->count() > 0)
-          <flux:heading class="font-bold">Servers</flux:heading>
+          <div>
+            <flux:heading level="3" class="font-bold! text-zinc-600!">Servers</flux:heading>
 
-          <div class="grid grid-cols-1 gap-2 mt-4">
-            @foreach ($this->servers as $server)
-              <a href="{{ route('servers.show', $server) }}">
-                <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
-                  <flux:heading class="flex items-center gap-2">
-                    {{ $server->name }}
-                    <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
-                  </flux:heading>
-                </flux:card>
-              </a>
-            @endforeach
+            <div class="grid grid-cols-1 gap-2 mt-1">
+              @foreach ($this->servers as $server)
+                <a href="{{ route('servers.show', $server) }}">
+                  <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                    <flux:heading class="flex items-center gap-2">
+                      <div class="flex items-center gap-2.5">
+                        <flux:icon name="server" class="ml-auto size-5 text-zinc-400" />
+                        {{ $server->name }}
+                      </div>
+                      <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
+                    </flux:heading>
+                  </flux:card>
+                </a>
+              @endforeach
+            </div>
           </div>
         @endif
 
+        @if($this->accounts->count() > 0)
+          <div>
+            <flux:heading level="3" class="font-bold! text-zinc-600!">Accounts</flux:heading>
 
+            <div class="grid grid-cols-1 gap-2 mt-1">
+              @foreach ($this->accounts as $account)
+                <a href="{{ route('accounts.show', $account) }}">
+                  <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                    <flux:heading class="flex items-center gap-2">
+                      <div class="flex items-center gap-2.5">
+                        <flux:icon name="globe-alt" class="ml-auto size-5 text-zinc-400" />
+                        {{ $account->domain }}
+                      </div>
+                      <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
+                    </flux:heading>
+                  </flux:card>
+                </a>
+              @endforeach
+            </div>
+          </div>
+        @endif
+
+        @if($this->monitors->count() > 0)
+          <div>
+            <flux:heading level="3" class="font-bold! text-zinc-600!">Monitors</flux:heading>
+
+            <div class="grid grid-cols-1 gap-2 mt-1">
+              @foreach ($this->monitors as $monitor)
+                <a href="{{ route('monitors.show', $monitor) }}">
+                  <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                    <flux:heading class="flex items-center gap-2">
+                      <div class="flex items-center gap-2.5">
+                        <flux:icon name="sparkles" class="ml-auto size-5 text-zinc-400" />
+                        {{ preg_replace("(^https?://)", "", $monitor->url ) }}
+                      </div>
+                      <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
+                    </flux:heading>
+                  </flux:card>
+                </a>
+              @endforeach
+            </div>
+          </div>
+        @endif
+      </div>
+
+      <div class="p-3">
+        <!-- Footer -->
       </div>
     </div>
   </flux:modal>
