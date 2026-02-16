@@ -43,7 +43,14 @@
                     <flux:heading class="flex items-center gap-2">
                       <div class="flex items-center gap-2.5">
                         <flux:icon name="globe-alt" class="ml-auto size-5 text-zinc-400" />
-                        {{ $account->domain }}
+                        <div>
+                          <div>
+                            {{ $account->domain }}
+                          </div>
+                          <div class="text-zinc-500 text-xs">
+                            {{ $account->server->name }}
+                          </div>
+                        </div>
                         @if($account->suspended)
                           <flux:badge as="button" size="sm" color="blue" inset="top bottom" icon:trailing="information-circle">Suspended</flux:badge>
                         @endif
