@@ -10,6 +10,24 @@
       </div>
 
       <div class="block max-h-96 transform-gpu scroll-py-3 overflow-y-auto p-3 space-y-5">
+        @if($siteSearch)
+          <div>
+            <a href="{{ route('search', ['search' => $siteSearch]) }}">
+              <flux:card size="sm" class="border-none hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                <flux:heading class="flex items-center gap-2">
+                  <div class="flex items-center gap-2.5">
+                    <flux:icon name="magnifying-glass" class="ml-auto size-5 text-zinc-400" />
+                    {{ $siteSearch }}
+                  </div>
+                  <div class="ml-auto flex items-center gap-2.5">
+                    <flux:text>See full results</flux:text>
+                  </div>
+                </flux:heading>
+              </flux:card>
+            </a>
+          </div>
+        @endif
+
         @if($this->servers->count() > 0)
           <div>
             <flux:heading level="3" class="font-bold! text-zinc-600!">Servers</flux:heading>
