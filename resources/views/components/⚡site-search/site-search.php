@@ -25,7 +25,7 @@ new class extends Component
     public function accounts(): \Illuminate\Database\Eloquent\Collection|Collection
     {
         if ($this->siteSearch) {
-            return Account::query()->with(['server'])->search($this->siteSearch)->orderBy('domain')->get();
+            return Account::query()->with(['server:id,name'])->search($this->siteSearch)->orderBy('domain')->get();
         }
 
         return collect();
