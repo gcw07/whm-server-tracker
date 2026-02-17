@@ -149,6 +149,13 @@ class Monitor extends BaseMonitor
         return $this->hasMany(LighthouseAudit::class)->orderBy('created_at', 'desc');
     }
 
+    protected function domainName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => preg_replace("(^https?://)", "", $this->url),
+        );
+    }
+
     protected function uptimeForToday(): Attribute
     {
         $startDate = today()->format('Y-m-d');
