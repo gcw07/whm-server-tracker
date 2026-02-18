@@ -117,6 +117,8 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  */
 class Monitor extends BaseMonitor
 {
+    protected $appends = ['domain_name', 'raw_url'];
+
     protected $casts = [
         'uptime_check_enabled' => 'boolean',
         'uptime_last_check_date' => 'datetime',
