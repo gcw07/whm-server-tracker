@@ -28,13 +28,72 @@
           </div>
         @endif
 
+        @if(!$siteSearch && count($this->recentSearches) > 0)
+          <div>
+            <flux:heading level="3" class="font-bold! text-zinc-600!">Recent</flux:heading>
+
+            <div class="grid grid-cols-1 gap-2 mt-1">
+              @foreach ($this->recentSearches as $result)
+                @if($result['type'] === 'server')
+                  <a href="{{ route('servers.show', $result['id']) }}">
+                    <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                      <flux:heading class="flex items-center gap-2">
+                        <div class="flex items-center gap-2.5">
+                          <flux:icon name="server" class="ml-auto size-5 text-zinc-400" />
+                          {{ $result['name'] }}
+                        </div>
+                        <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
+                      </flux:heading>
+                    </flux:card>
+                  </a>
+                @elseif($result['type'] === 'account')
+                  <a href="{{ route('accounts.show', $result['id']) }}">
+                    <flux:card size="sm" @class(['hover:bg-zinc-100 dark:hover:bg-zinc-700', 'bg-blue-200' => $result['suspended']])>
+                      <flux:heading class="flex items-center gap-2">
+                        <div class="flex items-center gap-2.5">
+                          <flux:icon name="globe-alt" class="ml-auto size-5 text-zinc-400" />
+                          <div>
+                            <div>
+                              {{ $result['name'] }}
+                            </div>
+                            <div class="text-zinc-500 text-xs">
+                              {{ $result['server'] }}
+                            </div>
+                          </div>
+                          @if($result['suspended'])
+                            <flux:badge as="button" size="sm" color="blue" inset="top bottom" icon:trailing="information-circle">Suspended</flux:badge>
+                          @endif
+                        </div>
+                        <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
+                      </flux:heading>
+                    </flux:card>
+                  </a>
+
+                @elseif($result['type'] === 'monitor')
+                  <a href="{{ route('monitors.show', $result['id']) }}">
+                    <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                      <flux:heading class="flex items-center gap-2">
+                        <div class="flex items-center gap-2.5">
+                          <flux:icon name="sparkles" class="ml-auto size-5 text-zinc-400" />
+                          {{ $result['name'] }}
+                        </div>
+                        <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
+                      </flux:heading>
+                    </flux:card>
+                  </a>
+                @endif
+              @endforeach
+            </div>
+          </div>
+        @endif
+
         @if($this->servers->count() > 0)
           <div>
             <flux:heading level="3" class="font-bold! text-zinc-600!">Servers</flux:heading>
 
             <div class="grid grid-cols-1 gap-2 mt-1">
               @foreach ($this->servers as $server)
-                <a href="{{ route('servers.show', $server) }}">
+                <a href="{{ route('servers.show', $server) }}" wire:click.prevent="registerSearchTerm('server', {{ $server }})">
                   <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
                     <flux:heading class="flex items-center gap-2">
                       <div class="flex items-center gap-2.5">
@@ -56,7 +115,7 @@
 
             <div class="grid grid-cols-1 gap-2 mt-1">
               @foreach ($this->accounts as $account)
-                <a href="{{ route('accounts.show', $account) }}">
+                <a href="{{ route('accounts.show', $account) }}" wire:click.prevent="registerSearchTerm('account', {{ $account }})">
                   <flux:card size="sm" @class(['hover:bg-zinc-100 dark:hover:bg-zinc-700', 'bg-blue-200' => $account->suspended])>
                     <flux:heading class="flex items-center gap-2">
                       <div class="flex items-center gap-2.5">
@@ -88,12 +147,12 @@
 
             <div class="grid grid-cols-1 gap-2 mt-1">
               @foreach ($this->monitors as $monitor)
-                <a href="{{ route('monitors.show', $monitor) }}">
+                <a href="{{ route('monitors.show', $monitor) }}" wire:click.prevent="registerSearchTerm('monitor', {{ $monitor }})">
                   <flux:card size="sm" class="hover:bg-zinc-100 dark:hover:bg-zinc-700">
                     <flux:heading class="flex items-center gap-2">
                       <div class="flex items-center gap-2.5">
                         <flux:icon name="sparkles" class="ml-auto size-5 text-zinc-400" />
-                        {{ preg_replace("(^https?://)", "", $monitor->url ) }}
+                        {{ $monitor->domain_name }}
                       </div>
                       <flux:icon name="arrow-turn-down-left" class="ml-auto text-zinc-400" variant="micro" />
                     </flux:heading>
