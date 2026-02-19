@@ -141,4 +141,13 @@ class PhpVersions
                 return $collection->map(fn ($version) => $version[$field]);
             });
     }
+
+    public static function outdated($field = null): Collection
+    {
+        return self::all()
+            ->filter(fn ($version) => $version['status'] === 'security' || $version['status'] === 'ended')
+            ->when($field, function ($collection) use ($field) {
+                return $collection->map(fn ($version) => $version[$field]);
+            });
+    }
 }

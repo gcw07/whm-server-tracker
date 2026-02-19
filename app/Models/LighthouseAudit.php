@@ -10,17 +10,16 @@ use Spatie\UptimeMonitor\Models\Monitor;
 /**
  * @property int $id
  * @property int $monitor_id
- * @property \Illuminate\Support\Carbon $date
+ * @property \Carbon\CarbonImmutable $date
  * @property int $performance_score
  * @property int $accessibility_score
  * @property int $best_practices_score
  * @property int $seo_score
- * @property int $pwa_score
  * @property int $speed_index
  * @property string|null $raw_results
  * @property string|null $report
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read Monitor $monitor
  *
  * @method static \Database\Factories\LighthouseAuditFactory factory($count = null, $state = [])
@@ -34,7 +33,6 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereMonitorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit wherePerformanceScore($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit wherePwaScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereRawResults($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereReport($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereSeoScore($value)

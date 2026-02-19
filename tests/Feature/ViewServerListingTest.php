@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\ServerTypeEnum;
-use App\Livewire\Server\Listings as ServerListings;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -24,10 +23,8 @@ test('an authorized user can view server listings page', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(ServerListings::class)
-        ->assertViewHas('servers', function ($servers) {
-            return count($servers) === 5;
-        })
+    Livewire::test('pages::server.listings')
+        ->assertCount('servers', 5)
         ->assertSee('MyServer.com');
 });
 
@@ -40,7 +37,7 @@ test('the server listings are in alphabetical order', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(ServerListings::class)
+    Livewire::test('pages::server.listings')
         ->assertViewHas('servers', function ($servers) {
             return count($servers) === 3;
         });
@@ -55,10 +52,8 @@ test('the server listings can be filtered by server type', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(ServerListings::class)
+    Livewire::test('pages::server.listings')
         ->set('serverType', 'vps')
-        ->assertViewHas('servers', function ($servers) {
-            return count($servers) === 2;
-        })
+        ->assertCount('servers', 2)
         ->assertSee('SomeServer.com');
 });

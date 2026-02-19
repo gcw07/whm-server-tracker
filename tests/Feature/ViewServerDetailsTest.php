@@ -1,7 +1,6 @@
 <?php
 
 use App\Jobs\FetchServerDataJob;
-use App\Livewire\Server\Details as ServerDetails;
 use App\Models\Server;
 use App\Models\User;
 use App\Services\WHM\WhmApi;
@@ -22,7 +21,7 @@ test('an authorized user can view server details page', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(ServerDetails::class, ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server])
         ->assertSee('MyServer.com');
 });
 
@@ -42,7 +41,7 @@ test('an authorized user can refresh server data from server details', function 
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(ServerDetails::class, ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server])
         ->call('refresh');
 
     Queue::assertPushed(FetchServerDataJob::class, function ($job) use ($server) {

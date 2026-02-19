@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\ServerTypeEnum;
-use App\Livewire\Server\Create as ServerCreate;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -28,12 +27,12 @@ test('an authorized user can view the add server form', function () {
 test('an authorized user can add a valid server', function () {
     $this->actingAs($this->user);
 
-    $response = Livewire::test(ServerCreate::class)
-        ->set('state', [
+    $response = Livewire::test('pages::server.create')
+        ->set('form', [
             'name' => 'My Test Server',
             'address' => '255.1.1.100',
             'port' => 1111,
-            'server_type' => ServerTypeEnum::Dedicated,
+            'serverType' => ServerTypeEnum::Dedicated,
             'notes' => 'some server note',
             'token' => 'new-server-api-token',
         ])
@@ -58,12 +57,12 @@ it('validates rules for create server form', function ($data) {
 
     $this->actingAs($this->user);
 
-    $response = Livewire::test(ServerCreate::class)
-        ->set('state', $this->requestData->create([$field => $value]))
+    $response = Livewire::test('pages::server.create')
+        ->set('form', $this->requestData->create([$field => $value]))
         ->call('save');
 
     if ($expectedResultType === 'invalid') {
-        $response->assertHasErrors(["state.$field" => $errorMessage]);
+        $response->assertHasErrors(["form.$field" => $errorMessage]);
         $this->assertEquals(0, Server::count());
     } else {
         tap(Server::first(), function (Server $server) use ($field) {
@@ -75,8 +74,8 @@ it('validates rules for create server form', function ($data) {
     fn () => ['address', '', 'invalid', 'required'],
     fn () => ['port', '', 'invalid', 'required'],
     fn () => ['port', 'not-a-number', 'invalid', 'numeric'],
-    fn () => ['server_type', '', 'invalid', 'required'],
-    fn () => ['server_type', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
+    fn () => ['serverType', '', 'invalid', 'required'],
+    fn () => ['serverType', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
     fn () => ['notes', '', 'success', null],
     fn () => ['token', '', 'success', null],
 ]);

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Casts\Settings;
 use App\Enums\ServerTypeEnum;
-use App\Filters\ServerFilters;
 use App\Jobs\FetchServerDataJob;
 use App\Models\Presenters\ServerPresenter;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -23,10 +22,10 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property string|null $token
  * @property string|null $notes
  * @property \App\Collections\SettingsCollection|null $settings
- * @property \Illuminate\Support\Carbon|null $server_update_last_failed_at
- * @property \Illuminate\Support\Carbon|null $server_update_last_succeeded_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Carbon\CarbonImmutable|null $server_update_last_failed_at
+ * @property \Carbon\CarbonImmutable|null $server_update_last_succeeded_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
  * @property-read int|null $accounts_count
  * @property-read mixed $backups_enabled
@@ -49,7 +48,6 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property-read mixed $whm_url
  *
  * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
- * @method static Builder<static>|Server filter(\App\Filters\ServerFilters $filters)
  * @method static Builder<static>|Server newModelQuery()
  * @method static Builder<static>|Server newQuery()
  * @method static Builder<static>|Server query()
@@ -156,16 +154,11 @@ class Server extends Model
     }
 
     #[Scope]
-    public function filter($query, ServerFilters $filters)
-    {
-        return $filters->apply($query);
-    }
-
-    #[Scope]
     public function search(Builder $query, string $term): void
     {
         $query->whereAny([
             'name',
+            'address',
             'notes',
         ], 'LIKE', "%$term%");
     }

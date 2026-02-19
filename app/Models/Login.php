@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $user_id
  * @property string $ip_address
- * @property \Illuminate\Support\Carbon $created_at
+ * @property \Carbon\CarbonImmutable $created_at
  * @property-read \App\Models\User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Login newModelQuery()

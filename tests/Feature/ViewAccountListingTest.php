@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Account\Listings as AccountListings;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
@@ -26,10 +25,8 @@ test('an authorized user can view account listings page', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(AccountListings::class)
-        ->assertViewHas('accounts', function ($accounts) {
-            return count($accounts) === 1;
-        })
+    Livewire::test('pages::account.listings')
+        ->assertCount('accounts', 1)
         ->assertSee('mytestsite.com');
 });
 
@@ -42,7 +39,7 @@ test('the account listings are in alphabetical order', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(AccountListings::class)
+    Livewire::test('pages::account.listings')
         ->assertViewHas('accounts', function ($accounts) {
             return count($accounts) === 3;
         });

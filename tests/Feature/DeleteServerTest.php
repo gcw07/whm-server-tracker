@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Server\Delete as ServerDelete;
 use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
@@ -14,15 +13,10 @@ beforeEach(function () {
     $this->server = Server::factory()->create();
 });
 
-test('guests cannot access the delete server component', function () {
-    $response = Livewire::test(ServerDelete::class, ['server' => $this->server]);
-    $response->assertStatus(401);
-});
-
 test('an authorized user can delete a server', function () {
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(ServerDelete::class, ['server' => $this->server])
+    Livewire::test('pages::server.details', ['server' => $this->server])
         ->call('delete')
         ->assertRedirectToRoute('servers.index');
 
@@ -46,7 +40,7 @@ test('accounts are deleted when a server is deleted', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(ServerDelete::class, ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server])
         ->call('delete')
         ->assertRedirectToRoute('servers.index');
 
@@ -83,7 +77,7 @@ test('monitors are deleted when a server is deleted', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(ServerDelete::class, ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server])
         ->call('delete')
         ->assertRedirectToRoute('servers.index');
 

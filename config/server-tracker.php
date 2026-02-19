@@ -82,6 +82,14 @@ return [
     | A list of blacklist servers to check each site against.
     */
 
+    // shorten and only use these. blacklist needs to be redesigned.
+    //    'b.barracudacentral.org',
+    //    'bl.spamcop.net',
+    //    'dbl.spamhaus.org',
+    //    'zen.spamhaus.org',
+    //    'multi.surbl.org',
+    //    'urlhaus',
+
     'blacklist_servers' => [
         'all.s5h.net',
         'b.barracudacentral.org',

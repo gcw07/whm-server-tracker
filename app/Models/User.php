@@ -16,10 +16,13 @@ use Illuminate\Notifications\Notifiable;
  * @property string $name
  * @property string $email
  * @property string $password
+ * @property string|null $two_factor_secret
+ * @property string|null $two_factor_recovery_codes
+ * @property string|null $two_factor_confirmed_at
  * @property string|null $remember_token
  * @property \App\Collections\NotificationsCollection|null $notification_types
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \App\Models\Login|null $lastLogin
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Login> $logins
  * @property-read int|null $logins_count
@@ -38,6 +41,9 @@ use Illuminate\Notifications\Notifiable;
  * @method static Builder<static>|User whereNotificationTypes($value)
  * @method static Builder<static>|User wherePassword($value)
  * @method static Builder<static>|User whereRememberToken($value)
+ * @method static Builder<static>|User whereTwoFactorConfirmedAt($value)
+ * @method static Builder<static>|User whereTwoFactorRecoveryCodes($value)
+ * @method static Builder<static>|User whereTwoFactorSecret($value)
  * @method static Builder<static>|User whereUpdatedAt($value)
  * @method static Builder<static>|User withLastLogin()
  *

@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Server\Edit as ServerEdit;
 use App\Models\Server;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -28,8 +27,8 @@ test('an authorized user can view the edit server form', function () {
 test('an authorized user can edit a server', function () {
     $this->actingAs($this->user);
 
-    Livewire::test(ServerEdit::class, ['server' => $this->server])
-        ->set('state', $this->requestData->create([
+    Livewire::test('pages::server.edit', ['server' => $this->server])
+        ->set('form', $this->requestData->create([
             'name' => 'My Server',
         ]))
         ->call('save')
@@ -49,12 +48,12 @@ it('validates rules for server edit form', function ($data) {
 
     $this->actingAs($this->user);
 
-    $response = Livewire::test(ServerEdit::class, ['server' => $this->server])
-        ->set('state', $this->requestData->create([$field => $value]))
+    $response = Livewire::test('pages::server.edit', ['server' => $this->server])
+        ->set('form', $this->requestData->create([$field => $value]))
         ->call('save');
 
     if ($expectedResultType === 'invalid') {
-        $response->assertHasErrors(["state.$field" => $errorMessage]);
+        $response->assertHasErrors(["form.$field" => $errorMessage]);
     } else {
         tap(Server::first(), function (Server $server) use ($field) {
             $this->assertEmpty($server->{$field});
@@ -65,7 +64,7 @@ it('validates rules for server edit form', function ($data) {
     fn () => ['address', '', 'invalid', 'required'],
     fn () => ['port', '', 'invalid', 'required'],
     fn () => ['port', 'not-a-number', 'invalid', 'numeric'],
-    fn () => ['server_type', '', 'invalid', 'required'],
-    fn () => ['server_type', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
+    fn () => ['serverType', '', 'invalid', 'required'],
+    fn () => ['serverType', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
     fn () => ['notes', '', 'success', null],
 ]);

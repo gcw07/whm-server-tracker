@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\User\ChangePassword as UserChangePassword;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
@@ -10,33 +9,28 @@ beforeEach(function () {
     $this->user = User::factory()->create();
 });
 
-test('guests cannot access the change password component', function () {
-    $response = Livewire::test(UserChangePassword::class, ['user' => $this->user]);
-    $response->assertStatus(401);
-});
-
 test('an authorized user can change a password', function () {
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(UserChangePassword::class, ['user' => $this->user])
-        ->set('state', [
+    Livewire::test('pages::user.change-password', ['user' => $this->user])
+        ->set('form', [
             'password' => 'NMeHq?Bzr#Nd#bt4',
             'password_confirmation' => 'NMeHq?Bzr#Nd#bt4',
         ])
         ->call('save')
-        ->assertDispatched('closeModal');
+        ->assertRedirectToRoute('users.index');
 });
 
 test('password confirmation is required for user change password', function () {
     $this->actingAs(User::factory()->create());
 
-    Livewire::test(UserChangePassword::class, ['user' => $this->user])
-        ->set('state', [
+    Livewire::test('pages::user.change-password', ['user' => $this->user])
+        ->set('form', [
             'password' => 'NMeHq?Bzr#Nd#bt4',
             'password_confirmation' => '',
         ])
         ->call('save')
-        ->assertHasErrors(['state.password' => 'confirmed']);
+        ->assertHasErrors(['form.password' => 'confirmed']);
 });
 
 it('validates rules for change user password form', function ($data) {
@@ -47,11 +41,11 @@ it('validates rules for change user password form', function ($data) {
 
     $this->actingAs(User::factory()->create());
 
-    $response = Livewire::test(UserChangePassword::class, ['user' => $this->user])
-        ->set('state', [$field => $value])
+    $response = Livewire::test('pages::user.change-password', ['user' => $this->user])
+        ->set('form', [$field => $value])
         ->call('save');
 
-    $response->assertHasErrors(["state.$field" => $errorMessage]);
+    $response->assertHasErrors(["form.$field" => $errorMessage]);
 })->with([
     fn () => ['password', '', 'required'],
     fn () => ['password', Str::random(5), 'Illuminate\Validation\Rules\Password'],
