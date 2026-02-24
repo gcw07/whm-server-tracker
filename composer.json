@@ -13,7 +13,7 @@
         "ext-simplexml": "*",
         "guzzlehttp/guzzle": "^7.10",
         "laravel/fortify": "^1.33",
-        "laravel/framework": "^12.47",
+        "laravel/framework": "^12.53",
         "laravel/horizon": "^5.43",
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.10",
@@ -107,9 +107,11 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "repositories": [{
-        "name": "flux-pro",
-        "type": "composer",
-        "url": "https://composer.fluxui.dev"
-    }]
+    "repositories": [
+        {
+            "name": "flux-pro",
+            "type": "composer",
+            "url": "https://composer.fluxui.dev"
+        }
+    ]
 }
