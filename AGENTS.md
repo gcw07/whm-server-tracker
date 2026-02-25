@@ -9,7 +9,7 @@ WHM Server Tracker is a Laravel-based application designed to monitor and manage
 ### Backend
 - **Framework:** Laravel 12.x
 - **PHP Version:** 8.4+
-- **Database:** MySQL
+- **Database:** MySQL 8.x
 - **Queue System:** Laravel Horizon for queue management
 - **Testing:** Pest PHP for unit, feature, and integration tests
 - **API Client:** Guzzle for HTTP requests to WHM API
