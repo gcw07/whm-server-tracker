@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Http;
 /**
  * @property int $id
  * @property int $server_id
+ * @property int|null $monitor_id
  * @property string $domain
  * @property string $user
  * @property string $ip
@@ -35,6 +36,7 @@ use Illuminate\Support\Facades\Http;
  * @property-read mixed $is_disk_critical
  * @property-read mixed $is_disk_full
  * @property-read mixed $is_disk_warning
+ * @property-read \App\Models\Monitor|null $monitor
  * @property-read \App\Models\Server $server
  *
  * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
@@ -90,6 +92,11 @@ class Account extends Model
     public function server(): BelongsTo
     {
         return $this->belongsTo(Server::class);
+    }
+
+    public function monitor(): BelongsTo
+    {
+        return $this->belongsTo(Monitor::class);
     }
 
     public function export($columns): array

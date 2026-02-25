@@ -328,16 +328,17 @@ it('it will add a monitor when adding a new account', function () {
 });
 
 it('it will update a monitor when updating an account if the url has changed', function () {
+    $monitor = Monitor::create([
+        'url' => 'https://my-site.com',
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
     $account = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'my-site.com',
         'user' => 'mysite',
-    ]);
-
-    Monitor::create([
-        'url' => $account->domain_url,
-        'uptime_check_enabled' => true,
-        'certificate_check_enabled' => true,
+        'monitor_id' => $monitor->id,
     ]);
 
     $this->assertDatabaseHas('monitors', [
@@ -372,20 +373,21 @@ it('it will update a monitor when updating an account if the url has changed', f
 });
 
 it('it will skip updating a monitor when updating an account if the url remains the same', function () {
+    $monitorToCheck = Monitor::create([
+        'url' => 'https://my-site.com',
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
     $account = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'my-site.com',
         'user' => 'mysite',
         'suspended' => false,
+        'monitor_id' => $monitorToCheck->id,
     ]);
 
-    $monitorToCheck = Monitor::create([
-        'url' => $account->domain_url,
-        'uptime_check_enabled' => true,
-        'certificate_check_enabled' => true,
-    ]);
-
-    tap(Monitor::where('url', $account->domain_url)->first(), function ($monitor) {
+    tap($account->fresh()->monitor, function ($monitor) {
         $this->assertEquals('https://my-site.com', $monitor->url);
     });
 
@@ -407,7 +409,7 @@ it('it will skip updating a monitor when updating an account if the url remains 
 
     (new ProcessAccounts)->execute($this->server, $data);
 
-    tap(Monitor::where('url', $account->domain_url)->first(), function ($monitor) use ($monitorToCheck) {
+    tap($account->fresh()->monitor, function ($monitor) use ($monitorToCheck) {
         $this->assertEquals('https://my-site.com', $monitor->url);
         $this->assertTrue($monitor->is($monitorToCheck));
         $this->assertEquals($monitorToCheck->created_at, $monitor->created_at);
@@ -415,22 +417,30 @@ it('it will skip updating a monitor when updating an account if the url remains 
 });
 
 it('it will remove the monitor when an account is removed', function () {
+    $monitor1 = Monitor::create([
+        'url' => 'https://first-site.com',
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
     Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'first-site.com',
         'user' => 'firstsite',
+        'monitor_id' => $monitor1->id,
+    ]);
+
+    $monitor2 = Monitor::create([
+        'url' => 'https://site-to-remove.com',
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
     ]);
 
     $account = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'site-to-remove.com',
         'user' => 'sitetoremove',
-    ]);
-
-    Monitor::create([
-        'url' => $account->domain_url,
-        'uptime_check_enabled' => true,
-        'certificate_check_enabled' => true,
+        'monitor_id' => $monitor2->id,
     ]);
 
     $this->assertDatabaseHas('monitors', [
@@ -522,17 +532,18 @@ it('it will add a monitor when updating an account if the account is no longer s
 });
 
 it('it will remove a monitor when updating an account if the account is suspended', function () {
+    $monitor = Monitor::create([
+        'url' => 'https://my-site.com',
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
     $account = Account::factory()->create([
         'server_id' => $this->server->id,
         'domain' => 'my-site.com',
         'user' => 'mysite',
         'suspended' => false,
-    ]);
-
-    Monitor::create([
-        'url' => $account->domain_url,
-        'uptime_check_enabled' => true,
-        'certificate_check_enabled' => true,
+        'monitor_id' => $monitor->id,
     ]);
 
     $this->assertDatabaseHas('monitors', [

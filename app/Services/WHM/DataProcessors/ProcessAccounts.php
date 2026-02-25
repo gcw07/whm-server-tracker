@@ -41,12 +41,14 @@ class ProcessAccounts
     protected function addOrUpdateAccount(Server $server, $account)
     {
         if ($foundAccount = $server->findAccount($account['user'])) {
-            $this->updateMonitor($foundAccount, $account);
+            $monitorId = $this->updateMonitor($foundAccount, $account);
+            $account['monitor_id'] = $monitorId;
 
             return $foundAccount->update($account);
         }
 
-        $this->addMonitor($account);
+        $monitorId = $this->addMonitor($account);
+        $account['monitor_id'] = $monitorId;
 
         return $server->addAccount($account);
     }
@@ -69,20 +71,20 @@ class ProcessAccounts
     protected function addMonitor($account)
     {
         if ($account['suspended']) {
-            return;
+            return null;
         }
 
         $url = trim('https://'.$account['domain'], '/');
 
-        if (Monitor::where('url', $url)->exists()) {
-            return;
-        }
+        $monitor = Monitor::firstOrCreate(
+            ['url' => $url],
+            [
+                'uptime_check_enabled' => true,
+                'certificate_check_enabled' => true,
+            ]
+        );
 
-        Monitor::create([
-            'url' => $url,
-            'uptime_check_enabled' => true,
-            'certificate_check_enabled' => true,
-        ]);
+        return $monitor->id;
     }
 
     protected function updateMonitor($account, $attributes)
@@ -90,27 +92,33 @@ class ProcessAccounts
         // If account suspended status has changed
         if ($account->suspended != $attributes['suspended']) {
             $this->removeMonitor($account);
-            $this->addMonitor($attributes);
 
-            return;
+            return $this->addMonitor($attributes);
         }
 
-        // If account domain name has not changed, do nothing
+        // If account domain name has not changed, keep existing monitor
         if ($account->domain === $attributes['domain']) {
-            return;
+            return $account->monitor_id;
         }
 
+        // Domain changed - remove old monitor and create new one
         $this->removeMonitor($account);
-        $this->addMonitor($attributes);
+
+        return $this->addMonitor($attributes);
     }
 
     protected function removeMonitor($account)
     {
-        if (Account::where('domain', $account->domain)->count() > 1) {
+        if (! $account->monitor_id) {
             return;
         }
 
-        if ($monitor = Monitor::where('url', $account->domain_url)->first()) {
+        // Only delete monitor if this is the last account using it
+        if (Account::where('monitor_id', $account->monitor_id)->count() > 1) {
+            return;
+        }
+
+        if ($monitor = Monitor::find($account->monitor_id)) {
             $monitor->delete();
         }
     }

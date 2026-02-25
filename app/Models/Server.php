@@ -137,11 +137,16 @@ class Server extends Model
     public function removeMonitors()
     {
         foreach ($this->accounts as $account) {
-            if (Account::where('domain', $account->domain)->count() > 1) {
+            if (! $account->monitor_id) {
                 continue;
             }
 
-            if ($monitor = Monitor::where('url', $account->domain_url)->first()) {
+            // Only delete monitor if this is the last account using it
+            if (Account::where('monitor_id', $account->monitor_id)->count() > 1) {
+                continue;
+            }
+
+            if ($monitor = Monitor::find($account->monitor_id)) {
                 $monitor->delete();
             }
         }

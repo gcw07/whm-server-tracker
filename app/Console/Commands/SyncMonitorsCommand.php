@@ -56,10 +56,15 @@ class SyncMonitorsCommand extends Command
     protected function createOrUpdateMonitorsFromAccounts($accounts)
     {
         $accounts
-            ->each(function ($monitorAttributes) {
-                $this->createOrUpdateMonitor([
-                    'url' => $monitorAttributes->domain_url,
+            ->each(function ($account) {
+                $monitor = $this->createOrUpdateMonitor([
+                    'url' => $account->domain_url,
                 ]);
+
+                // Update account with monitor_id if not already set
+                if ($account->monitor_id !== $monitor->id) {
+                    $account->update(['monitor_id' => $monitor->id]);
+                }
             });
 
         $this->info("Synced {$accounts->count()} monitor(s) to database");
@@ -67,17 +72,19 @@ class SyncMonitorsCommand extends Command
 
     protected function createOrUpdateMonitor(array $monitorAttributes)
     {
-        Monitor::firstOrNew([
-            'url' => $monitorAttributes['url'],
-        ])
-            ->fill($monitorAttributes)
-            ->save();
+        return Monitor::firstOrCreate(
+            ['url' => $monitorAttributes['url']],
+            $monitorAttributes
+        );
     }
 
     protected function deleteMissingMonitors($accounts)
     {
-        Monitor::all()
-            ->reject(fn (Monitor $monitor) => $accounts->contains('domain_url', $monitor->url))
+        // Get all monitor IDs that should exist based on accounts
+        $validMonitorIds = $accounts->pluck('monitor_id')->filter()->unique();
+
+        // Delete monitors that are not associated with any accounts
+        Monitor::whereNotIn('id', $validMonitorIds)
             ->each(function (Monitor $monitor) {
                 $this->comment("Deleted monitor for `{$monitor->url}` from database because it was not found in account listings.");
                 $monitor->delete();

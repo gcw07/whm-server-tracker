@@ -54,11 +54,12 @@ test('monitors are deleted when a server is deleted', function () {
         ->create(['name' => 'my-server-name']);
 
     foreach ($server->accounts as $account) {
-        Monitor::create([
+        $monitor = Monitor::create([
             'url' => $account->domain_url,
             'uptime_check_enabled' => true,
             'certificate_check_enabled' => true,
         ]);
+        $account->update(['monitor_id' => $monitor->id]);
     }
 
     $otherServer = Server::factory()
@@ -66,11 +67,12 @@ test('monitors are deleted when a server is deleted', function () {
         ->create(['name' => 'other-server-name']);
 
     foreach ($otherServer->accounts as $account) {
-        Monitor::create([
+        $monitor = Monitor::create([
             'url' => $account->domain_url,
             'uptime_check_enabled' => true,
             'certificate_check_enabled' => true,
         ]);
+        $account->update(['monitor_id' => $monitor->id]);
     }
 
     $this->assertEquals(6, Monitor::count());

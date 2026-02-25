@@ -136,6 +136,11 @@ class Monitor extends BaseMonitor
         'is_on_cloudflare' => 'boolean',
     ];
 
+    public function accounts(): HasMany
+    {
+        return $this->hasMany(Account::class);
+    }
+
     public function downtimeStats(): HasMany
     {
         return $this->hasMany(DowntimeStat::class);
@@ -154,7 +159,7 @@ class Monitor extends BaseMonitor
     protected function domainName(): Attribute
     {
         return Attribute::make(
-            get: fn () => preg_replace("(^https?://)", "", $this->url),
+            get: fn () => preg_replace('(^https?://)', '', $this->url),
         );
     }
 
