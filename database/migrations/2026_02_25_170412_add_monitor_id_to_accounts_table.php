@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('accounts', function (Blueprint $table) {
-            $table->unsignedInteger('monitor_id')->nullable();
+            $table->after('server_id', function (Blueprint $table) {
+                $table->unsignedInteger('monitor_id')->nullable();
+            });
             $table->foreign('monitor_id')->references('id')->on('monitors')->cascadeOnDelete();
         });
     }
