@@ -27,7 +27,5 @@ test('the user listings are in alphabetical order', function () {
     $this->actingAs($userA);
 
     Livewire::test('pages::user.listings')
-        ->assertViewHas('users', function ($users) {
-            return count($users) === 3;
-        });
-})->skip();
+        ->assertSeeInOrder(['Amy Smith', 'John Doe', 'Zach Williams']);
+});

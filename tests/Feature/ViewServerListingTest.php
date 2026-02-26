@@ -38,10 +38,8 @@ test('the server listings are in alphabetical order', function () {
     $this->actingAs(User::factory()->create());
 
     Livewire::test('pages::server.listings')
-        ->assertViewHas('servers', function ($servers) {
-            return count($servers) === 3;
-        });
-})->skip();
+        ->assertSeeInOrder(['AnotherServer.com', 'SomeServer.com', 'TheLastServer.com']);
+});
 
 test('the server listings can be filtered by server type', function () {
     Server::factory()->count(3)->state(new Sequence(
