@@ -38,10 +38,8 @@ test('the monitor listings are in alphabetical order', function () {
     $this->actingAs(User::factory()->create());
 
     Livewire::test('pages::monitor.listings')
-        ->assertViewHas('monitors', function ($monitors) {
-            return count($monitors) === 3;
-        });
-})->skip();
+        ->assertSeeInOrder(['anotherserver.com', 'someserver.com', 'thelastserver.com']);
+});
 
 test('the monitor listings can be filtered by having issues or not', function () {
     MonitorFactory::new()->count(3)->state(new Sequence(

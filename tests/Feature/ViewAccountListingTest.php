@@ -40,7 +40,5 @@ test('the account listings are in alphabetical order', function () {
     $this->actingAs(User::factory()->create());
 
     Livewire::test('pages::account.listings')
-        ->assertViewHas('accounts', function ($accounts) {
-            return count($accounts) === 3;
-        });
-})->skip();
+        ->assertSeeInOrder(['anothersite.com', 'somesite.com', 'thelastsite.com']);
+});
