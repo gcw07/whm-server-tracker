@@ -38,7 +38,7 @@ class SyncMonitorsCommand extends Command
     protected function getAccounts()
     {
         return Account::query()
-            ->select(['id', 'domain', 'suspended'])
+            ->select(['id', 'monitor_id', 'domain', 'suspended'])
             ->where('suspended', false)
             ->orderBy('domain')
             ->cursor();
