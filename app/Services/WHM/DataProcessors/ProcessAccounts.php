@@ -98,6 +98,14 @@ class ProcessAccounts
 
         // If account domain name has not changed, keep existing monitor
         if ($account->domain === $attributes['domain']) {
+            // If monitor_id is null, look up the monitor by URL
+            if (! $account->monitor_id) {
+                $url = trim('https://'.$attributes['domain'], '/');
+                $monitor = Monitor::where('url', $url)->first();
+
+                return $monitor?->id ?? $this->addMonitor($attributes);
+            }
+
             return $account->monitor_id;
         }
 

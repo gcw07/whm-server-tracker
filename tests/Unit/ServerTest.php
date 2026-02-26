@@ -416,6 +416,47 @@ it('it will skip updating a monitor when updating an account if the url remains 
     });
 });
 
+it('will link to existing monitor when account monitor_id is null but monitor exists', function () {
+    // Create a monitor that already exists
+    $existingMonitor = Monitor::create([
+        'url' => 'https://my-site.com',
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
+    // Create account without monitor_id
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+        'monitor_id' => null,
+    ]);
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($this->server, $data);
+
+    // Account should now be linked to the existing monitor
+    expect($account->fresh()->monitor_id)->toBe($existingMonitor->id);
+
+    // Should not create a duplicate monitor
+    expect(Monitor::count())->toBe(1);
+});
+
 it('it will remove the monitor when an account is removed', function () {
     $monitor1 = Monitor::create([
         'url' => 'https://first-site.com',
