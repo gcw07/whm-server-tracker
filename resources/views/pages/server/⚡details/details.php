@@ -11,8 +11,6 @@ new #[Title('Server Details')] class extends Component
 {
     public Server $server;
 
-    public array $monitoredAccounts;
-
     #[Validate(['required', 'string'])]
     public ?string $newToken = null;
 
@@ -21,18 +19,6 @@ new #[Title('Server Details')] class extends Component
         $server->loadMissing(['accounts'])->loadCount(['accounts']);
 
         $this->server = $server;
-        $this->monitoredAccounts = $this->getMonitoredAccounts();
-    }
-
-    public function getMonitoredAccounts(): array
-    {
-        $domains = $this->server->accounts->pluck('domain_url');
-
-        return Monitor::select(['id', 'url'])
-            ->whereIn('url', $domains)
-            ->get()
-            ->mapWithKeys(fn ($monitor) => [$monitor->url->getHost() => $monitor->id])
-            ->toArray();
     }
 
     public function getMonitorId(string $domain): ?int

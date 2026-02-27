@@ -279,9 +279,9 @@
                 <flux:table.cell class="whitespace-nowrap">{{ $account->created_at->format('M d, Y') }}</flux:table.cell>
 
                 <flux:table.cell>
-                  @if($id = $this->getMonitorId($account->domain))
+                  @if($account->monitor_id)
                     <flux:tooltip content="View Monitor">
-                      <flux:button :href="route('monitors.show', $id)" size="sm" icon="magnifying-glass"></flux:button>
+                      <flux:button :href="route('monitors.show', $account->monitor_id)" size="sm" icon="magnifying-glass"></flux:button>
                     </flux:tooltip>
                   @endif
                 </flux:table.cell>
