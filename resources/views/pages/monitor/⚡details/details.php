@@ -12,32 +12,10 @@ new #[Title('Monitor Details')] class extends Component
 {
     public Monitor $monitor;
 
-    public string $domainUrl;
-
-    public int $accountsCount;
-
     public function mount(Monitor $monitor): void
     {
         $this->monitor = $monitor;
-
-        $this->domainUrl = preg_replace('(^https?://)', '', $this->monitor->url);
-        $this->accountsCount = $this->accountCountQuery();
-    }
-
-    protected function accountCountQuery(): int
-    {
-        return Account::query()
-            ->where('domain', $this->domainUrl)
-            ->count();
-    }
-
-    #[Computed]
-    public function account(): \Eloquent|\Illuminate\Database\Eloquent\Builder|Account|null
-    {
-        return Account::query()
-            ->with(['server'])
-            ->where('domain', $this->domainUrl)
-            ->first();
+        $this->monitor->loadMissing(['accounts', 'accounts.server']);
     }
 
     #[Computed]

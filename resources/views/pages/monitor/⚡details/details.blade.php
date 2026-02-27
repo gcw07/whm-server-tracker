@@ -9,7 +9,7 @@
       </flux:breadcrumbs>
 
       <h3 class="mt-2 text-2xl leading-6 font-medium text-gray-900">
-        {{ $domainUrl }}
+        {{ $monitor->domain_name }}
       </h3>
     </div>
 
@@ -47,41 +47,51 @@
       <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5">Details</flux:heading>
       <div class="px-4 py-5 sm:p-0">
         <dl class="sm:divide-y sm:divide-gray-200">
-          @if($this->account->suspended)
+          @if($this->monitor->accounts->count() > 1)
             <div class="py-4 flex justify-center items-center text-base font-medium text-red-700 bg-red-50">
-              <flux:icon.exclamation-triangle variant="solid" />
-              This account is suspended
+              <flux:icon.exclamation-triangle variant="solid" class="mr-2" />
+              This domain was found on multiple servers.
             </div>
           @endif
           <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Server</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <a href="{{ route('servers.show', $this->account->server->id) }}" class="group inline-flex space-x-2 truncate text-sm">
-                <p class="text-gray-500 truncate font-semibold group-hover:text-gray-900">
-                  {{ $this->account->server->name }}
-                </p>
-              </a>
-              @if($accountsCount > 1)
-                <span class="ml-5 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800 capitalize">
-                  Found on multiple servers
-                </span>
-              @endif
+            <dd class="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <ul role="list" class="divide-y divide-gray-100 dark:divide-white/5">
+                @foreach($this->monitor->accounts as $account)
+                  <li class="flex items-center justify-between py-4 first:pt-0 last:pb-0">
+                    <div class="flex flex-1 items-center">
+                      <div class="flex min-w-0 flex-1 gap-2">
+                        <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">
+                          {{ $account->server->name }}
+                        </flux:link>
+                        @if($account->suspended)
+                          <flux:dropdown position="bottom" align="start">
+                            <flux:badge as="button" size="sm" color="blue" inset="top bottom" icon:trailing="information-circle" class="ml-1">Suspended</flux:badge>
+
+                            <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
+                              <div>
+                                This account was suspended on {{ $account->suspend_time->format('F d, Y \a\t g:ia') }}. It was suspended for "{{ $account->suspend_reason }}".
+                              </div>
+                            </flux:popover>
+                          </flux:dropdown>
+                        @endif
+                      </div>
+                    </div>
+                  </li>
+                @endforeach
+              </ul>
             </dd>
           </div>
           <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Disk Usage</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ $this->account->formatted_disk_usage }}
+              {{ $this->monitor->accounts->first()->formatted_disk_usage }}
             </dd>
           </div>
           <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">WordPress</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              @if($this->account->wordpress_version)
-                {{ $this->account->wordpress_version }}
-              @else
-                WP not detected
-              @endif
+              {{ $this->monitor->accounts->first()->wordpress_version ?: 'WP not detected' }}
             </dd>
           </div>
         </dl>
