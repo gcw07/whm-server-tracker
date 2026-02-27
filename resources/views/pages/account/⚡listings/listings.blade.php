@@ -143,10 +143,18 @@
 
             <flux:table.cell class="whitespace-nowrap">{{ $account->created_at->format('M d, Y') }}</flux:table.cell>
 
-            <flux:table.cell>
-              <flux:tooltip content="View WHM Panel">
-                <flux:button href="{{ $account->server->whm_url }}" size="sm" icon="arrow-top-right-on-square" target="_blank"></flux:button>
-              </flux:tooltip>
+            <flux:table.cell class="last:pe-3.5!">
+              <div class="flex justify-end gap-1" >
+                @if($account->monitor_id)
+                  <flux:tooltip content="View Monitor">
+                    <flux:button :href="route('monitors.show', $account->monitor_id)" size="sm" icon="magnifying-glass"></flux:button>
+                  </flux:tooltip>
+                @endif
+
+                <flux:tooltip content="View WHM Panel">
+                  <flux:button href="{{ $account->server->whm_url }}" size="sm" icon="arrow-top-right-on-square" target="_blank"></flux:button>
+                </flux:tooltip>
+              </div>
             </flux:table.cell>
           </flux:table.row>
         @empty
