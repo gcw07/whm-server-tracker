@@ -85,13 +85,13 @@
           <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Disk Usage</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ $this->monitor->accounts->first()->formatted_disk_usage }}
+              {{ $this->monitor->accounts->first()?->formatted_disk_usage }}
             </dd>
           </div>
           <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">WordPress</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ $this->monitor->accounts->first()->wordpress_version ?: 'WP not detected' }}
+              {{ $this->monitor->accounts->first()?->wordpress_version ?: 'WP not detected' }}
             </dd>
           </div>
         </dl>
