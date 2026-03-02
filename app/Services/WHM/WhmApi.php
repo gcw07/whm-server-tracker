@@ -13,8 +13,8 @@ use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\Promise;
+use Illuminate\Http\Client\Pool;
+use Illuminate\Support\Facades\Http;
 
 class WhmApi
 {
@@ -24,7 +24,7 @@ class WhmApi
 
     protected array $failureMessages;
 
-    public function setServer(Server $server)
+    public function setServer(Server $server): void
     {
         if (! $server->token) {
             throw new MissingTokenException;
@@ -37,53 +37,51 @@ class WhmApi
 
     public function fetch(): void
     {
-        $client = new Client([
-            'base_uri' => $this->server->whm_base_api_url,
-            'headers' => $this->promiseHeaders(),
-            'connect_timeout' => config('server-tracker.whm.connection_timeout'),
-            'verify' => false, // might remove
-        ]);
-
-        $responses = Promise\Utils::settle($this->getPromises($client))->wait();
+        $responses = Http::pool(fn (Pool $pool) => $this->getPoolRequests($pool));
 
         foreach ($responses as $type => $response) {
-            if ($response['state'] === 'fulfilled') {
-                $this->apiRequestSucceeded($type, $response);
-            }
-
-            if ($response['state'] === 'rejected') {
-                $this->apiRequestFailed($type, $response);
+            if ($response instanceof \Exception) {
+                $this->apiRequestFailed($type, $response->getMessage());
+            } elseif ($response->failed()) {
+                $this->apiRequestFailed($type, "HTTP {$response->status()} error");
+            } else {
+                $this->apiRequestSucceeded($type, $response->json());
             }
         }
 
         $this->processMessages();
     }
 
-    private function promiseHeaders(): array
+    private function getHeaders(): array
     {
         $username = config('server-tracker.whm.username');
 
-        return collect([])
-            ->merge(['Authorization' => "whm $username:{$this->server->token}"])
-            ->toArray();
+        return ['Authorization' => "whm $username:{$this->server->token}"];
     }
 
-    protected function getPromises($client): array
+    private function configuredRequest(Pool $pool, string $name): \Illuminate\Http\Client\PendingRequest
+    {
+        return $pool->as($name)
+            ->withHeaders($this->getHeaders())
+            ->baseUrl($this->server->whm_base_api_url)
+            ->connectTimeout(config('server-tracker.whm.connection_timeout'))
+            ->withoutVerifying();
+    }
+
+    protected function getPoolRequests(Pool $pool): array
     {
         return [
-            'accounts' => $client->getAsync('listaccts?api.version=1'),
-            'backups' => $client->getAsync('backup_config_get?api.version=1'),
-            'diskUsage' => $client->getAsync('getdiskusage?api.version=1'),
-            'phpInstalledVersions' => $client->getAsync('php_get_installed_versions?api.version=1'),
-            'phpSystemVersion' => $client->getAsync('php_get_system_default_version?api.version=1'),
-            'whmVersion' => $client->getAsync('version?api.version=1'),
+            'accounts' => $this->configuredRequest($pool, 'accounts')->get('listaccts?api.version=1'),
+            'backups' => $this->configuredRequest($pool, 'backups')->get('backup_config_get?api.version=1'),
+            'diskUsage' => $this->configuredRequest($pool, 'diskUsage')->get('getdiskusage?api.version=1'),
+            'phpInstalledVersions' => $this->configuredRequest($pool, 'phpInstalledVersions')->get('php_get_installed_versions?api.version=1'),
+            'phpSystemVersion' => $this->configuredRequest($pool, 'phpSystemVersion')->get('php_get_system_default_version?api.version=1'),
+            'whmVersion' => $this->configuredRequest($pool, 'whmVersion')->get('version?api.version=1'),
         ];
     }
 
-    protected function apiRequestSucceeded($type, $response): void
+    protected function apiRequestSucceeded(string $type, array $data): void
     {
-        $data = json_decode($response['value']->getBody()->getContents(), true);
-
         match ($type) {
             'accounts' => (new ProcessAccounts)->execute($this->server, $data),
             'backups' => (new ProcessBackups)->execute($this->server, $data),
@@ -96,9 +94,9 @@ class WhmApi
         $this->successMessages[] = ['type' => $type, 'message' => 'success'];
     }
 
-    protected function apiRequestFailed($type, $response): void
+    protected function apiRequestFailed(string $type, string $message): void
     {
-        $this->failureMessages[] = ['type' => $type, 'message' => $response['reason']->getMessage()];
+        $this->failureMessages[] = ['type' => $type, 'message' => $message];
     }
 
     protected function processMessages(): void
