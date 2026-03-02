@@ -1,7 +1,6 @@
 <?php
 
 use App\Jobs\FetchServerDataJob;
-use App\Models\Monitor;
 use App\Models\Server;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;

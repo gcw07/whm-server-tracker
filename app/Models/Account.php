@@ -33,6 +33,8 @@ use Illuminate\Support\Facades\Http;
  * @property-read mixed $backups_enabled
  * @property-read mixed $cpanel_url
  * @property-read mixed $domain_url
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AccountEmail> $emails
+ * @property-read int|null $emails_count
  * @property-read mixed $formatted_disk_usage
  * @property-read mixed $is_disk_critical
  * @property-read mixed $is_disk_full
@@ -52,6 +54,7 @@ use Illuminate\Support\Facades\Http;
  * @method static Builder<static>|Account whereDomain($value)
  * @method static Builder<static>|Account whereId($value)
  * @method static Builder<static>|Account whereIp($value)
+ * @method static Builder<static>|Account whereMonitorId($value)
  * @method static Builder<static>|Account wherePlan($value)
  * @method static Builder<static>|Account whereServerId($value)
  * @method static Builder<static>|Account whereSetupDate($value)

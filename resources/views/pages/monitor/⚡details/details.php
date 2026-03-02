@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Account;
 use App\Models\LighthouseAudit;
 use App\Models\Monitor;
 use Illuminate\Support\Facades\Artisan;

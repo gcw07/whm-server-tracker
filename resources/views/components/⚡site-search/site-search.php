@@ -51,19 +51,19 @@ new class extends Component
             'server' => [
                 'type' => 'server',
                 'id' => $model['id'],
-                'name' => $model['name']
+                'name' => $model['name'],
             ],
             'account' => [
                 'type' => 'account',
                 'id' => $model['id'],
                 'name' => $model['domain'],
                 'server' => $model['server']['name'],
-                'suspended' => (bool) $model['suspended']
+                'suspended' => (bool) $model['suspended'],
             ],
             'monitor' => [
                 'type' => 'monitor',
                 'id' => $model['id'],
-                'name' => $model['domain_name']
+                'name' => $model['domain_name'],
             ]
         };
 

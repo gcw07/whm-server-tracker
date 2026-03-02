@@ -56,6 +56,9 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property bool $is_on_cloudflare
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
+ * @property-read int|null $accounts_count
+ * @property-read mixed $domain_name
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DowntimeStat> $downtimeStats
  * @property-read int|null $downtime_stats_count
  * @property-read string $certificate_status_as_emoji
