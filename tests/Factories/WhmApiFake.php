@@ -16,7 +16,7 @@ class WhmApiFake extends WhmApi
 {
     protected Server $server;
 
-    public function setServer(Server $server)
+    public function setServer(Server $server): void
     {
         if (! $server->token) {
             throw new MissingTokenException;
