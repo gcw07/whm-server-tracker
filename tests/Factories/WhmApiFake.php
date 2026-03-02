@@ -4,6 +4,7 @@ namespace Tests\Factories;
 
 use App\Exceptions\Server\MissingTokenException;
 use App\Models\Server;
+use App\Services\WHM\DataProcessors\ProcessAccountEmails;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
 use App\Services\WHM\DataProcessors\ProcessBackups;
 use App\Services\WHM\DataProcessors\ProcessDiskUsage;
@@ -150,6 +151,46 @@ class WhmApiFake extends WhmApi
         return [
             'data' => [
                 'version' => '11.100.0.9999',
+            ],
+        ];
+    }
+
+    public function fetchEmailDiskUsage(): void
+    {
+        $accounts = $this->server->accounts()->get();
+
+        foreach ($accounts as $account) {
+            $data = $this->getEmailDiskUsageData($account->user);
+            (new ProcessAccountEmails)->execute($account, $data);
+        }
+    }
+
+    protected function getEmailDiskUsageData(string $username): array
+    {
+        return [
+            'result' => [
+                'data' => [
+                    [
+                        'email' => "info@{$username}.com",
+                        'user' => 'info',
+                        'domain' => "{$username}.com",
+                        '_diskused' => 1024000,
+                        'diskquota' => '524288000',
+                        'diskusedpercent_float' => 0.19,
+                        'suspended_incoming' => 0,
+                        'suspended_login' => 0,
+                    ],
+                    [
+                        'email' => "admin@{$username}.com",
+                        'user' => 'admin',
+                        'domain' => "{$username}.com",
+                        '_diskused' => 5120000,
+                        'diskquota' => 'unlimited',
+                        'diskusedpercent_float' => 0,
+                        'suspended_incoming' => 0,
+                        'suspended_login' => 0,
+                    ],
+                ],
             ],
         ];
     }

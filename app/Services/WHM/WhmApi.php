@@ -6,6 +6,7 @@ use App\Events\FetchedDataFailedEvent;
 use App\Events\FetchedDataSucceededEvent;
 use App\Exceptions\Server\MissingTokenException;
 use App\Models\Server;
+use App\Services\WHM\DataProcessors\ProcessAccountEmails;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
 use App\Services\WHM\DataProcessors\ProcessBackups;
 use App\Services\WHM\DataProcessors\ProcessDiskUsage;
@@ -116,6 +117,29 @@ class WhmApi
             ]);
 
             event(new FetchedDataFailedEvent($this->server, $this->failureMessages));
+        }
+    }
+
+    public function fetchEmailDiskUsage(): void
+    {
+        $accounts = $this->server->accounts()->get();
+
+        if ($accounts->isEmpty()) {
+            return;
+        }
+
+        $responses = Http::pool(fn (Pool $pool) => $accounts->map(fn ($account) => $this->configuredRequest($pool, $account->user)
+            ->get("cpanel?cpanel_jsonapi_apiversion=3&cpanel_jsonapi_user={$account->user}&cpanel_jsonapi_module=Email&cpanel_jsonapi_func=list_pops_with_disk")
+        )->all());
+
+        foreach ($responses as $username => $response) {
+            $account = $accounts->firstWhere('user', $username);
+
+            if ($response instanceof \Exception || $response->failed()) {
+                continue;
+            }
+
+            (new ProcessAccountEmails)->execute($account, $response->json());
         }
     }
 
