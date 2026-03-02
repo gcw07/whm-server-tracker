@@ -129,7 +129,12 @@ class WhmApi
         }
 
         $responses = Http::pool(fn (Pool $pool) => $accounts->map(fn ($account) => $this->configuredRequest($pool, $account->user)
-            ->get("cpanel?cpanel_jsonapi_apiversion=3&cpanel_jsonapi_user={$account->user}&cpanel_jsonapi_module=Email&cpanel_jsonapi_func=list_pops_with_disk")
+            ->get('cpanel', [
+                'cpanel_jsonapi_user' => $account->user,
+                'cpanel_jsonapi_module' => 'Email',
+                'cpanel_jsonapi_func' => 'list_pops_with_disk',
+                'cpanel_jsonapi_apiversion' => 3,
+            ])
         )->all());
 
         foreach ($responses as $username => $response) {
