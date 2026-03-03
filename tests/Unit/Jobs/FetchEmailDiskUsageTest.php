@@ -16,6 +16,7 @@ it('stores email disk usage records for each account', function () {
     Account::factory()->create([
         'server_id' => $server->id,
         'user' => 'mysite',
+        'domain' => 'mysite.com',
     ]);
 
     $fake = new WhmApiFake;
@@ -24,8 +25,8 @@ it('stores email disk usage records for each account', function () {
     dispatch(new FetchEmailDiskUsageJob($server));
 
     $emails = AccountEmail::all();
-    expect($emails)->toHaveCount(2);
-    expect($emails->pluck('email')->toArray())->toContain('info@mysite.com', 'admin@mysite.com');
+    expect($emails)->toHaveCount(3);
+    expect($emails->pluck('email')->toArray())->toContain('info@mysite.com', 'admin@mysite.com', 'default@mysite.com');
 });
 
 it('correctly maps email disk usage fields', function () {
@@ -70,7 +71,7 @@ it('removes stale email records when an email no longer exists', function () {
     expect(AccountEmail::where('email', 'info@mysite.com')->exists())->toBeTrue();
 });
 
-it('handles accounts with no email accounts gracefully', function () {
+it('handles accounts with no regular email accounts gracefully', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
     Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite']);
 
@@ -86,7 +87,7 @@ it('handles accounts with no email accounts gracefully', function () {
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
-    expect(AccountEmail::count())->toBe(0);
+    expect(AccountEmail::count())->toBe(1);
 });
 
 it('stores email records for multiple accounts', function () {
@@ -99,7 +100,53 @@ it('stores email records for multiple accounts', function () {
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
-    expect(AccountEmail::count())->toBe(4);
+    expect(AccountEmail::count())->toBe(6);
+});
+
+it('correctly maps default email disk usage fields', function () {
+    $server = Server::factory()->create(['token' => 'valid-token']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'mysite.com']);
+
+    $fake = new WhmApiFake;
+    $this->app->instance(WhmApi::class, $fake);
+
+    dispatch(new FetchEmailDiskUsageJob($server));
+
+    $default = AccountEmail::where('email', 'default@mysite.com')->first();
+    expect($default)->not->toBeNull();
+    expect($default->user)->toBe('default');
+    expect($default->domain)->toBe('mysite.com');
+    expect($default->disk_used)->toBe(2048000);
+    expect($default->disk_quota)->toBeNull();
+    expect($default->disk_used_percent)->toBe(0.0);
+    expect($default->suspended_incoming)->toBeFalse();
+    expect($default->suspended_login)->toBeFalse();
+});
+
+it('stores regular emails when main email account API fails', function () {
+    $server = Server::factory()->create(['token' => 'valid-token']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'mysite.com']);
+
+    $fake = new class extends WhmApiFake
+    {
+        public function fetchEmailDiskUsage(): void
+        {
+            $accounts = $this->server->accounts()->get();
+
+            foreach ($accounts as $account) {
+                $data = $this->getEmailDiskUsageData($account->user);
+                (new \App\Services\WHM\DataProcessors\ProcessAccountEmails)->execute($account, $data);
+            }
+        }
+    };
+
+    $this->app->instance(WhmApi::class, $fake);
+
+    dispatch(new FetchEmailDiskUsageJob($server));
+
+    expect(AccountEmail::count())->toBe(2);
+    expect(AccountEmail::where('email', 'info@mysite.com')->exists())->toBeTrue();
+    expect(AccountEmail::where('email', 'default@mysite.com')->exists())->toBeFalse();
 });
 
 it('dispatches FetchEmailDiskUsageJob after FetchServerDataJob runs', function () {

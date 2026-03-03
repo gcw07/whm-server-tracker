@@ -128,23 +128,48 @@ class WhmApi
             return;
         }
 
-        $responses = Http::pool(fn (Pool $pool) => $accounts->map(fn ($account) => $this->configuredRequest($pool, $account->user)
-            ->get('cpanel', [
-                'cpanel_jsonapi_user' => $account->user,
-                'cpanel_jsonapi_module' => 'Email',
-                'cpanel_jsonapi_func' => 'list_pops_with_disk',
-                'cpanel_jsonapi_apiversion' => 3,
-            ])
-        )->all());
+        $responses = Http::pool(fn (Pool $pool) => $accounts->flatMap(fn ($account) => [
+            $this->configuredRequest($pool, $account->user)
+                ->get('cpanel', [
+                    'cpanel_jsonapi_user' => $account->user,
+                    'cpanel_jsonapi_module' => 'Email',
+                    'cpanel_jsonapi_func' => 'list_pops_with_disk',
+                    'cpanel_jsonapi_apiversion' => 3,
+                ]),
+            $this->configuredRequest($pool, "{$account->user}_default")
+                ->get('cpanel', [
+                    'cpanel_jsonapi_user' => $account->user,
+                    'cpanel_jsonapi_module' => 'Email',
+                    'cpanel_jsonapi_func' => 'get_main_account_disk_usage_bytes',
+                    'cpanel_jsonapi_apiversion' => 3,
+                ]),
+        ])->all());
 
-        foreach ($responses as $username => $response) {
-            $account = $accounts->firstWhere('user', $username);
+        foreach ($accounts as $account) {
+            $emailsResponse = $responses[$account->user] ?? null;
+            $defaultResponse = $responses["{$account->user}_default"] ?? null;
 
-            if ($response instanceof \Exception || $response->failed()) {
+            if (! $emailsResponse || $emailsResponse instanceof \Exception || $emailsResponse->failed()) {
                 continue;
             }
 
-            (new ProcessAccountEmails)->execute($account, $response->json());
+            $emailData = $emailsResponse->json();
+
+            if ($defaultResponse && ! ($defaultResponse instanceof \Exception) && ! $defaultResponse->failed()) {
+                $defaultBytes = $defaultResponse->json()['result']['data'] ?? 0;
+                $emailData['result']['data'][] = [
+                    'email' => "default@{$account->domain}",
+                    'user' => 'default',
+                    'domain' => $account->domain,
+                    '_diskused' => $defaultBytes,
+                    'diskquota' => 'unlimited',
+                    'diskusedpercent_float' => 0,
+                    'suspended_incoming' => 0,
+                    'suspended_login' => 0,
+                ];
+            }
+
+            (new ProcessAccountEmails)->execute($account, $emailData);
         }
     }
 
