@@ -161,13 +161,13 @@ class WhmApiFake extends WhmApi
 
         foreach ($accounts as $account) {
             $data = $this->getEmailDiskUsageData($account->user);
-            $defaultBytes = $this->getDefaultEmailDiskUsageBytes($account->user);
+            $systemBytes = $this->getSystemEmailDiskUsageBytes($account->user);
 
             $data['result']['data'][] = [
-                'email' => "default@{$account->domain}",
-                'user' => 'default',
+                'email' => $account->user,
+                'user' => 'system',
                 'domain' => $account->domain,
-                '_diskused' => $defaultBytes,
+                '_diskused' => $systemBytes,
                 'diskquota' => 'unlimited',
                 'diskusedpercent_float' => 0,
                 'suspended_incoming' => 0,
@@ -178,7 +178,7 @@ class WhmApiFake extends WhmApi
         }
     }
 
-    protected function getDefaultEmailDiskUsageBytes(string $username): int
+    protected function getSystemEmailDiskUsageBytes(string $username): int
     {
         return 2048000;
     }
