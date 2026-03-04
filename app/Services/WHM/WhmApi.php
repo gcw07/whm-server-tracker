@@ -136,7 +136,7 @@ class WhmApi
                     'cpanel_jsonapi_func' => 'list_pops_with_disk',
                     'cpanel_jsonapi_apiversion' => 3,
                 ]),
-            $this->configuredRequest($pool, "{$account->user}_default")
+            $this->configuredRequest($pool, "{$account->user}_system")
                 ->get('cpanel', [
                     'cpanel_jsonapi_user' => $account->user,
                     'cpanel_jsonapi_module' => 'Email',
@@ -147,7 +147,7 @@ class WhmApi
 
         foreach ($accounts as $account) {
             $emailsResponse = $responses[$account->user] ?? null;
-            $defaultResponse = $responses["{$account->user}_default"] ?? null;
+            $systemResponse = $responses["{$account->user}_system"] ?? null;
 
             if (! $emailsResponse || $emailsResponse instanceof \Exception || $emailsResponse->failed()) {
                 continue;
@@ -155,13 +155,13 @@ class WhmApi
 
             $emailData = $emailsResponse->json();
 
-            if ($defaultResponse && ! ($defaultResponse instanceof \Exception) && ! $defaultResponse->failed()) {
-                $defaultBytes = $defaultResponse->json()['result']['data'] ?? 0;
+            if ($systemResponse && ! ($systemResponse instanceof \Exception) && ! $systemResponse->failed()) {
+                $systemBytes = $systemResponse->json()['result']['data'] ?? 0;
                 $emailData['result']['data'][] = [
-                    'email' => "default@{$account->domain}",
-                    'user' => 'default',
+                    'email' => $account->user,
+                    'user' => 'system',
                     'domain' => $account->domain,
-                    '_diskused' => $defaultBytes,
+                    '_diskused' => $systemBytes,
                     'diskquota' => 'unlimited',
                     'diskusedpercent_float' => 0,
                     'suspended_incoming' => 0,
