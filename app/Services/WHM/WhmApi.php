@@ -162,7 +162,7 @@ class WhmApi
                     'user' => 'system',
                     'domain' => $account->domain,
                     '_diskused' => $systemBytes,
-                    'diskquota' => 'unlimited',
+                    '_diskquota' => 0,
                     'diskusedpercent_float' => 0,
                     'suspended_incoming' => 0,
                     'suspended_login' => 0,
