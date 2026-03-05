@@ -193,12 +193,12 @@
     <!-- Email Accounts -->
     <div class="mt-6">
       <flux:card class="p-0 overflow-hidden bg-gray-50">
-        <div class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
-          <div class="bg-sky-500 rounded-md p-1 mr-2">
-            <flux:icon.envelope variant="solid" class="text-white" />
+        <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between border-b border-gray-200">
+          <div class="flex items-center gap-2">
+            <flux:icon.envelope />
+            Email Accounts
           </div>
-          Email Accounts
-        </div>
+        </flux:heading>
 
         <flux:table>
           <flux:table.columns>
@@ -215,7 +215,12 @@
                 'bg-gray-50' => $loop->even,
                 'bg-white' => $loop->odd,
               ])>
-                <flux:table.cell class="px-6! font-medium">{{ $email->email }}</flux:table.cell>
+                <flux:table.cell class="px-6! font-medium">
+                  {{ $email->email }}
+                  @if($email->email === $account->user)
+                    <flux:badge size="sm" color="blue" inset="top bottom" class="ml-2">System</flux:badge>
+                  @endif
+                </flux:table.cell>
                 <flux:table.cell class="whitespace-nowrap">{{ $email->formatted_disk_used }}</flux:table.cell>
                 <flux:table.cell class="whitespace-nowrap">{{ $email->formatted_disk_quota }}</flux:table.cell>
                 <flux:table.cell class="whitespace-nowrap">{{ number_format($email->disk_used_percent, 1) }}%</flux:table.cell>
