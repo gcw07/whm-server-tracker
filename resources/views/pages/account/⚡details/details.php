@@ -10,8 +10,7 @@ new #[Title('Account Details')] class extends Component
 
     public function mount(Account $account): void
     {
-        $account->loadMissing(['server']);
-        $account->load(['emails' => fn ($query) => $query->orderBy('disk_used', 'desc')]);
+        $account->loadMissing(['server', 'emails' => fn ($query) => $query->orderBy('email', 'asc')]);
 
         $this->account = $account;
     }
