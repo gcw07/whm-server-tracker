@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('user');
             $table->string('domain');
             $table->unsignedBigInteger('disk_used')->default(0);
-            $table->unsignedBigInteger('disk_quota')->nullable();
+            $table->unsignedBigInteger('disk_quota')->default(0);
             $table->float('disk_used_percent')->default(0);
             $table->boolean('suspended_incoming')->default(false);
             $table->boolean('suspended_login')->default(false);

@@ -21,7 +21,7 @@ class AccountEmailFactory extends Factory
             'user' => $user,
             'domain' => $domain,
             'disk_used' => $this->faker->numberBetween(0, 500_000_000),
-            'disk_quota' => $this->faker->optional(0.8)->numberBetween(500_000_000, 2_000_000_000),
+            'disk_quota' => $this->faker->boolean(20) ? 0 : $this->faker->numberBetween(500_000_000, 2_000_000_000),
             'disk_used_percent' => $this->faker->randomFloat(2, 0, 100),
             'suspended_incoming' => $this->faker->boolean(5),
             'suspended_login' => $this->faker->boolean(5),

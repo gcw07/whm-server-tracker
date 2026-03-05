@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $user
  * @property string $domain
  * @property int $disk_used
- * @property int|null $disk_quota
+ * @property int $disk_quota
  * @property float $disk_used_percent
  * @property bool $suspended_incoming
  * @property bool $suspended_login
@@ -68,7 +68,7 @@ class AccountEmail extends Model
     protected function formattedDiskQuota(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->disk_quota !== null ? $this->formatBytes($this->disk_quota) : 'Unlimited',
+            get: fn () => $this->disk_quota !== 0 ? $this->formatBytes($this->disk_quota) : 'Unlimited',
         );
     }
 

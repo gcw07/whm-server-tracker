@@ -26,8 +26,8 @@ it('formats disk quota in megabytes', function () {
     expect($email->formatted_disk_quota)->toBe('250 MB');
 });
 
-it('returns unlimited for null disk quota', function () {
-    $email = AccountEmail::factory()->make(['disk_quota' => null]);
+it('returns unlimited for zero disk quota', function () {
+    $email = AccountEmail::factory()->make(['disk_quota' => 0]);
 
     expect($email->formatted_disk_quota)->toBe('Unlimited');
 });

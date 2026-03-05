@@ -48,7 +48,7 @@ it('correctly maps email disk usage fields', function () {
     expect($email->suspended_login)->toBeFalse();
 
     $admin = AccountEmail::where('email', 'admin@mysite.com')->first();
-    expect($admin->disk_quota)->toBeNull();
+    expect($admin->disk_quota)->toBe(0);
 });
 
 it('removes stale email records when an email no longer exists', function () {
@@ -117,7 +117,7 @@ it('correctly maps default email disk usage fields', function () {
     expect($default->user)->toBe('system');
     expect($default->domain)->toBe('mysite.com');
     expect($default->disk_used)->toBe(2048000);
-    expect($default->disk_quota)->toBeNull();
+    expect($default->disk_quota)->toBe(0);
     expect($default->disk_used_percent)->toBe(0.0);
     expect($default->suspended_incoming)->toBeFalse();
     expect($default->suspended_login)->toBeFalse();

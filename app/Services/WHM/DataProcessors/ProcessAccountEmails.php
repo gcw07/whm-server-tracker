@@ -24,7 +24,7 @@ class ProcessAccountEmails
                     'user' => $item['user'],
                     'domain' => $item['domain'],
                     'disk_used' => $item['_diskused'] ?? 0,
-                    'disk_quota' => ($item['diskquota'] === 'unlimited' || $item['diskquota'] === '0') ? null : (int) $item['diskquota'],
+                    'disk_quota' => (int) ($item['_diskquota'] ?? 0),
                     'disk_used_percent' => $item['diskusedpercent_float'] ?? 0,
                     'suspended_incoming' => (bool) ($item['suspended_incoming'] ?? false),
                     'suspended_login' => (bool) ($item['suspended_login'] ?? false),

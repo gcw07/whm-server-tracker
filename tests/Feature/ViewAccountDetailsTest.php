@@ -77,7 +77,7 @@ test('shows unlimited for emails with no quota', function () {
 
     AccountEmail::factory()->create([
         'account_id' => $account->id,
-        'disk_quota' => null,
+        'disk_quota' => 0,
     ]);
 
     $this->actingAs($this->user);
