@@ -26,7 +26,7 @@ it('stores email disk usage records for each account', function () {
 
     $emails = AccountEmail::all();
     expect($emails)->toHaveCount(3);
-    expect($emails->pluck('email')->toArray())->toContain('info@mysite.com', 'admin@mysite.com', 'default@mysite.com');
+    expect($emails->pluck('email')->toArray())->toContain('info@mysite.com', 'admin@mysite.com', 'mysite');
 });
 
 it('correctly maps email disk usage fields', function () {
@@ -112,9 +112,9 @@ it('correctly maps default email disk usage fields', function () {
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
-    $default = AccountEmail::where('email', 'default@mysite.com')->first();
+    $default = AccountEmail::where('email', 'mysite')->first();
     expect($default)->not->toBeNull();
-    expect($default->user)->toBe('default');
+    expect($default->user)->toBe('system');
     expect($default->domain)->toBe('mysite.com');
     expect($default->disk_used)->toBe(2048000);
     expect($default->disk_quota)->toBeNull();
@@ -146,7 +146,7 @@ it('stores regular emails when main email account API fails', function () {
 
     expect(AccountEmail::count())->toBe(2);
     expect(AccountEmail::where('email', 'info@mysite.com')->exists())->toBeTrue();
-    expect(AccountEmail::where('email', 'default@mysite.com')->exists())->toBeFalse();
+    expect(AccountEmail::where('email', 'mysite')->exists())->toBeFalse();
 });
 
 it('dispatches FetchEmailDiskUsageJob after FetchServerDataJob runs', function () {

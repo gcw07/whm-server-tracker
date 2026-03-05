@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $suspended_login
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read string $formatted_disk_used
+ * @property-read string $formatted_disk_quota
  * @property-read \App\Models\Account $account
  *
  * @method static \Database\Factories\AccountEmailFactory factory($count = null, $state = [])
@@ -53,6 +56,32 @@ class AccountEmail extends Model
             'suspended_incoming' => 'boolean',
             'suspended_login' => 'boolean',
         ];
+    }
+
+    protected function formattedDiskUsed(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->formatBytes($this->disk_used),
+        );
+    }
+
+    protected function formattedDiskQuota(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->disk_quota !== null ? $this->formatBytes($this->disk_quota) : 'Unlimited',
+        );
+    }
+
+    private function formatBytes(int $bytes): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $precision = [0, 0, 1, 2, 2];
+
+        for ($i = 0; ($bytes / 1024) >= 0.9 && $i < count($units) - 1; $i++) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, $precision[$i]).' '.$units[$i];
     }
 
     public function account(): BelongsTo
