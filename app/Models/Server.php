@@ -19,6 +19,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property string $address
  * @property int $port
  * @property ServerTypeEnum $server_type
+ * @property string|null $hosting_provider
  * @property string|null $token
  * @property string|null $notes
  * @property \App\Collections\SettingsCollection|null $settings
@@ -54,6 +55,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @method static Builder<static>|Server search(string $term)
  * @method static Builder<static>|Server whereAddress($value)
  * @method static Builder<static>|Server whereCreatedAt($value)
+ * @method static Builder<static>|Server whereHostingProvider($value)
  * @method static Builder<static>|Server whereId($value)
  * @method static Builder<static>|Server whereName($value)
  * @method static Builder<static>|Server whereNotes($value)
@@ -164,6 +166,7 @@ class Server extends Model
         $query->whereAny([
             'name',
             'address',
+            'hosting_provider',
             'notes',
         ], 'LIKE', "%$term%");
     }

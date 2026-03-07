@@ -111,6 +111,14 @@
                   {{ $server->address }}:{{ $server->port }}
                 </dd>
               </div>
+              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-gray-400">
+                  Hosting Provider
+                </dt>
+                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
+                  {{ $server->hosting_provider }}
+                </dd>
+              </div>
             </dl>
           </div>
 
