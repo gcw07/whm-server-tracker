@@ -10,24 +10,20 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class FetchServerDataJob implements ShouldQueue
+class FetchSslVhostsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public Server $server;
-
     public int $tries = 5;
 
-    public function __construct(Server $server)
+    public function __construct(public Server $server)
     {
-        $this->server = $server;
+        $this->onQueue('high');
     }
 
     public function handle(WhmApi $whmApi): void
     {
         $whmApi->setServer($this->server);
-        $whmApi->fetch();
-        dispatch(new FetchEmailDiskUsageJob($this->server))->onQueue('high');
-        dispatch(new FetchSslVhostsJob($this->server))->onQueue('high');
+        $whmApi->fetchSslVhosts();
     }
 }

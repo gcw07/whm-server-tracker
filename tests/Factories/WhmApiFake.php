@@ -10,6 +10,7 @@ use App\Services\WHM\DataProcessors\ProcessBackups;
 use App\Services\WHM\DataProcessors\ProcessDiskUsage;
 use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
+use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use App\Services\WHM\WhmApi;
 
@@ -181,6 +182,51 @@ class WhmApiFake extends WhmApi
     protected function getSystemEmailDiskUsageBytes(string $username): int
     {
         return 2048000;
+    }
+
+    public function fetchSslVhosts(): void
+    {
+        (new ProcessSslVhosts)->execute($this->server, $this->getSslVhostsData());
+    }
+
+    protected function getSslVhostsData(): array
+    {
+        return [
+            'data' => [
+                'vhosts' => [
+                    [
+                        'user' => 'mysite',
+                        'servername' => 'my-site.com',
+                        'type' => 'main',
+                        'domains' => ['my-site.com', 'www.my-site.com'],
+                        'crt' => [
+                            'not_after' => 1893456000,
+                            'issuer.organizationName' => "Let's Encrypt",
+                        ],
+                    ],
+                    [
+                        'user' => 'mysite',
+                        'servername' => 'sub.my-site.com',
+                        'type' => 'sub',
+                        'domains' => ['sub.my-site.com'],
+                        'crt' => [
+                            'not_after' => 1893456000,
+                            'issuer.organizationName' => "Let's Encrypt",
+                        ],
+                    ],
+                    [
+                        'user' => 'super',
+                        'servername' => 'super-system.com',
+                        'type' => 'main',
+                        'domains' => ['super-system.com', 'www.super-system.com'],
+                        'crt' => [
+                            'not_after' => 1893456000,
+                            'issuer.organizationName' => "Let's Encrypt",
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     protected function getEmailDiskUsageData(string $username): array

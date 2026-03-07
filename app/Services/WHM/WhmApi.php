@@ -12,6 +12,7 @@ use App\Services\WHM\DataProcessors\ProcessBackups;
 use App\Services\WHM\DataProcessors\ProcessDiskUsage;
 use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
+use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Pool;
@@ -171,6 +172,21 @@ class WhmApi
 
             (new ProcessAccountEmails)->execute($account, $emailData);
         }
+    }
+
+    public function fetchSslVhosts(): void
+    {
+        $response = Http::withHeaders($this->getHeaders())
+            ->baseUrl($this->server->whm_base_api_url)
+            ->connectTimeout(config('server-tracker.whm.connection_timeout'))
+            ->withoutVerifying()
+            ->get('fetch_ssl_vhosts?api.version=1');
+
+        if ($response instanceof \Exception || $response->failed()) {
+            return;
+        }
+
+        (new ProcessSslVhosts)->execute($this->server, $response->json());
     }
 
     protected function shouldFireFailedEvent(): bool

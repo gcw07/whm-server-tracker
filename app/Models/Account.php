@@ -108,6 +108,11 @@ class Account extends Model
         return $this->hasMany(AccountEmail::class);
     }
 
+    public function sslCertificates(): HasMany
+    {
+        return $this->hasMany(AccountSslCertificate::class);
+    }
+
     public function export($columns): array
     {
         return collect([
