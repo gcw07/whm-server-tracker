@@ -17,9 +17,6 @@ Schedule::command('server-tracker:refresh')->hourly();
 // Schedule Uptime Check
 Schedule::command('monitor:check-uptime')->everyMinute();
 
-// Schedule SSL Certificate Check
-Schedule::command('monitor:check-certificate')->daily();
-
 // Schedule Email Blacklist Check
 Schedule::command('server-tracker:check-blacklist')->dailyAt('0:30');
 
