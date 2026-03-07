@@ -19,6 +19,8 @@ class EditServerForm extends Form
 
     public $serverType = '';
 
+    public string $hostingProvider = '';
+
     public $notes = '';
 
     protected function rules(): array
@@ -28,6 +30,7 @@ class EditServerForm extends Form
             'address' => ['required', 'string', 'max:255'],
             'port' => ['required', 'numeric'],
             'serverType' => ['required', new Enum(ServerTypeEnum::class)],
+            'hostingProvider' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
         ];
     }
@@ -40,6 +43,7 @@ class EditServerForm extends Form
         $this->address = $server->address;
         $this->port = $server->port;
         $this->serverType = $server->server_type;
+        $this->hostingProvider = $server->hosting_provider ?? '';
         $this->notes = $server->notes;
     }
 
@@ -52,6 +56,7 @@ class EditServerForm extends Form
             'address' => $this->address,
             'port' => $this->port,
             'server_type' => $this->serverType,
+            'hosting_provider' => $this->hostingProvider,
             'notes' => $this->notes,
         ]);
     }

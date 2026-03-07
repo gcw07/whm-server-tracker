@@ -16,6 +16,8 @@ class ServerRequestDataFactory
 
     protected string $notes = 'a server note';
 
+    protected string $hostingProvider = 'DigitalOcean';
+
     protected string $token = 'server-api-token';
 
     public static function new(): self
@@ -63,6 +65,13 @@ class ServerRequestDataFactory
         return $this;
     }
 
+    public function withHostingProvider(string $hostingProvider): self
+    {
+        $this->hostingProvider = $hostingProvider;
+
+        return $this;
+    }
+
     public function withToken(string $token): self
     {
         $this->token = $token;
@@ -78,6 +87,7 @@ class ServerRequestDataFactory
             'port' => $this->port,
             'serverType' => $this->serverType,
             'notes' => $this->notes,
+            'hostingProvider' => $this->hostingProvider,
             'token' => $this->token,
         ], $overrides);
     }

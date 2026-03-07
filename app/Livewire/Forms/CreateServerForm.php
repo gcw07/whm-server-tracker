@@ -17,6 +17,8 @@ class CreateServerForm extends Form
 
     public $serverType = '';
 
+    public string $hostingProvider = '';
+
     public $notes = '';
 
     public $token = null;
@@ -28,6 +30,7 @@ class CreateServerForm extends Form
             'address' => ['required', 'string', 'max:255'],
             'port' => ['required', 'numeric'],
             'serverType' => ['required', new Enum(ServerTypeEnum::class)],
+            'hostingProvider' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
             'token' => ['nullable', 'string'],
         ];
@@ -42,6 +45,7 @@ class CreateServerForm extends Form
             'address' => $this->address,
             'port' => $this->port,
             'server_type' => $this->serverType,
+            'hosting_provider' => $this->hostingProvider,
             'notes' => $this->notes,
             'token' => $this->token,
         ]);

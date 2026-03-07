@@ -37,6 +37,8 @@
           <flux:radio value="vps" label="VPS" />
         </flux:radio.group>
 
+        <flux:input wire:model="form.hostingProvider" label="Hosting Provider" />
+
         <flux:textarea wire:model="form.notes" label="Notes" />
 
         <flux:input wire:model="form.token" label="API Token" description:trailing="This is a WHM API Token. Once set this will not be visible again." />

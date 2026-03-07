@@ -37,6 +37,8 @@
           <flux:radio value="vps" label="VPS" />
         </flux:radio.group>
 
+        <flux:input wire:model="form.hostingProvider" label="Hosting Provider" />
+
         <flux:textarea wire:model="form.notes" label="Notes" />
 
         <div class="pt-5 border-t border-gray-200">

@@ -34,6 +34,7 @@ test('an authorized user can add a valid server', function () {
             'port' => 1111,
             'serverType' => ServerTypeEnum::Dedicated,
             'notes' => 'some server note',
+            'hostingProvider' => 'new-hosting-provider',
             'token' => 'new-server-api-token',
         ])
         ->call('save');
@@ -45,6 +46,7 @@ test('an authorized user can add a valid server', function () {
     $this->assertDatabaseHas('servers', [
         'name' => 'My Test Server',
         'address' => '255.1.1.100',
+        'hosting_provider' => 'new-hosting-provider',
     ]);
 });
 
@@ -77,5 +79,6 @@ it('validates rules for create server form', function ($data) {
     fn () => ['serverType', '', 'invalid', 'required'],
     fn () => ['serverType', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
     fn () => ['notes', '', 'success', null],
+    fn () => ['hostingProvider', '', 'success', null],
     fn () => ['token', '', 'success', null],
 ]);

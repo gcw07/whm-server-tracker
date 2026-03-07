@@ -67,4 +67,5 @@ it('validates rules for server edit form', function ($data) {
     fn () => ['serverType', '', 'invalid', 'required'],
     fn () => ['serverType', 'not-valid-type', 'invalid', 'Illuminate\Validation\Rules\Enum'],
     fn () => ['notes', '', 'success', null],
+    fn () => ['hostingProvider', '', 'success', null],
 ]);
