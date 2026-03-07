@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -129,14 +130,6 @@ class Monitor extends BaseMonitor
         'uptime_check_failed_event_fired_on_date' => 'datetime',
         'certificate_check_enabled' => 'boolean',
         'certificate_expiration_date' => 'datetime',
-        'lighthouse_check_enabled' => 'boolean',
-        'lighthouse_update_last_failed_at' => 'datetime',
-        'lighthouse_update_last_succeeded_at' => 'datetime',
-        'domain_name_check_enabled' => 'boolean',
-        'domain_name_expiration_date' => 'datetime',
-        'blacklist_check_enabled' => 'boolean',
-        'nameservers' => 'array',
-        'is_on_cloudflare' => 'boolean',
     ];
 
     public function accounts(): HasMany
@@ -157,6 +150,21 @@ class Monitor extends BaseMonitor
     public function lighthouseLatestAudit(): HasMany
     {
         return $this->hasMany(LighthouseAudit::class)->orderBy('created_at', 'desc');
+    }
+
+    public function blacklistCheck(): HasOne
+    {
+        return $this->hasOne(MonitorBlacklistCheck::class);
+    }
+
+    public function lighthouseCheck(): HasOne
+    {
+        return $this->hasOne(MonitorLighthouseCheck::class);
+    }
+
+    public function domainCheck(): HasOne
+    {
+        return $this->hasOne(MonitorDomainCheck::class);
     }
 
     protected function domainName(): Attribute
@@ -303,23 +311,26 @@ class Monitor extends BaseMonitor
     public function setBlacklist($items): void
     {
         if (count($items) > 0) {
-            $this->blacklist_status = BlacklistStatusEnum::Invalid->value;
-            $this->blacklist_check_failure_reason = $this->getBlacklistFailureReason($items);
+            $this->blacklistCheck->update([
+                'status' => BlacklistStatusEnum::Invalid->value,
+                'failure_reason' => $this->getBlacklistFailureReason($items),
+            ]);
         } else {
-            $this->blacklist_status = BlacklistStatusEnum::Valid->value;
-            $this->blacklist_check_failure_reason = null;
+            $this->blacklistCheck->update([
+                'status' => BlacklistStatusEnum::Valid->value,
+                'failure_reason' => null,
+            ]);
         }
-
-        $this->save();
 
         //        event(new BlacklistCheckSucceeded($this, $exception->getMessage()));
     }
 
     public function setBlacklistException(Exception $exception): void
     {
-        $this->blacklist_status = BlacklistStatusEnum::Invalid->value;
-        $this->blacklist_check_failure_reason = $exception->getMessage();
-        $this->save();
+        $this->blacklistCheck->update([
+            'status' => BlacklistStatusEnum::Invalid->value,
+            'failure_reason' => $exception->getMessage(),
+        ]);
 
         //        event(new BlacklistCheckFailed($this, $exception->getMessage()));
     }
@@ -366,25 +377,27 @@ class Monitor extends BaseMonitor
                     'report' => $report,
                 ]);
 
-                $this->lighthouse_status = LighthouseStatusEnum::Valid->value;
-                $this->lighthouse_update_last_succeeded_at = now();
-                $this->save();
+                $this->lighthouseCheck->update([
+                    'status' => LighthouseStatusEnum::Valid->value,
+                    'last_succeeded_at' => now(),
+                ]);
             } catch (Exception $exception) {
-                $this->lighthouse_status = LighthouseStatusEnum::Invalid->value;
-                $this->lighthouse_update_last_failed_at = now();
-                $this->lighthouse_check_failure_reason = $exception->getMessage();
-                $this->save();
+                $this->lighthouseCheck->update([
+                    'status' => LighthouseStatusEnum::Invalid->value,
+                    'last_failed_at' => now(),
+                    'failure_reason' => $exception->getMessage(),
+                ]);
             }
         }
     }
 
     protected function shouldRunLighthouseAudit(): bool
     {
-        if (is_null($this->lighthouse_update_last_succeeded_at)) {
+        if (is_null($this->lighthouseCheck->last_succeeded_at)) {
             return true;
         }
 
-        if ((int) abs($this->lighthouse_update_last_succeeded_at->diffInHours()) >= config('server-tracker.lighthouse_audits.run_audit_every_hours')) {
+        if ((int) abs($this->lighthouseCheck->last_succeeded_at->diffInHours()) >= config('server-tracker.lighthouse_audits.run_audit_every_hours')) {
             return true;
         }
 
@@ -416,26 +429,30 @@ class Monitor extends BaseMonitor
 
     public function setDomainNameExpiration(Carbon $date): void
     {
-        $this->domain_name_status = DomainNameStatusEnum::Valid->value;
-        $this->domain_name_expiration_date = $date;
-        $this->domain_name_check_failure_reason = null;
-        $this->save();
+        $this->domainCheck->update([
+            'status' => DomainNameStatusEnum::Valid->value,
+            'expiration_date' => $date,
+            'failure_reason' => null,
+        ]);
 
         $this->fireEventsForUpdatedMonitorWithDomainName($this, $date);
     }
 
     public function setDomainNameException($reason): void
     {
-        $this->domain_name_status = DomainNameStatusEnum::Invalid->value;
-        $this->domain_name_check_failure_reason = $reason;
-        $this->save();
+        $this->domainCheck->update([
+            'status' => DomainNameStatusEnum::Invalid->value,
+            'failure_reason' => $reason,
+        ]);
 
         //        event(new DomainNameCheckFailed($this, $exception->getMessage()));
     }
 
     public function fireEventsForUpdatedMonitorWithDomainName(Monitor $monitor, Carbon $date): void
     {
-        if ($this->domain_name_status === DomainNameStatusEnum::Valid->value) {
+        $domainStatus = $this->domainCheck->status;
+
+        if ($domainStatus === DomainNameStatusEnum::Valid) {
             if ((int) abs($date->diffInDays()) <= config('server-tracker.domain_name_expires_within_days')) {
                 event(new DomainNameExpiresSoonEvent($monitor, $date));
             }
@@ -443,7 +460,7 @@ class Monitor extends BaseMonitor
             return;
         }
 
-        if ($this->domain_name_status === DomainNameStatusEnum::Invalid->value) {
+        if ($domainStatus === DomainNameStatusEnum::Invalid) {
             //        event(new DomainNameCheckSucceeded($this, $exception->getMessage()));
         }
     }
@@ -452,8 +469,9 @@ class Monitor extends BaseMonitor
     {
         $isOnCloudflare = Str::contains(collect($nameservers)->first(), 'cloudflare.com');
 
-        $this->nameservers = $nameservers;
-        $this->is_on_cloudflare = $isOnCloudflare;
-        $this->save();
+        $this->domainCheck->update([
+            'nameservers' => $nameservers,
+            'is_on_cloudflare' => $isOnCloudflare,
+        ]);
     }
 }

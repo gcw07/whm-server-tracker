@@ -68,24 +68,23 @@ new #[Title('Monitors')] class extends Component
                     return $query->where(function ($query) {
                         $query->where('uptime_check_enabled', false)
                             ->orWhere('certificate_check_enabled', false)
-                            ->orWhere('blacklist_check_enabled', false);
+                            ->orWhereHas('blacklistCheck', fn ($q) => $q->where('enabled', false))
+                            ->orWhereHas('lighthouseCheck', fn ($q) => $q->where('enabled', false))
+                            ->orWhereHas('domainCheck', fn ($q) => $q->where('enabled', false));
                     });
                 }
 
                 if ($this->filterBy === 'on_cloudflare') {
-                    return $query->where(function ($query) {
-                        $query->where('is_on_cloudflare', true);
-                    });
+                    return $query->whereHas('domainCheck', fn ($q) => $q->where('is_on_cloudflare', true));
                 }
 
                 if ($this->filterBy === 'not_on_cloudflare') {
-                    return $query->where(function ($query) {
-                        $query->where('is_on_cloudflare', false);
-                    });
+                    return $query->whereHas('domainCheck', fn ($q) => $q->where('is_on_cloudflare', false));
                 }
 
                 return $query;
             })
+            ->with(['blacklistCheck', 'lighthouseCheck', 'domainCheck'])
             ->paginate(50);
     }
 

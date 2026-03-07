@@ -126,12 +126,12 @@
 
                     <!-- Blacklist Status -->
                     <flux:table.cell class="whitespace-nowrap">
-                      @if(!$monitor->blacklist_check_enabled)
+                      @if(!$monitor->blacklistCheck?->enabled)
                         <flux:badge size="sm" icon="no-symbol" color="zinc">Disabled</flux:badge>
                       @else
-                        @if($monitor->blacklist_status === 'invalid')
+                        @if($monitor->blacklistCheck?->status->value === 'invalid')
                           <flux:badge size="sm" icon="exclamation-triangle" color="red">Found</flux:badge>
-                        @elseif($monitor->blacklist_status === 'not yet checked')
+                        @elseif($monitor->blacklistCheck?->status->value === 'not yet checked')
                           <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Pending</flux:badge>
                         @else
                           <flux:badge size="sm" icon="check" color="green">Ok</flux:badge>
@@ -141,10 +141,10 @@
 
                     <!-- Cloudflare Status -->
                     <flux:table.cell class="whitespace-nowrap">
-                      @if(!$monitor->domain_name_check_enabled)
+                      @if(!$monitor->domainCheck?->enabled)
                         <flux:badge size="sm" icon="no-symbol" color="zinc">Disabled</flux:badge>
                       @else
-                        @if($monitor->is_on_cloudflare)
+                        @if($monitor->domainCheck?->is_on_cloudflare)
                           <flux:badge size="sm" icon="check" color="green">Yes</flux:badge>
                         @else
                           <flux:badge size="sm" icon="x-mark" color="red">No</flux:badge>

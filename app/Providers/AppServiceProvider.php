@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Monitor;
+use App\Observers\MonitorObserver;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Encryption\Encrypter;
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        Monitor::observe(MonitorObserver::class);
     }
 
     protected function configureDefaults(): void

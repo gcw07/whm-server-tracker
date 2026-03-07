@@ -29,7 +29,8 @@ class CheckDomainNameCommand extends Command
     public function handle(): void
     {
         $monitors = Monitor::query()
-            ->where('domain_name_check_enabled', true)
+            ->whereHas('domainCheck', fn ($q) => $q->where('enabled', true))
+            ->with('domainCheck')
             ->orderBy('url')
             ->get();
 

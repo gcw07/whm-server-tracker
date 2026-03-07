@@ -31,7 +31,8 @@ class CheckLighthouseCommand extends Command
     public function handle(): void
     {
         $monitors = Monitor::query()
-            ->where('lighthouse_check_enabled', true)
+            ->whereHas('lighthouseCheck', fn ($q) => $q->where('enabled', true))
+            ->with('lighthouseCheck')
             ->orderBy('url')
             ->get();
 

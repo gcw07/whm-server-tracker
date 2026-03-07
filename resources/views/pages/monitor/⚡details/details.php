@@ -14,7 +14,7 @@ new #[Title('Monitor Details')] class extends Component
     public function mount(Monitor $monitor): void
     {
         $this->monitor = $monitor;
-        $this->monitor->loadMissing(['accounts', 'accounts.server']);
+        $this->monitor->loadMissing(['accounts', 'accounts.server', 'blacklistCheck', 'lighthouseCheck', 'domainCheck']);
     }
 
     #[Computed]
@@ -30,10 +30,11 @@ new #[Title('Monitor Details')] class extends Component
     {
         $this->monitor->uptime_check_enabled = true;
         $this->monitor->certificate_check_enabled = true;
-        $this->monitor->blacklist_check_enabled = true;
-        $this->monitor->lighthouse_check_enabled = true;
-        $this->monitor->domain_name_check_enabled = true;
         $this->monitor->save();
+
+        $this->monitor->blacklistCheck->update(['enabled' => true]);
+        $this->monitor->lighthouseCheck->update(['enabled' => true]);
+        $this->monitor->domainCheck->update(['enabled' => true]);
 
         Flux::toast(
             text: 'Enabled all monitors for this URL.',
@@ -46,10 +47,11 @@ new #[Title('Monitor Details')] class extends Component
     {
         $this->monitor->uptime_check_enabled = false;
         $this->monitor->certificate_check_enabled = false;
-        $this->monitor->blacklist_check_enabled = false;
-        $this->monitor->lighthouse_check_enabled = false;
-        $this->monitor->domain_name_check_enabled = false;
         $this->monitor->save();
+
+        $this->monitor->blacklistCheck->update(['enabled' => false]);
+        $this->monitor->lighthouseCheck->update(['enabled' => false]);
+        $this->monitor->domainCheck->update(['enabled' => false]);
 
         Flux::toast(
             text: 'Disable all monitors for this URL.',
@@ -134,34 +136,22 @@ new #[Title('Monitor Details')] class extends Component
 
     public function toggleBlacklistCheck(): void
     {
-        if ($this->monitor->blacklist_check_enabled) {
-            $this->monitor->blacklist_check_enabled = false;
-        } else {
-            $this->monitor->blacklist_check_enabled = true;
-        }
-
-        $this->monitor->save();
+        $this->monitor->blacklistCheck->update([
+            'enabled' => ! $this->monitor->blacklistCheck->enabled,
+        ]);
     }
 
     public function toggleLighthouseCheck(): void
     {
-        if ($this->monitor->lighthouse_check_enabled) {
-            $this->monitor->lighthouse_check_enabled = false;
-        } else {
-            $this->monitor->lighthouse_check_enabled = true;
-        }
-
-        $this->monitor->save();
+        $this->monitor->lighthouseCheck->update([
+            'enabled' => ! $this->monitor->lighthouseCheck->enabled,
+        ]);
     }
 
     public function toggleDomainNameExpirationCheck(): void
     {
-        if ($this->monitor->domain_name_check_enabled) {
-            $this->monitor->domain_name_check_enabled = false;
-        } else {
-            $this->monitor->domain_name_check_enabled = true;
-        }
-
-        $this->monitor->save();
+        $this->monitor->domainCheck->update([
+            'enabled' => ! $this->monitor->domainCheck->enabled,
+        ]);
     }
 };
