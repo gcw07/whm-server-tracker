@@ -42,7 +42,8 @@ class ProcessSslVhosts
                 [
                     'user' => $username,
                     'type' => $vhost['type'] ?? 'main',
-                    'domains' => $vhost['domains'] ?? [],
+                    'vhost_domains' => $vhost['domains'] ?? [],
+                    'certificate_domains' => $vhost['crt']['domains'] ?? [],
                     'expires_at' => isset($vhost['crt']['not_after'])
                         ? date('Y-m-d H:i:s', $vhost['crt']['not_after'])
                         : null,

@@ -201,6 +201,7 @@ class WhmApiFake extends WhmApi
                         'domains' => ['my-site.com', 'www.my-site.com'],
                         'crt' => [
                             'not_after' => 1893456000,
+                            'domains' => ['my-site.com', 'www.my-site.com'],
                             'issuer.organizationName' => "Let's Encrypt",
                         ],
                     ],
@@ -211,6 +212,7 @@ class WhmApiFake extends WhmApi
                         'domains' => ['sub.my-site.com'],
                         'crt' => [
                             'not_after' => 1893456000,
+                            'domains' => ['sub.my-site.com'],
                             'issuer.organizationName' => "Let's Encrypt",
                         ],
                     ],
@@ -221,6 +223,7 @@ class WhmApiFake extends WhmApi
                         'domains' => ['super-system.com', 'www.super-system.com'],
                         'crt' => [
                             'not_after' => 1893456000,
+                            'domains' => ['super-system.com'],
                             'issuer.organizationName' => "Let's Encrypt",
                         ],
                     ],

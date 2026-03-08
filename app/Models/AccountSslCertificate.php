@@ -14,7 +14,8 @@ class AccountSslCertificate extends Model
     {
         return [
             'type' => SslVhostTypeEnum::class,
-            'domains' => 'array',
+            'vhost_domains' => 'array',
+            'certificate_domains' => 'array',
             'expires_at' => 'datetime',
         ];
     }

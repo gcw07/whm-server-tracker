@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('user');
             $table->string('type');
             $table->string('servername');
-            $table->json('domains');
+            $table->json('vhost_domains');
+            $table->json('certificate_domains');
             $table->timestamp('expires_at')->nullable();
             $table->string('issuer')->nullable();
             $table->timestamps();

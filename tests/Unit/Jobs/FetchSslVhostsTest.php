@@ -8,6 +8,7 @@ use App\Models\AccountSslCertificate;
 use App\Models\Server;
 use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Tests\Factories\WhmApiFake;
 
 uses(LazilyRefreshDatabase::class);
@@ -38,7 +39,8 @@ it('correctly maps ssl certificate fields', function () {
     expect($cert)->not->toBeNull();
     expect($cert->user)->toBe('mysite');
     expect($cert->type)->toBe(SslVhostTypeEnum::Main);
-    expect($cert->domains)->toBe(['my-site.com', 'www.my-site.com']);
+    expect($cert->vhost_domains)->toBe(['my-site.com', 'www.my-site.com']);
+    expect($cert->certificate_domains)->toBe(['my-site.com', 'www.my-site.com']);
     expect($cert->expires_at)->not->toBeNull();
     expect($cert->issuer)->toBe("Let's Encrypt");
 });
@@ -65,7 +67,8 @@ it('removes stale ssl certificate records no longer in api response', function (
         'user' => 'mysite',
         'type' => 'main',
         'servername' => 'stale-old.com',
-        'domains' => ['stale-old.com'],
+        'vhost_domains' => ['stale-old.com'],
+        'certificate_domains' => [],
         'expires_at' => null,
         'issuer' => null,
     ]);
