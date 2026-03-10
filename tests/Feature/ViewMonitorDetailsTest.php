@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Account;
+use App\Models\AccountSslCertificate;
 use App\Models\Monitor;
 use App\Models\MonitorBlacklistCheck;
 use App\Models\MonitorDomainCheck;
@@ -67,42 +68,123 @@ test('an authorized user can turn on uptime checks from monitor details', functi
     });
 });
 
-test('an authorized user can turn off ssl certificate checks from monitor details', function () {
-    Account::factory()->create(['domain' => 'myserver.com']);
-    MonitorFactory::new()->create([
-        'url' => 'https://myserver.com',
-        'certificate_check_enabled' => true,
-    ]);
-
+test('ssl certificates from accounts are displayed on monitor details', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
     $monitor = Monitor::first();
+    $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+
+    AccountSslCertificate::factory()->create([
+        'account_id' => $account->id,
+        'servername' => 'myserver.com',
+        'type' => 'main',
+        'issuer' => "Let's Encrypt Authority X3",
+        'expires_at' => now()->addDays(90),
+    ]);
 
     $this->actingAs(User::factory()->create());
 
     Livewire::test('pages::monitor.details', ['monitor' => $monitor])
-        ->call('toggleCertificateCheck');
-
-    tap($monitor->fresh(), function (Monitor $monitor) {
-        $this->assertFalse($monitor->certificate_check_enabled);
-    });
+        ->assertSee('myserver.com')
+        ->assertSee("Let's Encrypt Authority X3")
+        ->assertSee('Main');
 });
 
-test('an authorized user can turn on ssl certificate checks from monitor details', function () {
-    Account::factory()->create(['domain' => 'myserver.com']);
-    MonitorFactory::new()->create([
-        'url' => 'https://myserver.com',
-        'certificate_check_enabled' => false,
-    ]);
-
+test('a valid ssl certificate shows valid until on monitor details', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
     $monitor = Monitor::first();
+    $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+
+    AccountSslCertificate::factory()->create([
+        'account_id' => $account->id,
+        'servername' => 'myserver.com',
+        'expires_at' => now()->addDays(90),
+    ]);
 
     $this->actingAs(User::factory()->create());
 
     Livewire::test('pages::monitor.details', ['monitor' => $monitor])
-        ->call('toggleCertificateCheck');
+        ->assertSee('Valid until');
+});
 
-    tap($monitor->fresh(), function (Monitor $monitor) {
-        $this->assertTrue($monitor->certificate_check_enabled);
-    });
+test('an expiring soon ssl certificate shows expires in on monitor details', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
+    $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+
+    AccountSslCertificate::factory()->expiringSoon()->create([
+        'account_id' => $account->id,
+        'servername' => 'myserver.com',
+    ]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+        ->assertSee('Expires in');
+});
+
+test('an expired ssl certificate shows expired on monitor details', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
+    $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+
+    AccountSslCertificate::factory()->expired()->create([
+        'account_id' => $account->id,
+        'servername' => 'myserver.com',
+    ]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+        ->assertSee('Expired');
+});
+
+test('monitor details shows no ssl certificates found when there are none', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
+    Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+        ->assertSee('No SSL certificates found.');
+});
+
+test('covered vhost domains are shown with a check on monitor details', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
+    $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+
+    AccountSslCertificate::factory()->create([
+        'account_id' => $account->id,
+        'servername' => 'myserver.com',
+        'vhost_domains' => ['myserver.com', 'www.myserver.com'],
+        'certificate_domains' => ['myserver.com', 'www.myserver.com'],
+    ]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+        ->assertSee('myserver.com')
+        ->assertSee('www.myserver.com');
+});
+
+test('uncovered vhost domains are shown differently on monitor details', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
+    $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+
+    AccountSslCertificate::factory()->create([
+        'account_id' => $account->id,
+        'servername' => 'myserver.com',
+        'vhost_domains' => ['myserver.com', 'sub.myserver.com'],
+        'certificate_domains' => ['myserver.com'],
+    ]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+        ->assertSee('myserver.com')
+        ->assertSee('sub.myserver.com');
 });
 
 test('an authorized user can toggle blacklist check from monitor details', function () {

@@ -183,73 +183,65 @@
     </flux:card>
     <!-- End Uptime Checks Card -->
 
-    <!-- SSL Certificate Checks Card -->
+    <!-- SSL Certificates Card -->
     <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <flux:icon.lock-closed />
-          SSL Certificate
-        </div>
-        @if($monitor->certificate_check_enabled)
-          <flux:button wire:click="toggleCertificateCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
-        @else
-          <flux:button wire:click="toggleCertificateCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
-        @endif
+      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center gap-2">
+        <flux:icon.lock-closed />
+        SSL Certificates
       </flux:heading>
       <div class="px-4 py-5 sm:p-0">
-        @if(!$monitor->certificate_check_enabled)
-          <div class="bg-yellow-100 text-center  p-3">SSL Certificate check is disabled</div>
-          <div class="px-4 py-5 sm:p-0 opacity-20">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  N/A
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
-              </div>
-            </dl>
-          </div>
+        @if($this->sslCertificates->isEmpty())
+          <div class="py-4 sm:py-5 sm:px-6 text-sm text-gray-500">No SSL certificates found.</div>
         @else
-          <div class="px-4 py-5 sm:p-0">
-            <dl class="sm:divide-y sm:divide-gray-200">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            @foreach($this->sslCertificates as $cert)
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                <dt class="text-sm font-medium text-gray-900">
+                  {{ $cert->servername }}
+                  <div class="mt-1">
+                    @if($cert->type->value === 'main')
+                      <flux:badge size="sm" color="blue">Main</flux:badge>
+                    @else
+                      <flux:badge size="sm" color="zinc">Subdomain</flux:badge>
+                    @endif
+                  </div>
+                </dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($monitor->certificate_status === 'invalid')
-                    Invalid
-                  @elseif($monitor->certificate_status === 'not yet checked')
-                    Pending
+                  @if($cert->expires_at === null)
+                    <span class="text-sm text-gray-500">Expiration unknown</span>
+                  @elseif($cert->expires_at->isPast())
+                    <flux:badge color="red">Expired {{ $cert->expires_at->format('M j, Y') }}</flux:badge>
+                  @elseif(now()->diffInDays($cert->expires_at) <= 30)
+                    <flux:badge color="amber">Expires in {{ (int) now()->diffInDays($cert->expires_at) }} days ({{ $cert->expires_at->format('M j, Y') }})</flux:badge>
                   @else
-                    Ok
+                    <flux:badge color="green">Valid until {{ $cert->expires_at->format('M j, Y') }}</flux:badge>
+                  @endif
+                  @if($cert->issuer)
+                    <div class="mt-1 text-xs text-gray-500">{{ $cert->issuer }}</div>
+                  @endif
+                  @if($cert->vhost_domains)
+                    <ul class="mt-2 space-y-1">
+                      @foreach($cert->vhost_domains as $domain)
+                        <li class="flex items-center gap-1.5 text-xs">
+                          @if(in_array($domain, $cert->certificate_domains ?? []))
+                            <flux:icon.check-circle variant="solid" class="size-3.5 text-green-500 shrink-0" />
+                            <span class="text-gray-700">{{ $domain }}</span>
+                          @else
+                            <flux:icon.x-circle variant="solid" class="size-3.5 text-red-500 shrink-0" />
+                            <span class="text-gray-400">{{ $domain }}</span>
+                          @endif
+                        </li>
+                      @endforeach
+                    </ul>
                   @endif
                 </dd>
               </div>
-              @if($monitor->certificate_status === 'valid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_expiration_date->format("D, F j, Y, g:i a") }}</dd>
-                </div>
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Issued By</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_issuer }}</dd>
-                </div>
-              @endif
-              @if($monitor->certificate_status === 'invalid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Failure Reason</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->certificate_check_failure_reason }}</dd>
-                </div>
-              @endif
-            </dl>
-          </div>
+            @endforeach
+          </dl>
         @endif
       </div>
     </flux:card>
-    <!-- End SSL Certificate Checks Card -->
+    <!-- End SSL Certificates Card -->
 
     <!-- Email Blacklist Checks Card -->
     <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">

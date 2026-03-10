@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Account;
 use App\Models\LighthouseAudit;
 use App\Models\Monitor;
 use Illuminate\Support\Facades\Artisan;
@@ -14,7 +15,16 @@ new #[Title('Monitor Details')] class extends Component
     public function mount(Monitor $monitor): void
     {
         $this->monitor = $monitor;
-        $this->monitor->loadMissing(['accounts', 'accounts.server', 'blacklistCheck', 'lighthouseCheck', 'domainCheck']);
+        $this->monitor->loadMissing(['accounts', 'accounts.server', 'accounts.sslCertificates', 'blacklistCheck', 'lighthouseCheck', 'domainCheck']);
+    }
+
+    #[Computed]
+    public function sslCertificates(): \Illuminate\Support\Collection
+    {
+        return $this->monitor->accounts
+            ->flatMap(fn (Account $account) => $account->sslCertificates)
+            ->sortBy('servername')
+            ->values();
     }
 
     #[Computed]
@@ -29,7 +39,6 @@ new #[Title('Monitor Details')] class extends Component
     public function enableAllMonitors(): void
     {
         $this->monitor->uptime_check_enabled = true;
-        $this->monitor->certificate_check_enabled = true;
         $this->monitor->save();
 
         $this->monitor->blacklistCheck->update(['enabled' => true]);
@@ -46,7 +55,6 @@ new #[Title('Monitor Details')] class extends Component
     public function disableAllMonitors(): void
     {
         $this->monitor->uptime_check_enabled = false;
-        $this->monitor->certificate_check_enabled = false;
         $this->monitor->save();
 
         $this->monitor->blacklistCheck->update(['enabled' => false]);
@@ -118,17 +126,6 @@ new #[Title('Monitor Details')] class extends Component
             $this->monitor->uptime_check_enabled = false;
         } else {
             $this->monitor->uptime_check_enabled = true;
-        }
-
-        $this->monitor->save();
-    }
-
-    public function toggleCertificateCheck(): void
-    {
-        if ($this->monitor->certificate_check_enabled) {
-            $this->monitor->certificate_check_enabled = false;
-        } else {
-            $this->monitor->certificate_check_enabled = true;
         }
 
         $this->monitor->save();
