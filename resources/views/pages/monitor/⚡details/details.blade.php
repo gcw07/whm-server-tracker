@@ -456,7 +456,7 @@
               @if($this->monitor->lighthouseCheck?->status->value === 'valid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->lighthouseCheck?->last_succeeded_at?->diffForHumans() }}</dd>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->last_succeeded_at?->diffForHumans() }}</dd>
                 </div>
                 <div class="py-4 sm:py-5 sm:px-6">
                   <div class="flex w-full items-center justify-between">
@@ -487,17 +487,17 @@
                   </div>
                 </div>
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <a href="{{ route('monitors.lighthouse', $monitor->id) }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">View Full Reports</a>
+                  <a href="{{ route('monitors.lighthouse', $this->monitor->id) }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">View Full Reports</a>
                 </div>
               @endif
               @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->lighthouseCheck?->last_failed_at }}</dd>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->last_failed_at }}</dd>
                 </div>
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Last Error Message</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->lighthouseCheck?->failure_reason }}</dd>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->failure_reason }}</dd>
                 </div>
               @endif
             </dl>

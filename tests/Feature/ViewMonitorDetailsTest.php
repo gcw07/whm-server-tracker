@@ -26,7 +26,7 @@ test('an authorized user can view monitor details page', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->assertSee('myserver.com');
 });
 
@@ -41,7 +41,7 @@ test('an authorized user can turn off uptime checks from monitor details', funct
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->call('toggleUptimeCheck');
 
     tap($monitor->fresh(), function (Monitor $monitor) {
@@ -60,7 +60,7 @@ test('an authorized user can turn on uptime checks from monitor details', functi
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->call('toggleUptimeCheck');
 
     tap($monitor->fresh(), function (Monitor $monitor) {
@@ -83,7 +83,7 @@ test('ssl certificates from accounts are displayed on monitor details', function
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->assertSee('myserver.com')
         ->assertSee("Let's Encrypt Authority X3")
         ->assertSee('Main');
@@ -102,7 +102,7 @@ test('a valid ssl certificate shows valid until on monitor details', function ()
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->assertSee('Valid until');
 });
 
@@ -118,7 +118,7 @@ test('an expiring soon ssl certificate shows expires in on monitor details', fun
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->assertSee('Expires in');
 });
 
@@ -134,7 +134,7 @@ test('an expired ssl certificate shows expired on monitor details', function () 
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->assertSee('Expired');
 });
 
@@ -145,7 +145,7 @@ test('monitor details shows no ssl certificates found when there are none', func
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->assertSee('No SSL certificates found.');
 });
 
@@ -163,7 +163,7 @@ test('covered vhost domains are shown with a check on monitor details', function
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->assertSee('myserver.com')
         ->assertSee('www.myserver.com');
 });
@@ -182,7 +182,7 @@ test('uncovered vhost domains are shown differently on monitor details', functio
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->assertSee('myserver.com')
         ->assertSee('sub.myserver.com');
 });
@@ -195,7 +195,7 @@ test('an authorized user can toggle blacklist check from monitor details', funct
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->call('toggleBlacklistCheck');
 
     $this->assertFalse((bool) $monitor->blacklistCheck()->value('enabled'));
@@ -209,7 +209,7 @@ test('an authorized user can toggle lighthouse check from monitor details', func
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->call('toggleLighthouseCheck');
 
     $this->assertFalse((bool) $monitor->lighthouseCheck()->value('enabled'));
@@ -223,7 +223,7 @@ test('an authorized user can toggle domain name check from monitor details', fun
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::monitor.details', ['monitor' => $monitor])
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
         ->call('toggleDomainNameExpirationCheck');
 
     $this->assertFalse((bool) $monitor->domainCheck()->value('enabled'));
