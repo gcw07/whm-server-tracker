@@ -43,19 +43,22 @@ new #[Title('Monitor Details')] class extends Component
     public function lighthouseStats(): LighthouseAudit|\Illuminate\Database\Eloquent\Builder|null
     {
         return LighthouseAudit::query()
-            ->where('monitor_id', $this->monitor->id)
+            ->where('monitor_id', $this->monitorId)
             ->orderBy('created_at', 'desc')
             ->first();
     }
 
     public function enableAllMonitors(): void
     {
-        $this->monitor->uptime_check_enabled = true;
-        $this->monitor->save();
+        $monitor = $this->monitor;
+        $monitor->uptime_check_enabled = true;
+        $monitor->save();
 
-        $this->monitor->blacklistCheck->update(['enabled' => true]);
-        $this->monitor->lighthouseCheck->update(['enabled' => true]);
-        $this->monitor->domainCheck->update(['enabled' => true]);
+        $monitor->blacklistCheck->update(['enabled' => true]);
+        $monitor->lighthouseCheck->update(['enabled' => true]);
+        $monitor->domainCheck->update(['enabled' => true]);
+
+        unset($this->monitor);
 
         Flux::toast(
             text: 'Enabled all monitors for this URL.',
@@ -66,12 +69,16 @@ new #[Title('Monitor Details')] class extends Component
 
     public function disableAllMonitors(): void
     {
-        $this->monitor->uptime_check_enabled = false;
-        $this->monitor->save();
+        $monitor = $this->monitor;
 
-        $this->monitor->blacklistCheck->update(['enabled' => false]);
-        $this->monitor->lighthouseCheck->update(['enabled' => false]);
-        $this->monitor->domainCheck->update(['enabled' => false]);
+        $monitor->uptime_check_enabled = false;
+        $monitor->save();
+
+        $monitor->blacklistCheck->update(['enabled' => false]);
+        $monitor->lighthouseCheck->update(['enabled' => false]);
+        $monitor->domainCheck->update(['enabled' => false]);
+
+        unset($this->monitor);
 
         Flux::toast(
             text: 'Disable all monitors for this URL.',
@@ -121,33 +128,49 @@ new #[Title('Monitor Details')] class extends Component
 
     public function toggleUptimeCheck(): void
     {
-        if ($this->monitor->uptime_check_enabled) {
-            $this->monitor->uptime_check_enabled = false;
+        $monitor = $this->monitor;
+
+        if ($monitor->uptime_check_enabled) {
+            $monitor->uptime_check_enabled = false;
         } else {
-            $this->monitor->uptime_check_enabled = true;
+            $monitor->uptime_check_enabled = true;
         }
 
-        $this->monitor->save();
+        $monitor->save();
+
+        unset($this->monitor);
     }
 
     public function toggleBlacklistCheck(): void
     {
-        $this->monitor->blacklistCheck->update([
-            'enabled' => ! $this->monitor->blacklistCheck->enabled,
+        $monitor = $this->monitor;
+
+        $monitor->blacklistCheck->update([
+            'enabled' => ! $monitor->blacklistCheck->enabled,
         ]);
+
+        unset($this->monitor);
     }
 
     public function toggleLighthouseCheck(): void
     {
-        $this->monitor->lighthouseCheck->update([
-            'enabled' => ! $this->monitor->lighthouseCheck->enabled,
+        $monitor = $this->monitor;
+
+        $monitor->lighthouseCheck->update([
+            'enabled' => ! $monitor->lighthouseCheck->enabled,
         ]);
+
+        unset($this->monitor);
     }
 
     public function toggleDomainNameExpirationCheck(): void
     {
-        $this->monitor->domainCheck->update([
-            'enabled' => ! $this->monitor->domainCheck->enabled,
+        $monitor = $this->monitor;
+
+        $monitor->domainCheck->update([
+            'enabled' => ! $monitor->domainCheck->enabled,
         ]);
+
+        unset($this->monitor);
     }
 };
