@@ -206,7 +206,7 @@
                     @endif
                   </div>
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0">
                   @if($cert->expires_at === null)
                     <span class="text-sm text-gray-500">Expiration unknown</span>
                   @elseif($cert->expires_at->isPast())
@@ -219,8 +219,10 @@
                   @if($cert->issuer)
                     <div class="mt-1 text-xs text-gray-500">{{ $cert->issuer }}</div>
                   @endif
+                </dd>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0">
                   @if($cert->vhost_domains)
-                    <ul class="mt-2 space-y-1">
+                    <ul class="space-y-1">
                       @foreach($cert->vhost_domains as $domain)
                         <li class="flex items-center gap-1.5 text-xs">
                           @if(in_array($domain, $cert->certificate_domains ?? []))
