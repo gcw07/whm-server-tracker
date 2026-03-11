@@ -9,12 +9,12 @@
       </flux:breadcrumbs>
 
       <h3 class="mt-2 text-2xl leading-6 font-medium text-gray-900">
-        {{ $monitor->domain_name }}
+        {{ $this->monitor->domain_name }}
       </h3>
     </div>
 
     <div class="flex mt-3 md:mt-0 md:ml-4 gap-2">
-      <flux:button :href="$monitor->url" icon="arrow-top-right-on-square" target="_blank">View</flux:button>
+      <flux:button :href="$this->monitor->url" icon="arrow-top-right-on-square" target="_blank">View</flux:button>
 
       <flux:dropdown position="bottom" align="end">
         <flux:button icon="arrow-path" icon:trailing="chevron-down">Refresh</flux:button>
@@ -105,14 +105,14 @@
           <flux:icon.check-badge />
           Uptime Checks
         </div>
-        @if($monitor->uptime_check_enabled)
+        @if($this->monitor->uptime_check_enabled)
           <flux:button wire:click="toggleUptimeCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
         @else
           <flux:button wire:click="toggleUptimeCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
         @endif
       </flux:heading>
       <div class="px-4 py-5 sm:p-0">
-        @if(!$monitor->uptime_check_enabled)
+        @if(!$this->monitor->uptime_check_enabled)
           <div class="bg-yellow-100 text-center  p-3">Uptime check is disabled</div>
           <div class="px-4 py-5 sm:p-0 opacity-20">
             <dl class="sm:divide-y sm:divide-gray-200">
@@ -134,9 +134,9 @@
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Current Status</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($monitor->uptime_status === 'down')
+                  @if($this->monitor->uptime_status === 'down')
                     Down
-                  @elseif($monitor->uptime_status === 'not yet checked')
+                  @elseif($this->monitor->uptime_status === 'not yet checked')
                     Pending
                   @else
                     Up
@@ -145,7 +145,7 @@
               </div>
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->uptime_last_check_date?->diffForHumans() }}</dd>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->uptime_last_check_date?->diffForHumans() }}</dd>
               </div>
               <div class="py-4 sm:py-5 sm:px-6">
                 <div class="flex w-full items-center justify-between">
@@ -169,10 +169,10 @@
                   </div>
                 </div>
               </div>
-              @if($monitor->uptime_status === 'down')
+              @if($this->monitor->uptime_status === 'down')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Failure Reason</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->uptime_check_failure_reason }}</dd>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->uptime_check_failure_reason }}</dd>
                 </div>
               @endif
             </dl>
@@ -251,14 +251,14 @@
           <flux:icon.envelope />
           Email Blacklist
         </div>
-        @if($monitor->blacklistCheck?->enabled)
+        @if($this->monitor->blacklistCheck?->enabled)
           <flux:button wire:click="toggleBlacklistCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
         @else
           <flux:button wire:click="toggleBlacklistCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
         @endif
       </flux:heading>
       <div class="px-4 py-5 sm:p-0">
-        @if(!$monitor->blacklistCheck?->enabled)
+        @if(!$this->monitor->blacklistCheck?->enabled)
           <div class="bg-yellow-100 text-center  p-3">Email Blacklist check is disabled</div>
           <div class="px-4 py-5 sm:p-0 opacity-20">
             <dl class="sm:divide-y sm:divide-gray-200">
@@ -280,26 +280,26 @@
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Current Status</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($monitor->blacklistCheck?->status->value === 'invalid')
+                  @if($this->monitor->blacklistCheck?->status->value === 'invalid')
                     Found
-                  @elseif($monitor->blacklistCheck?->status->value === 'not yet checked')
+                  @elseif($this->monitor->blacklistCheck?->status->value === 'not yet checked')
                     Pending
                   @else
                     Ok
                   @endif
                 </dd>
               </div>
-              @if($monitor->blacklistCheck?->status->value === 'valid')
+              @if($this->monitor->blacklistCheck?->status->value === 'valid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">List</dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Not found on any blacklist</dd>
                 </div>
               @endif
-              @if($monitor->blacklistCheck?->status->value === 'invalid')
+              @if($this->monitor->blacklistCheck?->status->value === 'invalid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">List</dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {!! nl2br($monitor->blacklistCheck?->failure_reason) !!}
+                    {!! nl2br($this->monitor->blacklistCheck?->failure_reason) !!}
                   </dd>
                 </div>
               @endif
@@ -317,14 +317,14 @@
           <flux:icon.identification />
           Domain Information
         </div>
-        @if($monitor->domainCheck?->enabled)
+        @if($this->monitor->domainCheck?->enabled)
           <flux:button wire:click="toggleDomainNameExpirationCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
         @else
           <flux:button wire:click="toggleDomainNameExpirationCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
         @endif
       </flux:heading>
       <div class="px-4 py-5 sm:p-0">
-        @if(!$monitor->domainCheck?->enabled)
+        @if(!$this->monitor->domainCheck?->enabled)
           <div class="bg-yellow-100 text-center  p-3">Domain Information checks are disabled</div>
           <div class="px-4 py-5 sm:p-0 opacity-20">
             <dl class="sm:divide-y sm:divide-gray-200">
@@ -356,43 +356,43 @@
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Current Status</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($monitor->domainCheck?->status->value === 'invalid')
+                  @if($this->monitor->domainCheck?->status->value === 'invalid')
                     Invalid
-                  @elseif($monitor->domainCheck?->status->value === 'not yet checked')
+                  @elseif($this->monitor->domainCheck?->status->value === 'not yet checked')
                     Pending
                   @else
                     Valid
                   @endif
                 </dd>
               </div>
-              @if($monitor->domainCheck?->status->value === 'valid')
+              @if($this->monitor->domainCheck?->status->value === 'valid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->domainCheck?->expiration_date?->format("D, F j, Y, g:i a") }}</dd>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->domainCheck?->expiration_date?->format("D, F j, Y, g:i a") }}</dd>
                 </div>
               @endif
-              @if($monitor->domainCheck?->status->value === 'invalid')
+              @if($this->monitor->domainCheck?->status->value === 'invalid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Failed Reason</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->domainCheck?->failure_reason }}</dd>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->domainCheck?->failure_reason }}</dd>
                 </div>
               @endif
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">On Cloudflare</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($monitor->domainCheck?->is_on_cloudflare)
+                  @if($this->monitor->domainCheck?->is_on_cloudflare)
                     Yes
                   @else
                     No
                   @endif
                 </dd>
               </div>
-              @if($monitor->domainCheck?->status->value === 'valid')
+              @if($this->monitor->domainCheck?->status->value === 'valid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Nameservers</dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    @if($monitor->domainCheck?->nameservers)
-                      @foreach($monitor->domainCheck->nameservers as $nameserver)
+                    @if($this->monitor->domainCheck?->nameservers)
+                      @foreach($this->monitor->domainCheck->nameservers as $nameserver)
                         {{ $nameserver }}<br>
                       @endforeach
                     @else
@@ -415,14 +415,14 @@
           <flux:icon.light-bulb />
           Lighthouse Reports
         </div>
-        @if($monitor->lighthouseCheck?->enabled)
+        @if($this->monitor->lighthouseCheck?->enabled)
           <flux:button wire:click="toggleLighthouseCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
         @else
           <flux:button wire:click="toggleLighthouseCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
         @endif
       </flux:heading>
       <div class="px-4 py-5 sm:p-0">
-        @if(!$monitor->lighthouseCheck?->enabled)
+        @if(!$this->monitor->lighthouseCheck?->enabled)
           <div class="bg-yellow-100 text-center  p-3">Lighthouse reports are disabled</div>
           <div class="px-4 py-5 sm:p-0 opacity-20">
             <dl class="sm:divide-y sm:divide-gray-200">
@@ -444,16 +444,16 @@
               <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Current Status</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($monitor->lighthouseCheck?->status->value === 'invalid')
+                  @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
                     Invalid
-                  @elseif($monitor->lighthouseCheck?->status->value === 'not yet checked')
+                  @elseif($this->monitor->lighthouseCheck?->status->value === 'not yet checked')
                     Pending
                   @else
                     Ok
                   @endif
                 </dd>
               </div>
-              @if($monitor->lighthouseCheck?->status->value === 'valid')
+              @if($this->monitor->lighthouseCheck?->status->value === 'valid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->lighthouseCheck?->last_succeeded_at?->diffForHumans() }}</dd>
@@ -490,7 +490,7 @@
                   <a href="{{ route('monitors.lighthouse', $monitor->id) }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">View Full Reports</a>
                 </div>
               @endif
-              @if($monitor->lighthouseCheck?->status->value === 'invalid')
+              @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $monitor->lighthouseCheck?->last_failed_at }}</dd>

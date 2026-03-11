@@ -10,22 +10,24 @@ use Livewire\Component;
 
 new #[Title('Monitor Details')] class extends Component
 {
-    public Monitor $monitor;
+    public int $monitorId;
 
-    public function mount(Monitor $monitor): void
+    public function mount(int $monitor): void
     {
-        $this->monitor = $monitor;
-        $this->loadMonitorRelationships();
+        $this->monitorId = $monitor;
     }
 
-    public function hydrate(): void
+    #[Computed]
+    public function monitor(): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|Monitor|null
     {
-        $this->loadMonitorRelationships();
-    }
-
-    private function loadMonitorRelationships(): void
-    {
-        $this->monitor->loadMissing(['accounts', 'accounts.server', 'accounts.sslCertificates', 'blacklistCheck', 'lighthouseCheck', 'domainCheck']);
+        return Monitor::with([
+            'accounts',
+            'accounts.server',
+            'accounts.sslCertificates',
+            'blacklistCheck',
+            'lighthouseCheck',
+            'domainCheck'
+        ])->findOrFail($this->monitorId);
     }
 
     #[Computed]
