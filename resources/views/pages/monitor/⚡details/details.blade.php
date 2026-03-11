@@ -20,7 +20,6 @@
         <flux:button icon="arrow-path" icon:trailing="chevron-down">Refresh</flux:button>
 
         <flux:menu>
-          <flux:menu.item wire:click="refreshCertificateCheck" icon="lock-closed">SSL Certificate</flux:menu.item>
           <flux:menu.item wire:click="refreshBlacklistCheck" icon="envelope">Email Blacklist</flux:menu.item>
           <flux:menu.item wire:click="refreshDomainInfoCheck" icon="identification">Domain Info</flux:menu.item>
           <flux:menu.item wire:click="refreshLighthouseCheck" icon="light-bulb">Lighthouse Report</flux:menu.item>

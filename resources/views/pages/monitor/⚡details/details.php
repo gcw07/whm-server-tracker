@@ -68,19 +68,6 @@ new #[Title('Monitor Details')] class extends Component
         );
     }
 
-    public function refreshCertificateCheck(): void
-    {
-        Artisan::call('monitor:check-certificate', [
-            '--url' => $this->monitor->url,
-        ]);
-
-        Flux::toast(
-            text: 'The SSL certificate for this URL will be checked shortly.',
-            heading: 'Checking...',
-            variant: 'success',
-        );
-    }
-
     public function refreshBlacklistCheck(): void
     {
         Artisan::call('server-tracker:check-blacklist', [
