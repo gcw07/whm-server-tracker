@@ -15,6 +15,16 @@ new #[Title('Monitor Details')] class extends Component
     public function mount(Monitor $monitor): void
     {
         $this->monitor = $monitor;
+        $this->loadMonitorRelationships();
+    }
+
+    public function hydrate(): void
+    {
+        $this->loadMonitorRelationships();
+    }
+
+    private function loadMonitorRelationships(): void
+    {
         $this->monitor->loadMissing(['accounts', 'accounts.server', 'accounts.sslCertificates', 'blacklistCheck', 'lighthouseCheck', 'domainCheck']);
     }
 
