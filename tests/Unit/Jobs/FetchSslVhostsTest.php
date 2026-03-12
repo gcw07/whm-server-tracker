@@ -99,6 +99,18 @@ it('stores ssl certificates for multiple accounts on the same server', function 
     expect($superCerts)->toBe(1);
 });
 
+it('returns silently when a ConnectionException is thrown', function () {
+    $server = Server::factory()->create(['token' => 'valid-token']);
+
+    Illuminate\Support\Facades\Http::fake(function () {
+        throw new Illuminate\Http\Client\ConnectionException;
+    });
+
+    dispatch(new FetchSslVhostsJob($server));
+
+    expect(AccountSslCertificate::count())->toBe(0);
+});
+
 it('dispatches FetchSslVhostsJob after FetchServerDataJob runs', function () {
     Bus::fake([FetchEmailDiskUsageJob::class, FetchSslVhostsJob::class]);
 

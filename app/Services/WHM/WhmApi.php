@@ -15,6 +15,7 @@ use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
 use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use Carbon\Carbon;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
 
@@ -176,11 +177,15 @@ class WhmApi
 
     public function fetchSslVhosts(): void
     {
-        $response = Http::withHeaders($this->getHeaders())
-            ->baseUrl($this->server->whm_base_api_url)
-            ->connectTimeout(config('server-tracker.whm.connection_timeout'))
-            ->withoutVerifying()
-            ->get('fetch_ssl_vhosts?api.version=1');
+        try {
+            $response = Http::withHeaders($this->getHeaders())
+                ->baseUrl($this->server->whm_base_api_url)
+                ->connectTimeout(config('server-tracker.whm.connection_timeout'))
+                ->withoutVerifying()
+                ->get('fetch_ssl_vhosts?api.version=1');
+        } catch (ConnectionException) {
+            return;
+        }
 
         if ($response instanceof \Exception || $response->failed()) {
             return;
