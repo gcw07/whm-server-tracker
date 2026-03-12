@@ -45,7 +45,7 @@ class CheckDomainNameJob implements ShouldQueue
             ->get("https://$rdapServer/domain/{$this->monitor->url->getHost()}");
 
         if ($response->failed() && $response->status() == 429) {
-            $secondsRemaining = $response->header('Retry-After');
+            $secondsRemaining = (int) $response->header('Retry-After');
 
             Cache::put(
                 $cacheKey,
