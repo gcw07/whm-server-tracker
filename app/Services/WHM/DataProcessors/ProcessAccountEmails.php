@@ -17,6 +17,10 @@ class ProcessAccountEmails
 
         $emailAddresses = collect($emails)->map(fn ($item) => $item['email'])->all();
 
+        $existingEmails = AccountEmail::where('account_id', $account->id)
+            ->pluck('email')
+            ->all();
+
         collect($emails)->each(function ($item) use ($account) {
             AccountEmail::updateOrCreate(
                 ['account_id' => $account->id, 'email' => $item['email']],
@@ -32,8 +36,12 @@ class ProcessAccountEmails
             );
         });
 
-        AccountEmail::where('account_id', $account->id)
-            ->whereNotIn('email', $emailAddresses)
-            ->delete();
+        $emailsToDelete = array_diff($existingEmails, $emailAddresses);
+
+        if (! empty($emailsToDelete)) {
+            AccountEmail::where('account_id', $account->id)
+                ->whereIn('email', $emailsToDelete)
+                ->delete();
+        }
     }
 }
