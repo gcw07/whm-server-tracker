@@ -62,7 +62,7 @@
               </div>
             @endif
 
-            <flux:table :paginate="$this->servers">
+            <flux:table :paginate="$this->servers" pagination:scroll-to>
               <flux:table.columns>
                 <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'name'" :direction="$sortDirection" wire:click="sort('name')">NAME</flux:table.column>
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'accounts'" :direction="$sortDirection" wire:click="sort('accounts')">ACCOUNTS</flux:table.column>

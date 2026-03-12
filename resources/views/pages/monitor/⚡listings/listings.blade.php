@@ -70,7 +70,7 @@
               </div>
             @endif
 
-            <flux:table :paginate="$this->monitors">
+            <flux:table :paginate="$this->monitors" pagination:scroll-to>
               <flux:table.columns>
                 <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'url'" :direction="$sortDirection" wire:click="sort('url')">SITE</flux:table.column>
                 <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">UPTIME</flux:table.column>
