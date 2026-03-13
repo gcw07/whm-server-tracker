@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Spatie\Lighthouse\Lighthouse;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
@@ -487,8 +488,15 @@ class Monitor extends BaseMonitor
     public function checkWordPress(): void
     {
         try {
-            $feedUrl = (string) $this->url.'/feed/';
-            $xml = @simplexml_load_file($feedUrl);
+            $response = Http::timeout(30)->get((string) $this->url.'/feed/');
+
+            if (! $response->ok()) {
+                $this->setWordPress(null);
+
+                return;
+            }
+
+            $xml = simplexml_load_string($response->body());
 
             if ($xml === false) {
                 $this->setWordPress(null);
@@ -516,7 +524,6 @@ class Monitor extends BaseMonitor
     {
         $this->wordpressCheck->update([
             'status' => WordPressStatusEnum::Invalid->value,
-            'wordpress_version' => null,
             'failure_reason' => $exception->getMessage(),
         ]);
     }
