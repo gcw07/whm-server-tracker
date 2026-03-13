@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Account;
+use App\Models\Monitor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,17 +13,17 @@ class CheckWordPressJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public Account $account;
+    public Monitor $monitor;
 
     public int $tries = 5;
 
-    public function __construct(Account $account)
+    public function __construct(Monitor $monitor)
     {
-        $this->account = $account;
+        $this->monitor = $monitor;
     }
 
     public function handle(): void
     {
-        $this->account->checkWordPress();
+        $this->monitor->checkWordPress();
     }
 }

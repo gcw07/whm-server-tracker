@@ -105,7 +105,6 @@ new #[Title('Accounts')] class extends Component
                 'disk_limit',
                 'disk_usage',
                 'plan',
-                'wordpress_version',
             ]),
         ]);
 

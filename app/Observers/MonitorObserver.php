@@ -6,6 +6,7 @@ use App\Models\Monitor;
 use App\Models\MonitorBlacklistCheck;
 use App\Models\MonitorDomainCheck;
 use App\Models\MonitorLighthouseCheck;
+use App\Models\MonitorWordPressCheck;
 
 class MonitorObserver
 {
@@ -14,5 +15,6 @@ class MonitorObserver
         MonitorBlacklistCheck::create(['monitor_id' => $monitor->id]);
         MonitorLighthouseCheck::create(['monitor_id' => $monitor->id]);
         MonitorDomainCheck::create(['monitor_id' => $monitor->id]);
+        MonitorWordPressCheck::create(['monitor_id' => $monitor->id]);
     }
 }

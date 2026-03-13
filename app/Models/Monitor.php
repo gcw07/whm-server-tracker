@@ -5,13 +5,16 @@ namespace App\Models;
 use App\Enums\BlacklistStatusEnum;
 use App\Enums\DomainNameStatusEnum;
 use App\Enums\LighthouseStatusEnum;
+use App\Enums\WordPressStatusEnum;
 use App\Events\DomainNameExpiresSoonEvent;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Cache;
@@ -19,26 +22,27 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Lighthouse\Lighthouse;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
+use Spatie\Url\Url;
 
 /**
  * @property int $id
- * @property \Spatie\Url\Url|null $url
+ * @property Url|null $url
  * @property bool $uptime_check_enabled
  * @property string $look_for_string
  * @property string $uptime_check_interval_in_minutes
  * @property string $uptime_status
  * @property string|null $uptime_check_failure_reason
  * @property int $uptime_check_times_failed_in_a_row
- * @property \Carbon\CarbonImmutable|null $uptime_status_last_change_date
- * @property \Carbon\CarbonImmutable|null $uptime_last_check_date
- * @property \Carbon\CarbonImmutable|null $uptime_check_failed_event_fired_on_date
+ * @property CarbonImmutable|null $uptime_status_last_change_date
+ * @property CarbonImmutable|null $uptime_last_check_date
+ * @property CarbonImmutable|null $uptime_check_failed_event_fired_on_date
  * @property string $uptime_check_method
  * @property string|null $uptime_check_payload
  * @property array $uptime_check_additional_headers
  * @property string|null $uptime_check_response_checker
  * @property bool $certificate_check_enabled
  * @property string $certificate_status
- * @property \Carbon\CarbonImmutable|null $certificate_expiration_date
+ * @property CarbonImmutable|null $certificate_expiration_date
  * @property string|null $certificate_issuer
  * @property string $certificate_check_failure_reason
  * @property bool $blacklist_check_enabled
@@ -46,30 +50,30 @@ use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
  * @property string|null $blacklist_check_failure_reason
  * @property bool $lighthouse_check_enabled
  * @property string $lighthouse_status
- * @property \Carbon\CarbonImmutable|null $lighthouse_update_last_failed_at
- * @property \Carbon\CarbonImmutable|null $lighthouse_update_last_succeeded_at
+ * @property CarbonImmutable|null $lighthouse_update_last_failed_at
+ * @property CarbonImmutable|null $lighthouse_update_last_succeeded_at
  * @property string|null $lighthouse_check_failure_reason
  * @property bool $domain_name_check_enabled
  * @property string $domain_name_status
- * @property \Carbon\CarbonImmutable|null $domain_name_expiration_date
+ * @property CarbonImmutable|null $domain_name_expiration_date
  * @property string|null $domain_name_check_failure_reason
  * @property array<array-key, mixed>|null $nameservers
  * @property bool $is_on_cloudflare
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
+ * @property-read Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
  * @property-read mixed $domain_name
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DowntimeStat> $downtimeStats
+ * @property-read Collection<int, DowntimeStat> $downtimeStats
  * @property-read int|null $downtime_stats_count
  * @property-read string $certificate_status_as_emoji
  * @property-read string $chunked_last_certificate_check_failure_reason
  * @property-read string $chunked_last_failure_reason
  * @property-read string $raw_url
  * @property-read string $uptime_status_as_emoji
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LighthouseAudit> $lighthouseAudits
+ * @property-read Collection<int, LighthouseAudit> $lighthouseAudits
  * @property-read int|null $lighthouse_audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LighthouseAudit> $lighthouseLatestAudit
+ * @property-read Collection<int, LighthouseAudit> $lighthouseLatestAudit
  * @property-read int|null $lighthouse_latest_audit_count
  * @property-read mixed $uptime_for_last_seven_days
  * @property-read mixed $uptime_for_last_thirty_days
@@ -165,6 +169,11 @@ class Monitor extends BaseMonitor
     public function domainCheck(): HasOne
     {
         return $this->hasOne(MonitorDomainCheck::class);
+    }
+
+    public function wordpressCheck(): HasOne
+    {
+        return $this->hasOne(MonitorWordPressCheck::class);
     }
 
     protected function domainName(): Attribute
@@ -472,6 +481,43 @@ class Monitor extends BaseMonitor
         $this->domainCheck->update([
             'nameservers' => $nameservers,
             'is_on_cloudflare' => $isOnCloudflare,
+        ]);
+    }
+
+    public function checkWordPress(): void
+    {
+        try {
+            $feedUrl = (string) $this->url.'/feed/';
+            $xml = @simplexml_load_file($feedUrl);
+
+            if ($xml === false) {
+                $this->setWordPress(null);
+            } elseif ($xml->channel->generator && str_contains((string) $xml->channel->generator, '?v=')) {
+                [, $version] = explode('?v=', (string) $xml->channel->generator);
+                $this->setWordPress($version);
+            } else {
+                $this->setWordPress(null);
+            }
+        } catch (Exception $exception) {
+            $this->setWordPressException($exception);
+        }
+    }
+
+    public function setWordPress(?string $version): void
+    {
+        $this->wordpressCheck->update([
+            'status' => WordPressStatusEnum::Valid->value,
+            'wordpress_version' => $version,
+            'failure_reason' => null,
+        ]);
+    }
+
+    public function setWordPressException(Exception $exception): void
+    {
+        $this->wordpressCheck->update([
+            'status' => WordPressStatusEnum::Invalid->value,
+            'wordpress_version' => null,
+            'failure_reason' => $exception->getMessage(),
         ]);
     }
 }

@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use App\Models\Presenters\AccountPresenter;
-use Exception;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Http;
 
 /**
  * @property int $id
@@ -22,25 +22,24 @@ use Illuminate\Support\Facades\Http;
  * @property bool $backup
  * @property bool $suspended
  * @property string $suspend_reason
- * @property \Carbon\CarbonImmutable|null $suspend_time
- * @property \Carbon\CarbonImmutable|null $setup_date
+ * @property CarbonImmutable|null $suspend_time
+ * @property CarbonImmutable|null $setup_date
  * @property string $disk_used
  * @property string $disk_limit
  * @property string $plan
- * @property string|null $wordpress_version
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
  * @property-read mixed $backups_enabled
  * @property-read mixed $cpanel_url
  * @property-read mixed $domain_url
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AccountEmail> $emails
+ * @property-read Collection<int, AccountEmail> $emails
  * @property-read int|null $emails_count
  * @property-read mixed $formatted_disk_usage
  * @property-read mixed $is_disk_critical
  * @property-read mixed $is_disk_full
  * @property-read mixed $is_disk_warning
- * @property-read \App\Models\Monitor|null $monitor
- * @property-read \App\Models\Server $server
+ * @property-read Monitor|null $monitor
+ * @property-read Server $server
  *
  * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
  * @method static Builder<static>|Account newModelQuery()
@@ -63,7 +62,6 @@ use Illuminate\Support\Facades\Http;
  * @method static Builder<static>|Account whereSuspended($value)
  * @method static Builder<static>|Account whereUpdatedAt($value)
  * @method static Builder<static>|Account whereUser($value)
- * @method static Builder<static>|Account whereWordpressVersion($value)
  *
  * @mixin \Eloquent
  */
@@ -129,7 +127,6 @@ class Account extends Model
             'disk_limit' => $this->disk_limit,
             'disk_usage' => $this->formatted_disk_usage,
             'plan' => $this->plan,
-            'wordpress_version' => $this->wordpress_version,
         ])->only($columns)->all();
     }
 
@@ -141,36 +138,5 @@ class Account extends Model
             'user',
             'ip',
         ], 'LIKE', "%$term%");
-    }
-
-    public function checkWordPress()
-    {
-        try {
-            $url = $this->domain_url.'/feed/';
-            $fetch = Http::get($url);
-
-            if ($fetch->ok()) {
-                $xml = simplexml_load_file($url);
-
-                if ($xml === false) {
-                    $this->setWordPressVersion(null);
-                } else {
-                    if ($xml->channel->generator) {
-                        [, $version] = explode('?v=', $xml->channel->generator);
-                        $this->setWordPressVersion($version);
-                    }
-                }
-            } else {
-                $this->setWordPressVersion(null);
-            }
-        } catch (Exception $exception) {
-            $this->setWordPressVersion(null);
-        }
-    }
-
-    public function setWordPressVersion($version): void
-    {
-        $this->wordpress_version = $version;
-        $this->save();
     }
 }

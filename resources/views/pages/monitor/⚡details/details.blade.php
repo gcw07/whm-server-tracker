@@ -20,6 +20,7 @@
         <flux:button icon="arrow-path" icon:trailing="chevron-down">Refresh</flux:button>
 
         <flux:menu>
+          <flux:menu.item wire:click="refreshWordPressCheck" icon="globe-alt">WordPress</flux:menu.item>
           <flux:menu.item wire:click="refreshBlacklistCheck" icon="envelope">Email Blacklist</flux:menu.item>
           <flux:menu.item wire:click="refreshDomainInfoCheck" icon="identification">Domain Info</flux:menu.item>
           <flux:menu.item wire:click="refreshLighthouseCheck" icon="light-bulb">Lighthouse Report</flux:menu.item>
@@ -85,12 +86,6 @@
             <dt class="text-sm font-medium text-gray-500">Disk Usage</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {{ $this->monitor->accounts->first()?->formatted_disk_usage }}
-            </dd>
-          </div>
-          <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">WordPress</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ $this->monitor->accounts->first()?->wordpress_version ?: 'WP not detected' }}
             </dd>
           </div>
         </dl>
@@ -309,6 +304,70 @@
       </div>
     </flux:card>
     <!-- End Email Blacklist Checks Card -->
+
+    <!-- WordPress Checks Card -->
+    <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
+      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <flux:icon.globe-alt />
+          WordPress
+        </div>
+        @if($this->monitor->wordpressCheck?->enabled)
+          <flux:button wire:click="toggleWordPressCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
+        @else
+          <flux:button wire:click="toggleWordPressCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
+        @endif
+      </flux:heading>
+      <div class="px-4 py-5 sm:p-0">
+        @if(!$this->monitor->wordpressCheck?->enabled)
+          <div class="bg-yellow-100 text-center  p-3">WordPress check is disabled</div>
+          <div class="px-4 py-5 sm:p-0 opacity-20">
+            <dl class="sm:divide-y sm:divide-gray-200">
+              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  N/A
+                </dd>
+              </div>
+              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-500">Version</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
+              </div>
+            </dl>
+          </div>
+        @else
+          <div class="px-4 py-5 sm:p-0">
+            <dl class="sm:divide-y sm:divide-gray-200">
+              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  @if($this->monitor->wordpressCheck?->status->value === 'invalid')
+                    Error
+                  @elseif($this->monitor->wordpressCheck?->status->value === 'not yet checked')
+                    Pending
+                  @else
+                    Ok
+                  @endif
+                </dd>
+              </div>
+              @if($this->monitor->wordpressCheck?->status->value === 'valid')
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">Version</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->wordpress_version ?: 'WP not detected' }}</dd>
+                </div>
+              @endif
+              @if($this->monitor->wordpressCheck?->status->value === 'invalid')
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">Error</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->failure_reason }}</dd>
+                </div>
+              @endif
+            </dl>
+          </div>
+        @endif
+      </div>
+    </flux:card>
+    <!-- End WordPress Checks Card -->
 
     <!-- Domain Information Checks Card -->
     <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">

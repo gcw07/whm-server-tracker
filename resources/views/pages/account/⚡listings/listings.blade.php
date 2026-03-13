@@ -57,7 +57,6 @@
     <flux:table :paginate="$this->accounts" pagination:scroll-to>
       <flux:table.columns>
         <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'domain'" :direction="$sortDirection" wire:click="sort('domain')">DOMAIN</flux:table.column>
-        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">WORDPRESS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'usage'" :direction="$sortDirection" wire:click="sort('usage')">USAGE</flux:table.column>
@@ -123,10 +122,6 @@
                   <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">{{ $account->server->name }}</flux:link>
                 </div>
               </div>
-            </flux:table.cell>
-
-            <flux:table.cell class="whitespace-nowrap">
-              {{ $account->wordpress_version ?: '—' }}
             </flux:table.cell>
 
             <flux:table.cell>
@@ -203,7 +198,6 @@
                 <flux:checkbox label="Disk Limit" value="disk_limit" />
                 <flux:checkbox label="Disk Usage" value="disk_usage" />
                 <flux:checkbox label="Plan" value="plan" />
-                <flux:checkbox label="WordPress Version" value="wordpress_version" />
               </flux:checkbox.group>
 
               <flux:error name="exportColumns" />

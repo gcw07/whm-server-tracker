@@ -3,7 +3,6 @@
 use App\Models\Account;
 use App\Models\Server;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Illuminate\Support\Facades\Http;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -123,7 +122,6 @@ it('can export all account data columns', function () {
         'disk_used' => '500M',
         'disk_limit' => '1000M',
         'plan' => '1 Gig',
-        'wordpress_version' => null,
     ]);
 
     $exported = $account->export(['domain', 'server', 'username', 'ip']);
@@ -133,26 +131,4 @@ it('can export all account data columns', function () {
         ->and($exported['server'])->toBe('My Server')
         ->and($exported['username'])->toBe('testuser')
         ->and($exported['ip'])->toBe('1.2.3.4');
-});
-
-it('sets wordpress version to null when feed returns non-ok response', function () {
-    Http::fake(['*' => Http::response('Not Found', 404)]);
-
-    $account = Account::factory()->create(['domain' => 'testdomain.com']);
-
-    $account->checkWordPress();
-
-    expect($account->fresh()->wordpress_version)->toBeNull();
-});
-
-it('sets wordpress version to null on exception', function () {
-    Http::fake(['*' => function () {
-        throw new \Exception('Connection failed');
-    }]);
-
-    $account = Account::factory()->create(['domain' => 'testdomain.com']);
-
-    $account->checkWordPress();
-
-    expect($account->fresh()->wordpress_version)->toBeNull();
 });

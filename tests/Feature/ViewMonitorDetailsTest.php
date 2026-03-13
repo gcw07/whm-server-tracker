@@ -6,6 +6,7 @@ use App\Models\Monitor;
 use App\Models\MonitorBlacklistCheck;
 use App\Models\MonitorDomainCheck;
 use App\Models\MonitorLighthouseCheck;
+use App\Models\MonitorWordPressCheck;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
@@ -239,4 +240,53 @@ test('monitor observer creates check records when a monitor is created via App m
     $this->assertNotNull($monitor->blacklistCheck);
     $this->assertNotNull($monitor->lighthouseCheck);
     $this->assertNotNull($monitor->domainCheck);
+    $this->assertNotNull($monitor->wordpressCheck);
+});
+
+test('an authorized user can toggle wordpress check from monitor details', function () {
+    Account::factory()->create(['domain' => 'myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
+    MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
+        ->call('toggleWordPressCheck');
+
+    $this->assertFalse((bool) $monitor->wordpressCheck()->value('enabled'));
+});
+
+test('monitor details shows wordpress version when detected', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
+    Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+    MonitorWordPressCheck::create([
+        'monitor_id' => $monitor->id,
+        'enabled' => true,
+        'status' => 'valid',
+        'wordpress_version' => '6.4.2',
+    ]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
+        ->assertSee('6.4.2');
+});
+
+test('monitor details shows wp not detected when wordpress version is null', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    $monitor = Monitor::first();
+    Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+    MonitorWordPressCheck::create([
+        'monitor_id' => $monitor->id,
+        'enabled' => true,
+        'status' => 'valid',
+        'wordpress_version' => null,
+    ]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
+        ->assertSee('WP not detected');
 });

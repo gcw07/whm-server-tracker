@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\CheckWordPressJob;
-use App\Models\Account;
+use App\Models\Monitor;
 use Illuminate\Console\Command;
 
 class CheckWordPressCommand extends Command
@@ -13,14 +13,15 @@ class CheckWordPressCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'server-tracker:check-wordpress';
+    protected $signature = 'server-tracker:check-wordpress
+                           {--url= : Only check these urls}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Check if the account is using WordPress and get the version.';
+    protected $description = 'Check if the monitor URL is using WordPress and get the version.';
 
     /**
      * Execute the console command.
@@ -29,17 +30,22 @@ class CheckWordPressCommand extends Command
      */
     public function handle(): void
     {
-        $accounts = Account::query()
-            ->where('suspended', false)
-            ->orderBy('domain')
+        $monitors = Monitor::query()
+            ->whereHas('wordpressCheck', fn ($q) => $q->where('enabled', true))
+            ->with('wordpressCheck')
+            ->orderBy('url')
             ->get();
 
-        $this->comment('Start checking the accounts of '.count($accounts).' accounts...');
+        if ($url = $this->option('url')) {
+            $monitors = $monitors->filter(fn (Monitor $monitor) => in_array((string) $monitor->url, explode(',', $url)));
+        }
 
-        $accounts->each(function (Account $account) {
-            $this->info("Checking wordpress for $account->domain");
+        $this->comment('Start checking WordPress for '.count($monitors).' monitors...');
 
-            dispatch(new CheckWordPressJob($account));
+        $monitors->each(function (Monitor $monitor) {
+            $this->info("Checking WordPress for {$monitor->url}");
+
+            dispatch(new CheckWordPressJob($monitor));
         });
 
         $this->info('All done!');

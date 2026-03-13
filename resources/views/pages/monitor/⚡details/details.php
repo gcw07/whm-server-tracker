@@ -26,7 +26,8 @@ new #[Title('Monitor Details')] class extends Component
             'accounts.sslCertificates',
             'blacklistCheck',
             'lighthouseCheck',
-            'domainCheck'
+            'domainCheck',
+            'wordpressCheck',
         ])->findOrFail($this->monitorId);
     }
 
@@ -57,6 +58,7 @@ new #[Title('Monitor Details')] class extends Component
         $monitor->blacklistCheck->update(['enabled' => true]);
         $monitor->lighthouseCheck->update(['enabled' => true]);
         $monitor->domainCheck->update(['enabled' => true]);
+        $monitor->wordpressCheck->update(['enabled' => true]);
 
         unset($this->monitor);
 
@@ -77,12 +79,26 @@ new #[Title('Monitor Details')] class extends Component
         $monitor->blacklistCheck->update(['enabled' => false]);
         $monitor->lighthouseCheck->update(['enabled' => false]);
         $monitor->domainCheck->update(['enabled' => false]);
+        $monitor->wordpressCheck->update(['enabled' => false]);
 
         unset($this->monitor);
 
         Flux::toast(
             text: 'Disable all monitors for this URL.',
             heading: 'Disabling checks...',
+            variant: 'success',
+        );
+    }
+
+    public function refreshWordPressCheck(): void
+    {
+        Artisan::call('server-tracker:check-wordpress', [
+            '--url' => $this->monitor->url,
+        ]);
+
+        Flux::toast(
+            text: 'The WordPress check for this URL will run shortly.',
+            heading: 'Checking...',
             variant: 'success',
         );
     }
@@ -169,6 +185,17 @@ new #[Title('Monitor Details')] class extends Component
 
         $monitor->domainCheck->update([
             'enabled' => ! $monitor->domainCheck->enabled,
+        ]);
+
+        unset($this->monitor);
+    }
+
+    public function toggleWordPressCheck(): void
+    {
+        $monitor = $this->monitor;
+
+        $monitor->wordpressCheck->update([
+            'enabled' => ! $monitor->wordpressCheck->enabled,
         ]);
 
         unset($this->monitor);
