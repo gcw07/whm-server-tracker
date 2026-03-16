@@ -44,17 +44,7 @@ new #[Title('Monitors')] class extends Component
     {
         return Monitor::query()
             ->with(['blacklistCheck', 'lighthouseCheck', 'domainCheck', 'accounts.sslCertificates'])
-            ->when($this->monitorType !== 'all', function (Builder $query) {
-                return $query
-                    ->where(function ($query) {
-                        $query
-                            ->where('uptime_check_enabled', true);
-                    })
-                    ->where(function ($query) {
-                        $query
-                            ->where('uptime_status', 'down');
-                    });
-            })
+            ->when($this->monitorType !== 'all', fn (Builder $query) => $query->withIssues())
             ->when($this->sortBy, function (Builder $query) {
                 return $query->orderBy('url', $this->sortDirection);
             })
@@ -87,16 +77,7 @@ new #[Title('Monitors')] class extends Component
     {
         return [
             'all' => Monitor::query()->count(),
-            'issues' => Monitor::query()
-                ->where(function ($query) {
-                    $query
-                        ->where('uptime_check_enabled', true);
-                })
-                ->where(function ($query) {
-                    $query
-                        ->where('uptime_status', 'down');
-                })
-                ->count(),
+            'issues' => Monitor::query()->withIssues()->count(),
         ];
     }
 };

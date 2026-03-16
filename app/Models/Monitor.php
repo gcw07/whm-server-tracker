@@ -294,6 +294,20 @@ class Monitor extends BaseMonitor
     }
 
     #[Scope]
+    public function withIssues(Builder $query): void
+    {
+        $query->where(function ($q) {
+            $q->where(function ($inner) {
+                $inner->where('uptime_check_enabled', true)
+                    ->where('uptime_status', 'down');
+            })->orWhereHas('accounts.sslCertificates', function ($certs) {
+                $certs->whereNotNull('expires_at')
+                    ->where('expires_at', '<=', now()->addDays(30));
+            });
+        });
+    }
+
+    #[Scope]
     public function search(Builder $query, string $term): void
     {
         $query->whereAny([

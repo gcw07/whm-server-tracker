@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Account;
+use App\Models\AccountSslCertificate;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -41,7 +43,7 @@ test('the monitor listings are in alphabetical order', function () {
         ->assertSeeInOrder(['anotherserver.com', 'someserver.com', 'thelastserver.com']);
 });
 
-test('the monitor listings can be filtered by having issues or not', function () {
+test('the monitor listings can be filtered by having uptime issues', function () {
     MonitorFactory::new()->count(3)->state(new Sequence(
         ['url' => 'https://someserver.com', 'uptime_status' => UptimeStatus::DOWN],
         ['url' => 'https://anotherserver.com', 'uptime_status' => UptimeStatus::DOWN],
@@ -54,4 +56,42 @@ test('the monitor listings can be filtered by having issues or not', function ()
         ->set('monitorType', 'issues')
         ->assertcount('monitors', 2)
         ->assertSee('https://someserver.com');
+});
+
+test('the monitor listings issues filter includes monitors with expired ssl certificates', function () {
+    $monitor = MonitorFactory::new()->create(['url' => 'https://someserver.com', 'uptime_status' => UptimeStatus::UP]);
+    $healthyMonitor = MonitorFactory::new()->create(['url' => 'https://healthyserver.com', 'uptime_status' => UptimeStatus::UP]);
+
+    $account = Account::factory()->create(['monitor_id' => $monitor->id]);
+    AccountSslCertificate::factory()->expired()->create(['account_id' => $account->id]);
+
+    $healthyAccount = Account::factory()->create(['monitor_id' => $healthyMonitor->id]);
+    AccountSslCertificate::factory()->create(['account_id' => $healthyAccount->id, 'expires_at' => now()->addDays(60)]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.listings')
+        ->set('monitorType', 'issues')
+        ->assertCount('monitors', 1)
+        ->assertSee('someserver.com')
+        ->assertDontSee('healthyserver.com');
+});
+
+test('the monitor listings issues filter includes monitors with ssl certificates expiring soon', function () {
+    $monitor = MonitorFactory::new()->create(['url' => 'https://expiringsoon.com', 'uptime_status' => UptimeStatus::UP]);
+    $healthyMonitor = MonitorFactory::new()->create(['url' => 'https://healthyserver.com', 'uptime_status' => UptimeStatus::UP]);
+
+    $account = Account::factory()->create(['monitor_id' => $monitor->id]);
+    AccountSslCertificate::factory()->expiringSoon()->create(['account_id' => $account->id]);
+
+    $healthyAccount = Account::factory()->create(['monitor_id' => $healthyMonitor->id]);
+    AccountSslCertificate::factory()->create(['account_id' => $healthyAccount->id, 'expires_at' => now()->addDays(60)]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.listings')
+        ->set('monitorType', 'issues')
+        ->assertCount('monitors', 1)
+        ->assertSee('expiringsoon.com')
+        ->assertDontSee('healthyserver.com');
 });

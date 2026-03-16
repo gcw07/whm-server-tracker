@@ -6,7 +6,7 @@ use App\Models\User;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Spatie\UptimeMonitor\Models\Monitor;
+use App\Models\Monitor;
 
 new #[Title('Dashboard')] class extends Component
 {
@@ -47,14 +47,7 @@ new #[Title('Dashboard')] class extends Component
     #[Computed]
     public function sitesWithIssues(): int
     {
-        return Monitor::query()
-            ->where(function ($query) {
-                $query->where('uptime_check_enabled', true);
-            })
-            ->where(function ($query) {
-                $query->where('uptime_status', 'down');
-            })
-            ->count();
+        return Monitor::query()->withIssues()->count();
     }
 
     #[Computed]
