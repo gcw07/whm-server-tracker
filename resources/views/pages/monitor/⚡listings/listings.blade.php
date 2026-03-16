@@ -111,16 +111,12 @@
 
                     <!-- Certificate Status -->
                     <flux:table.cell class="whitespace-nowrap">
-                      @if(!$monitor->certificate_check_enabled)
-                        <flux:badge size="sm" icon="no-symbol" color="zinc">Disabled</flux:badge>
+                      @if($monitor->certificate_status === 'invalid')
+                        <flux:badge size="sm" icon="arrow-down" color="red">Invalid</flux:badge>
+                      @elseif($monitor->certificate_status === 'not yet checked')
+                        <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Pending</flux:badge>
                       @else
-                        @if($monitor->certificate_status === 'invalid')
-                          <flux:badge size="sm" icon="arrow-down" color="red">Invalid</flux:badge>
-                        @elseif($monitor->certificate_status === 'not yet checked')
-                          <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Pending</flux:badge>
-                        @else
-                          <flux:badge size="sm" icon="check" color="green">Ok</flux:badge>
-                        @endif
+                        <flux:badge size="sm" icon="check" color="green">Ok</flux:badge>
                       @endif
                     </flux:table.cell>
 

@@ -49,14 +49,10 @@ new #[Title('Dashboard')] class extends Component
     {
         return Monitor::query()
             ->where(function ($query) {
-                $query->where('uptime_check_enabled', true)
-                    ->orWhere('certificate_check_enabled', true);
-                //                    ->orWhere('blacklist_check_enabled', true);
+                $query->where('uptime_check_enabled', true);
             })
             ->where(function ($query) {
-                $query->where('uptime_status', 'down')
-                    ->orWhere('certificate_status', 'invalid');
-                //                    ->orWhere('blacklist_status', 'invalid');
+                $query->where('uptime_status', 'down');
             })
             ->count();
     }

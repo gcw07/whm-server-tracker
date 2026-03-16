@@ -43,24 +43,19 @@ new #[Title('Monitors')] class extends Component
     public function monitors()
     {
         return Monitor::query()
+            ->with(['blacklistCheck', 'lighthouseCheck', 'domainCheck'])
             ->when($this->monitorType !== 'all', function (Builder $query) {
                 return $query
                     ->where(function ($query) {
                         $query
-                            ->where('uptime_check_enabled', true)
-                            ->orWhere('certificate_check_enabled', true);
+                            ->where('uptime_check_enabled', true);
                     })
                     ->where(function ($query) {
                         $query
-                            ->where('uptime_status', 'down')
-                            ->orWhere('certificate_status', 'invalid');
+                            ->where('uptime_status', 'down');
                     });
             })
             ->when($this->sortBy, function (Builder $query) {
-                //                if ($this->sortBy === 'newest') {
-                //                    return $query->orderBy('created_at', $this->sortDirection);
-                //                }
-
                 return $query->orderBy('url', $this->sortDirection);
             })
             ->when($this->filterBy, function (Builder $query) {
@@ -84,7 +79,6 @@ new #[Title('Monitors')] class extends Component
 
                 return $query;
             })
-            ->with(['blacklistCheck', 'lighthouseCheck', 'domainCheck'])
             ->paginate(50);
     }
 
@@ -96,13 +90,11 @@ new #[Title('Monitors')] class extends Component
             'issues' => Monitor::query()
                 ->where(function ($query) {
                     $query
-                        ->where('uptime_check_enabled', true)
-                        ->orWhere('certificate_check_enabled', true);
+                        ->where('uptime_check_enabled', true);
                 })
                 ->where(function ($query) {
                     $query
-                        ->where('uptime_status', 'down')
-                        ->orWhere('certificate_status', 'invalid');
+                        ->where('uptime_status', 'down');
                 })
                 ->count(),
         ];
