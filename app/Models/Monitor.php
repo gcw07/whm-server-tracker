@@ -184,6 +184,40 @@ class Monitor extends BaseMonitor
         );
     }
 
+    protected function accountSslCertificateStatus(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $domain = $this->domain_name;
+                $worstStatus = null;
+
+                foreach ($this->accounts as $account) {
+                    foreach ($account->sslCertificates as $cert) {
+                        if ($cert->servername !== $domain && ! in_array($domain, $cert->certificate_domains ?? [])) {
+                            continue;
+                        }
+
+                        if (is_null($cert->expires_at)) {
+                            continue;
+                        }
+
+                        if ($cert->expires_at->isPast()) {
+                            return 'expired';
+                        }
+
+                        if ($cert->expires_at->diffInDays(now(), false) >= -30) {
+                            $worstStatus = 'expiring_soon';
+                        } elseif ($worstStatus === null) {
+                            $worstStatus = 'ok';
+                        }
+                    }
+                }
+
+                return $worstStatus;
+            }
+        );
+    }
+
     protected function uptimeForToday(): Attribute
     {
         $startDate = today()->format('Y-m-d');

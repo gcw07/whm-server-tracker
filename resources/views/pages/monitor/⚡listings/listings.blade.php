@@ -111,12 +111,14 @@
 
                     <!-- Certificate Status -->
                     <flux:table.cell class="whitespace-nowrap">
-                      @if($monitor->certificate_status === 'invalid')
-                        <flux:badge size="sm" icon="arrow-down" color="red">Invalid</flux:badge>
-                      @elseif($monitor->certificate_status === 'not yet checked')
-                        <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Pending</flux:badge>
-                      @else
+                      @if($monitor->account_ssl_certificate_status === 'expired')
+                        <flux:badge size="sm" icon="x-circle" color="red">Expired</flux:badge>
+                      @elseif($monitor->account_ssl_certificate_status === 'expiring_soon')
+                        <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Expiring Soon</flux:badge>
+                      @elseif($monitor->account_ssl_certificate_status === 'ok')
                         <flux:badge size="sm" icon="check" color="green">Ok</flux:badge>
+                      @else
+                        <flux:badge size="sm" color="zinc">No Data</flux:badge>
                       @endif
                     </flux:table.cell>
 

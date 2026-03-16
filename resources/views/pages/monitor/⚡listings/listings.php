@@ -43,7 +43,7 @@ new #[Title('Monitors')] class extends Component
     public function monitors()
     {
         return Monitor::query()
-            ->with(['blacklistCheck', 'lighthouseCheck', 'domainCheck'])
+            ->with(['blacklistCheck', 'lighthouseCheck', 'domainCheck', 'accounts.sslCertificates'])
             ->when($this->monitorType !== 'all', function (Builder $query) {
                 return $query
                     ->where(function ($query) {
