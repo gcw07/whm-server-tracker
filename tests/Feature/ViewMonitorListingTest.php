@@ -95,3 +95,16 @@ test('the monitor listings issues filter includes monitors with ssl certificates
         ->assertSee('expiringsoon.com')
         ->assertDontSee('healthyserver.com');
 });
+
+test('the monitor listings issues filter excludes monitors with expired ssl certificates on suspended accounts', function () {
+    $monitor = MonitorFactory::new()->create(['url' => 'https://suspended.com', 'uptime_status' => UptimeStatus::UP]);
+
+    $account = Account::factory()->create(['monitor_id' => $monitor->id, 'suspended' => true]);
+    AccountSslCertificate::factory()->expired()->create(['account_id' => $account->id]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.listings')
+        ->set('monitorType', 'issues')
+        ->assertCount('monitors', 0);
+});
