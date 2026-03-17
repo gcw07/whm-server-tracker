@@ -53,6 +53,7 @@ new #[Title('Monitor Details')] class extends Component
     {
         $monitor = $this->monitor;
         $monitor->uptime_check_enabled = true;
+        $monitor->certificate_check_enabled = true;
         $monitor->save();
 
         $monitor->blacklistCheck->update(['enabled' => true]);
@@ -74,6 +75,7 @@ new #[Title('Monitor Details')] class extends Component
         $monitor = $this->monitor;
 
         $monitor->uptime_check_enabled = false;
+        $monitor->certificate_check_enabled = false;
         $monitor->save();
 
         $monitor->blacklistCheck->update(['enabled' => false]);
@@ -140,6 +142,17 @@ new #[Title('Monitor Details')] class extends Component
             heading: 'Checking...',
             variant: 'success',
         );
+    }
+
+    public function toggleCertificateCheck(): void
+    {
+        $monitor = $this->monitor;
+
+        $monitor->certificate_check_enabled = ! $monitor->certificate_check_enabled;
+
+        $monitor->save();
+
+        unset($this->monitor);
     }
 
     public function toggleUptimeCheck(): void

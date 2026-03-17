@@ -300,11 +300,14 @@ class Monitor extends BaseMonitor
             $q->where(function ($inner) {
                 $inner->where('uptime_check_enabled', true)
                     ->where('uptime_status', 'down');
-            })->orWhereHas('accounts', function ($accountsQuery) {
-                $accountsQuery->where('suspended', false)
-                    ->whereHas('sslCertificates', function ($certs) {
-                        $certs->whereNotNull('expires_at')
-                            ->where('expires_at', '<=', now()->addDays(30));
+            })->orWhere(function ($certQuery) {
+                $certQuery->where('certificate_check_enabled', true)
+                    ->whereHas('accounts', function ($accountsQuery) {
+                        $accountsQuery->where('suspended', false)
+                            ->whereHas('sslCertificates', function ($certs) {
+                                $certs->whereNotNull('expires_at')
+                                    ->where('expires_at', '<=', now()->addDays(30));
+                            });
                     });
             });
         });

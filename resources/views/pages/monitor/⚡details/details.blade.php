@@ -179,9 +179,16 @@
 
     <!-- SSL Certificates Card -->
     <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center gap-2">
-        <flux:icon.lock-closed />
-        SSL Certificates
+      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <flux:icon.lock-closed />
+          SSL Certificates
+        </div>
+        @if($this->monitor->certificate_check_enabled)
+          <flux:button wire:click="toggleCertificateCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
+        @else
+          <flux:button wire:click="toggleCertificateCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
+        @endif
       </flux:heading>
       <div class="px-4 py-5 sm:p-0">
         @if($this->sslCertificates->isEmpty())
