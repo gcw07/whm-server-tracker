@@ -212,7 +212,7 @@
                     <span class="text-sm text-gray-500">Expiration unknown</span>
                   @elseif($cert->expires_at->isPast())
                     <flux:badge color="red">Expired {{ $cert->expires_at->format('M j, Y') }}</flux:badge>
-                  @elseif(now()->diffInDays($cert->expires_at) <= 30)
+                  @elseif(now()->diffInDays($cert->expires_at) <= 29)
                     <flux:badge color="amber">Expires in {{ (int) now()->diffInDays($cert->expires_at) }} days ({{ $cert->expires_at->format('M j, Y') }})</flux:badge>
                   @else
                     <flux:badge color="green">Valid until {{ $cert->expires_at->format('M j, Y') }}</flux:badge>

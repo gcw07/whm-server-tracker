@@ -183,7 +183,7 @@ class Monitor extends BaseMonitor
                             return 'expired';
                         }
 
-                        if ($cert->expires_at->diffInDays(now(), false) >= -30) {
+                        if ($cert->expires_at->diffInDays(now(), false) >= -29) {
                             $worstStatus = 'expiring_soon';
                         } elseif ($worstStatus === null) {
                             $worstStatus = 'ok';
