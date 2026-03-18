@@ -284,7 +284,7 @@ class Monitor extends BaseMonitor
                         $accountsQuery->where('suspended', false)
                             ->whereHas('sslCertificates', function ($certs) {
                                 $certs->whereNotNull('expires_at')
-                                    ->where('expires_at', '<=', now()->addDays(30));
+                                    ->where('expires_at', '<=', now()->addDays(29));
                             });
                     });
             });
