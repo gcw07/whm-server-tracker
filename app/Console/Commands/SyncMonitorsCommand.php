@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Models\Account;
+use App\Models\Monitor;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Spatie\UptimeMonitor\Exceptions\CannotSaveMonitor;
-use Spatie\UptimeMonitor\Models\Monitor;
 
 class SyncMonitorsCommand extends Command
 {
@@ -72,10 +72,22 @@ class SyncMonitorsCommand extends Command
 
     protected function createOrUpdateMonitor(array $monitorAttributes)
     {
-        return Monitor::firstOrCreate(
+        $monitor = Monitor::firstOrCreate(
             ['url' => $monitorAttributes['url']],
             $monitorAttributes
         );
+
+        $this->ensureSubMonitorsExist($monitor);
+
+        return $monitor;
+    }
+
+    protected function ensureSubMonitorsExist(Monitor $monitor): void
+    {
+        $monitor->blacklistCheck()->firstOrCreate([]);
+        $monitor->domainCheck()->firstOrCreate([]);
+        $monitor->wordpressCheck()->firstOrCreate([]);
+        $monitor->lighthouseCheck()->firstOrCreate([]);
     }
 
     protected function deleteMissingMonitors($accounts)

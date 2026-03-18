@@ -3,9 +3,9 @@
 namespace App\Services\WHM\DataProcessors;
 
 use App\Models\Account;
+use App\Models\Monitor;
 use App\Models\Server;
 use Carbon\Carbon;
-use Spatie\UptimeMonitor\Models\Monitor;
 
 class ProcessAccounts
 {
