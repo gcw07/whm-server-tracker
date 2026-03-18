@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Casts\Settings;
+use App\Collections\SettingsCollection;
 use App\Enums\ServerTypeEnum;
 use App\Jobs\FetchServerDataJob;
 use App\Models\Presenters\ServerPresenter;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,12 +25,12 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property string|null $hosting_provider
  * @property string|null $token
  * @property string|null $notes
- * @property \App\Collections\SettingsCollection|null $settings
- * @property \Carbon\CarbonImmutable|null $server_update_last_failed_at
- * @property \Carbon\CarbonImmutable|null $server_update_last_succeeded_at
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
+ * @property SettingsCollection|null $settings
+ * @property CarbonImmutable|null $server_update_last_failed_at
+ * @property CarbonImmutable|null $server_update_last_succeeded_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
+ * @property-read Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
  * @property-read mixed $backups_enabled
  * @property-read mixed $can_refresh_data

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
 /**
  * @property int $id
  * @property int $monitor_id
- * @property \Carbon\CarbonImmutable $date
+ * @property CarbonImmutable $date
  * @property int $downtime_period
  * @property-read Monitor $monitor
  *

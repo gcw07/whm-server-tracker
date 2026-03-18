@@ -40,6 +40,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read mixed $is_disk_warning
  * @property-read Monitor|null $monitor
  * @property-read Server $server
+ * @property-read Collection<int, AccountSslCertificate> $sslCertificates
+ * @property-read int|null $ssl_certificates_count
  *
  * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
  * @method static Builder<static>|Account newModelQuery()

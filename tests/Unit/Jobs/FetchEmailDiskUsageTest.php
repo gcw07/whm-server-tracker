@@ -1,9 +1,11 @@
 <?php
 
 use App\Jobs\FetchEmailDiskUsageJob;
+use App\Jobs\FetchServerDataJob;
 use App\Models\Account;
 use App\Models\AccountEmail;
 use App\Models\Server;
+use App\Services\WHM\DataProcessors\ProcessAccountEmails;
 use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\Factories\WhmApiFake;
@@ -135,7 +137,7 @@ it('stores regular emails when main email account API fails', function () {
 
             foreach ($accounts as $account) {
                 $data = $this->getEmailDiskUsageData($account->user);
-                (new \App\Services\WHM\DataProcessors\ProcessAccountEmails)->execute($account, $data);
+                (new ProcessAccountEmails)->execute($account, $data);
             }
         }
     };
@@ -157,7 +159,7 @@ it('dispatches FetchEmailDiskUsageJob after FetchServerDataJob runs', function (
     $fake = new WhmApiFake;
     $this->app->instance(WhmApi::class, $fake);
 
-    dispatch(new \App\Jobs\FetchServerDataJob($server));
+    dispatch(new FetchServerDataJob($server));
 
     Bus::assertDispatched(FetchEmailDiskUsageJob::class, fn ($job) => $job->server->is($server));
 });

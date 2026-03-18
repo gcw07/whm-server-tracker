@@ -12,8 +12,9 @@
 */
 
 use App\Models\User;
+use Tests\TestCase;
 
-uses(Tests\TestCase::class)->in('Feature', 'Integration', 'Unit');
+uses(TestCase::class)->in('Feature', 'Integration', 'Unit');
 
 /*
 |--------------------------------------------------------------------------

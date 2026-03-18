@@ -3,6 +3,9 @@
 use App\Models\Account;
 use App\Models\LighthouseAudit;
 use App\Models\Monitor;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
@@ -18,7 +21,7 @@ new #[Title('Monitor Details')] class extends Component
     }
 
     #[Computed]
-    public function monitor(): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|Monitor|null
+    public function monitor(): Model|Illuminate\Database\Eloquent\Collection|Monitor|null
     {
         return Monitor::with([
             'accounts',
@@ -32,7 +35,7 @@ new #[Title('Monitor Details')] class extends Component
     }
 
     #[Computed]
-    public function sslCertificates(): \Illuminate\Support\Collection
+    public function sslCertificates(): Collection
     {
         return $this->monitor->accounts
             ->flatMap(fn (Account $account) => $account->sslCertificates)
@@ -41,7 +44,7 @@ new #[Title('Monitor Details')] class extends Component
     }
 
     #[Computed]
-    public function lighthouseStats(): LighthouseAudit|\Illuminate\Database\Eloquent\Builder|null
+    public function lighthouseStats(): LighthouseAudit|Builder|null
     {
         return LighthouseAudit::query()
             ->where('monitor_id', $this->monitorId)

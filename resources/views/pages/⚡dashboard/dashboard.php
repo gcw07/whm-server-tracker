@@ -1,12 +1,13 @@
 <?php
 
 use App\Models\Account;
+use App\Models\Monitor;
 use App\Models\Server;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use App\Models\Monitor;
 
 new #[Title('Dashboard')] class extends Component
 {
@@ -59,7 +60,7 @@ new #[Title('Dashboard')] class extends Component
     }
 
     #[Computed]
-    public function recentAccounts(): \Illuminate\Database\Eloquent\Collection
+    public function recentAccounts(): Collection
     {
         return Account::query()->with(['server'])->latest()->limit(10)->get();
     }

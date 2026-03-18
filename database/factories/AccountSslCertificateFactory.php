@@ -4,10 +4,11 @@ namespace Database\Factories;
 
 use App\Enums\SslVhostTypeEnum;
 use App\Models\Account;
+use App\Models\AccountSslCertificate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AccountSslCertificate>
+ * @extends Factory<AccountSslCertificate>
  */
 class AccountSslCertificateFactory extends Factory
 {

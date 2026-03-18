@@ -4,11 +4,16 @@ namespace App\Models;
 
 use App\Casts\Lower;
 use App\Casts\Notifications;
+use App\Collections\NotificationsCollection;
 use App\Models\Concerns\HasLogins;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 
 /**
@@ -20,13 +25,13 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $two_factor_recovery_codes
  * @property string|null $two_factor_confirmed_at
  * @property string|null $remember_token
- * @property \App\Collections\NotificationsCollection|null $notification_types
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read \App\Models\Login|null $lastLogin
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Login> $logins
+ * @property NotificationsCollection|null $notification_types
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
+ * @property-read Login|null $lastLogin
+ * @property-read Collection<int, Login> $logins
  * @property-read int|null $logins_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])

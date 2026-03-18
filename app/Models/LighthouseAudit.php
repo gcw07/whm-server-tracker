@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Spatie\UptimeMonitor\Models\Monitor;
 /**
  * @property int $id
  * @property int $monitor_id
- * @property \Carbon\CarbonImmutable $date
+ * @property CarbonImmutable $date
  * @property int $performance_score
  * @property int $accessibility_score
  * @property int $best_practices_score
@@ -18,8 +19,8 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @property int $speed_index
  * @property string|null $raw_results
  * @property string|null $report
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
  * @property-read Monitor $monitor
  *
  * @method static \Database\Factories\LighthouseAuditFactory factory($count = null, $state = [])

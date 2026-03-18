@@ -16,6 +16,7 @@ use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use Carbon\Carbon;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
 
@@ -62,7 +63,7 @@ class WhmApi
         return ['Authorization' => "whm $username:{$this->server->token}"];
     }
 
-    private function configuredRequest(Pool $pool, string $name): \Illuminate\Http\Client\PendingRequest
+    private function configuredRequest(Pool $pool, string $name): PendingRequest
     {
         return $pool->as($name)
             ->withHeaders($this->getHeaders())

@@ -46,24 +46,13 @@ use Spatie\Url\Url;
  * @property CarbonImmutable|null $certificate_expiration_date
  * @property string|null $certificate_issuer
  * @property string $certificate_check_failure_reason
- * @property bool $blacklist_check_enabled
- * @property string $blacklist_status
- * @property string|null $blacklist_check_failure_reason
- * @property bool $lighthouse_check_enabled
- * @property string $lighthouse_status
- * @property CarbonImmutable|null $lighthouse_update_last_failed_at
- * @property CarbonImmutable|null $lighthouse_update_last_succeeded_at
- * @property string|null $lighthouse_check_failure_reason
- * @property bool $domain_name_check_enabled
- * @property string $domain_name_status
- * @property CarbonImmutable|null $domain_name_expiration_date
- * @property string|null $domain_name_check_failure_reason
- * @property array<array-key, mixed>|null $nameservers
- * @property bool $is_on_cloudflare
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
+ * @property-read mixed $account_ssl_certificate_status
  * @property-read Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
+ * @property-read MonitorBlacklistCheck|null $blacklistCheck
+ * @property-read MonitorDomainCheck|null $domainCheck
  * @property-read mixed $domain_name
  * @property-read Collection<int, DowntimeStat> $downtimeStats
  * @property-read int|null $downtime_stats_count
@@ -74,39 +63,27 @@ use Spatie\Url\Url;
  * @property-read string $uptime_status_as_emoji
  * @property-read Collection<int, LighthouseAudit> $lighthouseAudits
  * @property-read int|null $lighthouse_audits_count
+ * @property-read MonitorLighthouseCheck|null $lighthouseCheck
  * @property-read Collection<int, LighthouseAudit> $lighthouseLatestAudit
  * @property-read int|null $lighthouse_latest_audit_count
  * @property-read mixed $uptime_for_last_seven_days
  * @property-read mixed $uptime_for_last_thirty_days
  * @property-read mixed $uptime_for_today
+ * @property-read MonitorWordPressCheck|null $wordpressCheck
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor enabled()
  * @method static Builder<static>|Monitor newModelQuery()
  * @method static Builder<static>|Monitor newQuery()
  * @method static Builder<static>|Monitor query()
  * @method static Builder<static>|Monitor search(string $term)
- * @method static Builder<static>|Monitor whereBlacklistCheckEnabled($value)
- * @method static Builder<static>|Monitor whereBlacklistCheckFailureReason($value)
- * @method static Builder<static>|Monitor whereBlacklistStatus($value)
  * @method static Builder<static>|Monitor whereCertificateCheckEnabled($value)
  * @method static Builder<static>|Monitor whereCertificateCheckFailureReason($value)
  * @method static Builder<static>|Monitor whereCertificateExpirationDate($value)
  * @method static Builder<static>|Monitor whereCertificateIssuer($value)
  * @method static Builder<static>|Monitor whereCertificateStatus($value)
  * @method static Builder<static>|Monitor whereCreatedAt($value)
- * @method static Builder<static>|Monitor whereDomainNameCheckEnabled($value)
- * @method static Builder<static>|Monitor whereDomainNameCheckFailureReason($value)
- * @method static Builder<static>|Monitor whereDomainNameExpirationDate($value)
- * @method static Builder<static>|Monitor whereDomainNameStatus($value)
  * @method static Builder<static>|Monitor whereId($value)
- * @method static Builder<static>|Monitor whereIsOnCloudflare($value)
- * @method static Builder<static>|Monitor whereLighthouseCheckEnabled($value)
- * @method static Builder<static>|Monitor whereLighthouseCheckFailureReason($value)
- * @method static Builder<static>|Monitor whereLighthouseStatus($value)
- * @method static Builder<static>|Monitor whereLighthouseUpdateLastFailedAt($value)
- * @method static Builder<static>|Monitor whereLighthouseUpdateLastSucceededAt($value)
  * @method static Builder<static>|Monitor whereLookForString($value)
- * @method static Builder<static>|Monitor whereNameservers($value)
  * @method static Builder<static>|Monitor whereUpdatedAt($value)
  * @method static Builder<static>|Monitor whereUptimeCheckAdditionalHeaders($value)
  * @method static Builder<static>|Monitor whereUptimeCheckEnabled($value)
@@ -121,6 +98,7 @@ use Spatie\Url\Url;
  * @method static Builder<static>|Monitor whereUptimeStatus($value)
  * @method static Builder<static>|Monitor whereUptimeStatusLastChangeDate($value)
  * @method static Builder<static>|Monitor whereUrl($value)
+ * @method static Builder<static>|Monitor withIssues()
  *
  * @mixin \Eloquent
  */

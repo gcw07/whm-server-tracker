@@ -2,13 +2,16 @@
 
 use App\Enums\SslVhostTypeEnum;
 use App\Jobs\FetchEmailDiskUsageJob;
+use App\Jobs\FetchServerDataJob;
 use App\Jobs\FetchSslVhostsJob;
 use App\Models\Account;
 use App\Models\AccountSslCertificate;
 use App\Models\Server;
 use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Http;
 use Tests\Factories\WhmApiFake;
 
 uses(LazilyRefreshDatabase::class);
@@ -102,8 +105,8 @@ it('stores ssl certificates for multiple accounts on the same server', function 
 it('returns silently when a ConnectionException is thrown', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
 
-    Illuminate\Support\Facades\Http::fake(function () {
-        throw new Illuminate\Http\Client\ConnectionException;
+    Http::fake(function () {
+        throw new ConnectionException;
     });
 
     dispatch(new FetchSslVhostsJob($server));
@@ -119,7 +122,7 @@ it('dispatches FetchSslVhostsJob after FetchServerDataJob runs', function () {
     $fake = new WhmApiFake;
     $this->app->instance(WhmApi::class, $fake);
 
-    dispatch(new \App\Jobs\FetchServerDataJob($server));
+    dispatch(new FetchServerDataJob($server));
 
     Bus::assertDispatched(FetchSslVhostsJob::class, fn ($job) => $job->server->is($server));
 });

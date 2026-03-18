@@ -3,10 +3,11 @@
 namespace Database\Factories;
 
 use App\Models\Account;
+use App\Models\AccountEmail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AccountEmail>
+ * @extends Factory<AccountEmail>
  */
 class AccountEmailFactory extends Factory
 {

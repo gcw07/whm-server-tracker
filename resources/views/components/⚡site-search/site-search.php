@@ -16,7 +16,7 @@ new class extends Component
     public array $recentSearches = [];
 
     #[Computed]
-    public function servers(): \Illuminate\Database\Eloquent\Collection|Collection
+    public function servers(): Illuminate\Database\Eloquent\Collection|Collection
     {
         if ($this->siteSearch) {
             return Server::query()->withCount(['accounts'])->search($this->siteSearch)->orderBy('name')->get();
@@ -26,7 +26,7 @@ new class extends Component
     }
 
     #[Computed]
-    public function accounts(): \Illuminate\Database\Eloquent\Collection|Collection
+    public function accounts(): Illuminate\Database\Eloquent\Collection|Collection
     {
         if ($this->siteSearch) {
             return Account::query()->with(['server'])->search($this->siteSearch)->orderBy('domain')->get();
@@ -36,7 +36,7 @@ new class extends Component
     }
 
     #[Computed]
-    public function monitors(): \Illuminate\Database\Eloquent\Collection|Collection
+    public function monitors(): Illuminate\Database\Eloquent\Collection|Collection
     {
         if ($this->siteSearch) {
             return Monitor::query()->search($this->siteSearch)->orderBy('url')->get();

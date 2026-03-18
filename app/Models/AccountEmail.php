@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
+use Database\Factories\AccountEmailFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,11 +20,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $disk_used_percent
  * @property bool $suspended_incoming
  * @property bool $suspended_login
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read string $formatted_disk_used
- * @property-read string $formatted_disk_quota
- * @property-read \App\Models\Account $account
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
+ * @property-read Account $account
+ * @property-read mixed $formatted_disk_quota
+ * @property-read mixed $formatted_disk_used
  *
  * @method static \Database\Factories\AccountEmailFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountEmail newModelQuery()
@@ -45,7 +47,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AccountEmail extends Model
 {
-    /** @use HasFactory<\Database\Factories\AccountEmailFactory> */
+    /** @use HasFactory<AccountEmailFactory> */
     use HasFactory;
 
     protected $guarded = [];
