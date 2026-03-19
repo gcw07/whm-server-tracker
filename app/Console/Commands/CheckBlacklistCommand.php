@@ -4,25 +4,15 @@ namespace App\Console\Commands;
 
 use App\Jobs\CheckBlacklistJob;
 use App\Models\Monitor;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Signature('server-tracker:check-blacklist
+                           {--url= : Only check these urls}')]
+#[Description('Check for being blacklisted for all sites.')]
 class CheckBlacklistCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'server-tracker:check-blacklist
-                           {--url= : Only check these urls}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Check for being blacklisted for all sites.';
-
     /**
      * Execute the console command.
      *

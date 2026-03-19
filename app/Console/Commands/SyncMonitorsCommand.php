@@ -4,26 +4,16 @@ namespace App\Console\Commands;
 
 use App\Models\Account;
 use App\Models\Monitor;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Spatie\UptimeMonitor\Exceptions\CannotSaveMonitor;
 
+#[Signature('server-tracker:sync-monitors')]
+#[Description('Sync the uptime checker monitors with accounts in the system.')]
 class SyncMonitorsCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'server-tracker:sync-monitors';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Sync the uptime checker monitors with accounts in the system.';
-
     public function handle(): void
     {
         $accounts = $this->getAccounts();

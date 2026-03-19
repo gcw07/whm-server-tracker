@@ -6,20 +6,20 @@ use App\Models\Monitor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\Attributes\MaxExceptions;
+use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
+#[Tries(0)]
+#[MaxExceptions(3)]
 class CheckDomainNameJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public Monitor $monitor;
-
-    public int $tries = 0;
-
-    public int $maxExceptions = 3;
 
     public function __construct(Monitor $monitor)
     {

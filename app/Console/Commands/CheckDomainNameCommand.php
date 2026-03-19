@@ -4,25 +4,15 @@ namespace App\Console\Commands;
 
 use App\Jobs\CheckDomainNameJob;
 use App\Models\Monitor;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Signature('server-tracker:check-domain-name
+                           {--url= : Only check these urls}')]
+#[Description('Check domain name expiration date for all sites.')]
 class CheckDomainNameCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'server-tracker:check-domain-name
-                           {--url= : Only check these urls}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Check domain name expiration date for all sites.';
-
     /**
      * Execute the console command.
      */

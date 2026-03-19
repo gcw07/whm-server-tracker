@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\Server;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Signature('server-tracker:refresh')]
+#[Description('Refresh remote server data.')]
 class RefreshCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'server-tracker:refresh';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Refresh remote server data.';
-
     /**
      * Execute the console command.
      *
