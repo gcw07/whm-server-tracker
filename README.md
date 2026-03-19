@@ -58,7 +58,6 @@ WHM Server Tracker is a web application for managing and monitoring WHM servers 
    - Database connection (`DB_*`)
    - `SERVER_TRACKER_MAIL_TO_ADDRESS` — email address for alert notifications
    - `SERVER_TRACKER_SLACK_WEBHOOK_URL` — Slack webhook URL for alert notifications
-   - `WHM_TEST_SERVER_ADDRESS` — address of your WHM server
 
 4. Set the queue connection to an async driver (required for background jobs):
    ```
