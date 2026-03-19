@@ -1,8 +1,8 @@
-## WHM Server Tracker
+# WHM Server Tracker
 
-WHM Server Tracker is a simple tracker that helps you keep track of your WHM servers. I help manage several WHM servers, but needed a way to keep track of all the servers and accounts on each one.
+WHM Server Tracker is a web application for managing and monitoring WHM servers and their hosted accounts. It uses the WHM API to pull in server and account data, and provides automated monitoring for uptime, domain blacklisting, WordPress versions, and Lighthouse performance.
 
-WHM has a built in API and you can setup an account to use that API key to access information on your servers. This pulls in the following information:
+## Features
 
 #### Server Information
 - Server disk usage
@@ -21,20 +21,76 @@ WHM has a built in API and you can setup an account to use that API key to acces
 - Account disk space used and allowed
 - If the account is suspended
 
+#### Monitoring & Alerts
+- **Uptime monitoring** — checks whether sites are up and alerts on downtime
+- **Domain blacklist checking** — flags domains appearing on email blacklists
+- **WordPress version checking** — detects outdated WordPress installations
+- **Lighthouse performance auditing** — tracks performance scores for hosted sites
+- **Email and Slack notifications** — alerts delivered via email and/or Slack webhook
+- **Queue monitoring** — background jobs managed and monitored via Laravel Horizon
+
+## Requirements
+
+- PHP ^8.4
+- MySQL
+- Node.js / npm
+- Composer
+- A WHM server with API access enabled
+
 ## Installation
 
-Install this package by cloning this repository and install like you normally install Laravel.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/gcw07/whm-server-tracker.git
+   cd whm-server-tracker
+   ```
 
-- Run `composer install` and `npm install`
-- Run `npm` and `npm run dev` to generate assets
-- Copy `.env.example` to `.env` and fill your values (`php artisan key:generate`, database, pusher values etc)
-- Run `php artisan migrate`
-- Start your queue listener and setup the Laravel scheduler.
-- Run installer `php artisan server-tracker:install` to setup default user.
+2. Run the setup command (installs dependencies, generates key, runs migrations, and builds assets):
+   ```bash
+   composer setup
+   ```
+
+3. Copy `.env.example` to `.env` and fill in the required values:
+   ```bash
+   cp .env.example .env
+   ```
+   Key environment variables to configure:
+   - Database connection (`DB_*`)
+   - `SERVER_TRACKER_MAIL_TO_ADDRESS` — email address for alert notifications
+   - `SERVER_TRACKER_SLACK_WEBHOOK_URL` — Slack webhook URL for alert notifications
+   - `WHM_TEST_SERVER_ADDRESS` — address of your WHM server
+
+4. Set the queue connection to an async driver (required for background jobs):
+   ```
+   QUEUE_CONNECTION=redis
+   ```
+
+5. Start Laravel Horizon to process background jobs:
+   ```bash
+   php artisan horizon
+   ```
+
+6. Add the Laravel scheduler to your cron:
+   ```
+   * * * * * cd /path-to-app && php artisan schedule:run >> /dev/null 2>&1
+   ```
+
+7. Run the installer to set up the default user:
+   ```bash
+   php artisan server-tracker:install
+   ```
+
+For local development, you can start the server, queue worker, log watcher, and Vite dev server together:
+```bash
+composer run dev
+```
 
 ## Contributions
 
-Several form components are copied and customized for this project's usage are based upon the [Blade UI Kit](https://blade-ui-kit.com). It offers an easy way to do common UI elements.
+This project makes use of the following third-party packages:
+
+- **[Flux UI Pro](https://fluxui.dev)** — the UI component library used throughout the application. Flux UI Pro requires a paid license; you must purchase one before using this project.
+- **[spatie/laravel-uptime-monitor](https://github.com/spatie/laravel-uptime-monitor)** — powers the uptime monitoring features.
 
 ## License
 
