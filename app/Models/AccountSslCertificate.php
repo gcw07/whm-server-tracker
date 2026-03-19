@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\SslVhostTypeEnum;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,11 +41,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
+#[Unguarded]
 class AccountSslCertificate extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
 
     protected function casts(): array
     {

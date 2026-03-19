@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Presenters\AccountPresenter;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -67,11 +68,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
+#[Unguarded]
 class Account extends Model
 {
     use AccountPresenter, HasFactory;
-
-    protected $guarded = [];
 
     protected $appends = [
         'domain_url',

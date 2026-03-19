@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,11 +43,10 @@ use Spatie\UptimeMonitor\Models\Monitor;
  *
  * @mixin \Eloquent
  */
+#[Unguarded]
 class LighthouseAudit extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
 
     protected function casts(): array
     {

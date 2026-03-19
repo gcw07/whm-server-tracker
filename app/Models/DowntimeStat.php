@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,13 +28,11 @@ use Spatie\UptimeMonitor\Models\Monitor;
  *
  * @mixin \Eloquent
  */
+#[Table(timestamps: false)]
+#[Unguarded]
 class DowntimeStat extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
-
-    public $timestamps = false;
 
     protected function casts(): array
     {

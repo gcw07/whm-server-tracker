@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\WordPressStatusEnum;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -32,12 +34,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
+#[Table('monitor_wordpress_checks')]
+#[Unguarded]
 class MonitorWordPressCheck extends Model
 {
-    protected $table = 'monitor_wordpress_checks';
-
-    protected $guarded = [];
-
     protected function casts(): array
     {
         return [

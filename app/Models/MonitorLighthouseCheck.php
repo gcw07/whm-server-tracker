@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\LighthouseStatusEnum;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -34,10 +35,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
+#[Unguarded]
 class MonitorLighthouseCheck extends Model
 {
-    protected $guarded = [];
-
     protected function casts(): array
     {
         return [
