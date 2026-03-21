@@ -21,6 +21,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage whereDurationSeconds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage whereEndedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage whereMonitorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorOutage whereStartedAt($value)
  *
  * @mixin \Eloquent
  */
@@ -36,6 +42,7 @@ class MonitorOutage extends Model
         return [
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
+            'created_at' => 'datetime',
         ];
     }
 

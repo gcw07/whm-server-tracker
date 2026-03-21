@@ -53,8 +53,6 @@ use Spatie\Url\Url;
  * @property-read MonitorBlacklistCheck|null $blacklistCheck
  * @property-read MonitorDomainCheck|null $domainCheck
  * @property-read mixed $domain_name
- * @property-read Collection<int, MonitorOutage> $outages
- * @property-read int|null $outages_count
  * @property-read string $certificate_status_as_emoji
  * @property-read string $chunked_last_certificate_check_failure_reason
  * @property-read string $chunked_last_failure_reason
@@ -65,6 +63,8 @@ use Spatie\Url\Url;
  * @property-read MonitorLighthouseCheck|null $lighthouseCheck
  * @property-read Collection<int, LighthouseAudit> $lighthouseLatestAudit
  * @property-read int|null $lighthouse_latest_audit_count
+ * @property-read Collection<int, MonitorOutage> $outages
+ * @property-read int|null $outages_count
  * @property-read mixed $uptime_for_last_seven_days
  * @property-read mixed $uptime_for_last_thirty_days
  * @property-read mixed $uptime_for_today
