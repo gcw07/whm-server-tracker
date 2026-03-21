@@ -5,7 +5,7 @@ use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
 
 uses(LazilyRefreshDatabase::class);
 
-it('logs a downtime stat when a monitored site recovers', function () {
+it('logs a monitor outage when a monitored site recovers', function () {
     $this->travel(-10)->minutes();
 
     $monitor = MonitorFactory::new()->create([
@@ -25,8 +25,7 @@ it('logs a downtime stat when a monitored site recovers', function () {
         Artisan::call('monitor:check-uptime');
     }
 
-    $this->assertDatabaseHas('downtime_stats', [
+    $this->assertDatabaseHas('monitor_outages', [
         'monitor_id' => $monitor->id,
-        'date' => now()->format('Y-m-d'),
     ]);
 });

@@ -9,7 +9,7 @@ use App\Enums\WordPressStatusEnum;
 use App\Events\DomainNameExpiresSoonEvent;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use Carbon\CarbonPeriod;
+use Carbon\CarbonInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Spatie\Lighthouse\Lighthouse;
@@ -54,8 +53,8 @@ use Spatie\Url\Url;
  * @property-read MonitorBlacklistCheck|null $blacklistCheck
  * @property-read MonitorDomainCheck|null $domainCheck
  * @property-read mixed $domain_name
- * @property-read Collection<int, DowntimeStat> $downtimeStats
- * @property-read int|null $downtime_stats_count
+ * @property-read Collection<int, MonitorOutage> $outages
+ * @property-read int|null $outages_count
  * @property-read string $certificate_status_as_emoji
  * @property-read string $chunked_last_certificate_check_failure_reason
  * @property-read string $chunked_last_failure_reason
@@ -120,9 +119,9 @@ class Monitor extends BaseMonitor
         return $this->hasMany(Account::class);
     }
 
-    public function downtimeStats(): HasMany
+    public function outages(): HasMany
     {
-        return $this->hasMany(DowntimeStat::class);
+        return $this->hasMany(MonitorOutage::class);
     }
 
     public function lighthouseAudits(): HasMany
@@ -198,61 +197,37 @@ class Monitor extends BaseMonitor
 
     protected function uptimeForToday(): Attribute
     {
-        $startDate = today()->format('Y-m-d');
-        $endDate = today()->format('Y-m-d');
-
         return Attribute::make(
-            get: fn () => $this->calculateUptime($startDate, $endDate),
+            get: fn () => $this->calculateUptime(today(), today()),
         );
     }
 
     protected function uptimeForLastSevenDays(): Attribute
     {
-        $startDate = today()->subDays(6)->format('Y-m-d');
-        $endDate = today()->format('Y-m-d');
-
         return Attribute::make(
-            get: fn () => $this->calculateUptime($startDate, $endDate),
+            get: fn () => $this->calculateUptime(today()->subDays(6), today()),
         );
     }
 
     protected function uptimeForLastThirtyDays(): Attribute
     {
-        $startDate = today()->subDays(29)->format('Y-m-d');
-        $endDate = today()->format('Y-m-d');
-
         return Attribute::make(
-            get: fn () => $this->calculateUptime($startDate, $endDate),
+            get: fn () => $this->calculateUptime(today()->subDays(29), today()),
         );
     }
 
-    public function calculateUptime($startDate, $endDate): float
+    public function calculateUptime(CarbonInterface $startDate, CarbonInterface $endDate): float
     {
-        $dates = CarbonPeriod::create($startDate, '1 day', $endDate);
+        $windowStart = $startDate->startOfDay();
+        $windowEnd = $endDate->endOfDay();
+        $totalPossibleSeconds = ($startDate->diffInDays($endDate) + 1) * 86400;
 
-        $stats = $this->downtimeStats()
-            ->select([
-                'date',
-                DB::raw('SUM(downtime_period) as downtime'),
-            ])
-            ->whereBetween('date', [$startDate, $endDate])
-            ->groupBy('date')
-            ->get()
-            ->mapWithKeys(fn ($item) => [
-                $item->date->format('Y-m-d') => $item->downtime,
-            ]);
+        $totalDowntimeSeconds = $this->outages()
+            ->where('started_at', '<', $windowEnd)
+            ->where('ended_at', '>', $windowStart)
+            ->sum('duration_seconds');
 
-        $uptimePercentage = collect($dates)->mapWithKeys(function ($item) use ($stats) {
-            $date = $item->format('Y-m-d');
-
-            if (isset($stats[$date])) {
-                return [$date => 100 - round(($stats[$date] / 86400) * 100, 2)];
-            }
-
-            return [$date => 100];
-        })->average();
-
-        return round($uptimePercentage, 2);
+        return round((($totalPossibleSeconds - $totalDowntimeSeconds) / $totalPossibleSeconds) * 100, 2);
     }
 
     public function checkBlacklist()
