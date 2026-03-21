@@ -5,7 +5,7 @@ namespace App\Listeners;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
 
-class LogSuccessfulLogin
+class RecordSuccessfulLogin
 {
     /**
      * Create the event listener.
