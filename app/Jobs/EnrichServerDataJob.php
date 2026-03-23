@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 #[Tries(5)]
-class FetchSslVhostsJob implements ShouldQueue
+class EnrichServerDataJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -24,6 +24,6 @@ class FetchSslVhostsJob implements ShouldQueue
     public function handle(WhmApi $whmApi): void
     {
         $whmApi->setServer($this->server);
-        $whmApi->fetchSslVhosts();
+        $whmApi->enrichServerData();
     }
 }

@@ -12,10 +12,10 @@ use App\Services\WHM\DataProcessors\ProcessBackups;
 use App\Services\WHM\DataProcessors\ProcessDiskUsage;
 use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
+use App\Services\WHM\DataProcessors\ProcessPhpVhostVersions;
 use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use Carbon\Carbon;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
@@ -176,23 +176,23 @@ class WhmApi
         }
     }
 
-    public function fetchSslVhosts(): void
+    public function enrichServerData(): void
     {
-        try {
-            $response = Http::withHeaders($this->getHeaders())
-                ->baseUrl($this->server->whm_base_api_url)
-                ->connectTimeout(config('server-tracker.whm.connection_timeout'))
-                ->withoutVerifying()
-                ->get('fetch_ssl_vhosts?api.version=1');
-        } catch (ConnectionException) {
-            return;
+        $responses = Http::pool(fn (Pool $pool) => [
+            'sslVhosts' => $this->configuredRequest($pool, 'sslVhosts')->get('fetch_ssl_vhosts?api.version=1'),
+            'phpVhostVersions' => $this->configuredRequest($pool, 'phpVhostVersions')->get('php_get_vhost_versions?api.version=1'),
+        ]);
+
+        $sslResponse = $responses['sslVhosts'] ?? null;
+        $phpResponse = $responses['phpVhostVersions'] ?? null;
+
+        if ($sslResponse && ! ($sslResponse instanceof \Exception) && ! $sslResponse->failed()) {
+            (new ProcessSslVhosts)->execute($this->server, $sslResponse->json());
         }
 
-        if ($response instanceof \Exception || $response->failed()) {
-            return;
+        if ($phpResponse && ! ($phpResponse instanceof \Exception) && ! $phpResponse->failed()) {
+            (new ProcessPhpVhostVersions)->execute($this->server, $phpResponse->json());
         }
-
-        (new ProcessSslVhosts)->execute($this->server, $response->json());
     }
 
     protected function shouldFireFailedEvent(): bool

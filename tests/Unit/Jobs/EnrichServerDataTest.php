@@ -1,17 +1,15 @@
 <?php
 
 use App\Enums\SslVhostTypeEnum;
+use App\Jobs\EnrichServerDataJob;
 use App\Jobs\FetchEmailDiskUsageJob;
 use App\Jobs\FetchServerDataJob;
-use App\Jobs\FetchSslVhostsJob;
 use App\Models\Account;
 use App\Models\AccountSslCertificate;
 use App\Models\Server;
 use App\Services\WHM\WhmApi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Http;
 use Tests\Factories\WhmApiFake;
 
 uses(LazilyRefreshDatabase::class);
@@ -24,19 +22,19 @@ it('stores ssl certificate records for each account vhost', function () {
     $fake = new WhmApiFake;
     $this->app->instance(WhmApi::class, $fake);
 
-    dispatch(new FetchSslVhostsJob($server));
+    dispatch(new EnrichServerDataJob($server));
 
     expect(AccountSslCertificate::count())->toBe(3);
 });
 
 it('correctly maps ssl certificate fields', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
-    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'my-site.com']);
 
     $fake = new WhmApiFake;
     $this->app->instance(WhmApi::class, $fake);
 
-    dispatch(new FetchSslVhostsJob($server));
+    dispatch(new EnrichServerDataJob($server));
 
     $cert = AccountSslCertificate::where('servername', 'my-site.com')->first();
     expect($cert)->not->toBeNull();
@@ -50,12 +48,12 @@ it('correctly maps ssl certificate fields', function () {
 
 it('distinguishes main and sub type correctly', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
-    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'my-site.com']);
 
     $fake = new WhmApiFake;
     $this->app->instance(WhmApi::class, $fake);
 
-    dispatch(new FetchSslVhostsJob($server));
+    dispatch(new EnrichServerDataJob($server));
 
     expect(AccountSslCertificate::where('servername', 'my-site.com')->value('type'))->toBe(SslVhostTypeEnum::Main);
     expect(AccountSslCertificate::where('servername', 'sub.my-site.com')->value('type'))->toBe(SslVhostTypeEnum::Sub);
@@ -63,7 +61,7 @@ it('distinguishes main and sub type correctly', function () {
 
 it('removes stale ssl certificate records no longer in api response', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
-    $account = Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite']);
+    $account = Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'my-site.com']);
 
     AccountSslCertificate::create([
         'account_id' => $account->id,
@@ -79,7 +77,7 @@ it('removes stale ssl certificate records no longer in api response', function (
     $fake = new WhmApiFake;
     $this->app->instance(WhmApi::class, $fake);
 
-    dispatch(new FetchSslVhostsJob($server));
+    dispatch(new EnrichServerDataJob($server));
 
     expect(AccountSslCertificate::where('servername', 'stale-old.com')->exists())->toBeFalse();
     expect(AccountSslCertificate::where('servername', 'my-site.com')->exists())->toBeTrue();
@@ -87,13 +85,13 @@ it('removes stale ssl certificate records no longer in api response', function (
 
 it('stores ssl certificates for multiple accounts on the same server', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
-    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite']);
-    Account::factory()->create(['server_id' => $server->id, 'user' => 'super']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'my-site.com']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'super', 'domain' => 'super-system.com']);
 
     $fake = new WhmApiFake;
     $this->app->instance(WhmApi::class, $fake);
 
-    dispatch(new FetchSslVhostsJob($server));
+    dispatch(new EnrichServerDataJob($server));
 
     $mysiteCerts = AccountSslCertificate::whereHas('account', fn ($q) => $q->where('user', 'mysite'))->count();
     $superCerts = AccountSslCertificate::whereHas('account', fn ($q) => $q->where('user', 'super'))->count();
@@ -102,20 +100,66 @@ it('stores ssl certificates for multiple accounts on the same server', function 
     expect($superCerts)->toBe(1);
 });
 
-it('returns silently when a ConnectionException is thrown', function () {
+it('stores php version for each account', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'my-site.com']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'super', 'domain' => 'super-system.com']);
 
-    Http::fake(function () {
-        throw new ConnectionException;
-    });
+    $fake = new WhmApiFake;
+    $this->app->instance(WhmApi::class, $fake);
 
-    dispatch(new FetchSslVhostsJob($server));
+    dispatch(new EnrichServerDataJob($server));
 
-    expect(AccountSslCertificate::count())->toBe(0);
+    expect(Account::where('domain', 'my-site.com')->value('php_version'))->toBe('ea-php81');
+    expect(Account::where('domain', 'super-system.com')->value('php_version'))->toBe('ea-php82');
 });
 
-it('dispatches FetchSslVhostsJob after FetchServerDataJob runs', function () {
-    Bus::fake([FetchEmailDiskUsageJob::class, FetchSslVhostsJob::class]);
+it('handles empty php vhost versions response gracefully', function () {
+    $server = Server::factory()->create(['token' => 'valid-token']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'my-site.com']);
+
+    $fake = new class extends WhmApiFake
+    {
+        protected function getPhpVhostVersionsData(): array
+        {
+            return ['data' => ['versions' => []]];
+        }
+    };
+
+    $this->app->instance(WhmApi::class, $fake);
+
+    dispatch(new EnrichServerDataJob($server));
+
+    expect(Account::where('domain', 'my-site.com')->value('php_version'))->toBeNull();
+});
+
+it('skips php version for accounts with no matching domain', function () {
+    $server = Server::factory()->create(['token' => 'valid-token']);
+    Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'my-site.com']);
+
+    $fake = new class extends WhmApiFake
+    {
+        protected function getPhpVhostVersionsData(): array
+        {
+            return [
+                'data' => [
+                    'versions' => [
+                        ['vhost' => 'unknown-domain.com', 'php_version' => 'ea-php81'],
+                    ],
+                ],
+            ];
+        }
+    };
+
+    $this->app->instance(WhmApi::class, $fake);
+
+    dispatch(new EnrichServerDataJob($server));
+
+    expect(Account::where('domain', 'my-site.com')->value('php_version'))->toBeNull();
+});
+
+it('dispatches EnrichServerDataJob after FetchServerDataJob runs', function () {
+    Bus::fake([FetchEmailDiskUsageJob::class, EnrichServerDataJob::class]);
 
     $server = Server::factory()->create(['token' => 'valid-token']);
 
@@ -124,5 +168,5 @@ it('dispatches FetchSslVhostsJob after FetchServerDataJob runs', function () {
 
     dispatch(new FetchServerDataJob($server));
 
-    Bus::assertDispatched(FetchSslVhostsJob::class, fn ($job) => $job->server->is($server));
+    Bus::assertDispatched(EnrichServerDataJob::class, fn ($job) => $job->server->is($server));
 });

@@ -10,6 +10,7 @@ use App\Services\WHM\DataProcessors\ProcessBackups;
 use App\Services\WHM\DataProcessors\ProcessDiskUsage;
 use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
+use App\Services\WHM\DataProcessors\ProcessPhpVhostVersions;
 use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use App\Services\WHM\WhmApi;
@@ -184,9 +185,22 @@ class WhmApiFake extends WhmApi
         return 2048000;
     }
 
-    public function fetchSslVhosts(): void
+    public function enrichServerData(): void
     {
         (new ProcessSslVhosts)->execute($this->server, $this->getSslVhostsData());
+        (new ProcessPhpVhostVersions)->execute($this->server, $this->getPhpVhostVersionsData());
+    }
+
+    protected function getPhpVhostVersionsData(): array
+    {
+        return [
+            'data' => [
+                'versions' => [
+                    ['vhost' => 'my-site.com', 'php_version' => 'ea-php81'],
+                    ['vhost' => 'super-system.com', 'php_version' => 'ea-php82'],
+                ],
+            ],
+        ];
     }
 
     protected function getSslVhostsData(): array

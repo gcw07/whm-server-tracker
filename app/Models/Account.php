@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $disk_used
  * @property string $disk_limit
  * @property string $plan
+ * @property string|null $php_version
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
  * @property-read mixed $backups_enabled

@@ -28,6 +28,6 @@ class FetchServerDataJob implements ShouldQueue
         $whmApi->setServer($this->server);
         $whmApi->fetch();
         dispatch(new FetchEmailDiskUsageJob($this->server))->onQueue('high');
-        dispatch(new FetchSslVhostsJob($this->server))->onQueue('high');
+        dispatch(new EnrichServerDataJob($this->server))->onQueue('high');
     }
 }
