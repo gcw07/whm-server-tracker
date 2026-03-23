@@ -2,7 +2,9 @@
 
 namespace App\Models\Presenters;
 
+use App\Services\PhpVersions;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Arr;
 
 trait AccountPresenter
 {
@@ -25,6 +27,19 @@ trait AccountPresenter
         return Attribute::make(
             get: function () {
                 return $this->getDiskPercentage() ? $this->getDiskPercentage().'%' : 'Unknown';
+            },
+        );
+    }
+
+    protected function formattedPhpVersion(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->php_version) {
+                    return PhpVersions::all()->get(substr($this->php_version, 3), 'Unknown');
+                }
+
+                return 'Unknown';
             },
         );
     }

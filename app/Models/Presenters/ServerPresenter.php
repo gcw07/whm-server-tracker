@@ -145,18 +145,18 @@ trait ServerPresenter
     {
         return Attribute::make(
             get: function () {
-                $phpVersions = PhpVersions::filtered('version');
+                $phpVersions = PhpVersions::all();
 
                 if ($this->settings?->has('php_installed_versions')) {
                     return collect($this->settings->get('php_installed_versions'))
                         ->reject(fn ($item) => $item == 'nf-php74')
                         ->map(function ($version) use ($phpVersions) {
-                            return $phpVersions->get(substr($version, 3), 'Unknown');
+                            return $phpVersions->get(substr($version, 3), ['version' => 'Unknown', 'color' => 'gray']);
                         })
                         ->toArray();
                 }
 
-                return ['Unknown'];
+                return [['version' => 'Unknown', 'color' => 'gray']];
             },
         );
     }
@@ -257,27 +257,6 @@ trait ServerPresenter
         return Attribute::make(
             get: fn () => ! $this->missing_token,
         );
-    }
-
-    public function isPhpVersionActive($version): bool
-    {
-        $phpVersions = PhpVersions::active('version');
-
-        return $phpVersions->contains($version);
-    }
-
-    public function isPhpVersionSecurityOnly($version): bool
-    {
-        $phpVersions = PhpVersions::security('version');
-
-        return $phpVersions->contains($version);
-    }
-
-    public function isPhpVersionEndOfLife($version): bool
-    {
-        $phpVersions = PhpVersions::endOfLife('version');
-
-        return $phpVersions->contains($version);
     }
 
     protected function formatFileSize($kilobytes, $precision = null): string

@@ -78,6 +78,7 @@ class Account extends Model
         'domain_url',
         'cpanel_url',
         'formatted_disk_usage',
+        'formatted_php_version',
         'backups_enabled',
         'is_disk_warning',
         'is_disk_critical',

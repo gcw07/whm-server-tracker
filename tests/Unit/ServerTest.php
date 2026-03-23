@@ -803,18 +803,19 @@ it('can get formatted php installed versions', function () {
     $serverK = Server::factory()->create(['settings' => ['php_installed_versions' => ['ea-php74', 'ea-php80']]]);
     $serverL = Server::factory()->create();
 
-    $this->assertEquals(['5.4'], $serverA->formatted_php_installed_versions);
-    $this->assertEquals(['5.5'], $serverB->formatted_php_installed_versions);
-    $this->assertEquals(['5.6'], $serverC->formatted_php_installed_versions);
-    $this->assertEquals(['7.0'], $serverD->formatted_php_installed_versions);
-    $this->assertEquals(['7.1'], $serverE->formatted_php_installed_versions);
-    $this->assertEquals(['7.2'], $serverF->formatted_php_installed_versions);
-    $this->assertEquals(['7.3'], $serverG->formatted_php_installed_versions);
-    $this->assertEquals(['7.4'], $serverH->formatted_php_installed_versions);
-    $this->assertEquals(['8.0'], $serverI->formatted_php_installed_versions);
-    $this->assertEquals(['8.1'], $serverJ->formatted_php_installed_versions);
-    $this->assertEquals(['7.4', '8.0'], $serverK->formatted_php_installed_versions);
-    $this->assertEquals(['Unknown'], $serverL->formatted_php_installed_versions);
+    $this->assertEquals('5.4', $serverA->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('5.5', $serverB->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('5.6', $serverC->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('7.0', $serverD->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('7.1', $serverE->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('7.2', $serverF->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('7.3', $serverG->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('7.4', $serverH->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('8.0', $serverI->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('8.1', $serverJ->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('7.4', $serverK->formatted_php_installed_versions[0]['version']);
+    $this->assertEquals('8.0', $serverK->formatted_php_installed_versions[1]['version']);
+    $this->assertEquals('Unknown', $serverL->formatted_php_installed_versions[0]['version']);
 });
 
 it('can get formatted php system version', function () {

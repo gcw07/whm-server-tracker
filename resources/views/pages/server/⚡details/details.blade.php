@@ -97,7 +97,7 @@
                 </dt>
                 <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
                   @foreach($server->formatted_php_installed_versions as $version)
-                    {{ $version }}@if (!$loop->last),@endif
+                    {{ $version['version'] }}@if (!$loop->last),@endif
                   @endforeach
                   <span class="text-gray-400 font-medium">&mdash;</span>
                   <span>System {{ $server->formatted_php_system_version }}</span>
@@ -236,6 +236,7 @@
             <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">DOMAIN</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PLAN</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PHP</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USAGE</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">DATE ADDED</flux:table.column>
@@ -275,6 +276,14 @@
 
                 <flux:table.cell class="whitespace-nowrap">{{ $account->plan }}</flux:table.cell>
 
+                <flux:table.cell class="whitespace-nowrap">
+                  @if($account->php_version)
+                    <flux:badge size="sm" :color="$account->formatted_php_version['color']" inset="top bottom">{{ $account->formatted_php_version['version'] }}</flux:badge>
+                  @else
+                    —
+                  @endif
+                </flux:table.cell>
+
                 <flux:table.cell class="whitespace-nowrap">{{ $account->disk_used }} / {{ $account->disk_limit }}</flux:table.cell>
 
                 <flux:table.cell class="whitespace-nowrap">
@@ -293,7 +302,7 @@
               </flux:table.row>
             @empty
               <flux:table.row>
-                <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+                <flux:table.cell colspan="9" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
                   <div class="text-center">
                     <div class="flex items-center justify-center">
                       <flux:icon.magnifying-glass class="size-12" />

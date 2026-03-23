@@ -76,16 +76,7 @@
 
                 <flux:table.cell>
                   @foreach($server->formatted_php_installed_versions as $version)
-                    @php
-                      if ($server->isPhpVersionEndOfLife($version)) {
-                        $versionColor = 'red';
-                      } elseif ($server->isPhpVersionSecurityOnly($version)) {
-                        $versionColor = 'amber';
-                      } else {
-                        $versionColor = 'green';
-                      }
-                    @endphp
-                    <flux:badge size="sm" :color="$versionColor" inset="top bottom">{{ $version }}</flux:badge>
+                    <flux:badge size="sm" :color="$version['color']" inset="top bottom">{{ $version['version'] }}</flux:badge>
                   @endforeach
                 </flux:table.cell>
 
