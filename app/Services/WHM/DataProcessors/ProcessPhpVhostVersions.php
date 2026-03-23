@@ -19,7 +19,7 @@ class ProcessPhpVhostVersions
 
         foreach ($versions as $version) {
             $domain = $version['vhost'] ?? null;
-            $phpVersion = $version['php_version'] ?? null;
+            $phpVersion = $version['version'] ?? null;
 
             if (! $domain || ! $phpVersion) {
                 continue;

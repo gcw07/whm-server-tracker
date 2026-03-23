@@ -196,8 +196,8 @@ class WhmApiFake extends WhmApi
         return [
             'data' => [
                 'versions' => [
-                    ['vhost' => 'my-site.com', 'php_version' => 'ea-php81'],
-                    ['vhost' => 'super-system.com', 'php_version' => 'ea-php82'],
+                    ['vhost' => 'my-site.com', 'version' => 'ea-php81'],
+                    ['vhost' => 'super-system.com', 'version' => 'ea-php82'],
                 ],
             ],
         ];
