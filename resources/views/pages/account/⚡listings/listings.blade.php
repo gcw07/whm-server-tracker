@@ -58,7 +58,6 @@
       <flux:table.columns>
         <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'domain'" :direction="$sortDirection" wire:click="sort('domain')">DOMAIN</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'emails'" :direction="$sortDirection" wire:click="sort('emails')">EMAILS</flux:table.column>
-        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'usage'" :direction="$sortDirection" wire:click="sort('usage')">USAGE</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'newest'" :direction="$sortDirection" wire:click="sort('newest')">DATE ADDED</flux:table.column>
@@ -118,6 +117,9 @@
                       </flux:popover>
                     </flux:dropdown>
                   @endif
+                  @if(!$account->backups_enabled)
+                    <flux:badge size="sm" color="red" inset="top bottom" class="ml-1">No Backups</flux:badge>
+                  @endif
                 </div>
                 <div class="mt-1">
                   <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">{{ $account->server->name }}</flux:link>
@@ -126,10 +128,6 @@
             </flux:table.cell>
 
             <flux:table.cell class="whitespace-nowrap">{{ $account->emails_count }}</flux:table.cell>
-
-            <flux:table.cell>
-              <flux:badge size="sm" :color="$account->backups_enabled ? 'green' : 'red'" inset="top bottom">{{ $account->backups_enabled ? 'Yes' : 'No'}}</flux:badge>
-            </flux:table.cell>
 
             <flux:table.cell>
               {{ $account->disk_used }} / {{ $account->disk_limit }}
