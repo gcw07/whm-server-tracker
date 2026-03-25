@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Casts\Settings;
 use App\Collections\SettingsCollection;
 use App\Enums\ServerTypeEnum;
-use App\Jobs\FetchServerDataJob;
+use App\Jobs\FetchServerDetailsJob;
 use App\Models\Presenters\ServerPresenter;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -116,7 +116,7 @@ class Server extends Model
     {
         $servers = static::query()->withTokens()->get();
 
-        $servers->each(fn ($server) => dispatch(new FetchServerDataJob($server))->onQueue('high'));
+        $servers->each(fn ($server) => dispatch(new FetchServerDetailsJob($server))->onQueue('high'));
     }
 
     public function accounts(): HasMany

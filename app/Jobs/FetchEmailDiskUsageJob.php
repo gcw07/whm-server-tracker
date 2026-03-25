@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Server;
-use App\Services\WHM\WhmApi;
+use App\Services\WHM\WhmEmailDiskUsage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,9 +21,9 @@ class FetchEmailDiskUsageJob implements ShouldQueue
         $this->onQueue('high');
     }
 
-    public function handle(WhmApi $whmApi): void
+    public function handle(WhmEmailDiskUsage $whmEmailDiskUsage): void
     {
-        $whmApi->setServer($this->server);
-        $whmApi->fetchEmailDiskUsage();
+        $whmEmailDiskUsage->setServer($this->server);
+        $whmEmailDiskUsage->fetch();
     }
 }

@@ -4,37 +4,27 @@ namespace App\Services\WHM;
 
 use App\Events\FetchedDataFailedEvent;
 use App\Events\FetchedDataSucceededEvent;
-use App\Exceptions\Server\MissingTokenException;
 use App\Models\Server;
-use App\Services\WHM\DataProcessors\ProcessAccountEmails;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
 use App\Services\WHM\DataProcessors\ProcessBackups;
 use App\Services\WHM\DataProcessors\ProcessDiskUsage;
 use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
-use App\Services\WHM\DataProcessors\ProcessPhpVhostVersions;
-use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
 use Carbon\Carbon;
-use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
 
-class WhmApi
+class WhmServerDetails extends WhmApiBase
 {
-    protected Server $server;
-
     protected array $successMessages;
 
     protected array $failureMessages;
 
     public function setServer(Server $server): void
     {
-        if (! $server->token) {
-            throw new MissingTokenException;
-        }
+        parent::setServer($server);
 
-        $this->server = $server;
         $this->successMessages = [];
         $this->failureMessages = [];
     }
@@ -54,22 +44,6 @@ class WhmApi
         }
 
         $this->processMessages();
-    }
-
-    private function getHeaders(): array
-    {
-        $username = config('server-tracker.whm.username');
-
-        return ['Authorization' => "whm $username:{$this->server->token}"];
-    }
-
-    private function configuredRequest(Pool $pool, string $name): PendingRequest
-    {
-        return $pool->as($name)
-            ->withHeaders($this->getHeaders())
-            ->baseUrl($this->server->whm_base_api_url)
-            ->connectTimeout(config('server-tracker.whm.connection_timeout'))
-            ->withoutVerifying();
     }
 
     protected function getPoolRequests(Pool $pool): array
@@ -120,78 +94,6 @@ class WhmApi
             ]);
 
             event(new FetchedDataFailedEvent($this->server, $this->failureMessages));
-        }
-    }
-
-    public function fetchEmailDiskUsage(): void
-    {
-        $accounts = $this->server->accounts()->get();
-
-        if ($accounts->isEmpty()) {
-            return;
-        }
-
-        $responses = Http::pool(fn (Pool $pool) => $accounts->flatMap(fn ($account) => [
-            $this->configuredRequest($pool, $account->user)
-                ->get('cpanel', [
-                    'cpanel_jsonapi_user' => $account->user,
-                    'cpanel_jsonapi_module' => 'Email',
-                    'cpanel_jsonapi_func' => 'list_pops_with_disk',
-                    'cpanel_jsonapi_apiversion' => 3,
-                ]),
-            $this->configuredRequest($pool, "{$account->user}_system")
-                ->get('cpanel', [
-                    'cpanel_jsonapi_user' => $account->user,
-                    'cpanel_jsonapi_module' => 'Email',
-                    'cpanel_jsonapi_func' => 'get_main_account_disk_usage_bytes',
-                    'cpanel_jsonapi_apiversion' => 3,
-                ]),
-        ])->all());
-
-        foreach ($accounts as $account) {
-            $emailsResponse = $responses[$account->user] ?? null;
-            $systemResponse = $responses["{$account->user}_system"] ?? null;
-
-            if (! $emailsResponse || $emailsResponse instanceof \Exception || $emailsResponse->failed()) {
-                continue;
-            }
-
-            $emailData = $emailsResponse->json();
-
-            if ($systemResponse && ! ($systemResponse instanceof \Exception) && ! $systemResponse->failed()) {
-                $systemBytes = $systemResponse->json()['result']['data'] ?? 0;
-                $emailData['result']['data'][] = [
-                    'email' => $account->user,
-                    'user' => 'system',
-                    'domain' => $account->domain,
-                    '_diskused' => $systemBytes,
-                    '_diskquota' => 0,
-                    'diskusedpercent_float' => 0,
-                    'suspended_incoming' => 0,
-                    'suspended_login' => 0,
-                ];
-            }
-
-            (new ProcessAccountEmails)->execute($account, $emailData);
-        }
-    }
-
-    public function enrichServerData(): void
-    {
-        $responses = Http::pool(fn (Pool $pool) => [
-            'sslVhosts' => $this->configuredRequest($pool, 'sslVhosts')->get('fetch_ssl_vhosts?api.version=1'),
-            'phpVhostVersions' => $this->configuredRequest($pool, 'phpVhostVersions')->get('php_get_vhost_versions?api.version=1'),
-        ]);
-
-        $sslResponse = $responses['sslVhosts'] ?? null;
-        $phpResponse = $responses['phpVhostVersions'] ?? null;
-
-        if ($sslResponse && ! ($sslResponse instanceof \Exception) && ! $sslResponse->failed()) {
-            (new ProcessSslVhosts)->execute($this->server, $sslResponse->json());
-        }
-
-        if ($phpResponse && ! ($phpResponse instanceof \Exception) && ! $phpResponse->failed()) {
-            (new ProcessPhpVhostVersions)->execute($this->server, $phpResponse->json());
         }
     }
 

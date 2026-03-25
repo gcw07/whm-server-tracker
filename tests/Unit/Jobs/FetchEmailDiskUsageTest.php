@@ -1,14 +1,16 @@
 <?php
 
 use App\Jobs\FetchEmailDiskUsageJob;
-use App\Jobs\FetchServerDataJob;
+use App\Jobs\FetchServerDetailsJob;
 use App\Models\Account;
 use App\Models\AccountEmail;
 use App\Models\Server;
 use App\Services\WHM\DataProcessors\ProcessAccountEmails;
-use App\Services\WHM\WhmApi;
+use App\Services\WHM\WhmEmailDiskUsage;
+use App\Services\WHM\WhmServerDetails;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Tests\Factories\WhmApiFake;
+use Tests\Factories\WhmEmailDiskUsageFake;
+use Tests\Factories\WhmServerDetailsFake;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -21,8 +23,8 @@ it('stores email disk usage records for each account', function () {
         'domain' => 'mysite.com',
     ]);
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmEmailDiskUsageFake;
+    $this->app->instance(WhmEmailDiskUsage::class, $fake);
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
@@ -35,8 +37,8 @@ it('correctly maps email disk usage fields', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
     Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite']);
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmEmailDiskUsageFake;
+    $this->app->instance(WhmEmailDiskUsage::class, $fake);
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
@@ -64,8 +66,8 @@ it('removes stale email records when an email no longer exists', function () {
         'domain' => 'mysite.com',
     ]);
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmEmailDiskUsageFake;
+    $this->app->instance(WhmEmailDiskUsage::class, $fake);
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
@@ -77,7 +79,7 @@ it('handles accounts with no regular email accounts gracefully', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
     Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite']);
 
-    $fake = new class extends WhmApiFake
+    $fake = new class extends WhmEmailDiskUsageFake
     {
         protected function getEmailDiskUsageData(string $username): array
         {
@@ -85,7 +87,7 @@ it('handles accounts with no regular email accounts gracefully', function () {
         }
     };
 
-    $this->app->instance(WhmApi::class, $fake);
+    $this->app->instance(WhmEmailDiskUsage::class, $fake);
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
@@ -97,8 +99,8 @@ it('stores email records for multiple accounts', function () {
     Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite']);
     Account::factory()->create(['server_id' => $server->id, 'user' => 'super']);
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmEmailDiskUsageFake;
+    $this->app->instance(WhmEmailDiskUsage::class, $fake);
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
@@ -109,8 +111,8 @@ it('correctly maps default email disk usage fields', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
     Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'mysite.com']);
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmEmailDiskUsageFake;
+    $this->app->instance(WhmEmailDiskUsage::class, $fake);
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
@@ -129,9 +131,9 @@ it('stores regular emails when main email account API fails', function () {
     $server = Server::factory()->create(['token' => 'valid-token']);
     Account::factory()->create(['server_id' => $server->id, 'user' => 'mysite', 'domain' => 'mysite.com']);
 
-    $fake = new class extends WhmApiFake
+    $fake = new class extends WhmEmailDiskUsageFake
     {
-        public function fetchEmailDiskUsage(): void
+        public function fetch(): void
         {
             $accounts = $this->server->accounts()->get();
 
@@ -142,7 +144,7 @@ it('stores regular emails when main email account API fails', function () {
         }
     };
 
-    $this->app->instance(WhmApi::class, $fake);
+    $this->app->instance(WhmEmailDiskUsage::class, $fake);
 
     dispatch(new FetchEmailDiskUsageJob($server));
 
@@ -151,15 +153,15 @@ it('stores regular emails when main email account API fails', function () {
     expect(AccountEmail::where('email', 'mysite')->exists())->toBeFalse();
 });
 
-it('dispatches FetchEmailDiskUsageJob after FetchServerDataJob runs', function () {
+it('dispatches FetchEmailDiskUsageJob after FetchServerDetailsJob runs', function () {
     Bus::fake([FetchEmailDiskUsageJob::class]);
 
     $server = Server::factory()->create(['token' => 'valid-token']);
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmServerDetailsFake;
+    $this->app->instance(WhmServerDetails::class, $fake);
 
-    dispatch(new FetchServerDataJob($server));
+    dispatch(new FetchServerDetailsJob($server));
 
     Bus::assertDispatched(FetchEmailDiskUsageJob::class, fn ($job) => $job->server->is($server));
 });

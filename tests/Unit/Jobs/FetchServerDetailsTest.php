@@ -1,10 +1,12 @@
 <?php
 
-use App\Jobs\FetchServerDataJob;
+use App\Jobs\FetchAccountDetailsJob;
+use App\Jobs\FetchEmailDiskUsageJob;
+use App\Jobs\FetchServerDetailsJob;
 use App\Models\Server;
-use App\Services\WHM\WhmApi;
+use App\Services\WHM\WhmServerDetails;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Tests\Factories\WhmApiFake;
+use Tests\Factories\WhmServerDetailsFake;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -19,10 +21,10 @@ it('fetches server details', function () {
 
     Event::fake();
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmServerDetailsFake;
+    $this->app->instance(WhmServerDetails::class, $fake);
 
-    dispatch(new FetchServerDataJob($server));
+    dispatch(new FetchServerDetailsJob($server));
 
     tap($server->fresh(), function (Server $server) {
         $this->assertEquals('my-server-name', $server->name);
@@ -58,10 +60,10 @@ it('fetches server accounts', function () {
 
     Event::fake();
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmServerDetailsFake;
+    $this->app->instance(WhmServerDetails::class, $fake);
 
-    dispatch(new FetchServerDataJob($server));
+    dispatch(new FetchServerDetailsJob($server));
 
     tap($server->fresh(), function (Server $server) {
         $this->assertEquals('my-server-name', $server->name);
@@ -81,7 +83,7 @@ it('fetches server accounts when there are no accounts on remote server', functi
 
     Event::fake();
 
-    $fake = new class extends WhmApiFake
+    $fake = new class extends WhmServerDetailsFake
     {
         protected function getAccountsData(): array
         {
@@ -89,13 +91,39 @@ it('fetches server accounts when there are no accounts on remote server', functi
         }
     };
 
-    $this->app->instance(WhmApi::class, $fake);
+    $this->app->instance(WhmServerDetails::class, $fake);
 
-    dispatch(new FetchServerDataJob($server));
+    dispatch(new FetchServerDetailsJob($server));
 
     tap($server->fresh(), function (Server $server) {
         $this->assertEquals('my-server-name', $server->name);
 
         $this->assertCount(0, $server->accounts);
     });
+});
+
+it('dispatches FetchEmailDiskUsageJob after FetchServerDetailsJob runs', function () {
+    Bus::fake([FetchEmailDiskUsageJob::class]);
+
+    $server = Server::factory()->create(['token' => 'valid-token']);
+
+    $fake = new WhmServerDetailsFake;
+    $this->app->instance(WhmServerDetails::class, $fake);
+
+    dispatch(new FetchServerDetailsJob($server));
+
+    Bus::assertDispatched(FetchEmailDiskUsageJob::class, fn ($job) => $job->server->is($server));
+});
+
+it('dispatches FetchAccountDetailsJob after FetchServerDetailsJob runs', function () {
+    Bus::fake([FetchEmailDiskUsageJob::class, FetchAccountDetailsJob::class]);
+
+    $server = Server::factory()->create(['token' => 'valid-token']);
+
+    $fake = new WhmServerDetailsFake;
+    $this->app->instance(WhmServerDetails::class, $fake);
+
+    dispatch(new FetchServerDetailsJob($server));
+
+    Bus::assertDispatched(FetchAccountDetailsJob::class, fn ($job) => $job->server->is($server));
 });

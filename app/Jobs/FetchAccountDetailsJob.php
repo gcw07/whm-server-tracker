@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Server;
-use App\Services\WHM\WhmApi;
+use App\Services\WHM\WhmAccountDetails;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 #[Tries(5)]
-class EnrichServerDataJob implements ShouldQueue
+class FetchAccountDetailsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -21,9 +21,9 @@ class EnrichServerDataJob implements ShouldQueue
         $this->onQueue('high');
     }
 
-    public function handle(WhmApi $whmApi): void
+    public function handle(WhmAccountDetails $whmAccountDetails): void
     {
-        $whmApi->setServer($this->server);
-        $whmApi->enrichServerData();
+        $whmAccountDetails->setServer($this->server);
+        $whmAccountDetails->fetch();
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-use App\Jobs\FetchServerDataJob;
+use App\Jobs\FetchServerDetailsJob;
 use App\Models\Server;
 use App\Models\User;
-use App\Services\WHM\WhmApi;
+use App\Services\WHM\WhmServerDetails;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Tests\Factories\WhmApiFake;
+use Tests\Factories\WhmServerDetailsFake;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -36,15 +36,15 @@ test('an authorized user can refresh server data from server details', function 
 
     Queue::fake();
 
-    $fake = new WhmApiFake;
-    $this->app->instance(WhmApi::class, $fake);
+    $fake = new WhmServerDetailsFake;
+    $this->app->instance(WhmServerDetails::class, $fake);
 
     $this->actingAs(User::factory()->create());
 
     Livewire::test('pages::server.details', ['server' => $server])
         ->call('refresh');
 
-    Queue::assertPushed(FetchServerDataJob::class, function ($job) use ($server) {
+    Queue::assertPushed(FetchServerDetailsJob::class, function ($job) use ($server) {
         return $job->server->is($server);
     });
 });

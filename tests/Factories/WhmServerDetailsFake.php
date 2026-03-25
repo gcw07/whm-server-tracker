@@ -4,21 +4,16 @@ namespace Tests\Factories;
 
 use App\Exceptions\Server\MissingTokenException;
 use App\Models\Server;
-use App\Services\WHM\DataProcessors\ProcessAccountEmails;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
 use App\Services\WHM\DataProcessors\ProcessBackups;
 use App\Services\WHM\DataProcessors\ProcessDiskUsage;
 use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
-use App\Services\WHM\DataProcessors\ProcessPhpVhostVersions;
-use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
-use App\Services\WHM\WhmApi;
+use App\Services\WHM\WhmServerDetails;
 
-class WhmApiFake extends WhmApi
+class WhmServerDetailsFake extends WhmServerDetails
 {
-    protected Server $server;
-
     public function setServer(Server $server): void
     {
         if (! $server->token) {
@@ -38,7 +33,7 @@ class WhmApiFake extends WhmApi
         $this->apiRequestSucceeded('whmVersion', $this->getWhmVersionData());
     }
 
-    protected function apiRequestSucceeded($type, $data): void
+    protected function apiRequestSucceeded(string $type, array $data): void
     {
         match ($type) {
             'accounts' => (new ProcessAccounts)->execute($this->server, $data),
@@ -153,125 +148,6 @@ class WhmApiFake extends WhmApi
         return [
             'data' => [
                 'version' => '11.100.0.9999',
-            ],
-        ];
-    }
-
-    public function fetchEmailDiskUsage(): void
-    {
-        $accounts = $this->server->accounts()->get();
-
-        foreach ($accounts as $account) {
-            $data = $this->getEmailDiskUsageData($account->user);
-            $systemBytes = $this->getSystemEmailDiskUsageBytes($account->user);
-
-            $data['result']['data'][] = [
-                'email' => $account->user,
-                'user' => 'system',
-                'domain' => $account->domain,
-                '_diskused' => $systemBytes,
-                '_diskquota' => 0,
-                'diskusedpercent_float' => 0,
-                'suspended_incoming' => 0,
-                'suspended_login' => 0,
-            ];
-
-            (new ProcessAccountEmails)->execute($account, $data);
-        }
-    }
-
-    protected function getSystemEmailDiskUsageBytes(string $username): int
-    {
-        return 2048000;
-    }
-
-    public function enrichServerData(): void
-    {
-        (new ProcessSslVhosts)->execute($this->server, $this->getSslVhostsData());
-        (new ProcessPhpVhostVersions)->execute($this->server, $this->getPhpVhostVersionsData());
-    }
-
-    protected function getPhpVhostVersionsData(): array
-    {
-        return [
-            'data' => [
-                'versions' => [
-                    ['vhost' => 'my-site.com', 'version' => 'ea-php81'],
-                    ['vhost' => 'super-system.com', 'version' => 'ea-php82'],
-                ],
-            ],
-        ];
-    }
-
-    protected function getSslVhostsData(): array
-    {
-        return [
-            'data' => [
-                'vhosts' => [
-                    [
-                        'user' => 'mysite',
-                        'servername' => 'my-site.com',
-                        'type' => 'main',
-                        'domains' => ['my-site.com', 'www.my-site.com'],
-                        'crt' => [
-                            'not_after' => 1893456000,
-                            'domains' => ['my-site.com', 'www.my-site.com'],
-                            'issuer.organizationName' => "Let's Encrypt",
-                        ],
-                    ],
-                    [
-                        'user' => 'mysite',
-                        'servername' => 'sub.my-site.com',
-                        'type' => 'sub',
-                        'domains' => ['sub.my-site.com'],
-                        'crt' => [
-                            'not_after' => 1893456000,
-                            'domains' => ['sub.my-site.com'],
-                            'issuer.organizationName' => "Let's Encrypt",
-                        ],
-                    ],
-                    [
-                        'user' => 'super',
-                        'servername' => 'super-system.com',
-                        'type' => 'main',
-                        'domains' => ['super-system.com', 'www.super-system.com'],
-                        'crt' => [
-                            'not_after' => 1893456000,
-                            'domains' => ['super-system.com'],
-                            'issuer.organizationName' => "Let's Encrypt",
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    protected function getEmailDiskUsageData(string $username): array
-    {
-        return [
-            'result' => [
-                'data' => [
-                    [
-                        'email' => "info@{$username}.com",
-                        'user' => 'info',
-                        'domain' => "{$username}.com",
-                        '_diskused' => 1024000,
-                        '_diskquota' => 524288000,
-                        'diskusedpercent_float' => 0.19,
-                        'suspended_incoming' => 0,
-                        'suspended_login' => 0,
-                    ],
-                    [
-                        'email' => "admin@{$username}.com",
-                        'user' => 'admin',
-                        'domain' => "{$username}.com",
-                        '_diskused' => 5120000,
-                        '_diskquota' => 0,
-                        'diskusedpercent_float' => 0,
-                        'suspended_incoming' => 0,
-                        'suspended_login' => 0,
-                    ],
-                ],
             ],
         ];
     }

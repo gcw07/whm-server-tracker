@@ -3,7 +3,7 @@
 use App\Events\FetchedDataFailedEvent;
 use App\Exceptions\Server\MissingTokenException;
 use App\Models\Server;
-use App\Services\WHM\WhmApi;
+use App\Services\WHM\WhmServerDetails;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);
@@ -16,7 +16,7 @@ beforeEach(function () {
     $this->whmTestServerAddress = getenv('WHM_TEST_SERVER_ADDRESS');
     $this->whmTestServerToken = getenv('WHM_TEST_SERVER_TOKEN');
 
-    $this->whmApi = new WhmApi;
+    $this->whmApi = new WhmServerDetails;
 });
 
 function canTestWHMServerConnector(): bool

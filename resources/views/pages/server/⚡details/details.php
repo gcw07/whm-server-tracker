@@ -1,6 +1,6 @@
 <?php
 
-use App\Jobs\FetchServerDataJob;
+use App\Jobs\FetchServerDetailsJob;
 use App\Models\Server;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -27,7 +27,7 @@ new #[Title('Server Details')] class extends Component
 
     public function refresh(): void
     {
-        FetchServerDataJob::dispatch($this->server)->onQueue('high');
+        FetchServerDetailsJob::dispatch($this->server)->onQueue('high');
 
         Flux::toast(
             text: 'The server details will be refreshed shortly.',

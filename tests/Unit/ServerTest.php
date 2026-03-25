@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\ServerTypeEnum;
-use App\Jobs\FetchServerDataJob;
+use App\Jobs\FetchServerDetailsJob;
 use App\Models\Account;
 use App\Models\Server;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
@@ -896,11 +896,11 @@ it('dispatches fetch jobs only for servers with tokens', function () {
 
     Server::refreshData();
 
-    Queue::assertPushedOn('high', FetchServerDataJob::class, function ($job) use ($serverWithToken) {
+    Queue::assertPushedOn('high', FetchServerDetailsJob::class, function ($job) use ($serverWithToken) {
         return $job->server->is($serverWithToken);
     });
 
-    Queue::assertNotPushed(FetchServerDataJob::class, function ($job) use ($serverWithoutToken) {
+    Queue::assertNotPushed(FetchServerDetailsJob::class, function ($job) use ($serverWithoutToken) {
         return $job->server->is($serverWithoutToken);
     });
 });

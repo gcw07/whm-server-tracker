@@ -8,8 +8,16 @@ class WHMServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(WhmApi::class, function () {
-            return new WhmApi;
+        $this->app->singleton(WhmServerDetails::class, function () {
+            return new WhmServerDetails;
+        });
+
+        $this->app->singleton(WhmEmailDiskUsage::class, function () {
+            return new WhmEmailDiskUsage;
+        });
+
+        $this->app->singleton(WhmAccountDetails::class, function () {
+            return new WhmAccountDetails;
         });
     }
 }
