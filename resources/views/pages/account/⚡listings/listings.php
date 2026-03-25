@@ -46,7 +46,7 @@ new #[Title('Accounts')] class extends Component
     {
         return Account::query()
             ->select('*')
-            ->with(['server'])
+            ->with(['server', 'monitor.wordpressCheck'])
             ->withCount(['emails'])
             ->selectRaw('(disk_used / disk_limit) * 100 as sort_disk_usage')
             ->when($this->sortBy, function ($query) {
