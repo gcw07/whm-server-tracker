@@ -58,7 +58,7 @@
       <flux:table.columns>
         <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'domain'" :direction="$sortDirection" wire:click="sort('domain')">DOMAIN</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'emails'" :direction="$sortDirection" wire:click="sort('emails')">EMAILS</flux:table.column>
-        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">WORDPRESS</flux:table.column>
+        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'wordpress'" :direction="$sortDirection" wire:click="sort('wordpress')">WORDPRESS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'usage'" :direction="$sortDirection" wire:click="sort('usage')">USAGE</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'newest'" :direction="$sortDirection" wire:click="sort('newest')">DATE ADDED</flux:table.column>

@@ -66,6 +66,15 @@ new #[Title('Accounts')] class extends Component
                     return $query->orderBy(Server::select('name')->whereColumn('servers.id', 'accounts.server_id'), $this->sortDirection);
                 }
 
+                if ($this->sortBy === 'wordpress') {
+                    return $query->orderBy(
+                        \App\Models\MonitorWordPressCheck::select('wordpress_version')
+                            ->join('monitors', 'monitors.id', '=', 'monitor_wordpress_checks.monitor_id')
+                            ->whereColumn('monitors.id', 'accounts.monitor_id'),
+                        $this->sortDirection
+                    );
+                }
+
                 return $query->orderBy('domain', $this->sortDirection);
             })
             ->when($this->filterBy, function ($query) {
