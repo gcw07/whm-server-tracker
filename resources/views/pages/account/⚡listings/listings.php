@@ -45,12 +45,17 @@ new #[Title('Accounts')] class extends Component
     public function accounts()
     {
         return Account::query()
-            ->with(['server'])
             ->select('*')
+            ->with(['server'])
+            ->withCount(['emails'])
             ->selectRaw('(disk_used / disk_limit) * 100 as sort_disk_usage')
             ->when($this->sortBy, function ($query) {
                 if ($this->sortBy === 'newest') {
                     return $query->orderBy('created_at', $this->sortDirection)->orderBy('domain');
+                }
+
+                if ($this->sortBy === 'emails') {
+                    return $query->orderBy('emails_count', $this->sortDirection);
                 }
 
                 if ($this->sortBy === 'usage') {

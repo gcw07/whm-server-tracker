@@ -57,6 +57,7 @@
     <flux:table :paginate="$this->accounts" pagination:scroll-to>
       <flux:table.columns>
         <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'domain'" :direction="$sortDirection" wire:click="sort('domain')">DOMAIN</flux:table.column>
+        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'emails'" :direction="$sortDirection" wire:click="sort('emails')">EMAILS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'usage'" :direction="$sortDirection" wire:click="sort('usage')">USAGE</flux:table.column>
@@ -124,6 +125,8 @@
               </div>
             </flux:table.cell>
 
+            <flux:table.cell class="whitespace-nowrap">{{ $account->emails_count }}</flux:table.cell>
+
             <flux:table.cell>
               <flux:badge size="sm" :color="$account->backups_enabled ? 'green' : 'red'" inset="top bottom">{{ $account->backups_enabled ? 'Yes' : 'No'}}</flux:badge>
             </flux:table.cell>
@@ -154,7 +157,7 @@
           </flux:table.row>
         @empty
           <flux:table.row>
-            <flux:table.cell colspan="7" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+            <flux:table.cell colspan="8" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
               <div class="text-center">
                 <div class="flex items-center justify-center">
                   <flux:icon.magnifying-glass class="size-12" />
