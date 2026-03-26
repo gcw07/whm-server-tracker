@@ -130,7 +130,7 @@
 
             <flux:table.cell class="whitespace-nowrap">
               @if($account->emails_count === 1)
-                <flux:badge size="sm" color="zinc" inset="top bottom">None</flux:badge>
+                <flux:badge size="sm" color="zinc">None</flux:badge>
               @else
                 {{ $account->emails_count }}
               @endif
