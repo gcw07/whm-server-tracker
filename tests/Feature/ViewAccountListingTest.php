@@ -43,6 +43,18 @@ test('the email accounts count is shown for each account', function () {
         ->assertSee('3');
 });
 
+test('an account with only the default system email shows none badge instead of one', function () {
+    Account::factory()
+        ->for(Server::factory())
+        ->has(AccountEmail::factory()->count(1), 'emails')
+        ->create();
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::account.listings')
+        ->assertSee('None');
+});
+
 test('accounts can be sorted by email count', function () {
     $server = Server::factory()->create();
 

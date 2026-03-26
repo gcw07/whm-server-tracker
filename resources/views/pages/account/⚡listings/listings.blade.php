@@ -128,7 +128,13 @@
               </div>
             </flux:table.cell>
 
-            <flux:table.cell class="whitespace-nowrap">{{ $account->emails_count }}</flux:table.cell>
+            <flux:table.cell class="whitespace-nowrap">
+              @if($account->emails_count === 1)
+                <flux:badge size="sm" color="zinc" inset="top bottom">None</flux:badge>
+              @else
+                {{ $account->emails_count }}
+              @endif
+            </flux:table.cell>
 
             <flux:table.cell class="whitespace-nowrap">
               {{ $account->monitor?->wordpressCheck?->wordpress_version ?? '—' }}
