@@ -19,11 +19,8 @@ class CheckDomainNameJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public Monitor $monitor;
-
-    public function __construct(Monitor $monitor)
+    public function __construct(public Monitor $monitor)
     {
-        $this->monitor = $monitor;
         $this->onQueue('low');
     }
 

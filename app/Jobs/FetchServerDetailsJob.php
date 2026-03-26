@@ -16,11 +16,8 @@ class FetchServerDetailsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public Server $server;
-
-    public function __construct(Server $server)
+    public function __construct(public Server $server)
     {
-        $this->server = $server;
         $this->onQueue('high');
     }
 
