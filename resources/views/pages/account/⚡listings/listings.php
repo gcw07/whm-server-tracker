@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Account;
+use App\Models\MonitorWordPressCheck;
 use App\Models\Server;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -68,7 +69,7 @@ new #[Title('Accounts')] class extends Component
 
                 if ($this->sortBy === 'wordpress') {
                     return $query->orderBy(
-                        \App\Models\MonitorWordPressCheck::select('wordpress_version')
+                        MonitorWordPressCheck::select('wordpress_version')
                             ->join('monitors', 'monitors.id', '=', 'monitor_wordpress_checks.monitor_id')
                             ->whereColumn('monitors.id', 'accounts.monitor_id'),
                         $this->sortDirection

@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection<int, AccountEmail> $emails
  * @property-read int|null $emails_count
  * @property-read mixed $formatted_disk_usage
+ * @property-read mixed $formatted_php_version
  * @property-read mixed $is_disk_critical
  * @property-read mixed $is_disk_full
  * @property-read mixed $is_disk_warning
@@ -58,6 +59,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|Account whereId($value)
  * @method static Builder<static>|Account whereIp($value)
  * @method static Builder<static>|Account whereMonitorId($value)
+ * @method static Builder<static>|Account wherePhpVersion($value)
  * @method static Builder<static>|Account wherePlan($value)
  * @method static Builder<static>|Account whereServerId($value)
  * @method static Builder<static>|Account whereSetupDate($value)
