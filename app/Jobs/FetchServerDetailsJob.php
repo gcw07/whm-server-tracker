@@ -21,13 +21,14 @@ class FetchServerDetailsJob implements ShouldQueue
     public function __construct(Server $server)
     {
         $this->server = $server;
+        $this->onQueue('high');
     }
 
     public function handle(WhmServerDetails $whmServerDetails): void
     {
         $whmServerDetails->setServer($this->server);
         $whmServerDetails->fetch();
-        dispatch(new FetchEmailDiskUsageJob($this->server))->onQueue('high');
-        dispatch(new FetchAccountDetailsJob($this->server))->onQueue('high');
+        dispatch(new FetchEmailDiskUsageJob($this->server));
+        dispatch(new FetchAccountDetailsJob($this->server));
     }
 }

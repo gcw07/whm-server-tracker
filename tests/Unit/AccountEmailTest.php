@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\AccountEmail;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+
+uses(LazilyRefreshDatabase::class);
 
 it('formats disk used in bytes', function () {
     $email = AccountEmail::factory()->make(['disk_used' => 500]);

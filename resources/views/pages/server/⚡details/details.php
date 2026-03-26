@@ -27,7 +27,7 @@ new #[Title('Server Details')] class extends Component
 
     public function refresh(): void
     {
-        FetchServerDetailsJob::dispatch($this->server)->onQueue('high');
+        FetchServerDetailsJob::dispatch($this->server);
 
         Flux::toast(
             text: 'The server details will be refreshed shortly.',

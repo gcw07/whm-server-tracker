@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\FetchAccountDetailsJob;
 use App\Jobs\FetchEmailDiskUsageJob;
 use App\Jobs\FetchServerDetailsJob;
 use App\Models\Account;
@@ -154,7 +155,7 @@ it('stores regular emails when main email account API fails', function () {
 });
 
 it('dispatches FetchEmailDiskUsageJob after FetchServerDetailsJob runs', function () {
-    Bus::fake([FetchEmailDiskUsageJob::class]);
+    Bus::fake([FetchEmailDiskUsageJob::class, FetchAccountDetailsJob::class]);
 
     $server = Server::factory()->create(['token' => 'valid-token']);
 

@@ -11,6 +11,8 @@ use Tests\Factories\WhmServerDetailsFake;
 uses(LazilyRefreshDatabase::class);
 
 it('fetches server details', function () {
+    Bus::fake([FetchEmailDiskUsageJob::class, FetchAccountDetailsJob::class]);
+
     $server = Server::factory()->create([
         'name' => 'my-server-name',
         'address' => '1.1.1.1',
@@ -50,6 +52,8 @@ it('fetches server details', function () {
 });
 
 it('fetches server accounts', function () {
+    Bus::fake([FetchEmailDiskUsageJob::class, FetchAccountDetailsJob::class]);
+
     $server = Server::factory()->create([
         'name' => 'my-server-name',
         'address' => '1.1.1.1',
@@ -73,6 +77,8 @@ it('fetches server accounts', function () {
 });
 
 it('fetches server accounts when there are no accounts on remote server', function () {
+    Bus::fake([FetchEmailDiskUsageJob::class, FetchAccountDetailsJob::class]);
+
     $server = Server::factory()->create([
         'name' => 'my-server-name',
         'address' => '1.1.1.1',
@@ -103,7 +109,7 @@ it('fetches server accounts when there are no accounts on remote server', functi
 });
 
 it('dispatches FetchEmailDiskUsageJob after FetchServerDetailsJob runs', function () {
-    Bus::fake([FetchEmailDiskUsageJob::class]);
+    Bus::fake([FetchEmailDiskUsageJob::class, FetchAccountDetailsJob::class]);
 
     $server = Server::factory()->create(['token' => 'valid-token']);
 

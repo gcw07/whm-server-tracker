@@ -24,6 +24,7 @@ class CheckDomainNameJob implements ShouldQueue
     public function __construct(Monitor $monitor)
     {
         $this->monitor = $monitor;
+        $this->onQueue('low');
     }
 
     public function handle(): void
