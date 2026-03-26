@@ -11,20 +11,34 @@ class WhmAccountDetails extends WhmApiBase
 {
     public function fetch(): void
     {
-        $responses = Http::pool(fn (Pool $pool) => [
-            'sslVhosts' => $this->configuredRequest($pool, 'sslVhosts')->get('fetch_ssl_vhosts?api.version=1'),
-            'phpVhostVersions' => $this->configuredRequest($pool, 'phpVhostVersions')->get('php_get_vhost_versions?api.version=1'),
-        ]);
+        $responses = Http::pool(fn (Pool $pool) => $this->getPoolRequests($pool));
 
-        $sslResponse = $responses['sslVhosts'] ?? null;
-        $phpResponse = $responses['phpVhostVersions'] ?? null;
-
-        if ($sslResponse && ! ($sslResponse instanceof \Exception) && ! $sslResponse->failed()) {
-            (new ProcessSslVhosts)->execute($this->server, $sslResponse->json());
-        }
-
-        if ($phpResponse && ! ($phpResponse instanceof \Exception) && ! $phpResponse->failed()) {
-            (new ProcessPhpVhostVersions)->execute($this->server, $phpResponse->json());
+        foreach ($responses as $type => $response) {
+            if ($response instanceof \Exception) {
+                $this->requestFailed($type, $response->getMessage());
+            } elseif ($response->failed()) {
+                $this->requestFailed($type, "HTTP {$response->status()} error");
+            } else {
+                $this->requestSucceeded($type, $response->json());
+            }
         }
     }
+
+    protected function getPoolRequests(Pool $pool): array
+    {
+        return [
+            'sslVhosts' => $this->configuredRequest($pool, 'sslVhosts')->get('fetch_ssl_vhosts?api.version=1'),
+            'phpVhostVersions' => $this->configuredRequest($pool, 'phpVhostVersions')->get('php_get_vhost_versions?api.version=1'),
+        ];
+    }
+
+    protected function requestSucceeded(string $type, array $data): void
+    {
+        match ($type) {
+            'sslVhosts' => (new ProcessSslVhosts)->execute($this->server, $data),
+            'phpVhostVersions' => (new ProcessPhpVhostVersions)->execute($this->server, $data),
+        };
+    }
+
+    protected function requestFailed(string $type, string $message): void {}
 }

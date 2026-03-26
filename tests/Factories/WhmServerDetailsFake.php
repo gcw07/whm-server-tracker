@@ -25,15 +25,15 @@ class WhmServerDetailsFake extends WhmServerDetails
 
     public function fetch(): void
     {
-        $this->apiRequestSucceeded('accounts', $this->getAccountsData());
-        $this->apiRequestSucceeded('backups', $this->getBackupsData());
-        $this->apiRequestSucceeded('diskUsage', $this->getDiskUsageData());
-        $this->apiRequestSucceeded('phpInstalledVersions', $this->getPhpInstalledVersionsData());
-        $this->apiRequestSucceeded('phpSystemVersion', $this->getPhpSystemVersionData());
-        $this->apiRequestSucceeded('whmVersion', $this->getWhmVersionData());
+        $this->requestSucceeded('accounts', $this->getAccountsData());
+        $this->requestSucceeded('backups', $this->getBackupsData());
+        $this->requestSucceeded('diskUsage', $this->getDiskUsageData());
+        $this->requestSucceeded('phpInstalledVersions', $this->getPhpInstalledVersionsData());
+        $this->requestSucceeded('phpSystemVersion', $this->getPhpSystemVersionData());
+        $this->requestSucceeded('whmVersion', $this->getWhmVersionData());
     }
 
-    protected function apiRequestSucceeded(string $type, array $data): void
+    protected function requestSucceeded(string $type, array $data): void
     {
         match ($type) {
             'accounts' => (new ProcessAccounts)->execute($this->server, $data),

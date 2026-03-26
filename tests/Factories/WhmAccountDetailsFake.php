@@ -2,16 +2,14 @@
 
 namespace Tests\Factories;
 
-use App\Services\WHM\DataProcessors\ProcessPhpVhostVersions;
-use App\Services\WHM\DataProcessors\ProcessSslVhosts;
 use App\Services\WHM\WhmAccountDetails;
 
 class WhmAccountDetailsFake extends WhmAccountDetails
 {
     public function fetch(): void
     {
-        (new ProcessSslVhosts)->execute($this->server, $this->getSslVhostsData());
-        (new ProcessPhpVhostVersions)->execute($this->server, $this->getPhpVhostVersionsData());
+        $this->requestSucceeded('sslVhosts', $this->getSslVhostsData());
+        $this->requestSucceeded('phpVhostVersions', $this->getPhpVhostVersionsData());
     }
 
     protected function getPhpVhostVersionsData(): array

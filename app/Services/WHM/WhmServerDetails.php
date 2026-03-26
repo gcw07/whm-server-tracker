@@ -35,11 +35,11 @@ class WhmServerDetails extends WhmApiBase
 
         foreach ($responses as $type => $response) {
             if ($response instanceof \Exception) {
-                $this->apiRequestFailed($type, $response->getMessage());
+                $this->requestFailed($type, $response->getMessage());
             } elseif ($response->failed()) {
-                $this->apiRequestFailed($type, "HTTP {$response->status()} error");
+                $this->requestFailed($type, "HTTP {$response->status()} error");
             } else {
-                $this->apiRequestSucceeded($type, $response->json());
+                $this->requestSucceeded($type, $response->json());
             }
         }
 
@@ -58,7 +58,7 @@ class WhmServerDetails extends WhmApiBase
         ];
     }
 
-    protected function apiRequestSucceeded(string $type, array $data): void
+    protected function requestSucceeded(string $type, array $data): void
     {
         match ($type) {
             'accounts' => (new ProcessAccounts)->execute($this->server, $data),
@@ -72,7 +72,7 @@ class WhmServerDetails extends WhmApiBase
         $this->successMessages[] = ['type' => $type, 'message' => 'success'];
     }
 
-    protected function apiRequestFailed(string $type, string $message): void
+    protected function requestFailed(string $type, string $message): void
     {
         $this->failureMessages[] = ['type' => $type, 'message' => $message];
     }
