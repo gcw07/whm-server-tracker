@@ -1,13 +1,11 @@
 <?php
 
 use App\Enums\ServerTypeEnum;
-use App\Jobs\FetchServerDetailsJob;
 use App\Models\Account;
 use App\Models\Server;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Illuminate\Support\Facades\Queue;
 use Spatie\UptimeMonitor\Models\Monitor;
 
 uses(LazilyRefreshDatabase::class);
@@ -886,31 +884,4 @@ it('the api token should not be included in returned data', function () {
     $server = Server::factory()->make(['server_type' => ServerTypeEnum::Vps, 'token' => 'valid-token']);
 
     $this->assertArrayNotHasKey('token', $server->toArray());
-});
-
-it('dispatches fetch jobs only for servers with tokens', function () {
-    Queue::fake();
-
-    $serverWithToken = Server::factory()->create(['token' => 'valid-token']);
-    $serverWithoutToken = Server::factory()->create(['token' => null]);
-
-    Server::refreshData();
-
-    Queue::assertPushedOn('high', FetchServerDetailsJob::class, function ($job) use ($serverWithToken) {
-        return $job->server->is($serverWithToken);
-    });
-
-    Queue::assertNotPushed(FetchServerDetailsJob::class, function ($job) use ($serverWithoutToken) {
-        return $job->server->is($serverWithoutToken);
-    });
-});
-
-it('does not dispatch fetch jobs for servers without tokens', function () {
-    Queue::fake();
-
-    Server::factory()->create(['token' => null]);
-
-    Server::refreshData();
-
-    Queue::assertNothingPushed();
 });

@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Casts\Settings;
 use App\Collections\SettingsCollection;
 use App\Enums\ServerTypeEnum;
-use App\Jobs\FetchServerDetailsJob;
 use App\Models\Presenters\ServerPresenter;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -110,13 +109,6 @@ class Server extends Model
             'server_update_last_failed_at' => 'datetime',
             'server_update_last_succeeded_at' => 'datetime',
         ];
-    }
-
-    public static function refreshData(): void
-    {
-        $servers = static::query()->withTokens()->get();
-
-        $servers->each(fn ($server) => dispatch(new FetchServerDetailsJob($server)));
     }
 
     public function accounts(): HasMany

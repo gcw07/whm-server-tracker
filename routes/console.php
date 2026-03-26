@@ -12,7 +12,7 @@ Artisan::command('inspire', function () {
 Schedule::command('horizon:snapshot')->everyFiveMinutes();
 
 // Schedule Server Tracker
-Schedule::command('server-tracker:refresh')->hourly();
+Schedule::command('server-tracker:fetch-server-details')->hourly();
 
 // Schedule Uptime Check
 Schedule::command('monitor:check-uptime')->everyMinute();
