@@ -23,7 +23,7 @@ class BlacklistChecker
 
         try {
             $domain = $monitor->url->getHost();
-            $ip = $this->resolveIp($domain, $ttl);
+            $ip = $this->resolveIp($monitor, $domain, $ttl);
 
             // ALL ip-based results are cached by IP so domains sharing the same server
             // only trigger one set of remote lookups, but every domain gets its own rows.
@@ -75,8 +75,16 @@ class BlacklistChecker
             ->all();
     }
 
-    protected function resolveIp(string $domain, int $ttl): ?string
+    protected function resolveIp(Monitor $monitor, string $domain, int $ttl): ?string
     {
+        // Prefer the known server IP — DNS may return a Cloudflare proxy IP.
+        $serverIp = $monitor->accounts()->with('server')->first()?->server?->address;
+
+        if ($serverIp) {
+            return $serverIp;
+        }
+
+        // Fall back to DNS resolution for monitors not linked to a server.
         return Cache::remember("blacklist-ip:{$domain}", $ttl, function () use ($domain) {
             $ip = gethostbyname($domain);
 
