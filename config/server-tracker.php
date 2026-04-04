@@ -77,64 +77,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Blacklist Servers
+    | Blacklist Settings
     |--------------------------------------------------------------------------
-    | A list of blacklist servers to check each site against.
+    | Configuration for the driver-based blacklist checking system.
+    | cached_seconds controls how long resolved IPs and DNSBL results are
+    | cached. Multiple domains on the same server share cached IP lookups.
     */
 
-    // shorten and only use these. blacklist needs to be redesigned.
-    //    'b.barracudacentral.org',
-    //    'bl.spamcop.net',
-    //    'dbl.spamhaus.org',
-    //    'zen.spamhaus.org',
-    //    'multi.surbl.org',
-    //    'urlhaus',
-
-    'blacklist_servers' => [
-        'all.s5h.net',
-        'b.barracudacentral.org',
-        'bl.spamcop.net',
-        'blacklist.woody.ch',
-        'bogons.cymru.com',
-        'cbl.abuseat.org',
-        'db.wpbl.info',
-        // 'dnsbl-1.uceprotect.net', // uceprotect seems like a scam
-        // 'dnsbl-2.uceprotect.net',
-        // 'dnsbl-3.uceprotect.net',
-        'dnsbl.anticaptcha.net',
-        'dnsbl.cyberlogic.net',
-        'dnsbl.dronebl.org',
-        // 'dnsbl.spfbl.net', // does not seem valid either
-        'dnsbl.sorbs.net',
-        'all.spamrats.com',
-        'ips.backscatterer.org',
-        'ix.dnsbl.manitu.net',
-        'korea.services.net',
-        'orvedb.aupads.org',
-        'psbl.surriel.com',
-        'relays.nether.net',
-        'singular.ttk.pte.hu',
-        'spam.dnsbl.anonmails.de',
-        'spam.dnsbl.sorbs.net',
-        'spambot.bls.digibase.ca',
-        'spamrbl.imp.ch',
-        'spamsources.fabel.dk',
-        'ubl.unsubscore.com',
-        'wormrbl.imp.ch',
-        'z.mailspike.net',
-        'zen.spamhaus.org',
+    'blacklist' => [
+        'cached_seconds' => 7200,
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Blacklist Cached IP Address Time
-    |--------------------------------------------------------------------------
-    | The amount of time in seconds that the server IP addresses are cached.
-    | This is done because servers contain multiple domains and there is
-    | no reason to re-run the IP address of the server multiple times.
-    */
-
-    'blacklist_cached_seconds' => 7200,
 
     /*
     |--------------------------------------------------------------------------

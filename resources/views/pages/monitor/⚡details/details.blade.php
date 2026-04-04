@@ -424,20 +424,33 @@
                 @endif
               </dd>
             </div>
-            @if($this->monitor->blacklistCheck?->status->value === 'valid')
-              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
-                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Details</dt>
-                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">Not found on any blacklist</dd>
-              </div>
-            @endif
-            @if($this->monitor->blacklistCheck?->status->value === 'invalid')
-              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
-                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Listed On</dt>
-                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">
-                  {!! nl2br($this->monitor->blacklistCheck?->failure_reason) !!}
-                </dd>
-              </div>
-            @endif
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Checked</dt>
+              <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->blacklistCheck?->results->max('checked_at')?->diffForHumans() ?? 'Never' }}</dd>
+            </div>
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Lists</dt>
+              <dd class="text-sm sm:mt-0 sm:col-span-2">
+                <div class="space-y-2">
+                  @foreach($this->monitor->blacklistCheck->results->sortBy('driver') as $result)
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-700">{{ $result->driver }}</span>
+                      @if($result->checked_at === null)
+                        <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
+                      @elseif($result->listed)
+                        <flux:tooltip content="Checked: {{ $result->checked_value }}">
+                          <flux:badge size="sm" color="red" icon="exclamation-triangle" class="cursor-pointer">Listed</flux:badge>
+                        </flux:tooltip>
+                      @else
+                        <flux:tooltip content="Checked: {{ $result->checked_value }}">
+                          <flux:badge size="sm" color="green" icon="check" class="cursor-pointer">Clean</flux:badge>
+                        </flux:tooltip>
+                      @endif
+                    </div>
+                  @endforeach
+                </div>
+              </dd>
+            </div>
           </dl>
         @endif
       </flux:card>

@@ -29,7 +29,7 @@ new #[Title('Monitor Details')] class extends Component
             'accounts',
             'accounts.server',
             'accounts.sslCertificates',
-            'blacklistCheck',
+            'blacklistCheck.results',
             'lighthouseCheck',
             'domainCheck',
             'wordpressCheck',

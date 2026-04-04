@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\BlacklistStatusEnum;
 use App\Enums\DomainNameStatusEnum;
 use App\Enums\LighthouseStatusEnum;
 use App\Enums\WordPressStatusEnum;
@@ -17,7 +16,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Spatie\Lighthouse\Lighthouse;
@@ -230,22 +228,6 @@ class Monitor extends BaseMonitor
         return round((($totalPossibleSeconds - $totalDowntimeSeconds) / $totalPossibleSeconds) * 100, 2);
     }
 
-    public function checkBlacklist()
-    {
-        $blacklistServers = config('server-tracker.blacklist_servers');
-        $cachedSeconds = config('server-tracker.blacklist_cached_seconds');
-
-        try {
-            $items =
-                collect($this->checkBlacklistForIP($blacklistServers, $cachedSeconds))
-                    ->merge($this->checkBlacklistForHostname($blacklistServers));
-
-            $this->setBlacklist($items);
-        } catch (Exception $exception) {
-            $this->setBlacklistException($exception);
-        }
-    }
-
     #[Scope]
     public function withIssues(Builder $query): void
     {
@@ -272,94 +254,6 @@ class Monitor extends BaseMonitor
         $query->whereAny([
             'url',
         ], 'LIKE', "%$term%");
-    }
-
-    public function checkBlacklistForHostname($servers)
-    {
-        $reverseIp = implode('.', array_reverse(explode('.', $this->url->getHost())));
-
-        $items = [];
-
-        foreach ($servers as $host) {
-            if (checkdnsrr($reverseIp.'.'.$host.'.', 'A')) {
-                $foundOnList = true;
-            } else {
-                $foundOnList = false;
-            }
-
-            if ($foundOnList) {
-                $items[] = [
-                    'host' => $host,
-                ];
-            }
-        }
-
-        return $items;
-    }
-
-    public function checkBlacklistForIP($servers, $cachedSeconds)
-    {
-        $mxRecords = dns_get_record($this->url->getHost(), DNS_MX);
-        $mxEntry = collect($mxRecords)->pluck('target')->first();
-        $serverIP = gethostbyname($mxEntry);
-        $reverseIp = implode('.', array_reverse(explode('.', $serverIP)));
-
-        return Cache::remember($serverIP, $cachedSeconds, function () use ($servers, $reverseIp) {
-            $items = [];
-
-            foreach ($servers as $host) {
-                if (checkdnsrr($reverseIp.'.'.$host.'.', 'A')) {
-                    $foundOnList = true;
-                } else {
-                    $foundOnList = false;
-                }
-
-                if ($foundOnList) {
-                    $items[] = [
-                        'host' => $host,
-                    ];
-                }
-            }
-
-            return $items;
-        });
-    }
-
-    public function setBlacklist($items): void
-    {
-        if (count($items) > 0) {
-            $this->blacklistCheck->update([
-                'status' => BlacklistStatusEnum::Invalid->value,
-                'failure_reason' => $this->getBlacklistFailureReason($items),
-            ]);
-        } else {
-            $this->blacklistCheck->update([
-                'status' => BlacklistStatusEnum::Valid->value,
-                'failure_reason' => null,
-            ]);
-        }
-
-        //        event(new BlacklistCheckSucceeded($this, $exception->getMessage()));
-    }
-
-    public function setBlacklistException(Exception $exception): void
-    {
-        $this->blacklistCheck->update([
-            'status' => BlacklistStatusEnum::Invalid->value,
-            'failure_reason' => $exception->getMessage(),
-        ]);
-
-        //        event(new BlacklistCheckFailed($this, $exception->getMessage()));
-    }
-
-    public function getBlacklistFailureReason($items): string
-    {
-        $reason = '';
-        foreach ($items as $item) {
-            $reason .= "Found on {$item['host']} blacklist.\n";
-        }
-
-        return $reason;
     }
 
     public function checkLighthouse(): void
