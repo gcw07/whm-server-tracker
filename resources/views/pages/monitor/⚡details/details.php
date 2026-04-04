@@ -15,6 +15,8 @@ new #[Title('Monitor Details')] class extends Component
 {
     public int $monitorId;
 
+    public string $uptimePeriod = '30';
+
     public function mount(int $monitor): void
     {
         $this->monitorId = $monitor;
@@ -41,6 +43,27 @@ new #[Title('Monitor Details')] class extends Component
             ->flatMap(fn (Account $account) => $account->sslCertificates)
             ->sortBy('servername')
             ->values();
+    }
+
+    #[Computed]
+    public function uptimeChartData(): array
+    {
+        $days = (int) $this->uptimePeriod;
+
+        return collect(range($days - 1, 0))
+            ->map(function (int $daysAgo): array {
+                $date = now()->subDays($daysAgo);
+
+                $uptime = round($this->monitor->calculateUptime($date, $date), 1);
+
+                return [
+                    'date'     => $date->format('M j'),
+                    'uptime'   => $uptime,
+                    'downtime' => round(100 - $uptime, 1),
+                ];
+            })
+            ->values()
+            ->toArray();
     }
 
     #[Computed]

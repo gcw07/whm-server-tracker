@@ -39,165 +39,308 @@
   </div>
   <!-- / End Page Header -->
 
-  <div class="mt-6">
-    <!-- Begin content -->
+  <!-- Status Overview Strip -->
+  <flux:card class="mt-6 px-6 py-4">
+    <div class="flex flex-wrap gap-3 items-center">
+      <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Checks</span>
 
-    <!-- Details Card -->
-    <flux:card class="divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5">Details</flux:heading>
-      <div class="px-4 py-5 sm:p-0">
-        <dl class="sm:divide-y sm:divide-gray-200">
-          @if($this->monitor->accounts->count() > 1)
-            <div class="py-4 flex justify-center items-center text-base font-medium text-red-700 bg-red-50">
-              <flux:icon.exclamation-triangle variant="solid" class="mr-2" />
-              This domain was found on multiple servers.
-            </div>
-          @endif
-          <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Server</dt>
-            <dd class="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <ul role="list" class="divide-y divide-gray-100 dark:divide-white/5">
+      {{-- Uptime --}}
+      @if(!$this->monitor->uptime_check_enabled)
+        <flux:badge as="a" href="#uptime-card" color="zinc" icon="no-symbol">Uptime</flux:badge>
+      @elseif($this->monitor->uptime_status === 'not yet checked')
+        <flux:badge as="a" href="#uptime-card" color="yellow" icon="clock">Uptime</flux:badge>
+      @elseif($this->monitor->uptime_status === 'down')
+        <flux:badge as="a" href="#uptime-card" color="red" icon="arrow-down">Uptime</flux:badge>
+      @else
+        <flux:badge as="a" href="#uptime-card" color="green" icon="check">Uptime</flux:badge>
+      @endif
+
+      {{-- SSL --}}
+      @if(!$this->monitor->certificate_check_enabled)
+        <flux:badge as="a" href="#ssl-card" color="zinc" icon="no-symbol">SSL</flux:badge>
+      @elseif($this->sslCertificates->isEmpty())
+        <flux:badge as="a" href="#ssl-card" color="zinc" icon="lock-closed">SSL</flux:badge>
+      @elseif($this->sslCertificates->contains(fn($c) => $c->expires_at?->isPast()))
+        <flux:badge as="a" href="#ssl-card" color="red" icon="x-circle">SSL</flux:badge>
+      @elseif($this->sslCertificates->contains(fn($c) => $c->expires_at && now()->diffInDays($c->expires_at) <= 29))
+        <flux:badge as="a" href="#ssl-card" color="amber" icon="exclamation-triangle">SSL</flux:badge>
+      @else
+        <flux:badge as="a" href="#ssl-card" color="green" icon="lock-closed">SSL</flux:badge>
+      @endif
+
+      {{-- Blacklist --}}
+      @if(!$this->monitor->blacklistCheck?->enabled)
+        <flux:badge as="a" href="#blacklist-card" color="zinc" icon="no-symbol">Blacklist</flux:badge>
+      @elseif($this->monitor->blacklistCheck?->status->value === 'not yet checked')
+        <flux:badge as="a" href="#blacklist-card" color="yellow" icon="clock">Blacklist</flux:badge>
+      @elseif($this->monitor->blacklistCheck?->status->value === 'invalid')
+        <flux:badge as="a" href="#blacklist-card" color="red" icon="exclamation-triangle">Blacklist</flux:badge>
+      @else
+        <flux:badge as="a" href="#blacklist-card" color="green" icon="envelope">Blacklist</flux:badge>
+      @endif
+
+      {{-- WordPress --}}
+      @if(!$this->monitor->wordpressCheck?->enabled)
+        <flux:badge as="a" href="#wordpress-card" color="zinc" icon="no-symbol">WordPress</flux:badge>
+      @elseif($this->monitor->wordpressCheck?->status->value === 'not yet checked')
+        <flux:badge as="a" href="#wordpress-card" color="yellow" icon="clock">WordPress</flux:badge>
+      @elseif($this->monitor->wordpressCheck?->status->value === 'invalid')
+        <flux:badge as="a" href="#wordpress-card" color="red" icon="exclamation-triangle">WordPress</flux:badge>
+      @else
+        <flux:badge as="a" href="#wordpress-card" color="green" icon="globe-alt">WordPress</flux:badge>
+      @endif
+
+      {{-- Domain --}}
+      @if(!$this->monitor->domainCheck?->enabled)
+        <flux:badge as="a" href="#domain-card" color="zinc" icon="no-symbol">Domain</flux:badge>
+      @elseif($this->monitor->domainCheck?->status->value === 'not yet checked')
+        <flux:badge as="a" href="#domain-card" color="yellow" icon="clock">Domain</flux:badge>
+      @elseif($this->monitor->domainCheck?->status->value === 'invalid')
+        <flux:badge as="a" href="#domain-card" color="red" icon="x-circle">Domain</flux:badge>
+      @else
+        <flux:badge as="a" href="#domain-card" color="green" icon="identification">Domain</flux:badge>
+      @endif
+
+      {{-- Lighthouse --}}
+      @if(!$this->monitor->lighthouseCheck?->enabled)
+        <flux:badge as="a" href="#lighthouse-card" color="zinc" icon="no-symbol">Lighthouse</flux:badge>
+      @elseif($this->monitor->lighthouseCheck?->status->value === 'not yet checked')
+        <flux:badge as="a" href="#lighthouse-card" color="yellow" icon="clock">Lighthouse</flux:badge>
+      @elseif($this->monitor->lighthouseCheck?->status->value === 'invalid')
+        <flux:badge as="a" href="#lighthouse-card" color="red" icon="exclamation-triangle">Lighthouse</flux:badge>
+      @else
+        <flux:badge as="a" href="#lighthouse-card" color="green" icon="light-bulb">Lighthouse</flux:badge>
+      @endif
+    </div>
+  </flux:card>
+  <!-- / End Status Overview Strip -->
+
+  <!-- Two-Column Layout -->
+  <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
+    <!-- Left Column (primary checks) -->
+    <div class="lg:col-span-2 flex flex-col gap-6">
+
+      <!-- Details Card -->
+      <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="details-card">
+        <div class="flex items-center px-5 py-4">
+          <div class="flex items-center gap-3 border-l-4 border-gray-400 pl-3">
+            <flux:icon.server class="size-4 text-gray-500 shrink-0" />
+            <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">Details</flux:heading>
+          </div>
+        </div>
+
+        @if($this->monitor->accounts->count() > 1)
+          <div class="flex items-center gap-2 px-5 py-3 bg-red-50 text-sm font-medium text-red-700">
+            <flux:icon.exclamation-triangle variant="solid" class="size-4 shrink-0" />
+            This domain was found on multiple servers.
+          </div>
+        @endif
+
+        <dl class="divide-y divide-gray-100">
+          <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Server</dt>
+            <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">
+              <ul role="list" class="divide-y divide-gray-100">
                 @foreach($this->monitor->accounts as $account)
-                  <li class="flex items-center justify-between py-4 first:pt-0 last:pb-0">
-                    <div class="flex flex-1 items-center">
-                      <div class="flex min-w-0 flex-1 gap-2">
-                        <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">
-                          {{ $account->server->name }}
-                        </flux:link>
-                        @if($account->suspended)
-                          <flux:dropdown position="bottom" align="start">
-                            <flux:badge as="button" size="sm" color="blue" inset="top bottom" icon:trailing="information-circle" class="ml-1">Suspended</flux:badge>
+                  <li class="flex items-center justify-between py-3 first:pt-0 last:pb-0">
+                    <div class="flex items-center gap-2">
+                      <flux:link variant="subtle" :href="route('servers.show', $account->server->id)">
+                        {{ $account->server->name }}
+                      </flux:link>
+                      @if($account->suspended)
+                        <flux:dropdown position="bottom" align="start">
+                          <flux:badge as="button" size="sm" color="blue" inset="top bottom" icon:trailing="information-circle">Suspended</flux:badge>
 
-                            <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
-                              <div>
-                                This account was suspended on {{ $account->suspend_time->format('F d, Y \a\t g:ia') }}. It was suspended for "{{ $account->suspend_reason }}".
-                              </div>
-                            </flux:popover>
-                          </flux:dropdown>
-                        @endif
-                      </div>
+                          <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
+                            <div>
+                              This account was suspended on {{ $account->suspend_time->format('F d, Y \a\t g:ia') }}. It was suspended for "{{ $account->suspend_reason }}".
+                            </div>
+                          </flux:popover>
+                        </flux:dropdown>
+                      @endif
                     </div>
                   </li>
                 @endforeach
               </ul>
             </dd>
           </div>
-          <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Disk Usage</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+            <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Disk Usage</dt>
+            <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">
               {{ $this->monitor->accounts->first()?->formatted_disk_usage }}
             </dd>
           </div>
         </dl>
-      </div>
-    </flux:card>
-    <!-- End Details Card -->
+      </flux:card>
+      <!-- End Details Card -->
 
-    <!-- Uptime Checks Card -->
-    <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <flux:icon.check-badge />
-          Uptime Checks
+      <!-- Uptime Checks Card -->
+      <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="uptime-card">
+        <div class="flex items-center justify-between px-5 py-4">
+          <div class="flex items-center gap-3 border-l-4 border-cyan-500 pl-3">
+            <flux:icon.check-badge class="size-4 text-cyan-600 shrink-0" />
+            <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">Uptime Checks</flux:heading>
+          </div>
+          <flux:tooltip :content="$this->monitor->uptime_check_enabled ? 'Disable check' : 'Enable check'">
+            <flux:button
+              wire:click="toggleUptimeCheck"
+              variant="subtle"
+              size="sm"
+              :icon="$this->monitor->uptime_check_enabled ? 'check-circle' : 'x-circle'"
+              :class="$this->monitor->uptime_check_enabled ? 'text-emerald-600!' : 'text-gray-300!'"
+            />
+          </flux:tooltip>
         </div>
-        @if($this->monitor->uptime_check_enabled)
-          <flux:button wire:click="toggleUptimeCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
-        @else
-          <flux:button wire:click="toggleUptimeCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
-        @endif
-      </flux:heading>
-      <div class="px-4 py-5 sm:p-0">
+
         @if(!$this->monitor->uptime_check_enabled)
-          <div class="bg-yellow-100 text-center  p-3">Uptime check is disabled</div>
-          <div class="px-4 py-5 sm:p-0 opacity-20">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  N/A
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
-              </div>
-            </dl>
+          <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
+            <flux:icon.no-symbol class="size-8 text-gray-300" />
+            <p class="text-sm text-gray-400">Uptime check is currently disabled.</p>
+            <flux:button wire:click="toggleUptimeCheck" variant="ghost" size="sm" icon="check-circle">Enable check</flux:button>
           </div>
         @else
-          <div class="px-4 py-5 sm:p-0">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($this->monitor->uptime_status === 'down')
-                    Down
-                  @elseif($this->monitor->uptime_status === 'not yet checked')
-                    Pending
-                  @else
-                    Up
-                  @endif
-                </dd>
+          <dl class="divide-y divide-gray-100">
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Current Status</dt>
+              <dd class="text-sm sm:mt-0 sm:col-span-2">
+                @if($this->monitor->uptime_status === 'down')
+                  <flux:badge size="sm" color="red" icon="arrow-down">Down</flux:badge>
+                @elseif($this->monitor->uptime_status === 'not yet checked')
+                  <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
+                @else
+                  <flux:badge size="sm" color="green" icon="check">Up</flux:badge>
+                @endif
+              </dd>
+            </div>
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Checked</dt>
+              <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->uptime_last_check_date?->diffForHumans() ?? 'Never' }}</dd>
+            </div>
+            @if($this->monitor->uptime_status === 'down')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Failure Reason</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->uptime_check_failure_reason }}</dd>
               </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->uptime_last_check_date?->diffForHumans() }}</dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:px-6">
-                <div class="flex w-full items-center justify-between">
-                  <div>
-                    <dt class="text-xs font-normal text-gray-500">Today</dt>
-                    <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
-                      {{ $this->monitor->uptime_for_today }}%
-                    </dd>
-                  </div>
-                  <div>
-                    <dt class="text-xs font-normal text-gray-500">Last 7 Days</dt>
-                    <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
-                      {{ $this->monitor->uptime_for_last_seven_days }}%
-                    </dd>
-                  </div>
-                  <div>
-                    <dt class="text-xs font-normal text-gray-500">Last 30 Days</dt>
-                    <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
-                      {{ $this->monitor->uptime_for_last_thirty_days }}%
-                    </dd>
-                  </div>
-                </div>
-              </div>
-              @if($this->monitor->uptime_status === 'down')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Failure Reason</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->uptime_check_failure_reason }}</dd>
-                </div>
-              @endif
-            </dl>
-          </div>
-        @endif
-      </div>
-    </flux:card>
-    <!-- End Uptime Checks Card -->
+            @endif
+          </dl>
 
-    <!-- SSL Certificates Card -->
-    <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <flux:icon.lock-closed />
-          SSL Certificates
-        </div>
-        @if($this->monitor->certificate_check_enabled)
-          <flux:button wire:click="toggleCertificateCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
-        @else
-          <flux:button wire:click="toggleCertificateCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
+          {{-- Uptime percentage tiles --}}
+          @php
+            $today = $this->monitor->uptime_for_today;
+            $seven = $this->monitor->uptime_for_last_seven_days;
+            $thirty = $this->monitor->uptime_for_last_thirty_days;
+          @endphp
+          <div class="px-5 py-4 grid grid-cols-3 gap-3">
+            <div @class([
+              'rounded-lg border p-3 text-center',
+              'bg-green-50 border-green-200' => $today >= 90,
+              'bg-amber-50 border-amber-200' => $today >= 70 && $today < 90,
+              'bg-red-50 border-red-200'     => $today < 70,
+            ])>
+              <div class="text-xs font-medium text-gray-500 mb-1">Today</div>
+              <div @class([
+                'text-2xl font-bold',
+                'text-green-700' => $today >= 90,
+                'text-amber-700' => $today >= 70 && $today < 90,
+                'text-red-700'   => $today < 70,
+              ])>{{ $today }}%</div>
+            </div>
+            <div @class([
+              'rounded-lg border p-3 text-center',
+              'bg-green-50 border-green-200' => $seven >= 90,
+              'bg-amber-50 border-amber-200' => $seven >= 70 && $seven < 90,
+              'bg-red-50 border-red-200'     => $seven < 70,
+            ])>
+              <div class="text-xs font-medium text-gray-500 mb-1">Last 7 Days</div>
+              <div @class([
+                'text-2xl font-bold',
+                'text-green-700' => $seven >= 90,
+                'text-amber-700' => $seven >= 70 && $seven < 90,
+                'text-red-700'   => $seven < 70,
+              ])>{{ $seven }}%</div>
+            </div>
+            <div @class([
+              'rounded-lg border p-3 text-center',
+              'bg-green-50 border-green-200' => $thirty >= 90,
+              'bg-amber-50 border-amber-200' => $thirty >= 70 && $thirty < 90,
+              'bg-red-50 border-red-200'     => $thirty < 70,
+            ])>
+              <div class="text-xs font-medium text-gray-500 mb-1">Last 30 Days</div>
+              <div @class([
+                'text-2xl font-bold',
+                'text-green-700' => $thirty >= 90,
+                'text-amber-700' => $thirty >= 70 && $thirty < 90,
+                'text-red-700'   => $thirty < 70,
+              ])>{{ $thirty }}%</div>
+            </div>
+          </div>
+
+          {{-- Uptime chart --}}
+          <div class="px-5 pt-4 pb-1">
+            <div class="flex items-center gap-1.5 pb-3">
+              @foreach(['7' => '7d', '30' => '30d', '90' => '90d'] as $value => $label)
+                <button
+                  wire:click="$set('uptimePeriod', '{{ $value }}')"
+                  @class([
+                    'px-3 py-1 rounded-md font-semibold transition cursor-pointer',
+                    'bg-cyan-600 text-white text-xs' => $this->uptimePeriod === (string) $value,
+                    'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 text-xs' => $this->uptimePeriod !== (string) $value,
+                  ])
+                >{{ $label }}</button>
+              @endforeach
+            </div>
+
+            <flux:chart :value="$this->uptimeChartData" class="aspect-6/1 w-full pb-5">
+              <flux:chart.svg>
+                <flux:chart.stack>
+                  <flux:chart.bar field="uptime" class="text-green-500/85" />
+                  <flux:chart.bar field="downtime" class="text-red-500/85" />
+                </flux:chart.stack>
+                <flux:chart.axis axis="x" field="date" />
+                <flux:chart.axis axis="y" :tick-values="[0, 25, 50, 75, 100]" />
+                <flux:chart.cursor />
+              </flux:chart.svg>
+              <flux:chart.tooltip>
+                <flux:chart.tooltip.heading field="date" />
+                <flux:chart.tooltip.value field="uptime" label="Uptime" suffix="%" />
+                <flux:chart.tooltip.value field="downtime" label="Downtime" suffix="%" />
+              </flux:chart.tooltip>
+            </flux:chart>
+            <div class="flex justify-between text-xs text-gray-400 pt-1 pb-4">
+              <span>{{ now()->subDays((int) $this->uptimePeriod - 1)->format('M j') }}</span>
+              <span>Today</span>
+            </div>
+          </div>
         @endif
-      </flux:heading>
-      <div class="px-4 py-5 sm:p-0">
+      </flux:card>
+      <!-- End Uptime Checks Card -->
+
+      <!-- SSL Certificates Card -->
+      <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="ssl-card">
+        <div class="flex items-center justify-between px-5 py-4">
+          <div class="flex items-center gap-3 border-l-4 border-green-500 pl-3">
+            <flux:icon.lock-closed class="size-4 text-green-600 shrink-0" />
+            <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">SSL Certificates</flux:heading>
+          </div>
+          <flux:tooltip :content="$this->monitor->certificate_check_enabled ? 'Disable check' : 'Enable check'">
+            <flux:button
+              wire:click="toggleCertificateCheck"
+              variant="subtle"
+              size="sm"
+              :icon="$this->monitor->certificate_check_enabled ? 'check-circle' : 'x-circle'"
+              :class="$this->monitor->certificate_check_enabled ? 'text-emerald-600!' : 'text-gray-300!'"
+            />
+          </flux:tooltip>
+        </div>
+
         @if($this->sslCertificates->isEmpty())
-          <div class="py-4 sm:py-5 sm:px-6 text-sm text-gray-500">No SSL certificates found.</div>
+          <div class="px-5 py-6 text-sm text-gray-400 text-center">No SSL certificates found.</div>
         @else
-          <dl class="sm:divide-y sm:divide-gray-200">
+          <dl class="divide-y divide-gray-100">
             @foreach($this->sslCertificates as $cert)
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-900">
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-10 px-5">
+                <dt class="text-sm font-medium text-gray-800">
                   {{ $cert->servername }}
                   <div class="mt-1">
                     @if($cert->type->value === 'main')
@@ -207,23 +350,21 @@
                     @endif
                   </div>
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0">
+                <dd class="mt-1 sm:mt-0 sm:col-span-2">
                   @if($cert->expires_at === null)
-                    <span class="text-sm text-gray-500">Expiration unknown</span>
+                    <span class="text-sm text-gray-400">Expiration unknown</span>
                   @elseif($cert->expires_at->isPast())
-                    <flux:badge color="red">Expired {{ $cert->expires_at->format('M j, Y') }}</flux:badge>
+                    <flux:badge size="sm" color="red">Expired {{ $cert->expires_at->format('M j, Y') }}</flux:badge>
                   @elseif(now()->diffInDays($cert->expires_at) <= 29)
-                    <flux:badge color="amber">Expires in {{ (int) now()->diffInDays($cert->expires_at) }} days ({{ $cert->expires_at->format('M j, Y') }})</flux:badge>
+                    <flux:badge size="sm" color="amber">Expires in {{ (int) now()->diffInDays($cert->expires_at) }} days ({{ $cert->expires_at->format('M j, Y') }})</flux:badge>
                   @else
-                    <flux:badge color="green">Valid until {{ $cert->expires_at->format('M j, Y') }}</flux:badge>
+                    <flux:badge size="sm" color="green">Valid until {{ $cert->expires_at->format('M j, Y') }}</flux:badge>
                   @endif
                   @if($cert->issuer)
-                    <div class="mt-1 text-xs text-gray-500">{{ $cert->issuer }}</div>
+                    <div class="mt-1 text-xs text-gray-400">{{ $cert->issuer }}</div>
                   @endif
-                </dd>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0">
                   @if($cert->vhost_domains)
-                    <ul class="space-y-1">
+                    <ul class="mt-3 space-y-1">
                       @foreach($cert->vhost_domains as $domain)
                         <li class="flex items-center gap-1.5 text-xs">
                           @if(in_array($domain, $cert->certificate_domains ?? []))
@@ -242,338 +383,343 @@
             @endforeach
           </dl>
         @endif
-      </div>
-    </flux:card>
-    <!-- End SSL Certificates Card -->
+      </flux:card>
+      <!-- End SSL Certificates Card -->
 
-    <!-- Email Blacklist Checks Card -->
-    <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <flux:icon.envelope />
-          Email Blacklist
+      <!-- Email Blacklist Card -->
+      <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="blacklist-card">
+        <div class="flex items-center justify-between px-5 py-4">
+          <div class="flex items-center gap-3 border-l-4 border-amber-500 pl-3">
+            <flux:icon.envelope class="size-4 text-amber-600 shrink-0" />
+            <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">Email Blacklist</flux:heading>
+          </div>
+          <flux:tooltip :content="$this->monitor->blacklistCheck?->enabled ? 'Disable check' : 'Enable check'">
+            <flux:button
+              wire:click="toggleBlacklistCheck"
+              variant="subtle"
+              size="sm"
+              :icon="$this->monitor->blacklistCheck?->enabled ? 'check-circle' : 'x-circle'"
+              :class="$this->monitor->blacklistCheck?->enabled ? 'text-emerald-600!' : 'text-gray-300!'"
+            />
+          </flux:tooltip>
         </div>
-        @if($this->monitor->blacklistCheck?->enabled)
-          <flux:button wire:click="toggleBlacklistCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
-        @else
-          <flux:button wire:click="toggleBlacklistCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
-        @endif
-      </flux:heading>
-      <div class="px-4 py-5 sm:p-0">
+
         @if(!$this->monitor->blacklistCheck?->enabled)
-          <div class="bg-yellow-100 text-center  p-3">Email Blacklist check is disabled</div>
-          <div class="px-4 py-5 sm:p-0 opacity-20">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  N/A
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">List</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
-              </div>
-            </dl>
+          <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
+            <flux:icon.no-symbol class="size-8 text-gray-300" />
+            <p class="text-sm text-gray-400">Email Blacklist check is currently disabled.</p>
+            <flux:button wire:click="toggleBlacklistCheck" variant="ghost" size="sm" icon="check-circle">Enable check</flux:button>
           </div>
         @else
-          <div class="px-4 py-5 sm:p-0">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($this->monitor->blacklistCheck?->status->value === 'invalid')
-                    Found
-                  @elseif($this->monitor->blacklistCheck?->status->value === 'not yet checked')
-                    Pending
-                  @else
-                    Ok
-                  @endif
+          <dl class="divide-y divide-gray-100">
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Current Status</dt>
+              <dd class="text-sm sm:mt-0 sm:col-span-2">
+                @if($this->monitor->blacklistCheck?->status->value === 'invalid')
+                  <flux:badge size="sm" color="red" icon="exclamation-triangle">Found on Blacklist</flux:badge>
+                @elseif($this->monitor->blacklistCheck?->status->value === 'not yet checked')
+                  <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
+                @else
+                  <flux:badge size="sm" color="green" icon="check">Not Listed</flux:badge>
+                @endif
+              </dd>
+            </div>
+            @if($this->monitor->blacklistCheck?->status->value === 'valid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Details</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">Not found on any blacklist</dd>
+              </div>
+            @endif
+            @if($this->monitor->blacklistCheck?->status->value === 'invalid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Listed On</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">
+                  {!! nl2br($this->monitor->blacklistCheck?->failure_reason) !!}
                 </dd>
               </div>
-              @if($this->monitor->blacklistCheck?->status->value === 'valid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">List</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Not found on any blacklist</dd>
-                </div>
-              @endif
-              @if($this->monitor->blacklistCheck?->status->value === 'invalid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">List</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {!! nl2br($this->monitor->blacklistCheck?->failure_reason) !!}
-                  </dd>
-                </div>
-              @endif
-            </dl>
-          </div>
+            @endif
+          </dl>
         @endif
-      </div>
-    </flux:card>
-    <!-- End Email Blacklist Checks Card -->
+      </flux:card>
+      <!-- End Email Blacklist Card -->
 
-    <!-- WordPress Checks Card -->
-    <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <flux:icon.globe-alt />
-          WordPress
+    </div>
+    <!-- End Left Column -->
+
+    <!-- Right Column (secondary checks) -->
+    <div class="flex flex-col gap-6">
+
+      <!-- WordPress Card -->
+      <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="wordpress-card">
+        <div class="flex items-center justify-between px-5 py-4">
+          <div class="flex items-center gap-3 border-l-4 border-blue-500 pl-3">
+            <flux:icon.globe-alt class="size-4 text-blue-600 shrink-0" />
+            <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">WordPress</flux:heading>
+          </div>
+          <flux:tooltip :content="$this->monitor->wordpressCheck?->enabled ? 'Disable check' : 'Enable check'">
+            <flux:button
+              wire:click="toggleWordPressCheck"
+              variant="subtle"
+              size="sm"
+              :icon="$this->monitor->wordpressCheck?->enabled ? 'check-circle' : 'x-circle'"
+              :class="$this->monitor->wordpressCheck?->enabled ? 'text-emerald-600!' : 'text-gray-300!'"
+            />
+          </flux:tooltip>
         </div>
-        @if($this->monitor->wordpressCheck?->enabled)
-          <flux:button wire:click="toggleWordPressCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
-        @else
-          <flux:button wire:click="toggleWordPressCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
-        @endif
-      </flux:heading>
-      <div class="px-4 py-5 sm:p-0">
+
         @if(!$this->monitor->wordpressCheck?->enabled)
-          <div class="bg-yellow-100 text-center  p-3">WordPress check is disabled</div>
-          <div class="px-4 py-5 sm:p-0 opacity-20">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  N/A
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Version</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
-              </div>
-            </dl>
+          <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
+            <flux:icon.no-symbol class="size-8 text-gray-300" />
+            <p class="text-sm text-gray-400">WordPress check is currently disabled.</p>
+            <flux:button wire:click="toggleWordPressCheck" variant="ghost" size="sm" icon="check-circle">Enable check</flux:button>
           </div>
         @else
-          <div class="px-4 py-5 sm:p-0">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($this->monitor->wordpressCheck?->status->value === 'invalid')
-                    Error
-                  @elseif($this->monitor->wordpressCheck?->status->value === 'not yet checked')
-                    Pending
-                  @else
-                    Ok
-                  @endif
-                </dd>
+          <dl class="divide-y divide-gray-100">
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Status</dt>
+              <dd class="text-sm sm:mt-0 sm:col-span-2">
+                @if($this->monitor->wordpressCheck?->status->value === 'invalid')
+                  <flux:badge size="sm" color="red" icon="x-circle">Error</flux:badge>
+                @elseif($this->monitor->wordpressCheck?->status->value === 'not yet checked')
+                  <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
+                @else
+                  <flux:badge size="sm" color="green" icon="check">Ok</flux:badge>
+                @endif
+              </dd>
+            </div>
+            @if($this->monitor->wordpressCheck?->status->value === 'valid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Version</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->wordpress_version ?: 'WP not detected' }}</dd>
               </div>
-              @if($this->monitor->wordpressCheck?->status->value === 'valid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Version</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->wordpress_version ?: 'WP not detected' }}</dd>
-                </div>
-              @endif
-              @if($this->monitor->wordpressCheck?->status->value === 'invalid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Error</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->failure_reason }}</dd>
-                </div>
-              @endif
-            </dl>
-          </div>
+            @endif
+            @if($this->monitor->wordpressCheck?->status->value === 'invalid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Error</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->failure_reason }}</dd>
+              </div>
+            @endif
+          </dl>
         @endif
-      </div>
-    </flux:card>
-    <!-- End WordPress Checks Card -->
+      </flux:card>
+      <!-- End WordPress Card -->
 
-    <!-- Domain Information Checks Card -->
-    <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <flux:icon.identification />
-          Domain Information
+      <!-- Domain Information Card -->
+      <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="domain-card">
+        <div class="flex items-center justify-between px-5 py-4">
+          <div class="flex items-center gap-3 border-l-4 border-violet-500 pl-3">
+            <flux:icon.identification class="size-4 text-violet-600 shrink-0" />
+            <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">Domain Information</flux:heading>
+          </div>
+          <flux:tooltip :content="$this->monitor->domainCheck?->enabled ? 'Disable check' : 'Enable check'">
+            <flux:button
+              wire:click="toggleDomainNameExpirationCheck"
+              variant="subtle"
+              size="sm"
+              :icon="$this->monitor->domainCheck?->enabled ? 'check-circle' : 'x-circle'"
+              :class="$this->monitor->domainCheck?->enabled ? 'text-emerald-600!' : 'text-gray-300!'"
+            />
+          </flux:tooltip>
         </div>
-        @if($this->monitor->domainCheck?->enabled)
-          <flux:button wire:click="toggleDomainNameExpirationCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
-        @else
-          <flux:button wire:click="toggleDomainNameExpirationCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
-        @endif
-      </flux:heading>
-      <div class="px-4 py-5 sm:p-0">
+
         @if(!$this->monitor->domainCheck?->enabled)
-          <div class="bg-yellow-100 text-center  p-3">Domain Information checks are disabled</div>
-          <div class="px-4 py-5 sm:p-0 opacity-20">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  N/A
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">On Cloudflare</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  N/A
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Nameservers</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
-              </div>
-            </dl>
+          <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
+            <flux:icon.no-symbol class="size-8 text-gray-300" />
+            <p class="text-sm text-gray-400">Domain Information check is currently disabled.</p>
+            <flux:button wire:click="toggleDomainNameExpirationCheck" variant="ghost" size="sm" icon="check-circle">Enable check</flux:button>
           </div>
         @else
-          <div class="px-4 py-5 sm:p-0">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($this->monitor->domainCheck?->status->value === 'invalid')
-                    Invalid
-                  @elseif($this->monitor->domainCheck?->status->value === 'not yet checked')
-                    Pending
-                  @else
-                    Valid
-                  @endif
-                </dd>
+          <dl class="divide-y divide-gray-100">
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Status</dt>
+              <dd class="text-sm sm:mt-0 sm:col-span-2">
+                @if($this->monitor->domainCheck?->status->value === 'invalid')
+                  <flux:badge size="sm" color="red" icon="x-circle">Invalid</flux:badge>
+                @elseif($this->monitor->domainCheck?->status->value === 'not yet checked')
+                  <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
+                @else
+                  <flux:badge size="sm" color="green" icon="check">Valid</flux:badge>
+                @endif
+              </dd>
+            </div>
+            @if($this->monitor->domainCheck?->status->value === 'valid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Expiration</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->domainCheck?->expiration_date?->format("D, F j, Y, g:i a") }}</dd>
               </div>
-              @if($this->monitor->domainCheck?->status->value === 'valid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->domainCheck?->expiration_date?->format("D, F j, Y, g:i a") }}</dd>
-                </div>
-              @endif
-              @if($this->monitor->domainCheck?->status->value === 'invalid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Failed Reason</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->domainCheck?->failure_reason }}</dd>
-                </div>
-              @endif
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">On Cloudflare</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($this->monitor->domainCheck?->is_on_cloudflare)
-                    Yes
-                  @else
-                    No
-                  @endif
-                </dd>
+            @endif
+            @if($this->monitor->domainCheck?->status->value === 'invalid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Failed Reason</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->domainCheck?->failure_reason }}</dd>
               </div>
-              @if($this->monitor->domainCheck?->status->value === 'valid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Nameservers</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    @if($this->monitor->domainCheck?->nameservers)
+            @endif
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Cloudflare</dt>
+              <dd class="text-sm sm:mt-0 sm:col-span-2">
+                @if($this->monitor->domainCheck?->is_on_cloudflare)
+                  <flux:badge size="sm" color="green" icon="check">Yes</flux:badge>
+                @else
+                  <flux:badge size="sm" color="zinc" icon="x-mark">No</flux:badge>
+                @endif
+              </dd>
+            </div>
+            @if($this->monitor->domainCheck?->status->value === 'valid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Nameservers</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">
+                  @if($this->monitor->domainCheck?->nameservers)
+                    <ul class="space-y-0.5">
                       @foreach($this->monitor->domainCheck->nameservers as $nameserver)
-                        {{ $nameserver }}<br>
+                        <li>{{ $nameserver }}</li>
                       @endforeach
-                    @else
-                      Not fetched
-                    @endif
-                  </dd>
-                </div>
-              @endif
-            </dl>
-          </div>
-        @endif
-      </div>
-    </flux:card>
-    <!-- End Domain Information Checks Card -->
-
-    <!--Lighthouse Reports Checks Card -->
-    <flux:card class="mt-5 divide-y divide-gray-200 p-0 overflow-auto">
-      <flux:heading level="3" class="text-lg! bg-zinc-50 px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <flux:icon.light-bulb />
-          Lighthouse Reports
-        </div>
-        @if($this->monitor->lighthouseCheck?->enabled)
-          <flux:button wire:click="toggleLighthouseCheck" size="sm" variant="primary" color="emerald" icon="check">On</flux:button>
-        @else
-          <flux:button wire:click="toggleLighthouseCheck" size="sm" variant="primary" color="rose" icon="x-circle">Off</flux:button>
-        @endif
-      </flux:heading>
-      <div class="px-4 py-5 sm:p-0">
-        @if(!$this->monitor->lighthouseCheck?->enabled)
-          <div class="bg-yellow-100 text-center  p-3">Lighthouse reports are disabled</div>
-          <div class="px-4 py-5 sm:p-0 opacity-20">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  N/A
-                </dd>
-              </div>
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">N/A</dd>
-              </div>
-            </dl>
-          </div>
-        @else
-          <div class="px-4 py-5 sm:p-0">
-            <dl class="sm:divide-y sm:divide-gray-200">
-              <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Current Status</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
-                    Invalid
-                  @elseif($this->monitor->lighthouseCheck?->status->value === 'not yet checked')
-                    Pending
+                    </ul>
                   @else
-                    Ok
+                    Not fetched
                   @endif
                 </dd>
               </div>
-              @if($this->monitor->lighthouseCheck?->status->value === 'valid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->last_succeeded_at?->diffForHumans() }}</dd>
-                </div>
-                <div class="py-4 sm:py-5 sm:px-6">
-                  <div class="flex w-full items-center justify-between">
-                    <div>
-                      <dt class="text-xs font-normal text-gray-500">Performance</dt>
-                      <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
-                        {{ $this->lighthouseStats->performance_score }}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt class="text-xs font-normal text-gray-500">Accessibility</dt>
-                      <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
-                        {{ $this->lighthouseStats->accessibility_score }}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt class="text-xs font-normal text-gray-500">Best Practices</dt>
-                      <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
-                        {{ $this->lighthouseStats->best_practices_score }}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt class="text-xs font-normal text-gray-500">SEO</dt>
-                      <dd class="mt-1 flex items-baseline justify-between text-2xl font-semibold text-sky-600 md:block lg:flex">
-                        {{ $this->lighthouseStats->seo_score }}
-                      </dd>
-                    </div>
-                  </div>
-                </div>
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <a href="{{ route('monitors.lighthouse', $this->monitor->id) }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">View Full Reports</a>
-                </div>
-              @endif
-              @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Last Checked</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->last_failed_at }}</dd>
-                </div>
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt class="text-sm font-medium text-gray-500">Last Error Message</dt>
-                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->failure_reason }}</dd>
-                </div>
-              @endif
-            </dl>
-          </div>
+            @endif
+          </dl>
         @endif
-      </div>
-    </flux:card>
-    <!-- End Lighthouse Reports Checks Card -->
+      </flux:card>
+      <!-- End Domain Information Card -->
 
-    <!-- /End Content -->
+      <!-- Lighthouse Reports Card -->
+      <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="lighthouse-card">
+        <div class="flex items-center justify-between px-5 py-4">
+          <div class="flex items-center gap-3 border-l-4 border-yellow-500 pl-3">
+            <flux:icon.light-bulb class="size-4 text-yellow-600 shrink-0" />
+            <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">Lighthouse Reports</flux:heading>
+          </div>
+          <flux:tooltip :content="$this->monitor->lighthouseCheck?->enabled ? 'Disable check' : 'Enable check'">
+            <flux:button
+              wire:click="toggleLighthouseCheck"
+              variant="subtle"
+              size="sm"
+              :icon="$this->monitor->lighthouseCheck?->enabled ? 'check-circle' : 'x-circle'"
+              :class="$this->monitor->lighthouseCheck?->enabled ? 'text-emerald-600!' : 'text-gray-300!'"
+            />
+          </flux:tooltip>
+        </div>
+
+        @if(!$this->monitor->lighthouseCheck?->enabled)
+          <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
+            <flux:icon.no-symbol class="size-8 text-gray-300" />
+            <p class="text-sm text-gray-400">Lighthouse reports are currently disabled.</p>
+            <flux:button wire:click="toggleLighthouseCheck" variant="ghost" size="sm" icon="check-circle">Enable check</flux:button>
+          </div>
+        @else
+          <dl class="divide-y divide-gray-100">
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Status</dt>
+              <dd class="text-sm sm:mt-0 sm:col-span-2">
+                @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
+                  <flux:badge size="sm" color="red" icon="x-circle">Invalid</flux:badge>
+                @elseif($this->monitor->lighthouseCheck?->status->value === 'not yet checked')
+                  <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
+                @else
+                  <flux:badge size="sm" color="green" icon="check">Ok</flux:badge>
+                @endif
+              </dd>
+            </div>
+            @if($this->monitor->lighthouseCheck?->status->value === 'valid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Checked</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->last_succeeded_at?->diffForHumans() }}</dd>
+              </div>
+
+              {{-- Lighthouse score tiles --}}
+              @php
+                $perf = $this->lighthouseStats?->performance_score ?? 0;
+                $a11y = $this->lighthouseStats?->accessibility_score ?? 0;
+                $bp   = $this->lighthouseStats?->best_practices_score ?? 0;
+                $seo  = $this->lighthouseStats?->seo_score ?? 0;
+              @endphp
+              <div class="px-5 py-4 grid grid-cols-2 gap-2">
+                <div @class([
+                  'rounded-lg border p-3 text-center',
+                  'bg-green-50 border-green-200' => $perf >= 90,
+                  'bg-amber-50 border-amber-200' => $perf >= 70 && $perf < 90,
+                  'bg-red-50 border-red-200'     => $perf < 70,
+                ])>
+                  <div class="text-xs font-medium text-gray-500 mb-1">Performance</div>
+                  <div @class([
+                    'text-xl font-bold',
+                    'text-green-700' => $perf >= 90,
+                    'text-amber-700' => $perf >= 70 && $perf < 90,
+                    'text-red-700'   => $perf < 70,
+                  ])>{{ $perf }}</div>
+                </div>
+                <div @class([
+                  'rounded-lg border p-3 text-center',
+                  'bg-green-50 border-green-200' => $a11y >= 90,
+                  'bg-amber-50 border-amber-200' => $a11y >= 70 && $a11y < 90,
+                  'bg-red-50 border-red-200'     => $a11y < 70,
+                ])>
+                  <div class="text-xs font-medium text-gray-500 mb-1">Accessibility</div>
+                  <div @class([
+                    'text-xl font-bold',
+                    'text-green-700' => $a11y >= 90,
+                    'text-amber-700' => $a11y >= 70 && $a11y < 90,
+                    'text-red-700'   => $a11y < 70,
+                  ])>{{ $a11y }}</div>
+                </div>
+                <div @class([
+                  'rounded-lg border p-3 text-center',
+                  'bg-green-50 border-green-200' => $bp >= 90,
+                  'bg-amber-50 border-amber-200' => $bp >= 70 && $bp < 90,
+                  'bg-red-50 border-red-200'     => $bp < 70,
+                ])>
+                  <div class="text-xs font-medium text-gray-500 mb-1">Best Practices</div>
+                  <div @class([
+                    'text-xl font-bold',
+                    'text-green-700' => $bp >= 90,
+                    'text-amber-700' => $bp >= 70 && $bp < 90,
+                    'text-red-700'   => $bp < 70,
+                  ])>{{ $bp }}</div>
+                </div>
+                <div @class([
+                  'rounded-lg border p-3 text-center',
+                  'bg-green-50 border-green-200' => $seo >= 90,
+                  'bg-amber-50 border-amber-200' => $seo >= 70 && $seo < 90,
+                  'bg-red-50 border-red-200'     => $seo < 70,
+                ])>
+                  <div class="text-xs font-medium text-gray-500 mb-1">SEO</div>
+                  <div @class([
+                    'text-xl font-bold',
+                    'text-green-700' => $seo >= 90,
+                    'text-amber-700' => $seo >= 70 && $seo < 90,
+                    'text-red-700'   => $seo < 70,
+                  ])>{{ $seo }}</div>
+                </div>
+              </div>
+
+              <div class="px-5 py-4">
+                <flux:button :href="route('monitors.lighthouse', $this->monitor->id)" variant="subtle" size="sm" icon="arrow-top-right-on-square">
+                  View Full Reports
+                </flux:button>
+              </div>
+            @endif
+            @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Checked</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->last_failed_at }}</dd>
+              </div>
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Error</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->failure_reason }}</dd>
+              </div>
+            @endif
+          </dl>
+        @endif
+      </flux:card>
+      <!-- End Lighthouse Reports Card -->
+
+    </div>
+    <!-- End Right Column -->
+
   </div>
+  <!-- End Two-Column Layout -->
 
 </div>
