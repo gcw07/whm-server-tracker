@@ -78,7 +78,9 @@ class BlacklistChecker
     protected function resolveIp(Monitor $monitor, string $domain, int $ttl): ?string
     {
         // Prefer the known server IP — DNS may return a Cloudflare proxy IP.
-        $serverIp = $monitor->accounts()->with('server')->first()?->server?->address;
+        // Order by suspended ascending so non-suspended accounts (0) come before suspended ones (1),
+        // handling the common case where an account migrated to a new server and the old one is suspended.
+        $serverIp = $monitor->accounts()->with('server')->orderBy('suspended')->first()?->server?->address;
 
         if ($serverIp) {
             return $serverIp;
