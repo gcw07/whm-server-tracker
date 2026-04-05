@@ -132,7 +132,7 @@
                         @elseif($monitor->blacklistCheck?->status->value === 'not yet checked')
                           <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Pending</flux:badge>
                         @else
-                          <flux:badge size="sm" icon="check" color="green">Ok</flux:badge>
+                          <flux:badge size="sm" icon="check" color="green">Not Listed</flux:badge>
                         @endif
                       @endif
                     </flux:table.cell>
