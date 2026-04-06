@@ -219,6 +219,10 @@
             </div>
             @if($this->monitor->uptime_status === 'down')
               <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Down Since</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->uptime_status_last_change_date?->diffForHumans() ?? 'Unknown' }}</dd>
+              </div>
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Failure Reason</dt>
                 <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->uptime_check_failure_reason }}</dd>
               </div>
