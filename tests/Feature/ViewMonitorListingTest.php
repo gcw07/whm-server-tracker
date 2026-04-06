@@ -62,7 +62,7 @@ test('the monitor listings issues filter includes monitors with expired ssl cert
     $monitor = MonitorFactory::new()->create(['url' => 'https://someserver.com', 'uptime_status' => UptimeStatus::UP, 'certificate_check_enabled' => true]);
     $healthyMonitor = MonitorFactory::new()->create(['url' => 'https://healthyserver.com', 'uptime_status' => UptimeStatus::UP]);
 
-    $account = Account::factory()->create(['monitor_id' => $monitor->id]);
+    $account = Account::factory()->create(['monitor_id' => $monitor->id, 'suspended' => false]);
     AccountSslCertificate::factory()->expired()->create(['account_id' => $account->id]);
 
     $healthyAccount = Account::factory()->create(['monitor_id' => $healthyMonitor->id]);
@@ -81,7 +81,7 @@ test('the monitor listings issues filter includes monitors with ssl certificates
     $monitor = MonitorFactory::new()->create(['url' => 'https://expiringsoon.com', 'uptime_status' => UptimeStatus::UP, 'certificate_check_enabled' => true]);
     $healthyMonitor = MonitorFactory::new()->create(['url' => 'https://healthyserver.com', 'uptime_status' => UptimeStatus::UP]);
 
-    $account = Account::factory()->create(['monitor_id' => $monitor->id]);
+    $account = Account::factory()->create(['monitor_id' => $monitor->id, 'suspended' => false]);
     AccountSslCertificate::factory()->expiringSoon()->create(['account_id' => $account->id]);
 
     $healthyAccount = Account::factory()->create(['monitor_id' => $healthyMonitor->id]);

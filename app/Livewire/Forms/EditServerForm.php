@@ -42,7 +42,7 @@ class EditServerForm extends Form
         $this->name = $server->name;
         $this->address = $server->address;
         $this->port = $server->port;
-        $this->serverType = $server->server_type;
+        $this->serverType = $server->server_type->value;
         $this->hostingProvider = $server->hosting_provider ?? '';
         $this->notes = $server->notes;
     }
