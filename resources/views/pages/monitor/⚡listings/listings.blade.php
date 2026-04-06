@@ -111,7 +111,9 @@
 
                     <!-- Certificate Status -->
                     <flux:table.cell class="whitespace-nowrap">
-                      @if($monitor->account_ssl_certificate_status === 'expired')
+                      @if(!$monitor->certificate_check_enabled)
+                        <flux:badge size="sm" icon="no-symbol" color="zinc">Disabled</flux:badge>
+                      @elseif($monitor->account_ssl_certificate_status === 'expired')
                         <flux:badge size="sm" icon="x-circle" color="red">Expired</flux:badge>
                       @elseif($monitor->account_ssl_certificate_status === 'expiring_soon')
                         <flux:badge size="sm" icon="exclamation-triangle" color="yellow">Expiring Soon</flux:badge>

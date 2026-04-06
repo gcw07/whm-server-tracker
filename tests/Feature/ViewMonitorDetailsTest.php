@@ -70,7 +70,7 @@ test('an authorized user can turn on uptime checks from monitor details', functi
 });
 
 test('ssl certificates from accounts are displayed on monitor details', function () {
-    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com', 'certificate_check_enabled' => true]);
     $monitor = Monitor::first();
     $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
 
@@ -91,7 +91,7 @@ test('ssl certificates from accounts are displayed on monitor details', function
 });
 
 test('a valid ssl certificate shows valid until on monitor details', function () {
-    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com', 'certificate_check_enabled' => true]);
     $monitor = Monitor::first();
     $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
 
@@ -108,7 +108,7 @@ test('a valid ssl certificate shows valid until on monitor details', function ()
 });
 
 test('an expiring soon ssl certificate shows expires in on monitor details', function () {
-    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com', 'certificate_check_enabled' => true]);
     $monitor = Monitor::first();
     $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
 
@@ -124,7 +124,7 @@ test('an expiring soon ssl certificate shows expires in on monitor details', fun
 });
 
 test('an expired ssl certificate shows expired on monitor details', function () {
-    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com', 'certificate_check_enabled' => true]);
     $monitor = Monitor::first();
     $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
 
@@ -139,8 +139,23 @@ test('an expired ssl certificate shows expired on monitor details', function () 
         ->assertSee('Expired');
 });
 
+test('monitor details shows disabled message when certificate check is disabled', function () {
+    MonitorFactory::new()->create(['url' => 'https://myserver.com', 'certificate_check_enabled' => false]);
+    $monitor = Monitor::first();
+    $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
+    AccountSslCertificate::factory()->create(['account_id' => $account->id, 'servername' => 'myserver.com']);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.details', ['monitor' => $monitor->id])
+        ->assertSee('SSL Certificate check is currently disabled.')
+        ->assertDontSee('Valid until')
+        ->assertDontSee('Expired')
+        ->assertDontSee('No SSL certificates found.');
+});
+
 test('monitor details shows no ssl certificates found when there are none', function () {
-    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com', 'certificate_check_enabled' => true]);
     $monitor = Monitor::first();
     Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
 
@@ -151,7 +166,7 @@ test('monitor details shows no ssl certificates found when there are none', func
 });
 
 test('covered vhost domains are shown with a check on monitor details', function () {
-    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com', 'certificate_check_enabled' => true]);
     $monitor = Monitor::first();
     $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
 
@@ -170,7 +185,7 @@ test('covered vhost domains are shown with a check on monitor details', function
 });
 
 test('uncovered vhost domains are shown differently on monitor details', function () {
-    MonitorFactory::new()->create(['url' => 'https://myserver.com']);
+    MonitorFactory::new()->create(['url' => 'https://myserver.com', 'certificate_check_enabled' => true]);
     $monitor = Monitor::first();
     $account = Account::factory()->create(['domain' => 'myserver.com', 'monitor_id' => $monitor->id]);
 

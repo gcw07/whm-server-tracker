@@ -338,7 +338,13 @@
           </flux:tooltip>
         </div>
 
-        @if($this->sslCertificates->isEmpty())
+        @if(!$this->monitor->certificate_check_enabled)
+          <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
+            <flux:icon.no-symbol class="size-8 text-gray-300" />
+            <p class="text-sm text-gray-400">SSL Certificate check is currently disabled.</p>
+            <flux:button wire:click="toggleCertificateCheck" variant="ghost" size="sm" icon="check-circle">Enable check</flux:button>
+          </div>
+        @elseif($this->sslCertificates->isEmpty())
           <div class="px-5 py-6 text-sm text-gray-400 text-center">No SSL certificates found.</div>
         @else
           <dl class="divide-y divide-gray-100">

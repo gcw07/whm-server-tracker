@@ -109,6 +109,16 @@ test('the monitor listings issues filter excludes monitors with expired ssl cert
         ->assertCount('monitors', 0);
 });
 
+test('the certificate column shows a disabled badge when certificate check is disabled', function () {
+    MonitorFactory::new()->create(['url' => 'https://certdisabled.com', 'certificate_check_enabled' => false]);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.listings')
+        ->assertSee('Disabled')
+        ->assertDontSee('No Data');
+});
+
 test('the monitor listings issues filter excludes monitors with expiring ssl certificates when certificate check is disabled', function () {
     $monitor = MonitorFactory::new()->create([
         'url' => 'https://certdisabled.com',
