@@ -13,7 +13,7 @@
         "chrome-launcher": "^1.2.0",
         "concurrently": "^9.2.0",
         "laravel-vite-plugin": "^3.0.0",
-        "lighthouse": "^13.0.0",
+        "lighthouse": "^13.1.0",
         "tailwindcss": "^4.2.2",
         "vite": "^8.0.0"
     }
