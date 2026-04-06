@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
+use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -79,6 +80,11 @@ new #[Title('Monitor Details')] class extends Component
     {
         $monitor = $this->monitor;
         $monitor->uptime_check_enabled = true;
+
+        if ($monitor->uptime_status === UptimeStatus::DOWN) {
+            $monitor->resetUptimeStatus();
+        }
+
         $monitor->certificate_check_enabled = true;
         $monitor->save();
 
@@ -189,6 +195,10 @@ new #[Title('Monitor Details')] class extends Component
             $monitor->uptime_check_enabled = false;
         } else {
             $monitor->uptime_check_enabled = true;
+
+            if ($monitor->uptime_status === UptimeStatus::DOWN) {
+                $monitor->resetUptimeStatus();
+            }
         }
 
         $monitor->save();

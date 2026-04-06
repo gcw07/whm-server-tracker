@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Spatie\Lighthouse\Lighthouse;
+use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
 use Spatie\Url\Url;
 
@@ -212,6 +213,15 @@ class Monitor extends BaseMonitor
         return Attribute::make(
             get: fn () => $this->calculateUptime(today()->subDays(29), today()),
         );
+    }
+
+    public function resetUptimeStatus(): void
+    {
+        $this->uptime_status = UptimeStatus::NOT_YET_CHECKED;
+        $this->uptime_status_last_change_date = null;
+        $this->uptime_check_failed_event_fired_on_date = null;
+        $this->uptime_check_times_failed_in_a_row = 0;
+        $this->uptime_check_failure_reason = null;
     }
 
     public function calculateUptime(CarbonInterface $startDate, CarbonInterface $endDate): float
