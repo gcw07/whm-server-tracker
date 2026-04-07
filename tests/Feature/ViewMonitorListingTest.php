@@ -2,6 +2,7 @@
 
 use App\Models\Account;
 use App\Models\AccountSslCertificate;
+use App\Models\MonitorBlacklistCheck;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -117,6 +118,25 @@ test('the certificate column shows a disabled badge when certificate check is di
     Livewire::test('pages::monitor.listings')
         ->assertSee('Disabled')
         ->assertDontSee('No Data');
+});
+
+test('the monitor listings can be filtered by being on blacklist', function () {
+    $listedMonitor = MonitorFactory::new()->create(['url' => 'https://listed.com']);
+    $cleanMonitor = MonitorFactory::new()->create(['url' => 'https://clean.com']);
+    $disabledMonitor = MonitorFactory::new()->create(['url' => 'https://disabled.com']);
+
+    MonitorBlacklistCheck::create(['monitor_id' => $listedMonitor->id, 'enabled' => true, 'status' => 'invalid']);
+    MonitorBlacklistCheck::create(['monitor_id' => $cleanMonitor->id, 'enabled' => true, 'status' => 'valid']);
+    MonitorBlacklistCheck::create(['monitor_id' => $disabledMonitor->id, 'enabled' => false, 'status' => 'invalid']);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::monitor.listings')
+        ->set('filterBy', 'on_blacklist')
+        ->assertCount('monitors', 1)
+        ->assertSee('listed.com')
+        ->assertDontSee('clean.com')
+        ->assertDontSee('disabled.com');
 });
 
 test('the monitor listings issues filter excludes monitors with expiring ssl certificates when certificate check is disabled', function () {

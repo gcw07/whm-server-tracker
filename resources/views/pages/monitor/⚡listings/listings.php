@@ -67,6 +67,10 @@ new #[Title('Monitors')] class extends Component
                     return $query->whereHas('domainCheck', fn ($q) => $q->where('is_on_cloudflare', false));
                 }
 
+                if ($this->filterBy === 'on_blacklist') {
+                    return $query->whereHas('blacklistCheck', fn ($q) => $q->where('enabled', true)->where('status', 'invalid'));
+                }
+
                 return $query;
             })
             ->paginate(50);

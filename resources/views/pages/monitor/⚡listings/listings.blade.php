@@ -20,6 +20,7 @@
               <flux:menu.radio value="disabled">Disabled Monitors</flux:menu.radio>
               <flux:menu.radio value="on_cloudflare">On Cloudflare</flux:menu.radio>
               <flux:menu.radio value="not_on_cloudflare">Not on Cloudflare</flux:menu.radio>
+              <flux:menu.radio value="on_blacklist">On Blacklist</flux:menu.radio>
             </flux:menu.radio.group>
           </flux:menu>
         </flux:dropdown>
@@ -60,6 +61,9 @@
                   @endif
                   @if($this->filterBy === 'not_on_cloudflare')
                     <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">Not on Cloudflare</flux:badge>
+                  @endif
+                  @if($this->filterBy === 'on_blacklist')
+                    <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">On Blacklist</flux:badge>
                   @endif
                 </div>
                 <div>
