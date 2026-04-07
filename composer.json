@@ -13,7 +13,7 @@
         "ext-simplexml": "*",
         "guzzlehttp/guzzle": "^7.10",
         "laravel/fortify": "^1.36",
-        "laravel/framework": "^13.3",
+        "laravel/framework": "^13.4",
         "laravel/horizon": "^5.45",
         "laravel/nightwatch": "^1.26",
         "laravel/tinker": "^3.0",
