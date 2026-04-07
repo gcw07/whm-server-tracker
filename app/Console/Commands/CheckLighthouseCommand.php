@@ -7,6 +7,7 @@ use App\Models\Monitor;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Spatie\Lighthouse\Enums\FormFactor;
 
 #[Signature('server-tracker:check-lighthouse
                            {--url= : Only check these urls}')]
@@ -35,7 +36,8 @@ class CheckLighthouseCommand extends Command
         $monitors->each(function (Monitor $monitor) {
             $this->info("Checking lighthouse for {$monitor->url}");
 
-            dispatch(new CheckLighthouseJob($monitor));
+            CheckLighthouseJob::dispatch($monitor, FormFactor::Desktop);
+            CheckLighthouseJob::dispatch($monitor, FormFactor::Mobile);
         });
 
         $this->info('All done!');

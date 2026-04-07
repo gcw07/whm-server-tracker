@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $monitor_id
+ * @property string $form_factor
  * @property bool $enabled
  * @property LighthouseStatusEnum $status
  * @property CarbonImmutable|null $last_failed_at

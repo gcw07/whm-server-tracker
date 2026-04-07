@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\DomainNameStatusEnum;
-use App\Enums\LighthouseStatusEnum;
 use App\Enums\WordPressStatusEnum;
 use App\Events\DomainNameExpiresSoonEvent;
 use Carbon\Carbon;
@@ -18,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Spatie\Lighthouse\Lighthouse;
 use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
 use Spatie\Url\Url;
@@ -140,7 +138,12 @@ class Monitor extends BaseMonitor
 
     public function lighthouseCheck(): HasOne
     {
-        return $this->hasOne(MonitorLighthouseCheck::class);
+        return $this->hasOne(MonitorLighthouseCheck::class)->where('form_factor', 'desktop');
+    }
+
+    public function lighthouseChecks(): HasMany
+    {
+        return $this->hasMany(MonitorLighthouseCheck::class);
     }
 
     public function domainCheck(): HasOne
@@ -264,67 +267,6 @@ class Monitor extends BaseMonitor
         $query->whereAny([
             'url',
         ], 'LIKE', "%$term%");
-    }
-
-    public function checkLighthouse(): void
-    {
-        if ($this->shouldRunLighthouseAudit()) {
-            $timeout = config('server-tracker.lighthouse_audits.audit_timeout');
-
-            try {
-                $result = Lighthouse::url($this->url)
-                    ->timeoutInSeconds($timeout)
-                    ->withChromeOptions([
-                        'chromeFlags' => [
-                            '--headless=new',
-                            '--no-sandbox',
-                            '--disable-gpu',
-                            '--disable-dev-shm-usage',
-                        ],
-                    ])
-                    ->run();
-                $scores = $result->scores();
-                $speed = $result->speedIndexInMs();
-                $rawResults = json_encode($result->audits());
-                $report = $result->html();
-
-                LighthouseAudit::create([
-                    'monitor_id' => $this->id,
-                    'date' => today()->format('Y-m-d'),
-                    'performance_score' => $scores['performance'],
-                    'accessibility_score' => $scores['accessibility'],
-                    'best_practices_score' => $scores['best-practices'],
-                    'seo_score' => $scores['seo'],
-                    'speed_index' => $speed,
-                    'raw_results' => $rawResults,
-                    'report' => $report,
-                ]);
-
-                $this->lighthouseCheck->update([
-                    'status' => LighthouseStatusEnum::Valid->value,
-                    'last_succeeded_at' => now(),
-                ]);
-            } catch (Exception $exception) {
-                $this->lighthouseCheck->update([
-                    'status' => LighthouseStatusEnum::Invalid->value,
-                    'last_failed_at' => now(),
-                    'failure_reason' => $exception->getMessage(),
-                ]);
-            }
-        }
-    }
-
-    protected function shouldRunLighthouseAudit(): bool
-    {
-        if (is_null($this->lighthouseCheck->last_succeeded_at)) {
-            return true;
-        }
-
-        if ((int) abs($this->lighthouseCheck->last_succeeded_at->diffInHours()) >= config('server-tracker.lighthouse_audits.run_audit_every_hours')) {
-            return true;
-        }
-
-        return false;
     }
 
     public function processDomainNameExpiration($response)

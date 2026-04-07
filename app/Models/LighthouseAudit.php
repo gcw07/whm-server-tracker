@@ -12,14 +12,18 @@ use Spatie\UptimeMonitor\Models\Monitor;
 /**
  * @property int $id
  * @property int $monitor_id
- * @property CarbonImmutable $date
  * @property int $performance_score
  * @property int $accessibility_score
  * @property int $best_practices_score
  * @property int $seo_score
  * @property int $speed_index
+ * @property int|null $first_contentful_paint
+ * @property int|null $largest_contentful_paint
+ * @property int|null $time_to_interactive
+ * @property int|null $total_blocking_time
+ * @property float|null $cumulative_layout_shift
+ * @property string|null $form_factor
  * @property string|null $raw_results
- * @property string|null $report
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
  * @property-read Monitor $monitor
@@ -31,12 +35,10 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereAccessibilityScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereBestPracticesScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereMonitorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit wherePerformanceScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereRawResults($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereReport($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereSeoScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereSpeedIndex($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereUpdatedAt($value)
@@ -51,7 +53,7 @@ class LighthouseAudit extends Model
     protected function casts(): array
     {
         return [
-            'date' => 'date',
+            'cumulative_layout_shift' => 'float',
         ];
     }
 

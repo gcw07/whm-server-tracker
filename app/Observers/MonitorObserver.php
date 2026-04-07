@@ -20,7 +20,8 @@ class MonitorObserver
             MonitorBlacklistResult::create(['monitor_id' => $monitor->id, 'driver' => $driver]);
         }
 
-        MonitorLighthouseCheck::create(['monitor_id' => $monitor->id]);
+        MonitorLighthouseCheck::create(['monitor_id' => $monitor->id, 'form_factor' => 'desktop']);
+        MonitorLighthouseCheck::create(['monitor_id' => $monitor->id, 'form_factor' => 'mobile']);
         MonitorDomainCheck::create(['monitor_id' => $monitor->id]);
         MonitorWordPressCheck::create(['monitor_id' => $monitor->id]);
     }

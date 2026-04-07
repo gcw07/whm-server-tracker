@@ -89,7 +89,7 @@ new #[Title('Monitor Details')] class extends Component
         $monitor->save();
 
         $monitor->blacklistCheck->update(['enabled' => true]);
-        $monitor->lighthouseCheck->update(['enabled' => true]);
+        $monitor->lighthouseChecks()->update(['enabled' => true]);
         $monitor->domainCheck->update(['enabled' => true]);
         $monitor->wordpressCheck->update(['enabled' => true]);
 
@@ -111,7 +111,7 @@ new #[Title('Monitor Details')] class extends Component
         $monitor->save();
 
         $monitor->blacklistCheck->update(['enabled' => false]);
-        $monitor->lighthouseCheck->update(['enabled' => false]);
+        $monitor->lighthouseChecks()->update(['enabled' => false]);
         $monitor->domainCheck->update(['enabled' => false]);
         $monitor->wordpressCheck->update(['enabled' => false]);
 
@@ -221,7 +221,7 @@ new #[Title('Monitor Details')] class extends Component
     {
         $monitor = $this->monitor;
 
-        $monitor->lighthouseCheck->update([
+        $monitor->lighthouseChecks()->update([
             'enabled' => ! $monitor->lighthouseCheck->enabled,
         ]);
 
