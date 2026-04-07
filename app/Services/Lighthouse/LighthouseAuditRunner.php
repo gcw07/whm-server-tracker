@@ -20,8 +20,9 @@ class LighthouseAuditRunner
             return true;
         }
 
-        return (int) abs($check->last_succeeded_at->diffInHours())
-            >= config('server-tracker.lighthouse_audits.run_audit_every_hours');
+        return $check->last_succeeded_at
+            ->addDays(config('server-tracker.lighthouse_audits.run_audit_every_days'))
+            ->isPast();
     }
 
     public function run(Monitor $monitor, FormFactor $formFactor): void
