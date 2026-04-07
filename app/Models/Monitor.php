@@ -275,7 +275,6 @@ class Monitor extends BaseMonitor
                 $result = Lighthouse::url($this->url)
                     ->timeoutInSeconds($timeout)
                     ->withChromeOptions([
-                        'chromePath' => '/usr/bin/chromium-browser',
                         'chromeFlags' => [
                             '--headless=new',
                             '--no-sandbox',
