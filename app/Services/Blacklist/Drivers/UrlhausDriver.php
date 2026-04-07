@@ -13,6 +13,11 @@ class UrlhausDriver implements BlacklistDriver
         return 'URLhaus';
     }
 
+    public function url(): string
+    {
+        return 'https://urlhaus.abuse.ch/';
+    }
+
     public function check(string $domain, ?string $ip): BlacklistResult
     {
         $response = Http::asForm()

@@ -12,6 +12,11 @@ class SpamhausZenDriver implements BlacklistDriver
         return 'Spamhaus ZEN';
     }
 
+    public function url(): string
+    {
+        return 'https://check.spamhaus.org/';
+    }
+
     public function check(string $domain, ?string $ip): BlacklistResult
     {
         if (! $ip) {

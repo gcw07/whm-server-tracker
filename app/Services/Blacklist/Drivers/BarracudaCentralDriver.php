@@ -12,6 +12,11 @@ class BarracudaCentralDriver implements BlacklistDriver
         return 'Barracuda Central';
     }
 
+    public function url(): string
+    {
+        return 'https://www.barracudacentral.org/lookups';
+    }
+
     public function check(string $domain, ?string $ip): BlacklistResult
     {
         if (! $ip) {

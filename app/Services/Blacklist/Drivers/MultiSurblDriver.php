@@ -12,6 +12,11 @@ class MultiSurblDriver implements BlacklistDriver
         return 'SURBL';
     }
 
+    public function url(): string
+    {
+        return 'https://www.surbl.org/surbl-analysis';
+    }
+
     public function check(string $domain, ?string $ip): BlacklistResult
     {
         if ($this->isListed("{$domain}.multi.surbl.org.")) {

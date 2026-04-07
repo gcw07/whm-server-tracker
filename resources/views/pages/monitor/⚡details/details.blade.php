@@ -444,7 +444,13 @@
                 <div class="space-y-2">
                   @foreach($this->monitor->blacklistCheck->results->sortBy('driver') as $result)
                     <div class="flex items-center justify-between">
-                      <span class="text-sm text-gray-700">{{ $result->driver }}</span>
+                      <span class="text-sm text-gray-700">
+                        @if($result->url)
+                          <flux:link href="{{ $result->url }}" external>{{ $result->driver }} <flux:icon.arrow-top-right-on-square class="inline size-3.5" /></flux:link>
+                        @else
+                          {{ $result->driver }}
+                        @endif
+                      </span>
                       @if($result->checked_at === null)
                         <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
                       @elseif($result->listed)

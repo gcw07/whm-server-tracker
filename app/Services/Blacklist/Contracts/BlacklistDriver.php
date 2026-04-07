@@ -8,5 +8,7 @@ interface BlacklistDriver
 {
     public function name(): string;
 
+    public function url(): string;
+
     public function check(string $domain, ?string $ip): BlacklistResult;
 }

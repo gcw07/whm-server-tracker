@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Services\Blacklist\BlacklistChecker;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Unguarded;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -17,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonImmutable|null $checked_at
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
+ * @property-read string|null $url
  * @property-read Monitor $monitor
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult newModelQuery()
@@ -34,6 +37,11 @@ class MonitorBlacklistResult extends Model
             'listed' => 'boolean',
             'checked_at' => 'immutable_datetime',
         ];
+    }
+
+    protected function url(): Attribute
+    {
+        return Attribute::get(fn () => BlacklistChecker::driverUrls()[$this->driver] ?? null);
     }
 
     public function monitor(): BelongsTo

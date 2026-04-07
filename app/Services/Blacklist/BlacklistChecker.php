@@ -75,6 +75,14 @@ class BlacklistChecker
             ->all();
     }
 
+    public static function driverUrls(): array
+    {
+        return collect((new self)->ipBasedDrivers())
+            ->merge((new self)->domainBasedDrivers())
+            ->mapWithKeys(fn (BlacklistDriver $driver) => [$driver->name() => $driver->url()])
+            ->all();
+    }
+
     protected function resolveIp(Monitor $monitor, string $domain, int $ttl): ?string
     {
         // Prefer the known server IP — DNS may return a Cloudflare proxy IP.

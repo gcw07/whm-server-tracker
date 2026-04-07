@@ -12,6 +12,11 @@ class SpamhausDBLDriver implements BlacklistDriver
         return 'Spamhaus DBL';
     }
 
+    public function url(): string
+    {
+        return 'https://check.spamhaus.org/';
+    }
+
     public function check(string $domain, ?string $ip): BlacklistResult
     {
         if ($this->isListed("{$domain}.dbl.spamhaus.org.")) {

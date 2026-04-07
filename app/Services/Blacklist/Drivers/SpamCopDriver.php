@@ -12,6 +12,11 @@ class SpamCopDriver implements BlacklistDriver
         return 'SpamCop';
     }
 
+    public function url(): string
+    {
+        return 'https://www.spamcop.net/bl.shtml';
+    }
+
     public function check(string $domain, ?string $ip): BlacklistResult
     {
         if (! $ip) {

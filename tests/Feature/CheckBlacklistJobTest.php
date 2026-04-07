@@ -106,6 +106,11 @@ test('blacklist checker uses non-suspended account server ip when multiple accou
                     return 'Test';
                 }
 
+                public function url(): string
+                {
+                    return 'https://example.com';
+                }
+
                 public function check(string $domain, ?string $ip): BlacklistResult
                 {
                     return BlacklistResult::clean($this->name());
