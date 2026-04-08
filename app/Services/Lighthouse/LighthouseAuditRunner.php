@@ -21,7 +21,7 @@ class LighthouseAuditRunner
         }
 
         return $check->last_succeeded_at
-            ->addDays(config('server-tracker.lighthouse_audits.run_audit_every_days'))
+            ->addMinutes(config('server-tracker.lighthouse_audits.manual_run_cooldown_minutes'))
             ->isPast();
     }
 

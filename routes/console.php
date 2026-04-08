@@ -27,4 +27,4 @@ Schedule::command('server-tracker:check-wordpress')->dailyAt('1:15');
 Schedule::command('server-tracker:check-domain-name')->dailyAt('2:00');
 
 // Schedule Lighthouse Check
-Schedule::command('server-tracker:check-lighthouse')->dailyAt('3:10');
+Schedule::command('server-tracker:check-lighthouse')->weeklyOn(0, '3:05');

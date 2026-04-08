@@ -97,7 +97,7 @@ return [
     */
 
     'lighthouse_audits' => [
-        'run_audit_every_days' => 7,
+        'manual_run_cooldown_minutes' => 60,
         'audit_timeout' => env('SERVER_TRACKER_LIGHTHOUSE_AUDIT_TIMEOUT', 60),
     ],
 
