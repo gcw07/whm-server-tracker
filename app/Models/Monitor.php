@@ -66,6 +66,7 @@ use Spatie\Url\Url;
  * @property-read mixed $uptime_for_last_thirty_days
  * @property-read mixed $uptime_for_today
  * @property-read MonitorWordPressCheck|null $wordpressCheck
+ * @property-read MonitorCloudflareCheck|null $cloudflareCheck
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor enabled()
  * @method static Builder<static>|Monitor newModelQuery()
@@ -154,6 +155,11 @@ class Monitor extends BaseMonitor
     public function wordpressCheck(): HasOne
     {
         return $this->hasOne(MonitorWordPressCheck::class);
+    }
+
+    public function cloudflareCheck(): HasOne
+    {
+        return $this->hasOne(MonitorCloudflareCheck::class);
     }
 
     protected function domainName(): Attribute

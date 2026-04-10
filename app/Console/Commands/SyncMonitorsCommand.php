@@ -78,6 +78,7 @@ class SyncMonitorsCommand extends Command
         $monitor->domainCheck()->firstOrCreate([]);
         $monitor->wordpressCheck()->firstOrCreate([]);
         $monitor->lighthouseCheck()->firstOrCreate([]);
+        $monitor->cloudflareCheck()->firstOrCreate([]);
     }
 
     protected function deleteMissingMonitors($accounts)

@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Monitor;
 use App\Models\MonitorBlacklistCheck;
 use App\Models\MonitorBlacklistResult;
+use App\Models\MonitorCloudflareCheck;
 use App\Models\MonitorDomainCheck;
 use App\Models\MonitorLighthouseCheck;
 use App\Models\MonitorWordPressCheck;
@@ -24,5 +25,6 @@ class MonitorObserver
         MonitorLighthouseCheck::create(['monitor_id' => $monitor->id, 'form_factor' => 'mobile']);
         MonitorDomainCheck::create(['monitor_id' => $monitor->id]);
         MonitorWordPressCheck::create(['monitor_id' => $monitor->id]);
+        MonitorCloudflareCheck::create(['monitor_id' => $monitor->id]);
     }
 }

@@ -26,5 +26,8 @@ Schedule::command('server-tracker:check-wordpress')->dailyAt('1:15');
 // Schedule Domain Name Expiration Check
 Schedule::command('server-tracker:check-domain-name')->dailyAt('2:00');
 
+// Schedule Cloudflare Zone Sync (runs after domain check so is_on_cloudflare is fresh)
+Schedule::command('server-tracker:sync-cloudflare-zones')->dailyAt('2:30');
+
 // Schedule Lighthouse Check
 Schedule::command('server-tracker:check-lighthouse')->weeklyOn(0, '3:05');
