@@ -57,9 +57,7 @@
               'bg-white text-gray-600 hover:bg-gray-50' => $formFactor !== 'desktop',
             ])
           >
-            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M2 4.25A2.25 2.25 0 0 1 4.25 2h11.5A2.25 2.25 0 0 1 18 4.25v8.5A2.25 2.25 0 0 1 15.75 15h-3.105a3.501 3.501 0 0 0 1.1 1.677A.75.75 0 0 1 13.26 18H6.74a.75.75 0 0 1-.484-1.323A3.501 3.501 0 0 0 7.355 15H4.25A2.25 2.25 0 0 1 2 12.75v-8.5Z" clip-rule="evenodd" />
-            </svg>
+            <flux:icon.computer-desktop class="size-4" />
             Desktop
           </button>
           <button
@@ -70,10 +68,7 @@
               'bg-white text-gray-600 hover:bg-gray-50' => $formFactor !== 'mobile',
             ])
           >
-            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M8 16.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z" />
-              <path fill-rule="evenodd" d="M4 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4Zm6 11.75a.75.75 0 0 0 0 1.5h.008a.75.75 0 0 0 0-1.5H10Z" clip-rule="evenodd" />
-            </svg>
+            <flux:icon.device-phone-mobile class="size-4" />
             Mobile
           </button>
         </div>
@@ -96,14 +91,9 @@
                   'bg-purple-100 text-purple-700' => $selectedAudit->form_factor === 'mobile',
                 ])>
                   @if($selectedAudit->form_factor === 'desktop')
-                    <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M2 4.25A2.25 2.25 0 0 1 4.25 2h11.5A2.25 2.25 0 0 1 18 4.25v8.5A2.25 2.25 0 0 1 15.75 15h-3.105a3.501 3.501 0 0 0 1.1 1.677A.75.75 0 0 1 13.26 18H6.74a.75.75 0 0 1-.484-1.323A3.501 3.501 0 0 0 7.355 15H4.25A2.25 2.25 0 0 1 2 12.75v-8.5Z" clip-rule="evenodd" />
-                    </svg>
+                    <flux:icon.computer-desktop class="size-3" />
                   @else
-                    <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path d="M8 16.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z" />
-                      <path fill-rule="evenodd" d="M4 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4Zm6 11.75a.75.75 0 0 0 0 1.5h.008a.75.75 0 0 0 0-1.5H10Z" clip-rule="evenodd" />
-                    </svg>
+                    <flux:icon.device-phone-mobile class="size-3" />
                   @endif
                   {{ ucfirst($selectedAudit->form_factor) }}
                 </span>
