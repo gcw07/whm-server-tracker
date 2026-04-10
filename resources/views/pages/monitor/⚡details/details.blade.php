@@ -621,17 +621,48 @@
             <flux:icon.light-bulb class="size-4 text-yellow-600 shrink-0" />
             <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">Lighthouse Reports</flux:heading>
           </div>
-          <flux:tooltip :content="$this->monitor->lighthouseCheck?->enabled ? 'Disable check' : 'Enable check'">
-            <flux:button
-              wire:click="toggleLighthouseCheck"
-              variant="subtle"
-              size="sm"
-              :icon="$this->monitor->lighthouseCheck?->enabled ? 'check-circle' : 'x-circle'"
-              :class="$this->monitor->lighthouseCheck?->enabled ? 'text-emerald-600!' : 'text-gray-300!'"
-            />
-          </flux:tooltip>
+          <div class="flex items-center gap-2">
+            @if($this->monitor->lighthouseCheck?->enabled)
+              <div class="inline-flex rounded border border-gray-200 overflow-hidden text-xs">
+                <button
+                  wire:click="switchLighthouseFormFactor('desktop')"
+                  @class([
+                    'flex items-center gap-1 px-2.5 py-1 font-medium transition-colors',
+                    'bg-accent text-white' => $lighthouseFormFactor === 'desktop',
+                    'bg-white text-gray-600 hover:bg-gray-50' => $lighthouseFormFactor !== 'desktop',
+                  ])
+                >
+                  <flux:icon.computer-desktop class="size-3.5" />
+                  Desktop
+                </button>
+                <button
+                  wire:click="switchLighthouseFormFactor('mobile')"
+                  @class([
+                    'flex items-center gap-1 px-2.5 py-1 font-medium transition-colors border-l border-gray-200',
+                    'bg-accent text-white' => $lighthouseFormFactor === 'mobile',
+                    'bg-white text-gray-600 hover:bg-gray-50' => $lighthouseFormFactor !== 'mobile',
+                  ])
+                >
+                  <flux:icon.device-phone-mobile class="size-3.5" />
+                  Mobile
+                </button>
+              </div>
+            @endif
+            <flux:tooltip :content="$this->monitor->lighthouseCheck?->enabled ? 'Disable check' : 'Enable check'">
+              <flux:button
+                wire:click="toggleLighthouseCheck"
+                variant="subtle"
+                size="sm"
+                :icon="$this->monitor->lighthouseCheck?->enabled ? 'check-circle' : 'x-circle'"
+                :class="$this->monitor->lighthouseCheck?->enabled ? 'text-emerald-600!' : 'text-gray-300!'"
+              />
+            </flux:tooltip>
+          </div>
         </div>
 
+        @php
+          $lighthouseCheck = $this->monitor->lighthouseChecks->firstWhere('form_factor', $lighthouseFormFactor) ?? $this->monitor->lighthouseCheck;
+        @endphp
         @if(!$this->monitor->lighthouseCheck?->enabled)
           <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
             <flux:icon.no-symbol class="size-8 text-gray-300" />
@@ -643,19 +674,19 @@
             <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
               <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Status</dt>
               <dd class="text-sm sm:mt-0 sm:col-span-2">
-                @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
+                @if($lighthouseCheck?->status->value === 'invalid')
                   <flux:badge size="sm" color="red" icon="x-circle">Invalid</flux:badge>
-                @elseif($this->monitor->lighthouseCheck?->status->value === 'not yet checked')
+                @elseif($lighthouseCheck?->status->value === 'not yet checked')
                   <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
                 @else
                   <flux:badge size="sm" color="green" icon="check">Ok</flux:badge>
                 @endif
               </dd>
             </div>
-            @if($this->monitor->lighthouseCheck?->status->value === 'valid')
+            @if($lighthouseCheck?->status->value === 'valid')
               <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Checked</dt>
-                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->last_succeeded_at?->diffForHumans() }}</dd>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $lighthouseCheck?->last_succeeded_at?->diffForHumans() }}</dd>
               </div>
 
               {{-- Lighthouse score tiles --}}
@@ -730,14 +761,14 @@
                 </flux:button>
               </div>
             @endif
-            @if($this->monitor->lighthouseCheck?->status->value === 'invalid')
+            @if($lighthouseCheck?->status->value === 'invalid')
               <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Checked</dt>
-                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->last_failed_at }}</dd>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $lighthouseCheck?->last_failed_at }}</dd>
               </div>
               <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Error</dt>
-                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->lighthouseCheck?->failure_reason }}</dd>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $lighthouseCheck?->failure_reason }}</dd>
               </div>
             @endif
           </dl>

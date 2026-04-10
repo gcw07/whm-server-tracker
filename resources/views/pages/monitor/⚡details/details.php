@@ -18,6 +18,8 @@ new #[Title('Monitor Details')] class extends Component
 
     public string $uptimePeriod = '30';
 
+    public string $lighthouseFormFactor = 'desktop';
+
     public function mount(int $monitor): void
     {
         $this->monitorId = $monitor;
@@ -31,6 +33,7 @@ new #[Title('Monitor Details')] class extends Component
             'accounts.server',
             'accounts.sslCertificates',
             'blacklistCheck.results',
+            'lighthouseChecks',
             'lighthouseCheck',
             'domainCheck',
             'wordpressCheck',
@@ -72,8 +75,15 @@ new #[Title('Monitor Details')] class extends Component
     {
         return LighthouseAudit::query()
             ->where('monitor_id', $this->monitorId)
+            ->where('form_factor', $this->lighthouseFormFactor)
             ->orderBy('created_at', 'desc')
             ->first();
+    }
+
+    public function switchLighthouseFormFactor(string $formFactor): void
+    {
+        $this->lighthouseFormFactor = $formFactor;
+        unset($this->lighthouseStats);
     }
 
     public function enableAllMonitors(): void
