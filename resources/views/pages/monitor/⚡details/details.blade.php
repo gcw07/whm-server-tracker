@@ -696,7 +696,7 @@
                 $bp   = $this->lighthouseStats?->best_practices_score ?? 0;
                 $seo  = $this->lighthouseStats?->seo_score ?? 0;
               @endphp
-              <div class="px-5 py-4 grid grid-cols-2 gap-2">
+              <div class="px-5 py-4 grid grid-cols-2 gap-2 !border-t-0">
                 <div @class([
                   'rounded-lg border p-3 text-center',
                   'bg-green-50 border-green-200' => $perf >= 90,
