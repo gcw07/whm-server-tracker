@@ -30,3 +30,4 @@ herd.yml
 _ide_helper*.php
 CLAUDE.md
 boost.json
+polyscope.json
