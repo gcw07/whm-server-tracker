@@ -35,8 +35,8 @@ class DomainNameExpiresSoon extends Notification
             ->subject($this->getSubjectText())
             ->greeting('Domain Name Expiring')
             ->line("The domain name for {$this->event->monitor->url} expires soon:")
-            ->line("Domain name expires in {$this->event->monitor->domain_name_expiration_date->diffForHumans()} on:")
-            ->line("{$this->event->monitor->domain_name_expiration_date->toDayDateTimeString()}");
+            ->line("Domain name expires in {$this->event->date->diffForHumans()} on:")
+            ->line("{$this->event->date->toDayDateTimeString()}");
     }
 
     protected function getSubjectText(): string
