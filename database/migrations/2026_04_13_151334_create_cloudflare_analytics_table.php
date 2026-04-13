@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('date')->index();
             $table->unsignedBigInteger('unique_visitors')->nullable();
             $table->unsignedBigInteger('requests_total')->nullable();
-            $table->unsignedBigInteger('bandwidth_total')->nullable();
+            $table->unsignedBigInteger('bandwidth_total')->nullable(); // in bytes
             $table->timestamps();
             $table->unique(['monitor_cloudflare_check_id', 'date']);
         });
