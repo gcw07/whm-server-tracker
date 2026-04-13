@@ -6,6 +6,7 @@ use App\Models\Monitor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Queue\Attributes\MaxExceptions;
 use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Queue\InteractsWithQueue;
@@ -38,9 +39,15 @@ class CheckDomainNameJob implements ShouldQueue
 
         $rdapServer = config('server-tracker.rdap_server');
 
-        $response = Http::acceptJson()
-            ->timeout(20)
-            ->get("https://$rdapServer/domain/{$this->monitor->url->getHost()}");
+        try {
+            $response = Http::acceptJson()
+                ->timeout(5)
+                ->get("https://$rdapServer/domain/{$this->monitor->url->getHost()}");
+        } catch (ConnectionException) {
+            $this->release(60);
+
+            return;
+        }
 
         if ($response->failed() && $response->status() == 429) {
             $secondsRemaining = (int) $response->header('Retry-After');

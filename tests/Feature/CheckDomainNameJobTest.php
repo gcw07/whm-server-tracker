@@ -3,6 +3,7 @@
 use App\Jobs\CheckDomainNameJob;
 use App\Models\Monitor;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
@@ -28,6 +29,20 @@ it('caches the retry timestamp when the RDAP API returns a 429 with a Retry-Afte
     $cachedTimestamp = Cache::get($cacheKey);
     expect($cachedTimestamp)->toBeInt();
     expect($cachedTimestamp)->toBeGreaterThan(time());
+});
+
+it('releases the job when a connection exception occurs', function () {
+    $monitor = Monitor::create([
+        'url' => 'https://example.com',
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => false,
+    ]);
+
+    Http::fake([
+        '*' => fn () => throw new ConnectionException('Operation timed out'),
+    ]);
+
+    expect(fn () => CheckDomainNameJob::dispatchSync($monitor))->not->toThrow(ConnectionException::class);
 });
 
 it('does not throw a TypeError when the Retry-After header value is a string', function () {
