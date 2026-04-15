@@ -20,6 +20,8 @@ new #[Title('Monitor Details')] class extends Component
 
     public string $lighthouseFormFactor = 'desktop';
 
+    public string $cloudflareAnalyticsPeriod = '7';
+
     public function mount(int $monitor): void
     {
         $this->monitorId = $monitor;
@@ -37,6 +39,7 @@ new #[Title('Monitor Details')] class extends Component
             'lighthouseCheck',
             'domainCheck',
             'wordpressCheck',
+            'cloudflareCheck',
         ])->findOrFail($this->monitorId);
     }
 
@@ -68,6 +71,87 @@ new #[Title('Monitor Details')] class extends Component
             })
             ->values()
             ->toArray();
+    }
+
+    #[Computed]
+    public function cloudflareChartData(): array
+    {
+        $days = (int) $this->cloudflareAnalyticsPeriod;
+        $cloudflareCheck = $this->monitor->cloudflareCheck;
+
+        if (! $cloudflareCheck || ! $cloudflareCheck->cloudflare_zone_id) {
+            return [];
+        }
+
+        $analytics = $cloudflareCheck->analytics()
+            ->where('date', '>=', now()->subDays($days)->startOfDay())
+            ->where('date', '<', now()->startOfDay())
+            ->orderBy('date')
+            ->get()
+            ->keyBy(fn ($a) => $a->date->format('Y-m-d'));
+
+        return collect(range($days, 1))
+            ->map(function (int $daysAgo) use ($analytics): array {
+                $date = now()->subDays($daysAgo);
+                $analytic = $analytics->get($date->format('Y-m-d'));
+
+                return [
+                    'date'            => $date->format('M j'),
+                    'unique_visitors' => $analytic?->unique_visitors ?? 0,
+                    'requests_total'  => $analytic?->requests_total ?? 0,
+                    'bandwidth_mb'    => $analytic?->bandwidth_total
+                        ? round($analytic->bandwidth_total / 1024 / 1024, 1)
+                        : 0,
+                ];
+            })
+            ->values()
+            ->toArray();
+    }
+
+    #[Computed]
+    public function cloudflareAnalyticsTotals(): array
+    {
+        $days = (int) $this->cloudflareAnalyticsPeriod;
+        $cloudflareCheck = $this->monitor->cloudflareCheck;
+
+        if (! $cloudflareCheck || ! $cloudflareCheck->cloudflare_zone_id) {
+            return [];
+        }
+
+        $totals = $cloudflareCheck->analytics()
+            ->where('date', '>=', now()->subDays($days)->startOfDay())
+            ->where('date', '<', now()->startOfDay())
+            ->selectRaw('SUM(unique_visitors) as total_visitors, SUM(requests_total) as total_requests, SUM(bandwidth_total) as total_bandwidth')
+            ->first();
+
+        $bandwidthBytes = (int) ($totals->total_bandwidth ?? 0);
+
+        return [
+            'unique_visitors' => $this->formatCompact((int) ($totals->total_visitors ?? 0)),
+            'requests_total'  => $this->formatCompact((int) ($totals->total_requests ?? 0)),
+            'bandwidth'       => $bandwidthBytes >= 1_073_741_824
+                ? number_format($bandwidthBytes / 1_073_741_824, 2) . ' GB'
+                : number_format($bandwidthBytes / 1_048_576, 1) . ' MB',
+        ];
+    }
+
+    private function formatCompact(int $n): string
+    {
+        if ($n >= 1_000_000) {
+            return rtrim(rtrim(number_format($n / 1_000_000, 1), '0'), '.') . 'M';
+        }
+
+        if ($n >= 1_000) {
+            return rtrim(rtrim(number_format($n / 1_000, 1), '0'), '.') . 'k';
+        }
+
+        return (string) $n;
+    }
+
+    public function updatedCloudflareAnalyticsPeriod(): void
+    {
+        unset($this->cloudflareChartData);
+        unset($this->cloudflareAnalyticsTotals);
     }
 
     #[Computed]

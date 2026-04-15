@@ -320,6 +320,135 @@
       </flux:card>
       <!-- End Uptime Checks Card -->
 
+      <!-- Cloudflare Analytics Card -->
+      @if($this->monitor->cloudflareCheck)
+        <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="cloudflare-card">
+          <div class="flex items-center px-5 py-4">
+            <div class="flex items-center gap-3 border-l-4 border-orange-500 pl-3">
+              <flux:icon.chart-bar class="size-4 text-orange-500 shrink-0" />
+              <flux:heading level="3" class="text-sm! font-semibold text-gray-800 m-0!">Cloudflare Analytics</flux:heading>
+            </div>
+          </div>
+
+          @if(! $this->monitor->cloudflareCheck->cloudflare_zone_id)
+            <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
+              <flux:icon.signal-slash class="size-8 text-gray-300" />
+              <p class="text-sm text-gray-400">No Cloudflare zone configured for this monitor.</p>
+            </div>
+          @elseif(empty($this->cloudflareChartData))
+            <div class="px-5 py-8 flex flex-col items-center gap-2 text-center">
+              <flux:icon.chart-bar class="size-8 text-gray-300" />
+              <p class="text-sm text-gray-400">No analytics data available yet.</p>
+            </div>
+          @else
+            <div class="px-5 pt-4 pb-1">
+              {{-- Totals --}}
+              <div class="grid grid-cols-3 gap-3 pb-4">
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3 text-center">
+                  <div class="text-xs font-medium text-gray-500 mb-1">Unique Visitors</div>
+                  <div class="text-xl font-bold text-gray-800">{{ $this->cloudflareAnalyticsTotals['unique_visitors'] }}</div>
+                </div>
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3 text-center">
+                  <div class="text-xs font-medium text-gray-500 mb-1">Total Requests</div>
+                  <div class="text-xl font-bold text-gray-800">{{ $this->cloudflareAnalyticsTotals['requests_total'] }}</div>
+                </div>
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3 text-center">
+                  <div class="text-xs font-medium text-gray-500 mb-1">Bandwidth</div>
+                  <div class="text-xl font-bold text-gray-800">{{ $this->cloudflareAnalyticsTotals['bandwidth'] }}</div>
+                </div>
+              </div>
+
+              {{-- Period selector --}}
+              <div class="flex items-center gap-1.5 pb-4">
+                @foreach(['7' => 'Previous 7 days', '30' => 'Previous 30 days'] as $value => $label)
+                  <button
+                    wire:click="$set('cloudflareAnalyticsPeriod', '{{ $value }}')"
+                    @class([
+                      'px-3 py-1 rounded-md font-semibold transition cursor-pointer',
+                      'bg-cyan-600 text-white text-xs' => $this->cloudflareAnalyticsPeriod === (string) $value,
+                      'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 text-xs' => $this->cloudflareAnalyticsPeriod !== (string) $value,
+                    ])
+                  >{{ $label }}</button>
+                @endforeach
+              </div>
+
+              {{-- Unique Visitors --}}
+              <div class="mb-5">
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Unique Visitors</div>
+                <flux:chart :value="$this->cloudflareChartData" class="aspect-6/1 w-full pb-5">
+                  <flux:chart.svg>
+                    <flux:chart.line field="unique_visitors" class="text-blue-500" curve="none" />
+                    <flux:chart.point field="unique_visitors" class="text-blue-500" r="3" />
+                    <flux:chart.axis axis="x" field="date">
+                      <flux:chart.axis.tick />
+                    </flux:chart.axis>
+                    <flux:chart.axis axis="y" :format="['notation' => 'compact', 'compactDisplay' => 'short']">
+                      <flux:chart.axis.tick />
+                      <flux:chart.axis.line />
+                      <flux:chart.axis.grid />
+                    </flux:chart.axis>
+                    <flux:chart.cursor />
+                  </flux:chart.svg>
+                  <flux:chart.tooltip>
+                    <flux:chart.tooltip.heading field="date" />
+                    <flux:chart.tooltip.value field="unique_visitors" label="Unique Visitors" :format="['useGrouping' => true]" />
+                  </flux:chart.tooltip>
+                </flux:chart>
+              </div>
+
+              {{-- Total Requests --}}
+              <div class="mb-5">
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Total Requests</div>
+                <flux:chart :value="$this->cloudflareChartData" class="aspect-6/1 w-full pb-5">
+                  <flux:chart.svg>
+                    <flux:chart.line field="requests_total" class="text-cyan-500" curve="none" />
+                    <flux:chart.point field="requests_total" class="text-cyan-500" r="3" />
+                    <flux:chart.axis axis="x" field="date">
+                      <flux:chart.axis.tick />
+                    </flux:chart.axis>
+                    <flux:chart.axis axis="y" :format="['notation' => 'compact', 'compactDisplay' => 'short']">
+                      <flux:chart.axis.tick />
+                      <flux:chart.axis.line />
+                      <flux:chart.axis.grid />
+                    </flux:chart.axis>
+                    <flux:chart.cursor />
+                  </flux:chart.svg>
+                  <flux:chart.tooltip>
+                    <flux:chart.tooltip.heading field="date" />
+                    <flux:chart.tooltip.value field="requests_total" label="Requests" :format="['useGrouping' => true]" />
+                  </flux:chart.tooltip>
+                </flux:chart>
+              </div>
+
+              {{-- Bandwidth --}}
+              <div class="pb-4">
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Bandwidth (MB)</div>
+                <flux:chart :value="$this->cloudflareChartData" class="aspect-6/1 w-full pb-5">
+                  <flux:chart.svg>
+                    <flux:chart.line field="bandwidth_mb" class="text-purple-500" curve="none" />
+                    <flux:chart.point field="bandwidth_mb" class="text-purple-500" r="3" />
+                    <flux:chart.axis axis="x" field="date">
+                      <flux:chart.axis.tick />
+                    </flux:chart.axis>
+                    <flux:chart.axis axis="y" :format="['notation' => 'compact', 'compactDisplay' => 'short']">
+                      <flux:chart.axis.tick />
+                      <flux:chart.axis.line />
+                      <flux:chart.axis.grid />
+                    </flux:chart.axis>
+                    <flux:chart.cursor />
+                  </flux:chart.svg>
+                  <flux:chart.tooltip>
+                    <flux:chart.tooltip.heading field="date" />
+                    <flux:chart.tooltip.value field="bandwidth_mb" label="Bandwidth" suffix=" MB" :format="['useGrouping' => true]" />
+                  </flux:chart.tooltip>
+                </flux:chart>
+              </div>
+            </div>
+          @endif
+        </flux:card>
+      @endif
+      <!-- End Cloudflare Analytics Card -->
+
       <!-- SSL Certificates Card -->
       <flux:card class="p-0 overflow-hidden divide-y divide-gray-100" id="ssl-card">
         <div class="flex items-center justify-between px-5 py-4">
