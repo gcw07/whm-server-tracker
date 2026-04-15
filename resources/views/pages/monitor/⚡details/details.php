@@ -118,20 +118,59 @@ new #[Title('Monitor Details')] class extends Component
             return [];
         }
 
-        $totals = $cloudflareCheck->analytics()
+        $current = $cloudflareCheck->analytics()
             ->where('date', '>=', now()->subDays($days)->startOfDay())
             ->where('date', '<', now()->startOfDay())
             ->selectRaw('SUM(unique_visitors) as total_visitors, SUM(requests_total) as total_requests, SUM(bandwidth_total) as total_bandwidth')
             ->first();
 
-        $bandwidthBytes = (int) ($totals->total_bandwidth ?? 0);
+        $prior = $cloudflareCheck->analytics()
+            ->where('date', '>=', now()->subDays($days * 2)->startOfDay())
+            ->where('date', '<', now()->subDays($days)->startOfDay())
+            ->selectRaw('SUM(unique_visitors) as total_visitors, SUM(requests_total) as total_requests, SUM(bandwidth_total) as total_bandwidth')
+            ->first();
+
+        $bandwidthBytes = (int) ($current->total_bandwidth ?? 0);
 
         return [
-            'unique_visitors' => $this->formatCompact((int) ($totals->total_visitors ?? 0)),
-            'requests_total'  => $this->formatCompact((int) ($totals->total_requests ?? 0)),
-            'bandwidth'       => $bandwidthBytes >= 1_073_741_824
+            'unique_visitors'        => $this->formatCompact((int) ($current->total_visitors ?? 0)),
+            'requests_total'         => $this->formatCompact((int) ($current->total_requests ?? 0)),
+            'bandwidth'              => $bandwidthBytes >= 1_073_741_824
                 ? number_format($bandwidthBytes / 1_073_741_824, 2) . ' GB'
                 : number_format($bandwidthBytes / 1_048_576, 1) . ' MB',
+            'unique_visitors_change' => $this->formatPercentageChange(
+                (int) ($current->total_visitors ?? 0),
+                (int) ($prior->total_visitors ?? 0),
+            ),
+            'requests_total_change'  => $this->formatPercentageChange(
+                (int) ($current->total_requests ?? 0),
+                (int) ($prior->total_requests ?? 0),
+            ),
+            'bandwidth_change'       => $this->formatPercentageChange(
+                (int) ($current->total_bandwidth ?? 0),
+                (int) ($prior->total_bandwidth ?? 0),
+            ),
+        ];
+    }
+
+    /**
+     * @return array{value: string, direction: 'up'|'down'|'flat'}
+     */
+    private function formatPercentageChange(int $current, int $prior): array
+    {
+        if ($prior === 0) {
+            return ['value' => '—', 'direction' => 'flat'];
+        }
+
+        $pct = (($current - $prior) / $prior) * 100;
+
+        if (abs($pct) < 0.5) {
+            return ['value' => 'No change', 'direction' => 'flat'];
+        }
+
+        return [
+            'value'     => ($pct > 0 ? '+' : '') . number_format($pct, 1) . '%',
+            'direction' => $pct > 0 ? 'up' : 'down',
         ];
     }
 

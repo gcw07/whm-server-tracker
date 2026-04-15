@@ -343,19 +343,33 @@
           @else
             <div class="px-5 pt-4 pb-1">
               {{-- Totals --}}
+              @php $totals = $this->cloudflareAnalyticsTotals; @endphp
               <div class="grid grid-cols-3 gap-3 pb-4">
-                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3 text-center">
-                  <div class="text-xs font-medium text-gray-500 mb-1">Unique Visitors</div>
-                  <div class="text-xl font-bold text-gray-800">{{ $this->cloudflareAnalyticsTotals['unique_visitors'] }}</div>
-                </div>
-                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3 text-center">
-                  <div class="text-xs font-medium text-gray-500 mb-1">Total Requests</div>
-                  <div class="text-xl font-bold text-gray-800">{{ $this->cloudflareAnalyticsTotals['requests_total'] }}</div>
-                </div>
-                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3 text-center">
-                  <div class="text-xs font-medium text-gray-500 mb-1">Bandwidth</div>
-                  <div class="text-xl font-bold text-gray-800">{{ $this->cloudflareAnalyticsTotals['bandwidth'] }}</div>
-                </div>
+                @foreach([
+                  ['label' => 'Unique Visitors', 'value' => $totals['unique_visitors'], 'change' => $totals['unique_visitors_change']],
+                  ['label' => 'Total Requests',  'value' => $totals['requests_total'],  'change' => $totals['requests_total_change']],
+                  ['label' => 'Bandwidth',        'value' => $totals['bandwidth'],        'change' => $totals['bandwidth_change']],
+                ] as $stat)
+                  <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <div class="text-xs font-medium text-gray-500 mb-1">{{ $stat['label'] }}</div>
+                    <div class="flex items-center gap-1.5">
+                      <div class="text-xl font-bold text-gray-800">{{ $stat['value'] }}</div>
+                      <div @class([
+                        'text-xs font-medium flex items-center gap-0.5',
+                        'text-green-600' => $stat['change']['direction'] === 'up',
+                        'text-red-600'   => $stat['change']['direction'] === 'down',
+                        'text-gray-400'  => $stat['change']['direction'] === 'flat',
+                      ])>
+                        @if($stat['change']['direction'] === 'up')
+                          <flux:icon.arrow-trending-up class="size-3" />
+                        @elseif($stat['change']['direction'] === 'down')
+                          <flux:icon.arrow-trending-down class="size-3" />
+                        @endif
+                        {{ $stat['change']['value'] }}
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
               </div>
 
               {{-- Period selector --}}
