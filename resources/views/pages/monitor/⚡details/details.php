@@ -74,6 +74,24 @@ new #[Title('Monitor Details')] class extends Component
     }
 
     #[Computed]
+    public function cloudflareChartBandwidthUnit(): string
+    {
+        $days = (int) $this->cloudflareAnalyticsPeriod;
+        $cloudflareCheck = $this->monitor->cloudflareCheck;
+
+        if (! $cloudflareCheck || ! $cloudflareCheck->cloudflare_zone_id) {
+            return 'GB';
+        }
+
+        $maxBytes = $cloudflareCheck->analytics()
+            ->where('date', '>=', now()->subDays($days)->startOfDay())
+            ->where('date', '<', now()->startOfDay())
+            ->max('bandwidth_total') ?? 0;
+
+        return $maxBytes >= 1_073_741_824 ? 'GB' : 'MB';
+    }
+
+    #[Computed]
     public function cloudflareChartData(): array
     {
         $days = (int) $this->cloudflareAnalyticsPeriod;
@@ -83,6 +101,10 @@ new #[Title('Monitor Details')] class extends Component
             return [];
         }
 
+        $unit = $this->cloudflareChartBandwidthUnit;
+        $divisor = $unit === 'GB' ? 1_073_741_824 : 1_048_576;
+        $decimals = $unit === 'GB' ? 3 : 1;
+
         $analytics = $cloudflareCheck->analytics()
             ->where('date', '>=', now()->subDays($days)->startOfDay())
             ->where('date', '<', now()->startOfDay())
@@ -91,17 +113,18 @@ new #[Title('Monitor Details')] class extends Component
             ->keyBy(fn ($a) => $a->date->format('Y-m-d'));
 
         return collect(range($days, 1))
-            ->map(function (int $daysAgo) use ($analytics): array {
+            ->map(function (int $daysAgo) use ($analytics, $divisor, $decimals): array {
                 $date = now()->subDays($daysAgo);
                 $analytic = $analytics->get($date->format('Y-m-d'));
 
                 return [
-                    'date'            => $date->format('M j'),
-                    'unique_visitors' => $analytic?->unique_visitors ?? 0,
-                    'requests_total'  => $analytic?->requests_total ?? 0,
-                    'bandwidth_mb'    => $analytic?->bandwidth_total
-                        ? round($analytic->bandwidth_total / 1024 / 1024, 1)
+                    'date'                => $date->format('M j'),
+                    'unique_visitors'     => $analytic?->unique_visitors ?? 0,
+                    'requests_total'      => $analytic?->requests_total ?? 0,
+                    'bandwidth_value'     => $analytic?->bandwidth_total
+                        ? round($analytic->bandwidth_total / $divisor, $decimals)
                         : 0,
+                    'bandwidth_formatted' => $this->formatBandwidth($analytic?->bandwidth_total ?? 0),
                 ];
             })
             ->values()
@@ -174,6 +197,15 @@ new #[Title('Monitor Details')] class extends Component
         ];
     }
 
+    private function formatBandwidth(int $bytes): string
+    {
+        if ($bytes >= 1_073_741_824) {
+            return number_format($bytes / 1_073_741_824, 2) . ' GB';
+        }
+
+        return number_format($bytes / 1_048_576, 1) . ' MB';
+    }
+
     private function formatCompact(int $n): string
     {
         if ($n >= 1_000_000) {
@@ -189,6 +221,7 @@ new #[Title('Monitor Details')] class extends Component
 
     public function updatedCloudflareAnalyticsPeriod(): void
     {
+        unset($this->cloudflareChartBandwidthUnit);
         unset($this->cloudflareChartData);
         unset($this->cloudflareAnalyticsTotals);
     }

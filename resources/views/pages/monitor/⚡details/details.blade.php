@@ -436,15 +436,15 @@
 
               {{-- Bandwidth --}}
               <div class="pb-4">
-                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Bandwidth (MB)</div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Bandwidth ({{ $this->cloudflareChartBandwidthUnit }})</div>
                 <flux:chart :value="$this->cloudflareChartData" class="aspect-6/1 w-full pb-5">
                   <flux:chart.svg>
-                    <flux:chart.line field="bandwidth_mb" class="text-purple-500" curve="none" />
-                    <flux:chart.point field="bandwidth_mb" class="text-purple-500" r="3" />
+                    <flux:chart.line field="bandwidth_value" class="text-purple-500" curve="none" />
+                    <flux:chart.point field="bandwidth_value" class="text-purple-500" r="3" />
                     <flux:chart.axis axis="x" field="date">
                       <flux:chart.axis.tick />
                     </flux:chart.axis>
-                    <flux:chart.axis axis="y" :format="['notation' => 'compact', 'compactDisplay' => 'short']">
+                    <flux:chart.axis axis="y" :format="['notation' => 'compact', 'compactDisplay' => 'short']" tick-suffix=" {{ $this->cloudflareChartBandwidthUnit }}">
                       <flux:chart.axis.tick />
                       <flux:chart.axis.line />
                       <flux:chart.axis.grid />
@@ -453,7 +453,7 @@
                   </flux:chart.svg>
                   <flux:chart.tooltip>
                     <flux:chart.tooltip.heading field="date" />
-                    <flux:chart.tooltip.value field="bandwidth_mb" label="Bandwidth" suffix=" MB" :format="['useGrouping' => true]" />
+                    <flux:chart.tooltip.value field="bandwidth_formatted" label="Bandwidth" />
                   </flux:chart.tooltip>
                 </flux:chart>
               </div>
