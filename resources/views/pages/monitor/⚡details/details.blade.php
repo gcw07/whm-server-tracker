@@ -342,6 +342,20 @@
             </div>
           @else
             <div class="px-5 pt-4 pb-1">
+              {{-- Period selector --}}
+              <div class="flex items-center gap-1.5 pb-4">
+                @foreach(['7' => 'Previous 7 days', '30' => 'Previous 30 days'] as $value => $label)
+                  <button
+                    wire:click="$set('cloudflareAnalyticsPeriod', '{{ $value }}')"
+                    @class([
+                      'px-3 py-1 rounded-md font-semibold transition cursor-pointer',
+                      'bg-cyan-600 text-white text-xs' => $this->cloudflareAnalyticsPeriod === (string) $value,
+                      'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 text-xs' => $this->cloudflareAnalyticsPeriod !== (string) $value,
+                    ])
+                  >{{ $label }}</button>
+                @endforeach
+              </div>
+
               {{-- Totals --}}
               @php $totals = $this->cloudflareAnalyticsTotals; @endphp
               <div class="grid grid-cols-3 gap-3 pb-4">
@@ -369,20 +383,6 @@
                       </div>
                     </div>
                   </div>
-                @endforeach
-              </div>
-
-              {{-- Period selector --}}
-              <div class="flex items-center gap-1.5 pb-4">
-                @foreach(['7' => 'Previous 7 days', '30' => 'Previous 30 days'] as $value => $label)
-                  <button
-                    wire:click="$set('cloudflareAnalyticsPeriod', '{{ $value }}')"
-                    @class([
-                      'px-3 py-1 rounded-md font-semibold transition cursor-pointer',
-                      'bg-cyan-600 text-white text-xs' => $this->cloudflareAnalyticsPeriod === (string) $value,
-                      'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 text-xs' => $this->cloudflareAnalyticsPeriod !== (string) $value,
-                    ])
-                  >{{ $label }}</button>
                 @endforeach
               </div>
 
