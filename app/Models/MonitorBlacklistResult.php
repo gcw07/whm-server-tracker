@@ -19,12 +19,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonImmutable|null $checked_at
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
- * @property-read string|null $url
  * @property-read Monitor $monitor
+ * @property-read mixed $url
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereCheckedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereCheckedValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereDriver($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereListed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereMonitorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistResult whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

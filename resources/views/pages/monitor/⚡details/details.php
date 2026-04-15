@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
-use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
 
 new #[Title('Monitor Details')] class extends Component
 {
@@ -64,8 +64,8 @@ new #[Title('Monitor Details')] class extends Component
                 $uptime = round($this->monitor->calculateUptime($date, $date), 1);
 
                 return [
-                    'date'     => $date->format('M j'),
-                    'uptime'   => $uptime,
+                    'date' => $date->format('M j'),
+                    'uptime' => $uptime,
                     'downtime' => round(100 - $uptime, 1),
                 ];
             })
@@ -118,10 +118,10 @@ new #[Title('Monitor Details')] class extends Component
                 $analytic = $analytics->get($date->format('Y-m-d'));
 
                 return [
-                    'date'                => $date->format('M j'),
-                    'unique_visitors'     => $analytic?->unique_visitors ?? 0,
-                    'requests_total'      => $analytic?->requests_total ?? 0,
-                    'bandwidth_value'     => $analytic?->bandwidth_total
+                    'date' => $date->format('M j'),
+                    'unique_visitors' => $analytic?->unique_visitors ?? 0,
+                    'requests_total' => $analytic?->requests_total ?? 0,
+                    'bandwidth_value' => $analytic?->bandwidth_total
                         ? round($analytic->bandwidth_total / $divisor, $decimals)
                         : 0,
                     'bandwidth_formatted' => $this->formatBandwidth($analytic?->bandwidth_total ?? 0),
@@ -156,20 +156,20 @@ new #[Title('Monitor Details')] class extends Component
         $bandwidthBytes = (int) ($current->total_bandwidth ?? 0);
 
         return [
-            'unique_visitors'        => $this->formatCompact((int) ($current->total_visitors ?? 0)),
-            'requests_total'         => $this->formatCompact((int) ($current->total_requests ?? 0)),
-            'bandwidth'              => $bandwidthBytes >= 1_073_741_824
-                ? number_format($bandwidthBytes / 1_073_741_824, 2) . ' GB'
-                : number_format($bandwidthBytes / 1_048_576, 1) . ' MB',
+            'unique_visitors' => $this->formatCompact((int) ($current->total_visitors ?? 0)),
+            'requests_total' => $this->formatCompact((int) ($current->total_requests ?? 0)),
+            'bandwidth' => $bandwidthBytes >= 1_073_741_824
+                ? number_format($bandwidthBytes / 1_073_741_824, 2).' GB'
+                : number_format($bandwidthBytes / 1_048_576, 1).' MB',
             'unique_visitors_change' => $this->formatPercentageChange(
                 (int) ($current->total_visitors ?? 0),
                 (int) ($prior->total_visitors ?? 0),
             ),
-            'requests_total_change'  => $this->formatPercentageChange(
+            'requests_total_change' => $this->formatPercentageChange(
                 (int) ($current->total_requests ?? 0),
                 (int) ($prior->total_requests ?? 0),
             ),
-            'bandwidth_change'       => $this->formatPercentageChange(
+            'bandwidth_change' => $this->formatPercentageChange(
                 (int) ($current->total_bandwidth ?? 0),
                 (int) ($prior->total_bandwidth ?? 0),
             ),
@@ -192,7 +192,7 @@ new #[Title('Monitor Details')] class extends Component
         }
 
         return [
-            'value'     => ($pct > 0 ? '+' : '') . number_format($pct, 1) . '%',
+            'value' => ($pct > 0 ? '+' : '').number_format($pct, 1).'%',
             'direction' => $pct > 0 ? 'up' : 'down',
         ];
     }
@@ -200,20 +200,20 @@ new #[Title('Monitor Details')] class extends Component
     private function formatBandwidth(int $bytes): string
     {
         if ($bytes >= 1_073_741_824) {
-            return number_format($bytes / 1_073_741_824, 2) . ' GB';
+            return number_format($bytes / 1_073_741_824, 2).' GB';
         }
 
-        return number_format($bytes / 1_048_576, 1) . ' MB';
+        return number_format($bytes / 1_048_576, 1).' MB';
     }
 
     private function formatCompact(int $n): string
     {
         if ($n >= 1_000_000) {
-            return rtrim(rtrim(number_format($n / 1_000_000, 1), '0'), '.') . 'M';
+            return rtrim(rtrim(number_format($n / 1_000_000, 1), '0'), '.').'M';
         }
 
         if ($n >= 1_000) {
-            return rtrim(rtrim(number_format($n / 1_000, 1), '0'), '.') . 'k';
+            return rtrim(rtrim(number_format($n / 1_000, 1), '0'), '.').'k';
         }
 
         return (string) $n;

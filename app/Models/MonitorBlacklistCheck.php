@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property CarbonImmutable|null $updated_at
  * @property-read Monitor $monitor
  * @property-read Collection<int, MonitorBlacklistResult> $results
+ * @property-read int|null $results_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistCheck newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorBlacklistCheck newQuery()

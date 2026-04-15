@@ -35,12 +35,18 @@ use Spatie\UptimeMonitor\Models\Monitor;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereAccessibilityScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereBestPracticesScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereCumulativeLayoutShift($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereFirstContentfulPaint($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereFormFactor($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereLargestContentfulPaint($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereMonitorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit wherePerformanceScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereRawResults($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereSeoScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereSpeedIndex($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereTimeToInteractive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereTotalBlockingTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LighthouseAudit whereUpdatedAt($value)
  *
  * @mixin \Eloquent

@@ -48,6 +48,7 @@ use Spatie\Url\Url;
  * @property-read Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
  * @property-read MonitorBlacklistCheck|null $blacklistCheck
+ * @property-read MonitorCloudflareCheck|null $cloudflareCheck
  * @property-read MonitorDomainCheck|null $domainCheck
  * @property-read mixed $domain_name
  * @property-read string $certificate_status_as_emoji
@@ -58,6 +59,8 @@ use Spatie\Url\Url;
  * @property-read Collection<int, LighthouseAudit> $lighthouseAudits
  * @property-read int|null $lighthouse_audits_count
  * @property-read MonitorLighthouseCheck|null $lighthouseCheck
+ * @property-read Collection<int, MonitorLighthouseCheck> $lighthouseChecks
+ * @property-read int|null $lighthouse_checks_count
  * @property-read Collection<int, LighthouseAudit> $lighthouseLatestAudit
  * @property-read int|null $lighthouse_latest_audit_count
  * @property-read Collection<int, MonitorOutage> $outages
@@ -66,7 +69,6 @@ use Spatie\Url\Url;
  * @property-read mixed $uptime_for_last_thirty_days
  * @property-read mixed $uptime_for_today
  * @property-read MonitorWordPressCheck|null $wordpressCheck
- * @property-read MonitorCloudflareCheck|null $cloudflareCheck
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor enabled()
  * @method static Builder<static>|Monitor newModelQuery()

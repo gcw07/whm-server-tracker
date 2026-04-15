@@ -21,6 +21,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic whereBandwidthTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic whereMonitorCloudflareCheckId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic whereRequestsTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic whereUniqueVisitors($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CloudflareAnalytic whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

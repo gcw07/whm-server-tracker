@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorLighthouseCheck whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorLighthouseCheck whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorLighthouseCheck whereFailureReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorLighthouseCheck whereFormFactor($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorLighthouseCheck whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorLighthouseCheck whereLastFailedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MonitorLighthouseCheck whereLastSucceededAt($value)
