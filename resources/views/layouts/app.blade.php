@@ -32,9 +32,9 @@
           </flux:brand>
 
           <flux:navbar class="-mb-px gap-6 max-lg:hidden">
-            <flux:navbar.item icon="server" iconVariant="solid" :href="route('servers.index')" :current="request()->routeIs('servers.*')">Servers</flux:navbar.item>
-            <flux:navbar.item icon="globe-alt" iconVariant="solid" :href="route('accounts.index')" :current="request()->routeIs('accounts.*')">Accounts</flux:navbar.item>
-            <flux:navbar.item icon="sparkles" iconVariant="solid" :href="route('monitors.index')" :current="request()->routeIs('monitors.*')">Monitors</flux:navbar.item>
+            <flux:navbar.item icon="hard-drive" iconVariant="outline" :href="route('servers.index')" :current="request()->routeIs('servers.*')">Servers</flux:navbar.item>
+            <flux:navbar.item icon="globe" iconVariant="outline" :href="route('accounts.index')" :current="request()->routeIs('accounts.*')">Accounts</flux:navbar.item>
+            <flux:navbar.item icon="activity" iconVariant="outline" :href="route('monitors.index')" :current="request()->routeIs('monitors.*')">Monitors</flux:navbar.item>
           </flux:navbar>
 
           <flux:spacer />
@@ -78,10 +78,10 @@
           </flux:sidebar.header>
 
           <flux:sidebar.nav>
-            <flux:sidebar.item icon="home" href="{{ route('dashboard') }}">Dashboard</flux:sidebar.item>
-            <flux:sidebar.item icon="server" href="{{ route('servers.index') }}">Servers</flux:sidebar.item>
-            <flux:sidebar.item icon="globe-alt" href="{{ route('accounts.index') }}">Accounts</flux:sidebar.item>
-            <flux:sidebar.item icon="sparkles" href="{{ route('monitors.index') }}">Monitors</flux:sidebar.item>
+            <flux:sidebar.item icon="house" href="{{ route('dashboard') }}">Dashboard</flux:sidebar.item>
+            <flux:sidebar.item icon="hard-drive" href="{{ route('servers.index') }}">Servers</flux:sidebar.item>
+            <flux:sidebar.item icon="globe" href="{{ route('accounts.index') }}">Accounts</flux:sidebar.item>
+            <flux:sidebar.item icon="activity" href="{{ route('monitors.index') }}">Monitors</flux:sidebar.item>
             <flux:sidebar.item icon="users" href="{{ route('users.index') }}">Manage Users</flux:sidebar.item>
           </flux:sidebar.nav>
 

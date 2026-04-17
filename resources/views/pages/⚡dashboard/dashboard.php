@@ -3,7 +3,6 @@
 use App\Models\Account;
 use App\Models\Monitor;
 use App\Models\Server;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
@@ -30,22 +29,6 @@ new #[Title('Dashboard')] class extends Component
     }
 
     #[Computed]
-    public function totalUsers(): int
-    {
-        return User::query()->count();
-    }
-
-    #[Computed]
-    public function serverTypes(): ?object
-    {
-        return Server::toBase()
-            ->selectRaw("count(case when server_type = 'dedicated' then 1 end) as dedicated")
-            ->selectRaw("count(case when server_type = 'reseller' then 1 end) as reseller")
-            ->selectRaw("count(case when server_type = 'vps' then 1 end) as vps")
-            ->first();
-    }
-
-    #[Computed]
     public function sitesWithIssues(): int
     {
         return Monitor::query()->withIssues()->count();
@@ -63,5 +46,30 @@ new #[Title('Dashboard')] class extends Component
     public function recentAccounts(): Collection
     {
         return Account::query()->with(['server'])->latest()->limit(10)->get();
+    }
+
+    #[Computed]
+    public function suspendedAccounts(): int
+    {
+        return Account::query()->where('suspended', true)->count();
+    }
+
+    #[Computed]
+    public function monitorsDown(): int
+    {
+        return Monitor::query()
+            ->where('uptime_check_enabled', true)
+            ->where('uptime_status', 'down')
+            ->count();
+    }
+
+    #[Computed]
+    public function diskWarningServers(): Collection
+    {
+        return Server::query()
+            ->whereRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) >= 80")
+            ->orderByRaw("CAST(json_unquote(json_extract(`settings`, '$.\"disk_percentage\"')) AS FLOAT) DESC")
+            ->limit(5)
+            ->get();
     }
 };
