@@ -26,17 +26,6 @@
       </div>
     @endif
 
-    @if($this->serversWithIssues > 0)
-      <div class="bg-red-50 border-l-4 border-red-400 p-4 drop-shadow">
-        <div class="flex">
-          <div class="shrink-0"><flux:icon.x-circle variant="solid" class="text-red-400" /></div>
-          <div class="ml-3 flex-1 md:flex md:justify-between">
-            <p class="text-sm text-red-700">There {{ $this->serversWithIssues === 1 ? 'is' : 'are' }} {{ Str::plural('server', $this->serversWithIssues, prependCount: true) }} running out of disk space.</p>
-            <p class="mt-3 text-sm md:mt-0 md:ml-6"><a href="{{ route('servers.index') }}" class="whitespace-nowrap font-medium text-red-700 hover:text-red-600">View <span aria-hidden="true">&rarr;</span></a></p>
-          </div>
-        </div>
-      </div>
-    @endif
 
     <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
       <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-sky-500 px-6 py-5 flex flex-col gap-4">
