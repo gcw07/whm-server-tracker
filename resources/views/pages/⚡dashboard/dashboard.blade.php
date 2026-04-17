@@ -15,14 +15,15 @@
   <div class="mt-6">
 
     @if($this->sitesWithIssues > 0)
-      <div class="bg-red-50 border-l-4 border-red-400 p-4 drop-shadow">
-        <div class="flex">
-          <div class="shrink-0"><flux:icon.x-circle variant="solid" class="text-red-400" /></div>
-          <div class="ml-3 flex-1 md:flex md:justify-between">
-            <p class="text-sm text-red-700">There {{ $this->sitesWithIssues === 1 ? 'is' : 'are' }} {{ Str::plural('site', $this->sitesWithIssues, prependCount: true) }} with issues.</p>
-            <p class="mt-3 text-sm md:mt-0 md:ml-6"><a href="{{ route('monitors.index') }}" class="whitespace-nowrap font-medium text-red-700 hover:text-red-600">View <span aria-hidden="true">&rarr;</span></a></p>
-          </div>
+      <div class="flex items-center gap-4 rounded-lg border border-red-200 border-l-4 border-l-red-500 bg-red-50 px-5 py-4">
+        <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-100">
+          <flux:icon.exclamation-triangle variant="solid" class="size-6 text-red-600" />
         </div>
+        <div class="flex-1">
+          <p class="text-sm font-semibold text-gray-900">{{ $this->sitesWithIssues }} {{ Str::plural('site', $this->sitesWithIssues) }} with issues</p>
+          <p class="text-sm text-red-600/70">Monitor status requires attention.</p>
+        </div>
+        <a href="{{ route('monitors.index') }}" class="shrink-0 whitespace-nowrap text-sm font-medium text-red-600 hover:text-red-700">View &rarr;</a>
       </div>
     @endif
 
