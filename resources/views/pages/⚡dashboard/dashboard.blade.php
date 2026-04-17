@@ -2,7 +2,7 @@
   <!-- Page Header -->
   <div class="relative pb-5 border-b border-gray-200 sm:pb-0 mt-2">
     <div class="md:flex md:items-center md:justify-between">
-      <h3 class="text-2xl leading-6 font-medium text-gray-900">
+      <h3 class="text-2xl font-semibold text-gray-900 tracking-tight text-balance">
         Dashboard
       </h3>
     </div>
@@ -115,7 +115,7 @@
       <div class="md:col-span-2">
         <div class="sm:flex sm:items-center">
           <div class="sm:flex-auto">
-            <h1 class="text-lg font-semibold text-gray-700">Latest Accounts</h1>
+            <h2 class="text-base font-semibold text-gray-800 text-balance">Latest Accounts</h2>
           </div>
         </div>
         <flux:card class="p-0 overflow-hidden bg-gray-50 mt-4">
@@ -168,7 +168,7 @@
       <div>
         <div class="sm:flex sm:items-center">
           <div class="sm:flex-auto">
-            <h1 class="text-lg font-semibold text-gray-700">Server Disk Health</h1>
+            <h2 class="text-base font-semibold text-gray-800 text-balance">Server Disk Health</h2>
           </div>
         </div>
         <flux:card class="p-0 overflow-hidden bg-gray-50 mt-4">
