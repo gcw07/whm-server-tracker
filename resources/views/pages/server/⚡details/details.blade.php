@@ -68,7 +68,7 @@
 
           {{-- Server Overview --}}
           <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-sky-500 px-6 py-5 flex flex-col gap-4">
-            <flux:icon.info class="absolute -bottom-3 -right-3 size-28 text-sky-500 opacity-[0.08]" />
+            <flux:icon.info class="absolute -bottom-3 -right-3 size-28 text-sky-500 opacity-[0.08] pointer-events-none" />
             <div class="flex items-center justify-between gap-2">
               <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Server Overview</h3>
               @if($server->server_update_last_succeeded_at->diffInMinutes() > 120)
@@ -96,9 +96,25 @@
                   @endforeach &mdash; Sys {{ $server->formatted_php_system_version }}
                 </dd>
               </div>
-              <div class="flex items-center justify-between gap-4">
+              <div class="flex items-center justify-between gap-4" x-data="{ copied: false }">
                 <dt class="text-xs text-gray-500">IP address</dt>
-                <dd class="text-xs font-medium text-gray-800 tabular-nums">{{ $server->address }}</dd>
+                <flux:tooltip content="Click to copy">
+                  <dd class="text-xs font-medium tabular-nums cursor-pointer select-none transition-colors"
+                      x-bind:class="copied ? 'text-green-600' : 'text-gray-800 hover:text-sky-600'"
+                      x-text="copied ? 'Copied!' : '{{ $server->address }}'"
+                      x-on:click="
+                          let ipEl = document.createElement('textarea');
+                          ipEl.value = '{{ $server->address }}';
+                          ipEl.style.position = 'fixed';
+                          ipEl.style.opacity = '0';
+                          document.body.appendChild(ipEl);
+                          ipEl.select();
+                          document.execCommand('copy');
+                          document.body.removeChild(ipEl);
+                          copied = true;
+                          setTimeout(() => copied = false, 2000);
+                      ">{{ $server->address }}</dd>
+                </flux:tooltip>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <dt class="text-xs text-gray-500">Provider</dt>
@@ -109,7 +125,7 @@
 
           {{-- Disk --}}
           <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-violet-500 px-6 py-5 flex flex-col gap-4">
-            <flux:icon.database class="absolute -bottom-3 -right-3 size-28 text-violet-500 opacity-[0.08]" />
+            <flux:icon.database class="absolute -bottom-3 -right-3 size-28 text-violet-500 opacity-[0.08] pointer-events-none" />
             <div class="flex items-center justify-between gap-2">
               <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Disk</h3>
               @if($server->settings->get('disk_percentage') >= 90)
@@ -145,7 +161,7 @@
 
           {{-- Backups --}}
           <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-green-500 px-6 py-5 flex flex-col gap-4">
-            <flux:icon.archive-restore class="absolute -bottom-3 -right-3 size-28 text-green-500 opacity-[0.08]" />
+            <flux:icon.archive-restore class="absolute -bottom-3 -right-3 size-28 text-green-500 opacity-[0.08] pointer-events-none" />
             <div class="flex items-center justify-between gap-2">
               <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Backups</h3>
               @if($server->backups_enabled)

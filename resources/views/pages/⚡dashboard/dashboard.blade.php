@@ -30,7 +30,7 @@
 
     <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
       <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-sky-500 px-6 py-5 flex flex-col gap-4">
-        <flux:icon.hard-drive class="absolute -bottom-3 -right-3 size-28 text-sky-500 opacity-[0.08]" />
+        <flux:icon.hard-drive class="absolute -bottom-3 -right-3 size-28 text-sky-500 opacity-[0.08] pointer-events-none" />
         <div class="flex items-center justify-between gap-2">
           <h2 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Server Disk Health</h2>
           @if($this->serversWithIssues === 0)
@@ -53,7 +53,7 @@
       </div>
 
       <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-violet-500 px-6 py-5 flex flex-col gap-4">
-        <flux:icon.globe class="absolute -bottom-3 -right-3 size-28 text-violet-500 opacity-[0.08]" />
+        <flux:icon.globe class="absolute -bottom-3 -right-3 size-28 text-violet-500 opacity-[0.08] pointer-events-none" />
         <div class="flex items-center justify-between gap-2">
           <h2 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Account Health</h2>
           @if($this->suspendedAccounts === 0)
@@ -76,7 +76,7 @@
       </div>
 
       <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-green-500 px-6 py-5 flex flex-col gap-4">
-        <flux:icon.activity class="absolute -bottom-3 -right-3 size-28 text-green-500 opacity-[0.08]" />
+        <flux:icon.activity class="absolute -bottom-3 -right-3 size-28 text-green-500 opacity-[0.08] pointer-events-none" />
         <div class="flex items-center justify-between gap-2">
           <h2 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Monitor Status</h2>
           @if($this->monitorsDown === 0)
