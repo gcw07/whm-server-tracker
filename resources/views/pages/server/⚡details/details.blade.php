@@ -64,170 +64,134 @@
         @endif
       </div>
       <div class="hidden sm:block">
-        <dl class="mt-5 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow lg:grid-cols-3">
-          <div class="lg:border-r lg:border-gray-200">
-            <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
-              <div class="bg-sky-500 rounded-md p-1 mr-2">
-                <flux:icon.information-circle variant="solid" class="text-white" />
+        <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+
+          {{-- Details --}}
+          <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-sky-500 px-6 py-5 flex flex-col gap-4">
+            <flux:icon.info class="absolute -bottom-3 -right-3 size-28 text-sky-500 opacity-[0.08]" />
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Server Overview</h3>
+              @if($server->server_update_last_succeeded_at->diffInMinutes() > 120)
+                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700"><span class="size-1.5 rounded-full bg-red-500"></span>Offline</span>
+              @elseif($server->server_update_last_succeeded_at->diffInMinutes() > 60)
+                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700"><span class="size-1.5 rounded-full bg-amber-500"></span>Delayed</span>
+              @else
+                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="size-1.5 rounded-full bg-green-500"></span>Online</span>
+              @endif
+            </div>
+            <div>
+              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $server->accounts_count }}</p>
+              <p class="text-xs text-gray-500 mt-1">Accounts</p>
+            </div>
+            <dl class="space-y-2 pt-3">
+              <div class="flex items-start justify-between gap-4">
+                <dt class="text-xs text-gray-500 shrink-0">Server type</dt>
+                <dd class="text-xs font-medium text-gray-800 text-right">{{ $server->formatted_server_type }} &mdash; WHM {{ $server->formatted_whm_version }}</dd>
               </div>
-              Details
-            </dt>
-            <dl class="sm:divide-y sm:divide-gray-200 sm:px-5 sm:pt-4 sm:pb-1">
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Accounts
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  {{ $server->accounts_count }}
-                </dd>
-              </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Server type
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  {{ $server->formatted_server_type }}
-                  <span class="text-gray-400 font-medium">&mdash;</span>
-                  <span>WHM {{ $server->formatted_whm_version }}</span>
-                </dd>
-              </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  PHP versions
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
+              <div class="flex items-start justify-between gap-4">
+                <dt class="text-xs text-gray-500 shrink-0">PHP</dt>
+                <dd class="text-xs font-medium text-gray-800 text-right">
                   @foreach($server->formatted_php_installed_versions as $version)
-                    {{ $version['version'] }}@if (!$loop->last),@endif
-                  @endforeach
-                  <span class="text-gray-400 font-medium">&mdash;</span>
-                  <span>System {{ $server->formatted_php_system_version }}</span>
+                    {{ $version['version'] }}@if (!$loop->last), @endif
+                  @endforeach &mdash; Sys {{ $server->formatted_php_system_version }}
                 </dd>
               </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Server URL
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  {{ $server->address }}:{{ $server->port }}
-                </dd>
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-xs text-gray-500">IP address</dt>
+                <dd class="text-xs font-medium text-gray-800 tabular-nums">{{ $server->address }}</dd>
               </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Hosting Provider
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  {{ $server->hosting_provider }}
-                </dd>
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-xs text-gray-500">Provider</dt>
+                <dd class="text-xs font-medium text-gray-800">{{ $server->hosting_provider }}</dd>
               </div>
             </dl>
           </div>
 
-          <div class="lg:border-r lg:border-gray-200">
-            <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
-              <div class="bg-sky-500 rounded-md p-1 mr-2">
-                <flux:icon.server variant="solid" class="text-white" />
+          {{-- Disk --}}
+          <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-violet-500 px-6 py-5 flex flex-col gap-4">
+            <flux:icon.database class="absolute -bottom-3 -right-3 size-28 text-violet-500 opacity-[0.08]" />
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Disk</h3>
+              @if($server->settings->get('disk_percentage') >= 90)
+                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700"><span class="size-1.5 rounded-full bg-red-500"></span>Critical</span>
+              @elseif($server->settings->get('disk_percentage') >= 75)
+                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700"><span class="size-1.5 rounded-full bg-amber-500"></span>Warning</span>
+              @else
+                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="size-1.5 rounded-full bg-green-500"></span>Healthy</span>
+              @endif
+            </div>
+            <div style="--disk-usage: {{ min($server->settings->get('disk_percentage', 0), 100) }}%">
+              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $server->settings->get('disk_percentage') }}%</p>
+              <p class="text-xs text-gray-500 mt-1">Used</p>
+              <div class="mt-2 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                <div class="h-full rounded-full w-(--disk-usage) @if($server->settings->get('disk_percentage') >= 90) bg-red-500 @elseif($server->settings->get('disk_percentage') >= 75) bg-amber-500 @else bg-violet-500 @endif"></div>
               </div>
-              Disk
-            </dt>
-            <dl class="sm:divide-y sm:divide-gray-200 sm:px-5 sm:pt-4 sm:pb-1">
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Usage
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  {{ $server->settings->get('disk_percentage') }}%
-                </dd>
+            </div>
+            <dl class="space-y-2 pt-3">
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-xs text-gray-500">Used</dt>
+                <dd class="text-xs font-medium text-gray-800">{{ $server->formatted_disk_used }}</dd>
               </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Used
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  {{ $server->formatted_disk_used }}
-                </dd>
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-xs text-gray-500">Available</dt>
+                <dd class="text-xs font-medium text-gray-800">{{ $server->formatted_disk_available }}</dd>
               </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Available
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  {{ $server->formatted_disk_available }}
-                </dd>
-              </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Total
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  {{ $server->formatted_disk_total }}
-                </dd>
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-xs text-gray-500">Total</dt>
+                <dd class="text-xs font-medium text-gray-800">{{ $server->formatted_disk_total }}</dd>
               </div>
             </dl>
           </div>
 
-          <div>
-            <dt class="bg-gray-50 border-b border-gray-200 text-lg p-5 font-normal text-gray-900 flex items-center">
-              <div class="bg-sky-500 rounded-md p-1 mr-2">
-                <flux:icon.archive-box variant="solid" class="text-white" />
-              </div>
-              Backups
-            </dt>
-            <dl class="sm:divide-y sm:divide-gray-200 sm:px-5 sm:pt-4 sm:pb-1">
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Enabled
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
-                  @if($server->backups_enabled)
-                    Yes
-                  @else
-                    No
-                  @endif
-                </dd>
-              </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Daily
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
+          {{-- Backups --}}
+          <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-green-500 px-6 py-5 flex flex-col gap-4">
+            <flux:icon.archive-restore class="absolute -bottom-3 -right-3 size-28 text-green-500 opacity-[0.08]" />
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Backups</h3>
+              @if($server->backups_enabled)
+                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="size-1.5 rounded-full bg-green-500"></span>Enabled</span>
+              @else
+                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-500"><span class="size-1.5 rounded-full bg-zinc-400"></span>Disabled</span>
+              @endif
+            </div>
+            <dl class="space-y-2">
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-xs text-gray-500">Daily</dt>
+                <dd class="text-xs font-medium text-gray-800">
                   @if($server->settings->get('backup_daily_enabled'))
                     {{ $server->settings->get('backup_daily_retention') }} / {{ $server->formatted_backup_daily_days }}
                   @else
-                    Disabled
+                    <span class="text-gray-400">Disabled</span>
                   @endif
                 </dd>
               </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Weekly
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-xs text-gray-500">Weekly</dt>
+                <dd class="text-xs font-medium text-gray-800">
                   @if($server->settings->get('backup_weekly_enabled'))
                     {{ $server->settings->get('backup_weekly_retention') }} / {{ $server->formatted_backup_weekly_day }}
                   @else
-                    Disabled
+                    <span class="text-gray-400">Disabled</span>
                   @endif
                 </dd>
               </div>
-              <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                <dt class="text-sm font-medium text-gray-400">
-                  Monthly
-                </dt>
-                <dd class="mt-1 text-sm font-semibold text-gray-600 sm:mt-0 sm:col-span-2">
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-xs text-gray-500">Monthly</dt>
+                <dd class="text-xs font-medium text-gray-800">
                   @if($server->settings->get('backup_monthly_enabled'))
                     {{ $server->settings->get('backup_monthly_retention') }} / {{ $server->formatted_backup_monthly_days }}
                   @else
-                    Disabled
+                    <span class="text-gray-400">Disabled</span>
                   @endif
                 </dd>
               </div>
             </dl>
           </div>
-          <div class="col-span-1 lg:col-span-3 text-sm font-normal text-gray-600 p-4 flex sm:border-t sm:border-gray-200">
-            <span class="font-semibold mr-4">Notes</span>
-            <p>{{ $server->notes }}</p>
-          </div>
-        </dl>
+        </div>
+        <div class="mt-4 rounded-lg border border-gray-950/10 bg-white px-6 py-4 flex gap-4">
+          <span class="text-sm font-semibold text-gray-700 shrink-0">Notes</span>
+          <p class="text-sm text-gray-600 text-pretty">{{ $server->notes }}</p>
+        </div>
       </div>
 
       <flux:card class="p-0 overflow-hidden bg-gray-50 mt-8">
