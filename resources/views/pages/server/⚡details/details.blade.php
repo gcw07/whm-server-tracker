@@ -66,7 +66,7 @@
       <div class="hidden sm:block">
         <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
 
-          {{-- Details --}}
+          {{-- Server Overview --}}
           <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-sky-500 px-6 py-5 flex flex-col gap-4">
             <flux:icon.info class="absolute -bottom-3 -right-3 size-28 text-sky-500 opacity-[0.08]" />
             <div class="flex items-center justify-between gap-2">
@@ -154,32 +154,36 @@
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-500"><span class="size-1.5 rounded-full bg-zinc-400"></span>Disabled</span>
               @endif
             </div>
-            <dl class="space-y-2">
+            <div>
+              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $server->backup_types_active_count }} / 3</p>
+              <p class="text-xs text-gray-500 mt-1">Types active</p>
+            </div>
+            <dl class="space-y-2 pt-3">
               <div class="flex items-center justify-between gap-4">
-                <dt class="text-xs text-gray-500">Daily</dt>
-                <dd class="text-xs font-medium text-gray-800">
+                <dt class="text-xs font-semibold text-gray-700">Daily</dt>
+                <dd class="text-xs font-medium text-gray-800 text-right">
                   @if($server->settings->get('backup_daily_enabled'))
-                    {{ $server->settings->get('backup_daily_retention') }} / {{ $server->formatted_backup_daily_days }}
+                    {{ $server->settings->get('backup_daily_retention') }} kept &middot; {{ $server->formatted_backup_daily_days }}
                   @else
                     <span class="text-gray-400">Disabled</span>
                   @endif
                 </dd>
               </div>
               <div class="flex items-center justify-between gap-4">
-                <dt class="text-xs text-gray-500">Weekly</dt>
-                <dd class="text-xs font-medium text-gray-800">
+                <dt class="text-xs font-semibold text-gray-700">Weekly</dt>
+                <dd class="text-xs font-medium text-gray-800 text-right">
                   @if($server->settings->get('backup_weekly_enabled'))
-                    {{ $server->settings->get('backup_weekly_retention') }} / {{ $server->formatted_backup_weekly_day }}
+                    {{ $server->settings->get('backup_weekly_retention') }} kept &middot; {{ $server->formatted_backup_weekly_day }}
                   @else
                     <span class="text-gray-400">Disabled</span>
                   @endif
                 </dd>
               </div>
               <div class="flex items-center justify-between gap-4">
-                <dt class="text-xs text-gray-500">Monthly</dt>
-                <dd class="text-xs font-medium text-gray-800">
+                <dt class="text-xs font-semibold text-gray-700">Monthly</dt>
+                <dd class="text-xs font-medium text-gray-800 text-right">
                   @if($server->settings->get('backup_monthly_enabled'))
-                    {{ $server->settings->get('backup_monthly_retention') }} / {{ $server->formatted_backup_monthly_days }}
+                    {{ $server->settings->get('backup_monthly_retention') }} kept &middot; {{ $server->formatted_backup_monthly_days }}
                   @else
                     <span class="text-gray-400">Disabled</span>
                   @endif

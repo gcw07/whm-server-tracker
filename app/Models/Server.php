@@ -91,6 +91,7 @@ class Server extends Model
         'formatted_php_system_version',
         'formatted_whm_version',
         'backups_enabled',
+        'backup_types_active_count',
         'is_disk_warning',
         'is_disk_critical',
         'is_disk_full',

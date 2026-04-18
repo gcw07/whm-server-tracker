@@ -131,8 +131,8 @@ trait ServerPresenter
                     $values = explode(',', $this->settings->get('backup_monthly_days'));
 
                     return collect($values)->map(fn ($item) => match ($item) {
-                        '1' => '1st',
-                        '15' => '15th',
+                        '1' => '1st day',
+                        '15' => '15th day',
                     })->join(', ');
                 }
 
@@ -187,6 +187,17 @@ trait ServerPresenter
                 }
 
                 return 'Unknown';
+            },
+        );
+    }
+
+    protected function backupTypesActiveCount(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return (int) $this->settings?->get('backup_daily_enabled')
+                    + (int) $this->settings?->get('backup_weekly_enabled')
+                    + (int) $this->settings?->get('backup_monthly_enabled');
             },
         );
     }
