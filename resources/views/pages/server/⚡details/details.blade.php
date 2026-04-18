@@ -9,14 +9,14 @@
       </flux:breadcrumbs>
 
       <h3 class="mt-2 text-2xl leading-6 font-medium text-gray-900">
-        {{ $server->name }}
+        {{ $this->server->name }}
       </h3>
     </div>
 
     <div class="flex mt-3 md:mt-0 md:ml-4 gap-2">
-      <flux:button :href="$server->whm_url" icon="arrow-top-right-on-square" target="_blank">View</flux:button>
+      <flux:button :href="$this->server->whm_url" icon="arrow-top-right-on-square" target="_blank">View</flux:button>
 
-      @if(!$server->missing_token)
+      @if(!$this->server->missing_token)
         <flux:button wire:click="refresh" icon="arrow-path">Refresh</flux:button>
       @endif
 
@@ -24,9 +24,9 @@
         <flux:button icon="ellipsis-vertical" />
 
         <flux:menu>
-          <flux:menu.item :href="route('servers.edit', $server)" icon="pencil-square">Edit</flux:menu.item>
+          <flux:menu.item :href="route('servers.edit', $this->server)" icon="pencil-square">Edit</flux:menu.item>
 
-          @if(!$server->missing_token)
+          @if(!$this->server->missing_token)
             <flux:modal.trigger name="reset-token-modal">
               <flux:menu.item icon="key">Reset API Token</flux:menu.item>
             </flux:modal.trigger>
@@ -47,7 +47,7 @@
   <div class="mt-6">
     <!-- Begin content -->
 
-    @if($server->missing_token)
+    @if($this->server->missing_token)
       <flux:modal.trigger name="new-token-modal">
         <button type="button" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-2 focus:outline-offset-2 focus:outline-blue-300 dark:border-white/15 dark:hover:border-white/25 dark:focus:outline-blue-500">
           <flux:icon.key class="mx-auto size-12 text-zinc-400 dark:text-gray-500" />
@@ -60,8 +60,8 @@
           <flux:icon.clock class="size-3 shrink-0 text-gray-500" />
           <span class="text-gray-500">Last Updated</span>
           <span class="font-medium text-gray-800">
-            @if($server->server_update_last_succeeded_at)
-              {{ $server->server_update_last_succeeded_at->diffForHumans() }}
+            @if($this->server->server_update_last_succeeded_at)
+              {{ $this->server->server_update_last_succeeded_at->diffForHumans() }}
             @else
               Never
             @endif
@@ -76,29 +76,29 @@
             <flux:icon.info class="absolute -bottom-3 -right-3 size-28 text-sky-500 opacity-[0.08] pointer-events-none" />
             <div class="flex items-center justify-between gap-2">
               <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Server Overview</h3>
-              @if($server->server_update_last_succeeded_at->diffInMinutes() > 120)
+              @if(!$this->server->server_update_last_succeeded_at || $this->server->server_update_last_succeeded_at->diffInMinutes() > 120)
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700"><span class="size-1.5 rounded-full bg-red-500"></span>Offline</span>
-              @elseif($server->server_update_last_succeeded_at->diffInMinutes() > 60)
+              @elseif($this->server->server_update_last_succeeded_at->diffInMinutes() > 60)
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700"><span class="size-1.5 rounded-full bg-amber-500"></span>Delayed</span>
               @else
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="size-1.5 rounded-full bg-green-500"></span>Online</span>
               @endif
             </div>
             <div>
-              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $server->accounts_count }}</p>
+              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $this->server->accounts_count }}</p>
               <p class="text-xs text-gray-500 mt-1">Accounts</p>
             </div>
             <dl class="space-y-2 pt-3">
               <div class="flex items-start justify-between gap-4">
                 <dt class="text-xs text-gray-500 shrink-0">Server type</dt>
-                <dd class="text-xs font-medium text-gray-800 text-right">{{ $server->formatted_server_type }} &mdash; WHM {{ $server->formatted_whm_version }}</dd>
+                <dd class="text-xs font-medium text-gray-800 text-right">{{ $this->server->formatted_server_type }} &mdash; WHM {{ $this->server->formatted_whm_version }}</dd>
               </div>
               <div class="flex items-start justify-between gap-4">
                 <dt class="text-xs text-gray-500 shrink-0">PHP</dt>
                 <dd class="text-xs font-medium text-gray-800 text-right">
-                  @foreach($server->formatted_php_installed_versions as $version)
+                  @foreach($this->server->formatted_php_installed_versions as $version)
                     {{ $version['version'] }}@if (!$loop->last), @endif
-                  @endforeach &mdash; Sys {{ $server->formatted_php_system_version }}
+                  @endforeach &mdash; Sys {{ $this->server->formatted_php_system_version }}
                 </dd>
               </div>
               <div class="flex items-center justify-between gap-4" x-data="{ copied: false }">
@@ -106,10 +106,10 @@
                 <flux:tooltip content="Click to copy">
                   <dd class="text-xs font-medium tabular-nums cursor-pointer select-none transition-colors"
                       x-bind:class="copied ? 'text-green-600' : 'text-gray-800 hover:text-sky-600'"
-                      x-text="copied ? 'Copied!' : '{{ $server->address }}'"
+                      x-text="copied ? 'Copied!' : '{{ $this->server->address }}'"
                       x-on:click="
                           let ipEl = document.createElement('textarea');
-                          ipEl.value = '{{ $server->address }}';
+                          ipEl.value = '{{ $this->server->address }}';
                           ipEl.style.position = 'fixed';
                           ipEl.style.opacity = '0';
                           document.body.appendChild(ipEl);
@@ -118,12 +118,12 @@
                           document.body.removeChild(ipEl);
                           copied = true;
                           setTimeout(() => copied = false, 2000);
-                      ">{{ $server->address }}</dd>
+                      ">{{ $this->server->address }}</dd>
                 </flux:tooltip>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <dt class="text-xs text-gray-500">Provider</dt>
-                <dd class="text-xs font-medium text-gray-800">{{ $server->hosting_provider }}</dd>
+                <dd class="text-xs font-medium text-gray-800">{{ $this->server->hosting_provider }}</dd>
               </div>
             </dl>
           </div>
@@ -133,33 +133,33 @@
             <flux:icon.database class="absolute -bottom-3 -right-3 size-28 text-violet-500 opacity-[0.08] pointer-events-none" />
             <div class="flex items-center justify-between gap-2">
               <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Disk</h3>
-              @if($server->settings->get('disk_percentage') >= 90)
+              @if($this->server->settings->get('disk_percentage') >= 90)
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700"><span class="size-1.5 rounded-full bg-red-500"></span>Critical</span>
-              @elseif($server->settings->get('disk_percentage') >= 75)
+              @elseif($this->server->settings->get('disk_percentage') >= 75)
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700"><span class="size-1.5 rounded-full bg-amber-500"></span>Warning</span>
               @else
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="size-1.5 rounded-full bg-green-500"></span>Healthy</span>
               @endif
             </div>
-            <div style="--disk-usage: {{ min($server->settings->get('disk_percentage', 0), 100) }}%">
-              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $server->settings->get('disk_percentage') }}%</p>
+            <div style="--disk-usage: {{ min($this->server->settings->get('disk_percentage', 0), 100) }}%">
+              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $this->server->settings->get('disk_percentage') }}%</p>
               <p class="text-xs text-gray-500 mt-1">Used</p>
               <div class="mt-2 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                <div class="h-full rounded-full w-(--disk-usage) @if($server->settings->get('disk_percentage') >= 90) bg-red-500 @elseif($server->settings->get('disk_percentage') >= 75) bg-amber-500 @else bg-violet-500 @endif"></div>
+                <div class="h-full rounded-full w-(--disk-usage) @if($this->server->settings->get('disk_percentage') >= 90) bg-red-500 @elseif($this->server->settings->get('disk_percentage') >= 75) bg-amber-500 @else bg-violet-500 @endif"></div>
               </div>
             </div>
             <dl class="space-y-2 pt-3">
               <div class="flex items-center justify-between gap-4">
                 <dt class="text-xs text-gray-500">Used</dt>
-                <dd class="text-xs font-medium text-gray-800">{{ $server->formatted_disk_used }}</dd>
+                <dd class="text-xs font-medium text-gray-800">{{ $this->server->formatted_disk_used }}</dd>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <dt class="text-xs text-gray-500">Available</dt>
-                <dd class="text-xs font-medium text-gray-800">{{ $server->formatted_disk_available }}</dd>
+                <dd class="text-xs font-medium text-gray-800">{{ $this->server->formatted_disk_available }}</dd>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <dt class="text-xs text-gray-500">Total</dt>
-                <dd class="text-xs font-medium text-gray-800">{{ $server->formatted_disk_total }}</dd>
+                <dd class="text-xs font-medium text-gray-800">{{ $this->server->formatted_disk_total }}</dd>
               </div>
             </dl>
           </div>
@@ -169,22 +169,22 @@
             <flux:icon.archive-restore class="absolute -bottom-3 -right-3 size-28 text-green-500 opacity-[0.08] pointer-events-none" />
             <div class="flex items-center justify-between gap-2">
               <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Backups</h3>
-              @if($server->backups_enabled)
+              @if($this->server->backups_enabled)
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="size-1.5 rounded-full bg-green-500"></span>Enabled</span>
               @else
                 <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-500"><span class="size-1.5 rounded-full bg-zinc-400"></span>Disabled</span>
               @endif
             </div>
             <div>
-              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $server->backup_types_active_count }} / 3</p>
+              <p class="text-2xl font-semibold text-gray-900 tabular-nums">{{ $this->server->backup_types_active_count }} / 3</p>
               <p class="text-xs text-gray-500 mt-1">Types active</p>
             </div>
             <dl class="space-y-2 pt-3">
               <div class="flex items-center justify-between gap-4">
                 <dt class="text-xs font-semibold text-gray-700">Daily</dt>
                 <dd class="text-xs font-medium text-gray-800 text-right">
-                  @if($server->settings->get('backup_daily_enabled'))
-                    {{ $server->settings->get('backup_daily_retention') }} kept &middot; {{ $server->formatted_backup_daily_days }}
+                  @if($this->server->settings->get('backup_daily_enabled'))
+                    {{ $this->server->settings->get('backup_daily_retention') }} kept &middot; {{ $this->server->formatted_backup_daily_days }}
                   @else
                     <span class="text-gray-400">Disabled</span>
                   @endif
@@ -193,8 +193,8 @@
               <div class="flex items-center justify-between gap-4">
                 <dt class="text-xs font-semibold text-gray-700">Weekly</dt>
                 <dd class="text-xs font-medium text-gray-800 text-right">
-                  @if($server->settings->get('backup_weekly_enabled'))
-                    {{ $server->settings->get('backup_weekly_retention') }} kept &middot; {{ $server->formatted_backup_weekly_day }}
+                  @if($this->server->settings->get('backup_weekly_enabled'))
+                    {{ $this->server->settings->get('backup_weekly_retention') }} kept &middot; {{ $this->server->formatted_backup_weekly_day }}
                   @else
                     <span class="text-gray-400">Disabled</span>
                   @endif
@@ -203,8 +203,8 @@
               <div class="flex items-center justify-between gap-4">
                 <dt class="text-xs font-semibold text-gray-700">Monthly</dt>
                 <dd class="text-xs font-medium text-gray-800 text-right">
-                  @if($server->settings->get('backup_monthly_enabled'))
-                    {{ $server->settings->get('backup_monthly_retention') }} kept &middot; {{ $server->formatted_backup_monthly_days }}
+                  @if($this->server->settings->get('backup_monthly_enabled'))
+                    {{ $this->server->settings->get('backup_monthly_retention') }} kept &middot; {{ $this->server->formatted_backup_monthly_days }}
                   @else
                     <span class="text-gray-400">Disabled</span>
                   @endif
@@ -215,7 +215,7 @@
         </div>
         <div class="mt-4 rounded-lg border border-gray-950/10 bg-white px-6 py-4 flex gap-4">
           <span class="text-sm font-semibold text-gray-700 shrink-0">Notes</span>
-          <p class="text-sm text-gray-600 text-pretty">{{ $server->notes }}</p>
+          <p class="text-sm text-gray-600 text-pretty">{{ $this->server->notes }}</p>
         </div>
       </div>
 
@@ -353,7 +353,7 @@
         <div class="ml-4">
           <flux:heading size="lg">Reset API Token</flux:heading>
           <flux:text class="mt-2">
-            Are you sure you want to reset the api token for the server <span class="text-zinc-800 font-semibold">"{{ $server->name }}"</span>?
+            Are you sure you want to reset the api token for the server <span class="text-zinc-800 font-semibold">"{{ $this->server->name }}"</span>?
             This action cannot be undone.
           </flux:text>
         </div>
@@ -379,7 +379,7 @@
         <div class="ml-4">
           <flux:heading size="lg">Delete server?</flux:heading>
           <flux:text class="mt-2">
-            Are you sure you want to delete the server <span class="text-zinc-800 font-semibold">"{{ $server->name }}"</span>?
+            Are you sure you want to delete the server <span class="text-zinc-800 font-semibold">"{{ $this->server->name }}"</span>?
             The server information and all associated accounts will be permanently removed. This action cannot be undone.
           </flux:text>
         </div>

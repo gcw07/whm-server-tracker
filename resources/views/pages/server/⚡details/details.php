@@ -2,22 +2,29 @@
 
 use App\Jobs\FetchServerDetailsJob;
 use App\Models\Server;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new #[Title('Server Details')] class extends Component
 {
-    public Server $server;
+    public int $serverId;
 
     #[Validate(['required', 'string'])]
     public ?string $newToken = null;
 
-    public function mount(Server $server): void
+    public function mount(int $server): void
     {
-        $server->load(['accounts' => fn ($q) => $q->withCount('emails')])->loadCount(['accounts']);
+        $this->serverId = $server;
+    }
 
-        $this->server = $server;
+    #[Computed]
+    public function server(): Server
+    {
+        return Server::with(['accounts' => fn ($q) => $q->withCount('emails')])
+            ->withCount('accounts')
+            ->findOrFail($this->serverId);
     }
 
     public function getMonitorId(string $domain): ?int

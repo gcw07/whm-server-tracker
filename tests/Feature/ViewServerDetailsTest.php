@@ -21,7 +21,7 @@ test('an authorized user can view server details page', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::server.details', ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server->id])
         ->assertSee('MyServer.com');
 });
 
@@ -41,7 +41,7 @@ test('an authorized user can refresh server data from server details', function 
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::server.details', ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server->id])
         ->call('refresh');
 
     Queue::assertPushed(FetchServerDetailsJob::class, function ($job) use ($server) {
