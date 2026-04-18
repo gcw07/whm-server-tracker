@@ -14,18 +14,22 @@
 
   <div class="mt-6">
 
-    @if($this->sitesWithIssues > 0)
-      <div class="flex items-center gap-4 rounded-lg border border-red-200 border-l-4 border-l-red-500 bg-red-50 px-5 py-4">
-        <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-100">
-          <flux:icon.exclamation-triangle variant="solid" class="size-6 text-red-600" />
-        </div>
-        <div class="flex-1">
-          <p class="text-sm font-semibold text-gray-900">{{ $this->sitesWithIssues }} {{ Str::plural('site', $this->sitesWithIssues) }} with issues</p>
-          <p class="text-sm text-red-600/70">Monitor status requires attention.</p>
-        </div>
-        <a href="{{ route('monitors.index') }}" class="shrink-0 whitespace-nowrap text-sm font-medium text-red-600 hover:text-red-700">View &rarr;</a>
+    @island(name: 'monitor-status')
+      <div wire:poll.60s>
+        @if($this->sitesWithIssues > 0)
+          <div class="flex items-center gap-4 rounded-lg border border-red-200 border-l-4 border-l-red-500 bg-red-50 px-5 py-4">
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-100">
+              <flux:icon.exclamation-triangle variant="solid" class="size-6 text-red-600" />
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-gray-900">{{ $this->sitesWithIssues }} {{ Str::plural('site', $this->sitesWithIssues) }} with issues</p>
+              <p class="text-sm text-red-600/70">Monitor status requires attention.</p>
+            </div>
+            <a href="{{ route('monitors.index') }}" class="shrink-0 whitespace-nowrap text-sm font-medium text-red-600 hover:text-red-700">View &rarr;</a>
+          </div>
+        @endif
       </div>
-    @endif
+    @endisland
 
 
     <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -75,28 +79,30 @@
         <div class="text-xs"><flux:link :href="route('accounts.index')" variant="subtle">View all accounts &rarr;</flux:link></div>
       </div>
 
-      <div class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-green-500 px-6 py-5 flex flex-col gap-4">
-        <flux:icon.activity class="absolute -bottom-3 -right-3 size-28 text-green-500 opacity-[0.08] pointer-events-none" />
-        <div class="flex items-center justify-between gap-2">
-          <h2 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Monitor Status</h2>
-          @if($this->monitorsDown === 0)
-            <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="size-1.5 rounded-full bg-green-500"></span>All online</span>
-          @else
-            <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700"><span class="size-1.5 rounded-full bg-red-500"></span>{{ $this->monitorsDown }} down</span>
-          @endif
-        </div>
-        <div class="flex items-end gap-6">
-          <div>
-            <p class="text-2xl font-semibold text-green-600 tabular-nums">{{ $this->totalMonitors - $this->monitorsDown }}</p>
-            <p class="text-xs text-gray-500 mt-1">Online</p>
+      @island(name: 'monitor-status')
+        <div wire:poll.60s class="relative overflow-hidden bg-white rounded-lg border border-gray-950/10 border-t-2 border-t-green-500 px-6 py-5 flex flex-col gap-4">
+          <flux:icon.activity class="absolute -bottom-3 -right-3 size-28 text-green-500 opacity-[0.08] pointer-events-none" />
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">Monitor Status</h2>
+            @if($this->monitorsDown === 0)
+              <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="size-1.5 rounded-full bg-green-500"></span>All online</span>
+            @else
+              <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700"><span class="size-1.5 rounded-full bg-red-500"></span>{{ $this->monitorsDown }} down</span>
+            @endif
           </div>
-          <div>
-            <p @class(['text-2xl font-semibold tabular-nums', 'text-red-600' => $this->monitorsDown > 0, 'text-gray-400' => $this->monitorsDown === 0])>{{ $this->monitorsDown }}</p>
-            <p class="text-xs text-gray-500 mt-1">Down</p>
+          <div class="flex items-end gap-6">
+            <div>
+              <p class="text-2xl font-semibold text-green-600 tabular-nums">{{ $this->totalMonitors - $this->monitorsDown }}</p>
+              <p class="text-xs text-gray-500 mt-1">Online</p>
+            </div>
+            <div>
+              <p @class(['text-2xl font-semibold tabular-nums', 'text-red-600' => $this->monitorsDown > 0, 'text-gray-400' => $this->monitorsDown === 0])>{{ $this->monitorsDown }}</p>
+              <p class="text-xs text-gray-500 mt-1">Down</p>
+            </div>
           </div>
+          <div class="text-xs"><flux:link :href="route('monitors.index')" variant="subtle">View all monitors &rarr;</flux:link></div>
         </div>
-        <div class="text-xs"><flux:link :href="route('monitors.index')" variant="subtle">View all monitors &rarr;</flux:link></div>
-      </div>
+      @endisland
     </div>
 
     <div class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-3">
