@@ -8,7 +8,7 @@
         <flux:breadcrumbs.item>Details</flux:breadcrumbs.item>
       </flux:breadcrumbs>
 
-      <h3 class="mt-2 text-2xl leading-6 font-medium text-gray-900">
+      <h3 class="mt-2 text-2xl font-semibold text-gray-900 tracking-tight text-balance">
         {{ $this->server->name }}
       </h3>
     </div>
