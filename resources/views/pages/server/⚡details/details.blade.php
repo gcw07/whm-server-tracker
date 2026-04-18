@@ -223,7 +223,7 @@
         <flux:table>
           <flux:table.columns>
             <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">DOMAIN</flux:table.column>
-            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">BACKUPS</flux:table.column>
+            <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">EMAILS</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PLAN</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PHP</flux:table.column>
             <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">USED / LIMIT</flux:table.column>
@@ -257,10 +257,17 @@
                       </flux:popover>
                     </flux:dropdown>
                   @endif
+                  @if(!$account->backups_enabled)
+                    <flux:badge size="sm" color="red" inset="top bottom" class="ml-1">No Backups</flux:badge>
+                  @endif
                 </flux:table.cell>
 
-                <flux:table.cell>
-                  <flux:badge size="sm" :color="$account->backups_enabled ? 'green' : 'red'" inset="top bottom">{{ $account->backups_enabled ? 'Yes' : 'No'}}</flux:badge>
+                <flux:table.cell class="whitespace-nowrap">
+                  @if($account->emails_count === 1)
+                    <flux:badge size="sm" color="zinc">None</flux:badge>
+                  @else
+                    {{ $account->emails_count }}
+                  @endif
                 </flux:table.cell>
 
                 <flux:table.cell class="whitespace-nowrap">{{ $account->plan }}</flux:table.cell>

@@ -15,7 +15,7 @@ new #[Title('Server Details')] class extends Component
 
     public function mount(Server $server): void
     {
-        $server->loadMissing(['accounts'])->loadCount(['accounts']);
+        $server->load(['accounts' => fn ($q) => $q->withCount('emails')])->loadCount(['accounts']);
 
         $this->server = $server;
     }
