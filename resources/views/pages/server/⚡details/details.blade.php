@@ -55,13 +55,18 @@
         </button>
       </flux:modal.trigger>
     @else
-      <div class="hidden text-sm text-gray-500 sm:flex sm:justify-end">
-        Last Updated:
-        @if($server->server_update_last_succeeded_at)
-          {{ $server->server_update_last_succeeded_at->diffForHumans() }}
-        @else
-          Never
-        @endif
+      <div class="hidden sm:flex sm:justify-end">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs">
+          <flux:icon.clock class="size-3 shrink-0 text-gray-500" />
+          <span class="text-gray-500">Last Updated</span>
+          <span class="font-medium text-gray-800">
+            @if($server->server_update_last_succeeded_at)
+              {{ $server->server_update_last_succeeded_at->diffForHumans() }}
+            @else
+              Never
+            @endif
+          </span>
+        </span>
       </div>
       <div class="hidden sm:block">
         <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
