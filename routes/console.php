@@ -18,6 +18,9 @@ Schedule::command('server-tracker:fetch-server-details')->hourly();
 // Schedule Uptime Check
 Schedule::command('monitor:check-uptime')->everyMinute();
 
+// Prune soft-deleted monitors older than 7 days
+Schedule::command('model:prune', ['--model' => [Monitor::class]])->dailyAt('0:15');
+
 // Schedule Email Blacklist Check
 Schedule::command('server-tracker:check-blacklist')->dailyAt('0:30');
 
@@ -35,6 +38,3 @@ Schedule::command('server-tracker:fetch-cloudflare-analytics')->dailyAt('2:30');
 
 // Schedule Lighthouse Check
 Schedule::command('server-tracker:check-lighthouse')->weeklyOn(0, '3:05');
-
-// Prune soft-deleted monitors older than 7 days
-Schedule::command('model:prune', ['--model' => [Monitor::class]])->dailyAt('4:00');
