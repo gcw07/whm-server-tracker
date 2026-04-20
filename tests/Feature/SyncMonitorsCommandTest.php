@@ -77,7 +77,7 @@ it('deletes orphaned monitors not linked to any account', function () {
 
     $this->artisan('server-tracker:sync-monitors')->assertSuccessful();
 
-    $this->assertDatabaseMissing('monitors', ['url' => 'https://orphan.com']);
+    $this->assertSoftDeleted('monitors', ['url' => 'https://orphan.com']);
 });
 
 it('does not delete monitors that are still linked to an account', function () {

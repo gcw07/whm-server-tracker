@@ -13,8 +13,10 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
@@ -103,6 +105,8 @@ use Spatie\Url\Url;
  */
 class Monitor extends BaseMonitor
 {
+    use Prunable, SoftDeletes;
+
     protected $appends = ['domain_name', 'raw_url'];
 
     protected $casts = [
@@ -113,6 +117,11 @@ class Monitor extends BaseMonitor
         'certificate_check_enabled' => 'boolean',
         'certificate_expiration_date' => 'datetime',
     ];
+
+    public function prunable(): Builder
+    {
+        return static::onlyTrashed()->where('deleted_at', '<', now()->subDays(7));
+    }
 
     public function accounts(): HasMany
     {

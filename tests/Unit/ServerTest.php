@@ -367,7 +367,7 @@ it('it will update a monitor when updating an account if the url has changed', f
         'url' => 'https://my-new-site.com',
     ]);
 
-    $this->assertDatabaseMissing('monitors', [
+    $this->assertSoftDeleted('monitors', [
         'url' => 'https://my-site.com',
     ]);
 });
@@ -506,7 +506,7 @@ it('it will remove the monitor when an account is removed', function () {
 
     (new ProcessAccounts)->execute($this->server, $data);
 
-    $this->assertDatabaseMissing('monitors', [
+    $this->assertSoftDeleted('monitors', [
         'url' => 'https://site-to-remove.com',
     ]);
 });
@@ -609,7 +609,7 @@ it('it will remove a monitor when updating an account if the account is suspende
 
     (new ProcessAccounts)->execute($this->server, $data);
 
-    $this->assertDatabaseMissing('monitors', [
+    $this->assertSoftDeleted('monitors', [
         'url' => 'https://my-site.com',
     ]);
 });
@@ -705,6 +705,53 @@ it('will only remove a monitor if the account no longer exists on any servers', 
     $this->assertDatabaseHas('monitors', [
         'url' => $account->domain_url,
     ]);
+});
+
+it('restores a soft-deleted monitor when an account is re-added after being removed', function () {
+    $monitor = Monitor::create([
+        'url' => 'https://my-site.com',
+        'uptime_check_enabled' => true,
+        'certificate_check_enabled' => true,
+    ]);
+
+    $account = Account::factory()->create([
+        'server_id' => $this->server->id,
+        'domain' => 'my-site.com',
+        'user' => 'mysite',
+        'monitor_id' => $monitor->id,
+    ]);
+
+    // Server A removes the account (e.g. account moved away)
+    $emptyData['data']['acct'] = [];
+    (new ProcessAccounts)->execute($this->server, $emptyData);
+
+    $this->assertSoftDeleted('monitors', ['url' => 'https://my-site.com']);
+
+    // Server B adds the same account back — should restore the original monitor
+    $serverB = Server::factory()->create();
+
+    $data['data']['acct'] = [
+        [
+            'domain' => 'my-site.com',
+            'user' => 'mysite',
+            'ip' => '1.1.1.1',
+            'backup' => 1,
+            'suspended' => 0,
+            'suspendreason' => 'not suspended',
+            'suspendtime' => 0,
+            'startdate' => '17 Jan 1 10:35',
+            'diskused' => '300M',
+            'disklimit' => '2000M',
+            'plan' => '2 Gig',
+        ],
+    ];
+
+    (new ProcessAccounts)->execute($serverB, $data);
+
+    $restoredAccount = $serverB->fresh()->accounts->first();
+
+    expect($restoredAccount->monitor_id)->toBe($monitor->id);
+    $this->assertDatabaseHas('monitors', ['url' => 'https://my-site.com', 'deleted_at' => null]);
 });
 
 it('can get whm url', function () {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Monitor;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -34,3 +35,6 @@ Schedule::command('server-tracker:fetch-cloudflare-analytics')->dailyAt('2:30');
 
 // Schedule Lighthouse Check
 Schedule::command('server-tracker:check-lighthouse')->weeklyOn(0, '3:05');
+
+// Prune soft-deleted monitors older than 7 days
+Schedule::command('model:prune', ['--model' => [Monitor::class]])->dailyAt('4:00');

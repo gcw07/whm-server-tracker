@@ -76,13 +76,21 @@ class ProcessAccounts
 
         $url = trim('https://'.$account['domain'], '/');
 
-        $monitor = Monitor::firstOrCreate(
-            ['url' => $url],
-            [
-                'uptime_check_enabled' => true,
-                'certificate_check_enabled' => true,
-            ]
-        );
+        $monitor = Monitor::withTrashed()->where('url', $url)->first();
+
+        if ($monitor) {
+            if ($monitor->trashed()) {
+                $monitor->restore();
+            }
+
+            return $monitor->id;
+        }
+
+        $monitor = Monitor::create([
+            'url' => $url,
+            'uptime_check_enabled' => true,
+            'certificate_check_enabled' => true,
+        ]);
 
         return $monitor->id;
     }
@@ -98,12 +106,20 @@ class ProcessAccounts
 
         // If account domain name has not changed, keep existing monitor
         if ($account->domain === $attributes['domain']) {
-            // If monitor_id is null, look up the monitor by URL
+            // If monitor_id is null, look up the monitor by URL (including soft-deleted)
             if (! $account->monitor_id) {
                 $url = trim('https://'.$attributes['domain'], '/');
-                $monitor = Monitor::where('url', $url)->first();
+                $monitor = Monitor::withTrashed()->where('url', $url)->first();
 
-                return $monitor?->id ?? $this->addMonitor($attributes);
+                if ($monitor) {
+                    if ($monitor->trashed()) {
+                        $monitor->restore();
+                    }
+
+                    return $monitor->id;
+                }
+
+                return $this->addMonitor($attributes);
             }
 
             return $account->monitor_id;
