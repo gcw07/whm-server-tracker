@@ -16,7 +16,7 @@ test('an authorized user can add a new server token', function () {
 
     $server = Server::factory()->create(['token' => null]);
 
-    Livewire::test('pages::server.details', ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server->id])
         ->set('newToken', 'new-api-token')
         ->call('saveNewApiToken')
         ->assertRedirectToRoute('servers.show', $server->id);
@@ -25,7 +25,7 @@ test('an authorized user can add a new server token', function () {
 test('an authorized user can update a server token', function () {
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::server.details', ['server' => $this->server])
+    Livewire::test('pages::server.details', ['server' => $this->server->id])
         ->set('newToken', 'new-api-token')
         ->call('saveNewApiToken')
         ->assertNoRedirect();
@@ -38,7 +38,7 @@ test('an authorized user can update a server token', function () {
 test('server token is required', function () {
     $this->actingAs(User::factory()->create());
 
-    $response = Livewire::test('pages::server.details', ['server' => $this->server])
+    $response = Livewire::test('pages::server.details', ['server' => $this->server->id])
         ->set('newToken', '')
         ->call('saveNewApiToken');
 

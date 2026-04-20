@@ -828,9 +828,9 @@ it('can get formatted backup monthly days', function () {
     $serverC = Server::factory()->create(['settings' => ['backup_monthly_days' => '15']]);
     $serverD = Server::factory()->create();
 
-    $this->assertEquals('1st, 15th', $serverA->formatted_backup_monthly_days);
-    $this->assertEquals('1st', $serverB->formatted_backup_monthly_days);
-    $this->assertEquals('15th', $serverC->formatted_backup_monthly_days);
+    $this->assertEquals('1st day, 15th day', $serverA->formatted_backup_monthly_days);
+    $this->assertEquals('1st day', $serverB->formatted_backup_monthly_days);
+    $this->assertEquals('15th day', $serverC->formatted_backup_monthly_days);
     $this->assertEquals('None', $serverD->formatted_backup_monthly_days);
 });
 
