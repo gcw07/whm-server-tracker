@@ -16,7 +16,7 @@ beforeEach(function () {
 test('an authorized user can delete a server', function () {
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::server.details', ['server' => $this->server])
+    Livewire::test('pages::server.details', ['server' => $this->server->id])
         ->call('delete')
         ->assertRedirectToRoute('servers.index');
 
@@ -40,7 +40,7 @@ test('accounts are deleted when a server is deleted', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::server.details', ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server->id])
         ->call('delete')
         ->assertRedirectToRoute('servers.index');
 
@@ -79,7 +79,7 @@ test('monitors are deleted when a server is deleted', function () {
 
     $this->actingAs(User::factory()->create());
 
-    Livewire::test('pages::server.details', ['server' => $server])
+    Livewire::test('pages::server.details', ['server' => $server->id])
         ->call('delete')
         ->assertRedirectToRoute('servers.index');
 
