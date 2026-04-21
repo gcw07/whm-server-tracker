@@ -15,6 +15,11 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/backups'),
         ],
+
+        'wp-plugin' => [
+            'driver' => 'local',
+            'root' => storage_path('app/wp-plugin'),
+        ],
     ],
 
 ];

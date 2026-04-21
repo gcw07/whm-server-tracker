@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Monitor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -12,7 +13,7 @@ class PluginUpdaterController
 {
     public function info(Request $request, string $slug): JsonResponse
     {
-        if ($slug !== config('plugin-updater.slug')) {
+        if ($slug !== config('wp-plugin-updater.slug')) {
             abort(404);
         }
 
@@ -35,23 +36,27 @@ class PluginUpdaterController
         );
 
         return response()->json([
-            'version' => config('plugin-updater.version'),
+            'version' => config('wp-plugin-updater.version'),
             'download_url' => $downloadUrl,
-            'requires' => config('plugin-updater.requires'),
-            'tested' => config('plugin-updater.tested'),
+            'requires' => config('wp-plugin-updater.requires'),
+            'tested' => config('wp-plugin-updater.tested'),
         ]);
     }
 
     public function download(Request $request, string $slug): BinaryFileResponse
     {
-        if ($slug !== config('plugin-updater.slug')) {
+        if ($slug !== config('wp-plugin-updater.slug')) {
             abort(404);
         }
 
-        $path = config('plugin-updater.zip_path');
+        $version = config('wp-plugin-updater.version');
+        $filename = "{$slug}-v{$version}.zip";
 
-        abort_unless($path && file_exists($path), 404);
+        abort_unless(Storage::disk('wp-plugin')->exists($filename), 404);
 
-        return response()->download($path, $slug.'.zip');
+        return response()->download(
+            Storage::disk('wp-plugin')->path($filename),
+            $filename,
+        );
     }
 }

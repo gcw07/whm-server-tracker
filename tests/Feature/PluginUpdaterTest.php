@@ -2,6 +2,7 @@
 
 use App\Models\Monitor;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
 
@@ -40,9 +41,9 @@ describe('info endpoint', function () {
         ])->assertStatus(200);
 
         $response->assertJsonStructure(['version', 'download_url', 'requires', 'tested']);
-        $response->assertJsonPath('version', config('plugin-updater.version'));
-        $response->assertJsonPath('requires', config('plugin-updater.requires'));
-        $response->assertJsonPath('tested', config('plugin-updater.tested'));
+        $response->assertJsonPath('version', config('wp-plugin-updater.version'));
+        $response->assertJsonPath('requires', config('wp-plugin-updater.requires'));
+        $response->assertJsonPath('tested', config('wp-plugin-updater.tested'));
 
         expect($response->json('download_url'))->toContain(
             route('plugin-updates.download', ['slug' => 'wp-tracker-agent'])
@@ -67,7 +68,7 @@ describe('download endpoint', function () {
     });
 
     it('returns 404 when zip file is missing', function () {
-        config(['plugin-updater.zip_path' => '/non/existent/path.zip']);
+        Storage::fake('wp-plugin');
 
         $url = URL::temporarySignedRoute(
             'plugin-updates.download',
@@ -79,9 +80,10 @@ describe('download endpoint', function () {
     });
 
     it('downloads the zip file with a valid signed URL', function () {
-        $zip = tempnam(sys_get_temp_dir(), 'wp-tracker-agent').'.zip';
-        file_put_contents($zip, 'fake zip content');
-        config(['plugin-updater.zip_path' => $zip]);
+        Storage::fake('wp-plugin');
+
+        $version = config('wp-plugin-updater.version');
+        Storage::disk('wp-plugin')->put("wp-tracker-agent-v{$version}.zip", 'fake zip content');
 
         $url = URL::temporarySignedRoute(
             'plugin-updates.download',
@@ -92,8 +94,6 @@ describe('download endpoint', function () {
         $this->get($url)
             ->assertStatus(200)
             ->assertHeader('content-disposition');
-
-        unlink($zip);
     });
 
     it('returns 403 for an expired signed URL', function () {
