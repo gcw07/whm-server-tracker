@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $monitor_id
  * @property bool $enabled
  * @property string|null $cloudflare_zone_id
+ * @property string|null $cloudflare_account_id
  * @property string|null $zone_status
  * @property CarbonImmutable|null $last_synced_at
  * @property CarbonImmutable|null $created_at

@@ -13,6 +13,7 @@ function cloudflareZonesResponse(array $zones): array
             'id' => $zone['id'],
             'name' => $zone['name'],
             'status' => $zone['status'],
+            'account' => ['id' => $zone['account_id'] ?? 'default-account-id'],
         ])->values()->all(),
         'result_info' => [
             'page' => 1,
@@ -36,12 +37,12 @@ function makeMonitorOnCloudflare(string $domain): Monitor
     return $monitor;
 }
 
-it('syncs zone id and status for monitors on cloudflare', function () {
+it('syncs zone id, account id, and status for monitors on cloudflare', function () {
     $monitor = makeMonitorOnCloudflare('example.com');
 
     Http::fake([
         'api.cloudflare.com/*' => Http::response(cloudflareZonesResponse([
-            ['id' => 'abc123', 'name' => 'example.com', 'status' => 'active'],
+            ['id' => 'abc123', 'name' => 'example.com', 'status' => 'active', 'account_id' => 'acct001'],
         ])),
     ]);
 
@@ -49,6 +50,7 @@ it('syncs zone id and status for monitors on cloudflare', function () {
 
     expect($monitor->cloudflareCheck->fresh())
         ->cloudflare_zone_id->toBe('abc123')
+        ->cloudflare_account_id->toBe('acct001')
         ->zone_status->toBe('active')
         ->last_synced_at->not->toBeNull();
 });

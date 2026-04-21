@@ -77,7 +77,7 @@ class CloudflareApiClient
      *
      * Returns a collection keyed by domain name with zone id and status.
      *
-     * @return Collection<string, array{id: string, status: string}>
+     * @return Collection<string, array{id: string, status: string, account_id: string}>
      */
     public function fetchAllZones(): Collection
     {
@@ -100,6 +100,7 @@ class CloudflareApiClient
                 $zones->put($zone['name'], [
                     'id' => $zone['id'],
                     'status' => $zone['status'],
+                    'account_id' => $zone['account']['id'],
                 ]);
             });
 

@@ -36,6 +36,7 @@ class SyncCloudflareZonesCommand extends Command
 
             $monitor->cloudflareCheck->update([
                 'cloudflare_zone_id' => $zone['id'],
+                'cloudflare_account_id' => $zone['account_id'],
                 'zone_status' => $zone['status'],
                 'last_synced_at' => now(),
             ]);
