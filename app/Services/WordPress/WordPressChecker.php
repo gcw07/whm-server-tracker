@@ -10,24 +10,22 @@ use Illuminate\Support\Facades\Http;
 
 class WordPressChecker
 {
-    public function __construct(public readonly Monitor $monitor) {}
-
-    public function check(): void
+    public function check(Monitor $monitor): void
     {
-        if ($this->monitor->wp_api_token) {
-            $this->checkViaAgent();
+        if ($monitor->wp_api_token) {
+            $this->checkViaAgent($monitor);
         } else {
-            $this->checkViaRss();
+            $this->checkViaRss($monitor);
         }
     }
 
-    private function checkViaRss(): void
+    private function checkViaRss(Monitor $monitor): void
     {
         try {
-            $response = Http::timeout(30)->get((string) $this->monitor->url.'/feed/');
+            $response = Http::timeout(30)->get((string) $monitor->url.'/feed/');
 
             if (! $response->ok()) {
-                $this->setWordPress(null);
+                $this->setWordPress($monitor, null);
 
                 return;
             }
@@ -35,43 +33,43 @@ class WordPressChecker
             $xml = simplexml_load_string($response->body());
 
             if ($xml === false) {
-                $this->setWordPress(null);
+                $this->setWordPress($monitor, null);
             } elseif ($xml->channel->generator && str_contains((string) $xml->channel->generator, '?v=')) {
                 [, $version] = explode('?v=', (string) $xml->channel->generator);
-                $this->setWordPress($version);
+                $this->setWordPress($monitor, $version);
             } else {
-                $this->setWordPress(null);
+                $this->setWordPress($monitor, null);
             }
         } catch (Exception $exception) {
-            $this->setException($exception);
+            $this->setException($monitor, $exception);
         }
     }
 
-    private function checkViaAgent(): void
+    private function checkViaAgent(Monitor $monitor): void
     {
         try {
             $response = Http::timeout(30)
-                ->withToken($this->monitor->wp_api_token)
-                ->get((string) $this->monitor->url.'/wp-json/tracker/v1/status');
+                ->withToken($monitor->wp_api_token)
+                ->get((string) $monitor->url.'/wp-json/tracker/v1/status');
 
             if (! $response->ok()) {
-                $this->setException(new Exception("Agent returned HTTP {$response->status()}"));
+                $this->setException($monitor, new Exception("Agent returned HTTP {$response->status()}"));
 
                 return;
             }
 
-            $this->storeAgentData($response->json());
+            $this->storeAgentData($monitor, $response->json());
         } catch (Exception $exception) {
-            $this->setException($exception);
+            $this->setException($monitor, $exception);
         }
     }
 
-    private function storeAgentData(array $data): void
+    private function storeAgentData(Monitor $monitor, array $data): void
     {
         $pluginUpdateFiles = collect($data['updates']['plugins'] ?? []);
         $themeUpdateSlugs = collect($data['updates']['themes'] ?? []);
 
-        $this->monitor->wordpressCheck->update([
+        $monitor->wordpressCheck->update([
             'status' => WordPressStatusEnum::Valid->value,
             'wordpress_version' => $data['site']['wordpress_version'] ?? null,
             'php_version' => $data['site']['php_version'] ?? null,
@@ -88,8 +86,8 @@ class WordPressChecker
             'failure_reason' => null,
         ]);
 
-        $this->monitor->wpPlugins()->delete();
-        $this->monitor->wpPlugins()->createMany(
+        $monitor->wpPlugins()->delete();
+        $monitor->wpPlugins()->createMany(
             collect($data['plugins'] ?? [])->map(fn (array $plugin) => [
                 'name' => $plugin['name'],
                 'file' => $plugin['file'],
@@ -99,8 +97,8 @@ class WordPressChecker
             ])->all()
         );
 
-        $this->monitor->wpThemes()->delete();
-        $this->monitor->wpThemes()->createMany(
+        $monitor->wpThemes()->delete();
+        $monitor->wpThemes()->createMany(
             collect($data['themes'] ?? [])->map(fn (array $theme) => [
                 'name' => $theme['name'],
                 'slug' => $theme['slug'],
@@ -111,9 +109,9 @@ class WordPressChecker
         );
     }
 
-    public function setWordPress(?string $version): void
+    public function setWordPress(Monitor $monitor, ?string $version): void
     {
-        $this->monitor->wordpressCheck->update([
+        $monitor->wordpressCheck->update([
             'status' => WordPressStatusEnum::Valid->value,
             'wordpress_version' => $version,
             'check_source' => 'rss',
@@ -121,9 +119,9 @@ class WordPressChecker
         ]);
     }
 
-    public function setException(Exception $exception): void
+    public function setException(Monitor $monitor, Exception $exception): void
     {
-        $this->monitor->wordpressCheck->update([
+        $monitor->wordpressCheck->update([
             'status' => WordPressStatusEnum::Invalid->value,
             'failure_reason' => $exception->getMessage(),
         ]);

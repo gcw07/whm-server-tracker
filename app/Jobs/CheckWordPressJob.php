@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Monitor;
+use App\Services\WordPress\WordPressChecker;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,8 +18,8 @@ class CheckWordPressJob implements ShouldQueue
 
     public function __construct(public Monitor $monitor) {}
 
-    public function handle(): void
+    public function handle(WordPressChecker $checker): void
     {
-        $this->monitor->checkWordPress();
+        $checker->check($this->monitor);
     }
 }

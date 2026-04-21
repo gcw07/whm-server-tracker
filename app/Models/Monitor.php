@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\DomainNameStatusEnum;
 use App\Events\DomainNameExpiresSoonEvent;
-use App\Services\WordPress\WordPressChecker;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
@@ -368,10 +367,5 @@ class Monitor extends BaseMonitor
             'nameservers' => $nameservers,
             'is_on_cloudflare' => $isOnCloudflare,
         ]);
-    }
-
-    public function checkWordPress(): void
-    {
-        (new WordPressChecker($this))->check();
     }
 }

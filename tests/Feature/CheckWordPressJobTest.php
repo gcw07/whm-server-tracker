@@ -40,7 +40,7 @@ XML;
     file_put_contents($tmpFile, $feedXml);
 
     $monitor->wordpressCheck->load('monitor');
-    (new WordPressChecker($monitor))->setWordPress('6.4.2');
+    (new WordPressChecker)->setWordPress($monitor, '6.4.2');
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Valid);
@@ -54,7 +54,7 @@ test('check wordpress job sets valid status with null version when wordpress is 
     $monitor = Monitor::first();
     $check = MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    (new WordPressChecker($monitor))->setWordPress(null);
+    (new WordPressChecker)->setWordPress($monitor, null);
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Valid);
@@ -68,7 +68,7 @@ test('check wordpress job sets invalid status with failure reason on exception',
     $monitor = Monitor::first();
     $check = MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    (new WordPressChecker($monitor))->setException(new Exception('Connection failed'));
+    (new WordPressChecker)->setException($monitor, new Exception('Connection failed'));
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Invalid);
@@ -96,14 +96,14 @@ XML;
     $monitor = Monitor::first();
     $check = MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Valid);
         expect($check->wordpress_version)->toBe('6.4.2');
     });
 
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Invalid);
@@ -128,7 +128,7 @@ XML;
     $monitor = Monitor::first();
     $check = MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Valid);
@@ -153,7 +153,7 @@ XML;
     $monitor = Monitor::first();
     $check = MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Valid);
@@ -169,7 +169,7 @@ test('checkWordPress sets null version when feed returns non-ok response', funct
     $monitor = Monitor::first();
     $check = MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Valid);

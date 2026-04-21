@@ -3,6 +3,7 @@
 use App\Enums\WordPressStatusEnum;
 use App\Models\Monitor;
 use App\Models\MonitorWordPressCheck;
+use App\Services\WordPress\WordPressChecker;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
@@ -50,7 +51,7 @@ test('checkWordPress uses agent when wp_api_token is set', function () {
     ]);
 
     $monitor = makeMonitorWithToken();
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     $check = $monitor->wordpressCheck->fresh();
     expect($check->status)->toBe(WordPressStatusEnum::Valid);
@@ -71,7 +72,7 @@ test('checkWordPress stores plugins via agent', function () {
     ]);
 
     $monitor = makeMonitorWithToken();
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     $monitor->load('wpPlugins');
     expect($monitor->wpPlugins)->toHaveCount(2);
@@ -92,7 +93,7 @@ test('checkWordPress stores themes via agent', function () {
     ]);
 
     $monitor = makeMonitorWithToken();
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     $monitor->load('wpThemes');
     expect($monitor->wpThemes)->toHaveCount(1);
@@ -112,7 +113,7 @@ test('agent marks plugins with available updates', function () {
     ]);
 
     $monitor = makeMonitorWithToken();
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     $monitor->load('wpPlugins');
     $akismet = $monitor->wpPlugins->firstWhere('file', 'akismet/akismet.php');
@@ -131,7 +132,7 @@ test('agent sets invalid status on non-ok response', function () {
     ]);
 
     $monitor = makeMonitorWithToken();
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     $check = $monitor->wordpressCheck->fresh();
     expect($check->status)->toBe(WordPressStatusEnum::Invalid);
@@ -144,7 +145,7 @@ test('agent sets invalid status on connection exception', function () {
     ]);
 
     $monitor = makeMonitorWithToken();
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     $check = $monitor->wordpressCheck->fresh();
     expect($check->status)->toBe(WordPressStatusEnum::Invalid);
@@ -167,7 +168,7 @@ XML;
     $monitor = Monitor::first();
     MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
 
     $check = $monitor->wordpressCheck->fresh();
     expect($check->status)->toBe(WordPressStatusEnum::Valid);
@@ -190,10 +191,10 @@ test('agent replaces previously stored plugins on re-check', function () {
     ]);
 
     $monitor = makeMonitorWithToken();
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
     expect($monitor->wpPlugins()->count())->toBe(2);
 
-    $monitor->checkWordPress();
+    (new WordPressChecker)->check($monitor);
     expect($monitor->wpPlugins()->count())->toBe(1);
     expect($monitor->wpPlugins()->first()->name)->toBe('Hello Dolly');
 });
