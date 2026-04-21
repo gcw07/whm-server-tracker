@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('monitors', function (Blueprint $table) {
-            $table->string('wp_api_token')->nullable()->unique()->after('url');
+            $table->string('wp_api_token')->nullable()->unique()->after('certificate_check_failure_reason');
         });
     }
 
