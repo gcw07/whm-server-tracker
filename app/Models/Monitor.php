@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use App\Enums\DomainNameStatusEnum;
-use App\Enums\WordPressStatusEnum;
 use App\Events\DomainNameExpiresSoonEvent;
+use App\Services\WordPress\WordPressChecker;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
-use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,7 +16,6 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Spatie\UptimeMonitor\Models\Enums\UptimeStatus;
 use Spatie\UptimeMonitor\Models\Monitor as BaseMonitor;
@@ -374,118 +372,6 @@ class Monitor extends BaseMonitor
 
     public function checkWordPress(): void
     {
-        if ($this->wp_api_token) {
-            $this->checkWordPressViaAgent();
-        } else {
-            $this->checkWordPressViaRss();
-        }
-    }
-
-    private function checkWordPressViaRss(): void
-    {
-        try {
-            $response = Http::timeout(30)->get((string) $this->url.'/feed/');
-
-            if (! $response->ok()) {
-                $this->setWordPress(null);
-
-                return;
-            }
-
-            $xml = simplexml_load_string($response->body());
-
-            if ($xml === false) {
-                $this->setWordPress(null);
-            } elseif ($xml->channel->generator && str_contains((string) $xml->channel->generator, '?v=')) {
-                [, $version] = explode('?v=', (string) $xml->channel->generator);
-                $this->setWordPress($version);
-            } else {
-                $this->setWordPress(null);
-            }
-        } catch (Exception $exception) {
-            $this->setWordPressException($exception);
-        }
-    }
-
-    private function checkWordPressViaAgent(): void
-    {
-        try {
-            $response = Http::timeout(30)
-                ->withToken($this->wp_api_token)
-                ->get((string) $this->url.'/wp-json/tracker/v1/status');
-
-            if (! $response->ok()) {
-                $this->setWordPressException(new Exception("Agent returned HTTP {$response->status()}"));
-
-                return;
-            }
-
-            $this->setWordPressFromAgent($response->json());
-        } catch (Exception $exception) {
-            $this->setWordPressException($exception);
-        }
-    }
-
-    private function setWordPressFromAgent(array $data): void
-    {
-        $pluginUpdateFiles = collect($data['updates']['plugins'] ?? []);
-        $themeUpdateSlugs = collect($data['updates']['themes'] ?? []);
-
-        $this->wordpressCheck->update([
-            'status' => WordPressStatusEnum::Valid->value,
-            'wordpress_version' => $data['site']['wordpress_version'] ?? null,
-            'php_version' => $data['site']['php_version'] ?? null,
-            'site_name' => $data['site']['name'] ?? null,
-            'active_theme' => $data['theme']['name'] ?? null,
-            'active_theme_version' => $data['theme']['version'] ?? null,
-            'plugins_installed_count' => $data['counts']['plugins_installed'] ?? null,
-            'themes_installed_count' => $data['counts']['themes_installed'] ?? null,
-            'plugin_updates_count' => $pluginUpdateFiles->count(),
-            'theme_updates_count' => $themeUpdateSlugs->count(),
-            'check_source' => 'agent',
-            'agent_version' => $data['agent']['version'] ?? null,
-            'last_response_at' => Carbon::parse($data['generated_at'] ?? now()),
-            'failure_reason' => null,
-        ]);
-
-        $this->wpPlugins()->delete();
-        $this->wpPlugins()->createMany(
-            collect($data['plugins'] ?? [])->map(fn (array $plugin) => [
-                'name' => $plugin['name'],
-                'file' => $plugin['file'],
-                'version' => $plugin['version'],
-                'active' => $plugin['active'],
-                'update_available' => $pluginUpdateFiles->contains($plugin['file']),
-            ])->all()
-        );
-
-        $this->wpThemes()->delete();
-        $this->wpThemes()->createMany(
-            collect($data['themes'] ?? [])->map(fn (array $theme) => [
-                'name' => $theme['name'],
-                'slug' => $theme['slug'],
-                'version' => $theme['version'],
-                'active' => $theme['active'],
-                'update_available' => $themeUpdateSlugs->contains($theme['slug']),
-            ])->all()
-        );
-    }
-
-    public function setWordPress(?string $version): void
-    {
-        $this->wordpressCheck->update([
-            'status' => WordPressStatusEnum::Valid->value,
-            'wordpress_version' => $version,
-            'check_source' => 'rss',
-            'failure_reason' => null,
-        ]);
-    }
-
-    public function setWordPressException(Exception $exception): void
-    {
-        $this->wordpressCheck->update([
-            'status' => WordPressStatusEnum::Invalid->value,
-            'failure_reason' => $exception->getMessage(),
-        ]);
+        (new WordPressChecker($this))->check();
     }
 }

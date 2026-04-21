@@ -4,6 +4,7 @@ use App\Enums\WordPressStatusEnum;
 use App\Jobs\CheckWordPressJob;
 use App\Models\Monitor;
 use App\Models\MonitorWordPressCheck;
+use App\Services\WordPress\WordPressChecker;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
@@ -39,7 +40,7 @@ XML;
     file_put_contents($tmpFile, $feedXml);
 
     $monitor->wordpressCheck->load('monitor');
-    $monitor->setWordPress('6.4.2');
+    (new WordPressChecker($monitor))->setWordPress('6.4.2');
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Valid);
@@ -53,7 +54,7 @@ test('check wordpress job sets valid status with null version when wordpress is 
     $monitor = Monitor::first();
     $check = MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    $monitor->setWordPress(null);
+    (new WordPressChecker($monitor))->setWordPress(null);
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Valid);
@@ -67,7 +68,7 @@ test('check wordpress job sets invalid status with failure reason on exception',
     $monitor = Monitor::first();
     $check = MonitorWordPressCheck::create(['monitor_id' => $monitor->id, 'enabled' => true]);
 
-    $monitor->setWordPressException(new Exception('Connection failed'));
+    (new WordPressChecker($monitor))->setException(new Exception('Connection failed'));
 
     tap($check->fresh(), function (MonitorWordPressCheck $check) {
         expect($check->status)->toBe(WordPressStatusEnum::Invalid);
