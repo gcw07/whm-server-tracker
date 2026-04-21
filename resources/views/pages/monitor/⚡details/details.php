@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -414,5 +415,18 @@ new #[Title('Monitor Details')] class extends Component
         ]);
 
         unset($this->monitor);
+    }
+
+    public function generateWpApiToken(): void
+    {
+        $this->monitor->update(['wp_api_token' => Str::random(64)]);
+
+        unset($this->monitor);
+
+        Flux::toast(
+            text: 'WP API token generated. Copy it and paste it into the plugin settings on your WordPress site.',
+            heading: 'Token generated',
+            variant: 'success',
+        );
     }
 };

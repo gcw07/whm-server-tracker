@@ -1,6 +1,14 @@
 <?php
 
+use App\Http\Controllers\PluginUpdaterController;
 use Illuminate\Support\Facades\Route;
+
+Route::prefix('api/plugin-updates')->group(function () {
+    Route::get('/{slug}', [PluginUpdaterController::class, 'info']);
+    Route::get('/{slug}/download', [PluginUpdaterController::class, 'download'])
+        ->middleware('signed')
+        ->name('plugin-updates.download');
+});
 
 Route::redirect('/', '/dashboard');
 

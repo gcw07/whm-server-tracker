@@ -684,6 +684,40 @@
                 <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->failure_reason }}</dd>
               </div>
             @endif
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">WP Tracker Token</dt>
+              <dd class="text-sm sm:mt-0 sm:col-span-2">
+                @if($this->monitor->wp_api_token)
+                  <div class="flex items-center gap-2">
+                    <flux:input
+                      value="{{ $this->monitor->wp_api_token }}"
+                      readonly
+                      size="sm"
+                      class="font-mono text-xs!"
+                      x-data
+                      x-ref="tokenInput"
+                    />
+                    <flux:tooltip content="Copy token">
+                      <flux:button
+                        size="sm"
+                        variant="subtle"
+                        icon="clipboard"
+                        x-data
+                        x-on:click="navigator.clipboard.writeText('{{ $this->monitor->wp_api_token }}')"
+                      />
+                    </flux:tooltip>
+                  </div>
+                  <flux:button wire:click="generateWpApiToken" size="sm" variant="ghost" icon="arrow-path" class="mt-2">
+                    Regenerate
+                  </flux:button>
+                @else
+                  <p class="text-sm text-gray-400 mb-2">No token generated yet.</p>
+                  <flux:button wire:click="generateWpApiToken" size="sm" variant="primary" icon="key">
+                    Generate Token
+                  </flux:button>
+                @endif
+              </dd>
+            </div>
           </dl>
         @endif
       </flux:card>

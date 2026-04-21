@@ -26,6 +26,7 @@ use Spatie\Url\Url;
 /**
  * @property int $id
  * @property Url|null $url
+ * @property string|null $wp_api_token
  * @property bool $uptime_check_enabled
  * @property string $look_for_string
  * @property string $uptime_check_interval_in_minutes
