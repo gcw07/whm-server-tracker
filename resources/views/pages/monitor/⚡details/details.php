@@ -40,6 +40,8 @@ new #[Title('Monitor Details')] class extends Component
             'lighthouseCheck',
             'domainCheck',
             'wordpressCheck',
+            'wpPlugins',
+            'wpThemes',
             'cloudflareCheck',
         ])->findOrFail($this->monitorId);
     }

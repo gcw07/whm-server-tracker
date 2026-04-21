@@ -16,6 +16,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property WordPressStatusEnum $status
  * @property string|null $wordpress_version
  * @property string|null $failure_reason
+ * @property string|null $php_version
+ * @property string|null $site_name
+ * @property string|null $active_theme
+ * @property string|null $active_theme_version
+ * @property int|null $plugins_installed_count
+ * @property int|null $themes_installed_count
+ * @property int|null $plugin_updates_count
+ * @property int|null $theme_updates_count
+ * @property string|null $check_source
+ * @property string|null $agent_version
+ * @property CarbonImmutable|null $last_response_at
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
  * @property-read Monitor $monitor
@@ -43,6 +54,7 @@ class MonitorWordPressCheck extends Model
         return [
             'enabled' => 'boolean',
             'status' => WordPressStatusEnum::class,
+            'last_response_at' => 'immutable_datetime',
         ];
     }
 

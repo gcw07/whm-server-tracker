@@ -72,6 +72,10 @@ use Spatie\Url\Url;
  * @property-read mixed $uptime_for_last_thirty_days
  * @property-read mixed $uptime_for_today
  * @property-read MonitorWordPressCheck|null $wordpressCheck
+ * @property-read Collection<int, MonitorWpPlugin> $wpPlugins
+ * @property-read int|null $wp_plugins_count
+ * @property-read Collection<int, MonitorWpTheme> $wpThemes
+ * @property-read int|null $wp_themes_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Monitor enabled()
  * @method static Builder<static>|Monitor newModelQuery()
@@ -167,6 +171,16 @@ class Monitor extends BaseMonitor
     public function wordpressCheck(): HasOne
     {
         return $this->hasOne(MonitorWordPressCheck::class);
+    }
+
+    public function wpPlugins(): HasMany
+    {
+        return $this->hasMany(MonitorWpPlugin::class);
+    }
+
+    public function wpThemes(): HasMany
+    {
+        return $this->hasMany(MonitorWpTheme::class);
     }
 
     public function cloudflareCheck(): HasOne
@@ -360,6 +374,15 @@ class Monitor extends BaseMonitor
 
     public function checkWordPress(): void
     {
+        if ($this->wp_api_token) {
+            $this->checkWordPressViaAgent();
+        } else {
+            $this->checkWordPressViaRss();
+        }
+    }
+
+    private function checkWordPressViaRss(): void
+    {
         try {
             $response = Http::timeout(30)->get((string) $this->url.'/feed/');
 
@@ -384,11 +407,76 @@ class Monitor extends BaseMonitor
         }
     }
 
+    private function checkWordPressViaAgent(): void
+    {
+        try {
+            $response = Http::timeout(30)
+                ->withToken($this->wp_api_token)
+                ->get((string) $this->url.'/wp-json/tracker/v1/status');
+
+            if (! $response->ok()) {
+                $this->setWordPressException(new Exception("Agent returned HTTP {$response->status()}"));
+
+                return;
+            }
+
+            $this->setWordPressFromAgent($response->json());
+        } catch (Exception $exception) {
+            $this->setWordPressException($exception);
+        }
+    }
+
+    private function setWordPressFromAgent(array $data): void
+    {
+        $pluginUpdateFiles = collect($data['updates']['plugins'] ?? []);
+        $themeUpdateSlugs = collect($data['updates']['themes'] ?? []);
+
+        $this->wordpressCheck->update([
+            'status' => WordPressStatusEnum::Valid->value,
+            'wordpress_version' => $data['site']['wordpress_version'] ?? null,
+            'php_version' => $data['site']['php_version'] ?? null,
+            'site_name' => $data['site']['name'] ?? null,
+            'active_theme' => $data['theme']['name'] ?? null,
+            'active_theme_version' => $data['theme']['version'] ?? null,
+            'plugins_installed_count' => $data['counts']['plugins_installed'] ?? null,
+            'themes_installed_count' => $data['counts']['themes_installed'] ?? null,
+            'plugin_updates_count' => $pluginUpdateFiles->count(),
+            'theme_updates_count' => $themeUpdateSlugs->count(),
+            'check_source' => 'agent',
+            'agent_version' => $data['agent']['version'] ?? null,
+            'last_response_at' => Carbon::parse($data['generated_at'] ?? now()),
+            'failure_reason' => null,
+        ]);
+
+        $this->wpPlugins()->delete();
+        $this->wpPlugins()->createMany(
+            collect($data['plugins'] ?? [])->map(fn (array $plugin) => [
+                'name' => $plugin['name'],
+                'file' => $plugin['file'],
+                'version' => $plugin['version'],
+                'active' => $plugin['active'],
+                'update_available' => $pluginUpdateFiles->contains($plugin['file']),
+            ])->all()
+        );
+
+        $this->wpThemes()->delete();
+        $this->wpThemes()->createMany(
+            collect($data['themes'] ?? [])->map(fn (array $theme) => [
+                'name' => $theme['name'],
+                'slug' => $theme['slug'],
+                'version' => $theme['version'],
+                'active' => $theme['active'],
+                'update_available' => $themeUpdateSlugs->contains($theme['slug']),
+            ])->all()
+        );
+    }
+
     public function setWordPress(?string $version): void
     {
         $this->wordpressCheck->update([
             'status' => WordPressStatusEnum::Valid->value,
             'wordpress_version' => $version,
+            'check_source' => 'rss',
             'failure_reason' => null,
         ]);
     }

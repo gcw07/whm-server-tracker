@@ -659,29 +659,88 @@
             <flux:button wire:click="toggleWordPressCheck" variant="ghost" size="sm" icon="check-circle">Enable check</flux:button>
           </div>
         @else
+          @php $wpCheck = $this->monitor->wordpressCheck; @endphp
           <dl class="divide-y divide-gray-100">
             <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
               <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Status</dt>
               <dd class="text-sm sm:mt-0 sm:col-span-2">
-                @if($this->monitor->wordpressCheck?->status->value === 'invalid')
+                @if($wpCheck?->status->value === 'invalid')
                   <flux:badge size="sm" color="red" icon="x-circle">Error</flux:badge>
-                @elseif($this->monitor->wordpressCheck?->status->value === 'not yet checked')
+                @elseif($wpCheck?->status->value === 'not yet checked')
                   <flux:badge size="sm" color="yellow" icon="clock">Pending</flux:badge>
                 @else
                   <flux:badge size="sm" color="green" icon="check">Ok</flux:badge>
                 @endif
+                @if($wpCheck?->check_source === 'agent')
+                  <flux:badge size="sm" color="blue" class="ml-1">Agent</flux:badge>
+                @endif
               </dd>
             </div>
-            @if($this->monitor->wordpressCheck?->status->value === 'valid')
+            @if($wpCheck?->status->value === 'valid')
               <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
-                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Version</dt>
-                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->wordpress_version ?: 'WP not detected' }}</dd>
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">WP Version</dt>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $wpCheck?->wordpress_version ?: 'WP not detected' }}</dd>
               </div>
+              @if($wpCheck?->php_version)
+                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                  <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">PHP Version</dt>
+                  <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $wpCheck->php_version }}</dd>
+                </div>
+              @endif
+              @if($wpCheck?->active_theme)
+                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                  <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Active Theme</dt>
+                  <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">
+                    {{ $wpCheck->active_theme }}
+                    @if($wpCheck->active_theme_version)
+                      <span class="text-gray-400">v{{ $wpCheck->active_theme_version }}</span>
+                    @endif
+                  </dd>
+                </div>
+              @endif
+              @if($wpCheck?->plugins_installed_count !== null)
+                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                  <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Plugins</dt>
+                  <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2 flex items-center gap-2">
+                    {{ $wpCheck->plugins_installed_count }} installed
+                    @if($wpCheck->plugin_updates_count > 0)
+                      <flux:badge size="sm" color="amber" icon="arrow-up-circle">{{ $wpCheck->plugin_updates_count }} update{{ $wpCheck->plugin_updates_count !== 1 ? 's' : '' }}</flux:badge>
+                    @endif
+                  </dd>
+                </div>
+              @endif
             @endif
-            @if($this->monitor->wordpressCheck?->status->value === 'invalid')
+            @if($wpCheck?->status->value === 'invalid')
               <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Error</dt>
-                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $this->monitor->wordpressCheck?->failure_reason }}</dd>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $wpCheck?->failure_reason }}</dd>
+              </div>
+            @endif
+            @if($this->monitor->wpPlugins->isNotEmpty())
+              <div class="py-3 sm:py-4 px-5">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Plugins</dt>
+                <dd class="sm:col-span-3">
+                  <div class="divide-y divide-gray-100">
+                    @foreach($this->monitor->wpPlugins->sortBy('name') as $plugin)
+                      <div class="flex items-center justify-between py-2 first:pt-0 last:pb-0">
+                        <div class="flex items-center gap-2 min-w-0">
+                          @if($plugin->active)
+                            <flux:icon.check-circle variant="solid" class="size-3.5 text-green-500 shrink-0" />
+                          @else
+                            <flux:icon.x-circle variant="solid" class="size-3.5 text-gray-300 shrink-0" />
+                          @endif
+                          <span class="text-sm text-gray-700 truncate">{{ $plugin->name }}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                          <span class="text-xs text-gray-400">v{{ $plugin->version }}</span>
+                          @if($plugin->update_available)
+                            <flux:badge size="sm" color="amber">Update</flux:badge>
+                          @endif
+                        </div>
+                      </div>
+                    @endforeach
+                  </div>
+                </dd>
               </div>
             @endif
             <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
