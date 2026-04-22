@@ -49,6 +49,7 @@ class WordPressChecker
     {
         try {
             $response = Http::timeout(30)
+                ->retry(2, 1000)
                 ->withToken($monitor->wp_api_token)
                 ->get((string) $monitor->url.'/wp-json/tracker/v1/status');
 

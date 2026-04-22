@@ -661,7 +661,7 @@
         @else
           @php $wpCheck = $this->monitor->wordpressCheck; @endphp
           <dl class="divide-y divide-gray-100">
-            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
               <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Status</dt>
               <dd class="text-sm sm:mt-0 sm:col-span-2">
                 @if($wpCheck?->status->value === 'invalid')
@@ -672,23 +672,17 @@
                   <flux:badge size="sm" color="green" icon="check">Ok</flux:badge>
                 @endif
                 @if($wpCheck?->check_source === 'agent')
-                  <flux:badge size="sm" color="blue" class="ml-1">Agent</flux:badge>
+                  <flux:badge size="sm" color="blue" icon="bot" class="ml-1">Agent</flux:badge>
                 @endif
               </dd>
             </div>
             @if($wpCheck?->status->value === 'valid')
-              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">WP Version</dt>
                 <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $wpCheck?->wordpress_version ?: 'WP not detected' }}</dd>
               </div>
-              @if($wpCheck?->php_version)
-                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
-                  <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">PHP Version</dt>
-                  <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $wpCheck->php_version }}</dd>
-                </div>
-              @endif
               @if($wpCheck?->active_theme)
-                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
                   <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Active Theme</dt>
                   <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">
                     {{ $wpCheck->active_theme }}
@@ -698,79 +692,65 @@
                   </dd>
                 </div>
               @endif
+              @if($wpCheck?->php_version)
+                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
+                  <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">PHP Version</dt>
+                  <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $wpCheck->php_version }}</dd>
+                </div>
+              @endif
               @if($wpCheck?->plugins_installed_count !== null)
-                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+                <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
                   <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Plugins</dt>
                   <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2 flex items-center gap-2">
                     {{ $wpCheck->plugins_installed_count }} installed
                     @if($wpCheck->plugin_updates_count > 0)
                       <flux:badge size="sm" color="amber" icon="arrow-up-circle">{{ $wpCheck->plugin_updates_count }} update{{ $wpCheck->plugin_updates_count !== 1 ? 's' : '' }}</flux:badge>
                     @endif
+                    @if($this->monitor->wpPlugins->isNotEmpty())
+                      <flux:modal.trigger :name="'wp-plugins-'.$this->monitor->id">
+                        <flux:button size="sm" variant="ghost" icon="list-bullet">View Plugins</flux:button>
+                      </flux:modal.trigger>
+                    @endif
                   </dd>
                 </div>
               @endif
             @endif
             @if($wpCheck?->status->value === 'invalid')
-              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Error</dt>
                 <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $wpCheck?->failure_reason }}</dd>
               </div>
             @endif
-            @if($this->monitor->wpPlugins->isNotEmpty())
-              <div class="py-3 sm:py-4 px-5">
-                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Plugins</dt>
-                <dd class="sm:col-span-3">
-                  <div class="divide-y divide-gray-100">
-                    @foreach($this->monitor->wpPlugins->sortBy('name') as $plugin)
-                      <div class="flex items-center justify-between py-2 first:pt-0 last:pb-0">
-                        <div class="flex items-center gap-2 min-w-0">
-                          @if($plugin->active)
-                            <flux:icon.check-circle variant="solid" class="size-3.5 text-green-500 shrink-0" />
-                          @else
-                            <flux:icon.x-circle variant="solid" class="size-3.5 text-gray-300 shrink-0" />
-                          @endif
-                          <span class="text-sm text-gray-700 truncate">{{ $plugin->name }}</span>
-                        </div>
-                        <div class="flex items-center gap-1.5 shrink-0 ml-2">
-                          <span class="text-xs text-gray-400">v{{ $plugin->version }}</span>
-                          @if($plugin->update_available)
-                            <flux:badge size="sm" color="amber">Update</flux:badge>
-                          @endif
-                        </div>
-                      </div>
-                    @endforeach
-                  </div>
-                </dd>
-              </div>
-            @endif
-            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5">
-              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">WP Tracker Token</dt>
+            <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
+              <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Plugin Token</dt>
               <dd class="text-sm sm:mt-0 sm:col-span-2">
                 @if($this->monitor->wp_api_token)
-                  <div class="flex items-center gap-2">
-                    <flux:input
-                      value="{{ $this->monitor->wp_api_token }}"
-                      readonly
+                  <div class="flex flex-wrap items-center gap-2" x-data="{ copied: false }">
+                    <flux:button
                       size="sm"
-                      class="font-mono text-xs!"
-                      x-data
-                      x-ref="tokenInput"
-                    />
-                    <flux:tooltip content="Copy token">
-                      <flux:button
-                        size="sm"
-                        variant="subtle"
-                        icon="clipboard"
-                        x-data
-                        x-on:click="navigator.clipboard.writeText('{{ $this->monitor->wp_api_token }}')"
-                      />
-                    </flux:tooltip>
+                      variant="ghost"
+                      icon="clipboard"
+                      x-on:click="
+                        const t = '{{ $this->monitor->wp_api_token }}';
+                        if (navigator.clipboard) {
+                          navigator.clipboard.writeText(t);
+                        } else {
+                          const el = Object.assign(document.createElement('textarea'), { value: t, style: 'position:fixed;opacity:0' });
+                          document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+                        }
+                        copied = true; setTimeout(() => copied = false, 2000)
+                      "
+                    >
+                      <span x-text="copied ? 'Copied!' : 'Copy Token'"></span>
+                    </flux:button>
+
+                    <flux:modal.trigger :name="'regenerate-wp-token-'.$this->monitor->id">
+                        <flux:tooltip content="Regenerate Token">
+                          <flux:button size="sm" variant="ghost" icon="arrow-path" />
+                        </flux:tooltip>
+                    </flux:modal.trigger>
                   </div>
-                  <flux:button wire:click="generateWpApiToken" size="sm" variant="ghost" icon="arrow-path" class="mt-2">
-                    Regenerate
-                  </flux:button>
                 @else
-                  <p class="text-sm text-gray-400 mb-2">No token generated yet.</p>
                   <flux:button wire:click="generateWpApiToken" size="sm" variant="primary" icon="key">
                     Generate Token
                   </flux:button>
@@ -780,6 +760,7 @@
           </dl>
         @endif
       </flux:card>
+
       <!-- End WordPress Card -->
 
       <!-- Domain Information Card -->
@@ -1030,5 +1011,56 @@
 
   </div>
   <!-- End Two-Column Layout -->
+
+  <!-- WordPress Modals -->
+  <flux:modal :name="'regenerate-wp-token-'.$this->monitor->id">
+    <div class="space-y-6">
+      <div class="sm:flex sm:items-start">
+        <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
+          <flux:icon.exclamation-triangle class="text-red-500" />
+        </div>
+        <div class="ml-4">
+          <flux:heading size="lg">Regenerate Plugin Token</flux:heading>
+          <flux:text class="mt-2">
+            Regenerating the token will invalidate the current one. You will need to update the token in your WordPress plugin before the agent can communicate again.
+          </flux:text>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <flux:spacer />
+        <flux:modal.close>
+          <flux:button>Cancel</flux:button>
+        </flux:modal.close>
+        <flux:button wire:click="generateWpApiToken" icon="arrow-path" variant="danger">Regenerate</flux:button>
+      </div>
+    </div>
+  </flux:modal>
+
+  @if($this->monitor->wpPlugins->isNotEmpty())
+    <flux:modal :name="'wp-plugins-'.$this->monitor->id" class="md:w-2xl">
+      <flux:heading size="lg">Plugins ({{ $this->monitor->wpPlugins->count() }})</flux:heading>
+      <div class="divide-y divide-gray-100 mt-4">
+        @foreach($this->monitor->wpPlugins->sortBy('name') as $plugin)
+          <div class="flex items-center justify-between py-2 first:pt-0 last:pb-0">
+            <div class="flex items-center gap-2 min-w-0">
+              @if($plugin->active)
+                <flux:icon.check-circle variant="solid" class="size-3.5 text-green-500 shrink-0" />
+              @else
+                <flux:icon.x-circle variant="solid" class="size-3.5 text-gray-300 shrink-0" />
+              @endif
+              <span class="text-sm text-gray-700 truncate">{{ $plugin->name }}</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0 ml-2">
+              <span class="text-xs text-gray-400">v{{ $plugin->version }}</span>
+              @if($plugin->update_available)
+                <flux:badge size="sm" color="amber">Update</flux:badge>
+              @endif
+            </div>
+          </div>
+        @endforeach
+      </div>
+    </flux:modal>
+  @endif
+  <!-- End WordPress Modals -->
 
 </div>
