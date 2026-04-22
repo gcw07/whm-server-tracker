@@ -676,6 +676,16 @@
                 @endif
               </dd>
             </div>
+            @if($wpCheck?->status->value !== 'not yet checked' && $wpCheck?->updated_at)
+              <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
+                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Last Checked</dt>
+                <dd class="text-sm text-gray-800 sm:mt-0 sm:col-span-2">
+                  <flux:tooltip :content="$wpCheck->updated_at->format('M j, Y g:i A')">
+                    <span class="cursor-default">{{ $wpCheck->updated_at->diffForHumans() }}</span>
+                  </flux:tooltip>
+                </dd>
+              </div>
+            @endif
             @if($wpCheck?->status->value === 'valid')
               <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">WP Version</dt>
