@@ -4,7 +4,9 @@ use App\Models\CloudflareAnalytic;
 use App\Models\Monitor;
 use App\Models\MonitorCloudflareCheck;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 uses(LazilyRefreshDatabase::class);
 
@@ -139,6 +141,30 @@ it('skips checks with no zone id', function () {
 
     expect(CloudflareAnalytic::count())->toBe(0);
     Http::assertNothingSent();
+});
+
+it('logs a warning when a zone is queried but no data is returned', function () {
+    $warnings = collect();
+
+    Log::listen(function (MessageLogged $event) use ($warnings) {
+        if ($event->level === 'warning') {
+            $warnings->push($event);
+        }
+    });
+
+    makeCheckWithZone('zone-missing');
+
+    Http::fake([
+        'api.cloudflare.com/*' => Http::response(cloudflareAnalyticsResponse([])),
+    ]);
+
+    $this->artisan('server-tracker:fetch-cloudflare-analytics', ['--date' => '2026-04-12'])
+        ->assertSuccessful();
+
+    $warning = $warnings->first();
+    expect($warning->message)->toBe('No analytics returned for zone');
+    expect($warning->context['zone_id'])->toBe('zone-missing');
+    expect((string) $warning->context['monitor_url'])->toBe('https://example-zone-missing.com');
 });
 
 it('skips disabled cloudflare checks', function () {
