@@ -711,15 +711,19 @@
               @if($wpCheck?->plugins_installed_count !== null)
                 <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
                   <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">Plugins</dt>
-                  <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2 flex items-center gap-2">
-                    {{ $wpCheck->plugins_installed_count }} installed
+                  <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2 flex flex-col gap-1">
+                    <div class="flex items-center gap-2">
+                      <span>{{ $wpCheck->plugins_installed_count }} installed</span>
+                      @if($this->monitor->wpPlugins->isNotEmpty())
+                        <flux:modal.trigger :name="'wp-plugins-'.$this->monitor->id">
+                          <flux:button size="sm" variant="ghost" icon="list-bullet">View Plugins</flux:button>
+                        </flux:modal.trigger>
+                      @endif
+                    </div>
                     @if($wpCheck->plugin_updates_count > 0)
-                      <flux:badge size="sm" color="amber" icon="arrow-up-circle">{{ $wpCheck->plugin_updates_count }} update{{ $wpCheck->plugin_updates_count !== 1 ? 's' : '' }}</flux:badge>
-                    @endif
-                    @if($this->monitor->wpPlugins->isNotEmpty())
-                      <flux:modal.trigger :name="'wp-plugins-'.$this->monitor->id">
-                        <flux:button size="sm" variant="ghost" icon="list-bullet">View Plugins</flux:button>
-                      </flux:modal.trigger>
+                      <div>
+                        <flux:badge size="sm" color="amber" icon="arrow-up-circle">{{ $wpCheck->plugin_updates_count }} update{{ $wpCheck->plugin_updates_count !== 1 ? 's' : '' }}</flux:badge>
+                      </div>
                     @endif
                   </dd>
                 </div>
