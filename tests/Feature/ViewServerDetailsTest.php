@@ -1,6 +1,7 @@
 <?php
 
 use App\Jobs\FetchServerDetailsJob;
+use App\Models\Account;
 use App\Models\Server;
 use App\Models\User;
 use App\Services\WHM\WhmServerDetails;
@@ -18,6 +19,20 @@ test('guests can not view server details page', function () {
 
 test('an authorized user can view server details page', function () {
     $server = Server::factory()->create(['name' => 'MyServer.com']);
+
+    $this->actingAs(User::factory()->create());
+
+    Livewire::test('pages::server.details', ['server' => $server->id])
+        ->assertSee('MyServer.com');
+});
+
+test('server details page renders for a suspended account with no suspend time', function () {
+    $server = Server::factory()->create(['name' => 'MyServer.com']);
+    Account::factory()->create([
+        'server_id' => $server->id,
+        'suspended' => true,
+        'suspend_time' => null,
+    ]);
 
     $this->actingAs(User::factory()->create());
 

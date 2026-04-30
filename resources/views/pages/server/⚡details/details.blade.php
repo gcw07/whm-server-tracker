@@ -252,7 +252,7 @@
 
                       <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
                         <div>
-                          This account was suspended on {{ $account->suspend_time->format('F d, Y \a\t g:ia') }}. It was suspended for "{{ $account->suspend_reason }}".
+                          This account was suspended{{ $account->suspend_time ? ' on ' . $account->suspend_time->format('F d, Y \a\t g:ia') : '' }}. It was suspended for "{{ $account->suspend_reason }}".
                         </div>
                       </flux:popover>
                     </flux:dropdown>
