@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\FetchCloudflareAnalyticsCommand;
 use App\Models\CloudflareAnalytic;
 use App\Models\Monitor;
 use App\Models\MonitorCloudflareCheck;
@@ -57,7 +58,7 @@ it('creates a cloudflare analytic record with correct data', function () {
         ])),
     ]);
 
-    $this->artisan('server-tracker:fetch-cloudflare-analytics', ['--date' => '2026-04-12'])
+    $this->artisan(FetchCloudflareAnalyticsCommand::class, ['--date' => '2026-04-12'])
         ->assertSuccessful();
 
     expect(CloudflareAnalytic::first())
@@ -85,7 +86,7 @@ it('upserts on re-run for the same date', function () {
         ])),
     ]);
 
-    $this->artisan('server-tracker:fetch-cloudflare-analytics', ['--date' => '2026-04-12'])->assertSuccessful();
+    $this->artisan(FetchCloudflareAnalyticsCommand::class, ['--date' => '2026-04-12'])->assertSuccessful();
 
     expect(CloudflareAnalytic::count())->toBe(1);
     expect(CloudflareAnalytic::first())
@@ -103,7 +104,7 @@ it('defaults to yesterday when no date option is provided', function () {
         ])),
     ]);
 
-    $this->artisan('server-tracker:fetch-cloudflare-analytics')->assertSuccessful();
+    $this->artisan(FetchCloudflareAnalyticsCommand::class)->assertSuccessful();
 
     expect(CloudflareAnalytic::first()->date->toDateString())->toBe(now()->subDay()->toDateString());
 });
@@ -119,7 +120,7 @@ it('handles multiple zones in a single command run', function () {
         ])),
     ]);
 
-    $this->artisan('server-tracker:fetch-cloudflare-analytics', ['--date' => '2026-04-12'])
+    $this->artisan(FetchCloudflareAnalyticsCommand::class, ['--date' => '2026-04-12'])
         ->assertSuccessful();
 
     expect(CloudflareAnalytic::count())->toBe(2);
@@ -136,7 +137,7 @@ it('skips checks with no zone id', function () {
 
     Http::fake();
 
-    $this->artisan('server-tracker:fetch-cloudflare-analytics', ['--date' => '2026-04-12'])
+    $this->artisan(FetchCloudflareAnalyticsCommand::class, ['--date' => '2026-04-12'])
         ->assertSuccessful();
 
     expect(CloudflareAnalytic::count())->toBe(0);
@@ -158,7 +159,7 @@ it('logs a warning when a zone is queried but no data is returned', function () 
         'api.cloudflare.com/*' => Http::response(cloudflareAnalyticsResponse([])),
     ]);
 
-    $this->artisan('server-tracker:fetch-cloudflare-analytics', ['--date' => '2026-04-12'])
+    $this->artisan(FetchCloudflareAnalyticsCommand::class, ['--date' => '2026-04-12'])
         ->assertSuccessful();
 
     $warning = $warnings->first();
@@ -181,7 +182,7 @@ it('skips disabled cloudflare checks', function () {
 
     Http::fake();
 
-    $this->artisan('server-tracker:fetch-cloudflare-analytics', ['--date' => '2026-04-12'])
+    $this->artisan(FetchCloudflareAnalyticsCommand::class, ['--date' => '2026-04-12'])
         ->assertSuccessful();
 
     expect(CloudflareAnalytic::count())->toBe(0);
