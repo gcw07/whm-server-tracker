@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\SyncMonitorsCommand;
 use App\Models\Account;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Spatie\UptimeMonitor\Models\Monitor;
@@ -13,7 +14,7 @@ it('creates a monitor for a non-suspended account', function () {
         'monitor_id' => null,
     ]);
 
-    $this->artisan('server-tracker:sync-monitors')->assertSuccessful();
+    $this->artisan(SyncMonitorsCommand::class)->assertSuccessful();
 
     $this->assertDatabaseHas('monitors', ['url' => 'https://mysite.com']);
 });
@@ -25,7 +26,7 @@ it('skips suspended accounts', function () {
         'monitor_id' => null,
     ]);
 
-    $this->artisan('server-tracker:sync-monitors')->assertSuccessful();
+    $this->artisan(SyncMonitorsCommand::class)->assertSuccessful();
 
     $this->assertDatabaseMissing('monitors', ['url' => 'https://suspendedsite.com']);
 });
@@ -43,7 +44,7 @@ it('updates the monitor_id on an account that has no monitor_id set', function (
         'monitor_id' => null,
     ]);
 
-    $this->artisan('server-tracker:sync-monitors')->assertSuccessful();
+    $this->artisan(SyncMonitorsCommand::class)->assertSuccessful();
 
     expect($account->fresh()->monitor_id)->toBe($existingMonitor->id);
     expect(Monitor::count())->toBe(1);
@@ -62,7 +63,7 @@ it('does not update monitor_id when account already has the correct monitor_id',
         'monitor_id' => $monitor->id,
     ]);
 
-    $this->artisan('server-tracker:sync-monitors')->assertSuccessful();
+    $this->artisan(SyncMonitorsCommand::class)->assertSuccessful();
 
     expect($account->fresh()->monitor_id)->toBe($monitor->id);
     expect(Monitor::count())->toBe(1);
@@ -75,7 +76,7 @@ it('deletes orphaned monitors not linked to any account', function () {
         'certificate_check_enabled' => true,
     ]);
 
-    $this->artisan('server-tracker:sync-monitors')->assertSuccessful();
+    $this->artisan(SyncMonitorsCommand::class)->assertSuccessful();
 
     $this->assertSoftDeleted('monitors', ['url' => 'https://orphan.com']);
 });
@@ -93,7 +94,7 @@ it('does not delete monitors that are still linked to an account', function () {
         'monitor_id' => $monitor->id,
     ]);
 
-    $this->artisan('server-tracker:sync-monitors')->assertSuccessful();
+    $this->artisan(SyncMonitorsCommand::class)->assertSuccessful();
 
     $this->assertDatabaseHas('monitors', ['url' => 'https://mysite.com']);
 });

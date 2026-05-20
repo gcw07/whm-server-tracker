@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\SyncCloudflareZonesCommand;
 use App\Models\Monitor;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -46,7 +47,7 @@ it('syncs zone id, account id, and status for monitors on cloudflare', function 
         ])),
     ]);
 
-    $this->artisan('server-tracker:sync-cloudflare-zones')->assertSuccessful();
+    $this->artisan(SyncCloudflareZonesCommand::class)->assertSuccessful();
 
     expect($monitor->cloudflareCheck->fresh())
         ->cloudflare_zone_id->toBe('abc123')
@@ -64,7 +65,7 @@ it('skips monitors whose domain is not in the cloudflare account', function () {
         ])),
     ]);
 
-    $this->artisan('server-tracker:sync-cloudflare-zones')->assertSuccessful();
+    $this->artisan(SyncCloudflareZonesCommand::class)->assertSuccessful();
 
     expect($monitor->cloudflareCheck->fresh())
         ->cloudflare_zone_id->toBeNull()
@@ -87,7 +88,7 @@ it('skips monitors where cloudflare check is disabled', function () {
         ])),
     ]);
 
-    $this->artisan('server-tracker:sync-cloudflare-zones')->assertSuccessful();
+    $this->artisan(SyncCloudflareZonesCommand::class)->assertSuccessful();
 
     expect($monitor->cloudflareCheck->fresh())
         ->cloudflare_zone_id->toBeNull();
@@ -108,7 +109,7 @@ it('skips monitors where is_on_cloudflare is false', function () {
         ])),
     ]);
 
-    $this->artisan('server-tracker:sync-cloudflare-zones')->assertSuccessful();
+    $this->artisan(SyncCloudflareZonesCommand::class)->assertSuccessful();
 
     expect($monitor->cloudflareCheck->fresh())->cloudflare_zone_id->toBeNull();
 });
@@ -124,7 +125,7 @@ it('syncs multiple monitors in a single api call', function () {
         ])),
     ]);
 
-    $this->artisan('server-tracker:sync-cloudflare-zones')->assertSuccessful();
+    $this->artisan(SyncCloudflareZonesCommand::class)->assertSuccessful();
 
     expect($monitor1->cloudflareCheck->fresh()->cloudflare_zone_id)->toBe('aaa111');
     expect($monitor2->cloudflareCheck->fresh()->cloudflare_zone_id)->toBe('bbb222');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\FetchServerDetailsCommand;
 use App\Jobs\FetchServerDetailsJob;
 use App\Models\Server;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -13,7 +14,7 @@ it('dispatches fetch jobs only for servers with tokens', function () {
     $serverWithToken = Server::factory()->create(['token' => 'valid-token']);
     $serverWithoutToken = Server::factory()->create(['token' => null]);
 
-    $this->artisan('server-tracker:fetch-server-details')->assertSuccessful();
+    $this->artisan(FetchServerDetailsCommand::class)->assertSuccessful();
 
     Queue::assertPushedOn('high', FetchServerDetailsJob::class, function ($job) use ($serverWithToken) {
         return $job->server->is($serverWithToken);
@@ -29,7 +30,7 @@ it('does not dispatch fetch jobs for servers without tokens', function () {
 
     Server::factory()->create(['token' => null]);
 
-    $this->artisan('server-tracker:fetch-server-details')->assertSuccessful();
+    $this->artisan(FetchServerDetailsCommand::class)->assertSuccessful();
 
     Queue::assertNothingPushed();
 });
