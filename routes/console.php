@@ -38,3 +38,6 @@ Schedule::command('server-tracker:fetch-cloudflare-analytics')->dailyAt('2:30');
 
 // Schedule Lighthouse Check
 Schedule::command('server-tracker:check-lighthouse')->weeklyOn(0, '3:05');
+
+// Prune Lighthouse audit raw_results and old rows (runs Monday after Sunday's audits)
+Schedule::command('server-tracker:prune-lighthouse-audits')->weeklyOn(1, '3:05');

@@ -185,7 +185,9 @@
         <div class="bg-white shadow rounded-lg p-6">
           <h3 class="text-base font-semibold text-gray-900 mb-5">Opportunities</h3>
 
-          @if(count($this->opportunities) > 0)
+          @if(!$selectedAudit->raw_results)
+            <p class="text-sm text-gray-500">Detailed audit data is not available for this older report.</p>
+          @elseif(count($this->opportunities) > 0)
             <ul class="divide-y divide-gray-100">
               @foreach($this->opportunities as $opportunity)
                 @php

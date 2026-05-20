@@ -99,6 +99,8 @@ return [
     'lighthouse_audits' => [
         'manual_run_cooldown_minutes' => 60,
         'audit_timeout' => env('SERVER_TRACKER_LIGHTHOUSE_AUDIT_TIMEOUT', 60),
+        'keep_full_details_count' => 4,
+        'prune_rows_after_months' => 12,
     ],
 
     /*
