@@ -14,7 +14,8 @@
     </div>
 
     <div class="flex mt-3 md:mt-0 md:ml-4 gap-2">
-      <flux:button :href="$account->domain_url" icon="arrow-top-right-on-square" target="_blank">View</flux:button>
+      <flux:button :href="$account->server->whm_url" icon="arrow-top-right-on-square" target="_blank">View Server</flux:button>
+      <flux:button :href="$account->domain_url" icon="arrow-top-right-on-square" target="_blank">View Site</flux:button>
     </div>
   </div>
   <!-- / End Page Header -->

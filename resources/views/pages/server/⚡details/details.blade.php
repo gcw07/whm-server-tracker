@@ -14,7 +14,7 @@
     </div>
 
     <div class="flex mt-3 md:mt-0 md:ml-4 gap-2">
-      <flux:button :href="$this->server->whm_url" icon="arrow-top-right-on-square" target="_blank">View</flux:button>
+      <flux:button :href="$this->server->whm_url" icon="arrow-top-right-on-square" target="_blank">View Server</flux:button>
 
       @if(!$this->server->missing_token)
         <flux:button wire:click="refresh" icon="arrow-path">Refresh</flux:button>
