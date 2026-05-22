@@ -81,6 +81,7 @@ class WordPressChecker
             'themes_installed_count' => $data['counts']['themes_installed'] ?? null,
             'plugin_updates_count' => $pluginUpdateFiles->count(),
             'theme_updates_count' => $themeUpdateSlugs->count(),
+            'core_update_version' => $data['updates']['core'] ?? null,
             'check_source' => 'agent',
             'agent_version' => $data['agent']['version'] ?? null,
             'last_response_at' => Carbon::parse($data['generated_at'] ?? now()),

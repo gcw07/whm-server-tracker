@@ -689,7 +689,12 @@
             @if($wpCheck?->status->value === 'valid')
               <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">
                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wide">WP Version</dt>
-                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2">{{ $wpCheck?->wordpress_version ?: 'WP not detected' }}</dd>
+                <dd class="text-sm font-medium text-gray-800 sm:mt-0 sm:col-span-2 flex items-center gap-2">
+                  {{ $wpCheck?->wordpress_version ?: 'WP not detected' }}
+                  @if($wpCheck?->check_source === 'agent' && $wpCheck?->core_update_version)
+                    <flux:badge size="sm" color="amber" icon="arrow-up-circle">{{ $wpCheck->core_update_version }} available</flux:badge>
+                  @endif
+                </dd>
               </div>
               @if($wpCheck?->active_theme)
                 <div class="py-3 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 px-5 sm:items-center">

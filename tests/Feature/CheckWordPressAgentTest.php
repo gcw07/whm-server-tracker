@@ -31,7 +31,7 @@ function agentPayload(array $overrides = []): array
         'themes' => [
             ['name' => 'Avada', 'slug' => 'Avada', 'version' => '7.14', 'active' => true],
         ],
-        'updates' => ['plugins' => [], 'themes' => []],
+        'updates' => ['plugins' => [], 'themes' => [], 'core' => null],
         'generated_at' => '2026-04-21 18:58:47',
     ], $overrides);
 }
@@ -174,6 +174,32 @@ XML;
     expect($check->status)->toBe(WordPressStatusEnum::Valid);
     expect($check->check_source)->toBe('rss');
     expect($check->wordpress_version)->toBe('6.4.2');
+});
+
+test('agent stores core update version when core update is available', function () {
+    $payload = agentPayload(['updates' => ['plugins' => [], 'themes' => [], 'core' => '6.8.1']]);
+
+    Http::fake([
+        'https://myserver.com/wp-json/tracker/v1/status' => Http::response($payload, 200),
+    ]);
+
+    $monitor = makeMonitorWithToken();
+    (new WordPressChecker)->check($monitor);
+
+    $check = $monitor->wordpressCheck->fresh();
+    expect($check->core_update_version)->toBe('6.8.1');
+});
+
+test('agent stores null core update version when core is up to date', function () {
+    Http::fake([
+        'https://myserver.com/wp-json/tracker/v1/status' => Http::response(agentPayload(), 200),
+    ]);
+
+    $monitor = makeMonitorWithToken();
+    (new WordPressChecker)->check($monitor);
+
+    $check = $monitor->wordpressCheck->fresh();
+    expect($check->core_update_version)->toBeNull();
 });
 
 test('agent replaces previously stored plugins on re-check', function () {

@@ -19,6 +19,7 @@
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">WP VERSION</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PLUGIN UPDATES</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">THEME UPDATES</flux:table.column>
+        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">CORE UPDATE</flux:table.column>
       </flux:table.columns>
 
       <flux:table.rows>
@@ -70,10 +71,22 @@
                 <span class="text-gray-400 text-sm">—</span>
               @endif
             </flux:table.cell>
+
+            <flux:table.cell class="whitespace-nowrap">
+              @if($hasAgent)
+                @if($monitor->wordpressCheck->core_update_version)
+                  <flux:badge size="sm" icon="arrow-up-circle" color="yellow">{{ $monitor->wordpressCheck->core_update_version }} available</flux:badge>
+                @else
+                  <flux:badge size="sm" icon="check" color="green">Up to date</flux:badge>
+                @endif
+              @else
+                <span class="text-gray-400 text-sm">—</span>
+              @endif
+            </flux:table.cell>
           </flux:table.row>
         @empty
           <flux:table.row>
-            <flux:table.cell colspan="5" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
+            <flux:table.cell colspan="6" class="py-8 whitespace-nowrap font-semibold text-zinc-700">
               <div class="text-center">
                 <div class="flex items-center justify-center">
                   <flux:icon.magnifying-glass class="size-12" />

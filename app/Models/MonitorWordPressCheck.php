@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $themes_installed_count
  * @property int|null $plugin_updates_count
  * @property int|null $theme_updates_count
+ * @property string|null $core_update_version
  * @property string|null $check_source
  * @property string|null $agent_version
  * @property CarbonImmutable|null $last_response_at
