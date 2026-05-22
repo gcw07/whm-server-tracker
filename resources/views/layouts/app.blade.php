@@ -35,6 +35,7 @@
             <flux:navbar.item icon="hard-drive" iconVariant="outline" :href="route('servers.index')" :current="request()->routeIs('servers.*')">Servers</flux:navbar.item>
             <flux:navbar.item icon="globe" iconVariant="outline" :href="route('accounts.index')" :current="request()->routeIs('accounts.*')">Accounts</flux:navbar.item>
             <flux:navbar.item icon="activity" iconVariant="outline" :href="route('monitors.index')" :current="request()->routeIs('monitors.*')">Monitors</flux:navbar.item>
+            <flux:navbar.item icon="document-chart-bar" iconVariant="outline" :href="route('reports.index')" :current="request()->routeIs('reports.*')">Reports</flux:navbar.item>
           </flux:navbar>
 
           <flux:spacer />
@@ -82,6 +83,7 @@
             <flux:sidebar.item icon="hard-drive" href="{{ route('servers.index') }}">Servers</flux:sidebar.item>
             <flux:sidebar.item icon="globe" href="{{ route('accounts.index') }}">Accounts</flux:sidebar.item>
             <flux:sidebar.item icon="activity" href="{{ route('monitors.index') }}">Monitors</flux:sidebar.item>
+            <flux:sidebar.item icon="document-chart-bar" href="{{ route('reports.index') }}">Reports</flux:sidebar.item>
             <flux:sidebar.item icon="users" href="{{ route('users.index') }}">Manage Users</flux:sidebar.item>
           </flux:sidebar.nav>
 

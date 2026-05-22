@@ -46,6 +46,12 @@ Route::prefix('users')->middleware('auth')->group(function () {
     Route::livewire('/{user}/change-password', 'pages::user.change-password')->name('users.change-password');
 });
 
+// Report Routes...
+Route::prefix('reports')->middleware('auth')->group(function () {
+    Route::livewire('/', 'pages::report.index')->name('reports.index');
+    Route::livewire('/wp-updates', 'pages::report.wp-updates')->name('reports.wp-updates');
+});
+
 // Search Routes...
 Route::middleware('auth')->group(function () {
     Route::livewire('/search', 'pages::search')->name('search');
