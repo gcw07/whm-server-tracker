@@ -48,10 +48,20 @@ class WordPressChecker
     private function checkViaAgent(Monitor $monitor): void
     {
         try {
+            $url = (string) $monitor->url.'/wp-json/tracker/v1/status';
+
+            for ($i = 0; $i < 5; $i++) {
+                $probe = Http::timeout(10)->withoutRedirecting()->get($url);
+                if (! $probe->redirect() || ! $probe->header('Location')) {
+                    break;
+                }
+                $url = $probe->header('Location');
+            }
+
             $response = Http::timeout(30)
                 ->retry(2, 1000)
                 ->withToken($monitor->wp_api_token)
-                ->get((string) $monitor->url.'/wp-json/tracker/v1/status');
+                ->get($url);
 
             if (! $response->ok()) {
                 $this->setException($monitor, new Exception("Agent returned HTTP {$response->status()}"));

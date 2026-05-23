@@ -212,8 +212,10 @@ test('agent replaces previously stored plugins on re-check', function () {
 
     Http::fake([
         'https://myserver.com/wp-json/tracker/v1/status' => Http::sequence()
-            ->push(agentPayload(), 200)
-            ->push($newPayload, 200),
+            ->push([], 200)              // probe for check 1 (non-redirect)
+            ->push(agentPayload(), 200)  // actual check 1
+            ->push([], 200)              // probe for check 2 (non-redirect)
+            ->push($newPayload, 200),    // actual check 2
     ]);
 
     $monitor = makeMonitorWithToken();
@@ -223,4 +225,19 @@ test('agent replaces previously stored plugins on re-check', function () {
     (new WordPressChecker)->check($monitor);
     expect($monitor->wpPlugins()->count())->toBe(1);
     expect($monitor->wpPlugins()->first()->name)->toBe('Hello Dolly');
+});
+
+test('agent follows redirect and preserves auth token', function () {
+    Http::fake([
+        'https://myserver.com/wp-json/tracker/v1/status' => Http::response('', 301, ['Location' => 'https://www.myserver.com/wp-json/tracker/v1/status']),
+        'https://www.myserver.com/wp-json/tracker/v1/status' => Http::response(agentPayload(), 200),
+    ]);
+
+    $monitor = makeMonitorWithToken();
+    (new WordPressChecker)->check($monitor);
+
+    $check = $monitor->wordpressCheck->fresh();
+    expect($check->status)->toBe(WordPressStatusEnum::Valid);
+    expect($check->check_source)->toBe('agent');
+    expect($check->wordpress_version)->toBe('6.4.2');
 });
