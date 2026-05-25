@@ -58,8 +58,8 @@ new #[Title('Lighthouse Performance Report')] class extends Component
     #[Computed]
     public function audits()
     {
-        $latestIds = LighthouseAudit::query()
-            ->select(DB::raw('MAX(id)'))
+        $latestPerMonitor = LighthouseAudit::query()
+            ->select('monitor_id', DB::raw('MAX(id) as max_id'))
             ->where('form_factor', $this->formFactor)
             ->groupBy('monitor_id');
 
@@ -73,9 +73,18 @@ new #[Title('Lighthouse Performance Report')] class extends Component
 
         return LighthouseAudit::query()
             ->with('monitor')
+            ->joinSub($latestPerMonitor, 'latest', fn ($join) => $join->on('lighthouse_audits.id', '=', 'latest.max_id'))
             ->join('monitors', 'monitors.id', '=', 'lighthouse_audits.monitor_id')
-            ->select('lighthouse_audits.*')
-            ->whereIn('lighthouse_audits.id', $latestIds)
+            ->select(
+                'lighthouse_audits.id',
+                'lighthouse_audits.monitor_id',
+                'lighthouse_audits.performance_score',
+                'lighthouse_audits.accessibility_score',
+                'lighthouse_audits.best_practices_score',
+                'lighthouse_audits.seo_score',
+                'lighthouse_audits.form_factor',
+                'lighthouse_audits.created_at',
+            )
             ->orderBy($sortColumn, $this->lhSortDirection)
             ->paginate(50);
     }
