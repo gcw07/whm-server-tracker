@@ -50,6 +50,16 @@ Route::prefix('users')->middleware('auth')->group(function () {
 Route::prefix('reports')->middleware('auth')->group(function () {
     Route::livewire('/', 'pages::report.index')->name('reports.index');
     Route::livewire('/wp-updates', 'pages::report.wp-updates')->name('reports.wp-updates');
+    Route::livewire('/ssl-certificates', 'pages::report.ssl-certificates')->name('reports.ssl-certificates');
+    Route::livewire('/domain-expiry', 'pages::report.domain-expiry')->name('reports.domain-expiry');
+    Route::livewire('/php-versions', 'pages::report.php-versions')->name('reports.php-versions');
+    Route::livewire('/uptime-summary', 'pages::report.uptime-summary')->name('reports.uptime-summary');
+    Route::livewire('/disk-usage', 'pages::report.disk-usage')->name('reports.disk-usage');
+    Route::livewire('/lighthouse-performance', 'pages::report.lighthouse-performance')->name('reports.lighthouse-performance');
+    Route::livewire('/wp-plugins', 'pages::report.wp-plugins')->name('reports.wp-plugins');
+    Route::livewire('/blacklisted-sites', 'pages::report.blacklisted-sites')->name('reports.blacklisted-sites');
+    Route::livewire('/suspended-accounts', 'pages::report.suspended-accounts')->name('reports.suspended-accounts');
+    Route::livewire('/cloudflare-traffic', 'pages::report.cloudflare-traffic')->name('reports.cloudflare-traffic');
 });
 
 // Search Routes...
