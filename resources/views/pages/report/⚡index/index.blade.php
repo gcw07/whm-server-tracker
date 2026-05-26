@@ -23,6 +23,21 @@
 
     <flux:card class="flex flex-col gap-4">
       <div class="flex items-center gap-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-rose-100 text-rose-600">
+          <flux:icon.puzzle-piece class="size-5" />
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-gray-900">WP Plugins</h3>
+          <p class="text-sm text-gray-500">WordPress plugins with updates available across all sites</p>
+        </div>
+      </div>
+      <flux:button :href="route('reports.wp-plugins')" icon:trailing="arrow-right" variant="ghost" class="self-start">
+        View Report
+      </flux:button>
+    </flux:card>
+
+    <flux:card class="flex flex-col gap-4">
+      <div class="flex items-center gap-3">
         <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 text-blue-600">
           <flux:icon.lock-closed class="size-5" />
         </div>
@@ -107,21 +122,6 @@
         </div>
       </div>
       <flux:button :href="route('reports.lighthouse-performance')" icon:trailing="arrow-right" variant="ghost" class="self-start">
-        View Report
-      </flux:button>
-    </flux:card>
-
-    <flux:card class="flex flex-col gap-4">
-      <div class="flex items-center gap-3">
-        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-rose-100 text-rose-600">
-          <flux:icon.puzzle-piece class="size-5" />
-        </div>
-        <div>
-          <h3 class="text-base font-semibold text-gray-900">WP Plugins</h3>
-          <p class="text-sm text-gray-500">WordPress plugins with updates available across all sites</p>
-        </div>
-      </div>
-      <flux:button :href="route('reports.wp-plugins')" icon:trailing="arrow-right" variant="ghost" class="self-start">
         View Report
       </flux:button>
     </flux:card>
