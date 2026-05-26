@@ -35,13 +35,19 @@
             @endphp
             <flux:table.row :key="$cert->id" @class(['bg-gray-50' => $loop->even, 'bg-white' => $loop->odd])>
               <flux:table.cell class="px-6! py-5!">
-                <flux:link variant="subtle" :href="route('accounts.show', $cert->account_id)">
+                @if ($cert->account->monitor_id)
+                  <flux:link variant="subtle" :href="route('monitors.show', $cert->account->monitor_id)">
+                    {{ $cert->servername }}
+                  </flux:link>
+                @else
                   {{ $cert->servername }}
-                </flux:link>
+                @endif
               </flux:table.cell>
 
               <flux:table.cell class="whitespace-nowrap text-sm text-gray-700">
-                {{ $cert->account->domain }}
+                <flux:link variant="subtle" :href="route('accounts.show', $cert->account_id)">
+                  {{ $cert->account->domain }}
+                </flux:link>
               </flux:table.cell>
 
               <flux:table.cell class="whitespace-nowrap text-sm text-gray-700">
