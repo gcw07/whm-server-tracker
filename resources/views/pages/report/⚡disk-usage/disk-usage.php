@@ -43,6 +43,8 @@ new #[Title('Disk Usage Report')] class extends Component
     {
         return Server::all()->filter(
             fn (Server $server) => $server->settings?->has('disk_percentage')
+        )->sortByDesc(
+            fn (Server $server) => $server->settings->get('disk_percentage')
         )->values();
     }
 
