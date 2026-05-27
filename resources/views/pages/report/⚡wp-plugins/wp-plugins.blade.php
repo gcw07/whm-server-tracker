@@ -23,7 +23,7 @@
         @forelse ($this->pluginGroups as $group)
           @php
             $sites = $this->monitorsByPlugin->get($group->name, collect());
-            $visible = $sites->take(5);
+            $visible = $sites->take(3);
             $overflow = $sites->count() - $visible->count();
           @endphp
           <flux:table.row :key="$group->name" @class(['bg-gray-50' => $loop->even, 'bg-white' => $loop->odd])>
@@ -39,23 +39,35 @@
             </flux:table.cell>
 
             <flux:table.cell>
-              <div class="flex flex-wrap gap-1">
+              <div class="flex flex-wrap gap-1 items-center">
                 @foreach ($visible as $plugin)
-                  <flux:badge
-                    as="a"
-                    :href="route('monitors.show', $plugin->monitor_id)"
-                    size="sm"
-                    color="zinc"
-                    inset="top bottom"
-                    class="hover:bg-zinc-200!"
-                  >
-                    {{ preg_replace("(^https?://)", "", $plugin->monitor->url) }}
-                  </flux:badge>
+                  <a href="{{ route('monitors.show', $plugin->monitor_id) }}">
+                    <flux:badge size="sm" color="zinc" inset="top bottom" class="hover:bg-zinc-200!">
+                      {{ preg_replace("(^https?://)", "", $plugin->monitor->url) }}
+                    </flux:badge>
+                  </a>
                 @endforeach
                 @if ($overflow > 0)
-                  <span class="text-xs text-gray-400 self-center">and {{ $overflow }} more</span>
+                  <flux:modal.trigger :name="'wp-plugin-sites-'.Str::slug($group->name)">
+                    <button class="text-xs text-zinc-400 hover:text-zinc-600 cursor-pointer">and {{ $overflow }} more</button>
+                  </flux:modal.trigger>
                 @endif
               </div>
+
+              <flux:modal :name="'wp-plugin-sites-'.Str::slug($group->name)" class="md:w-xl">
+                <flux:heading size="lg">{{ $group->name }}</flux:heading>
+                <flux:subheading>{{ $sites->count() }} {{ Str::plural('affected site', $sites->count()) }}</flux:subheading>
+                <div class="divide-y divide-gray-100 mt-4">
+                  @foreach ($sites as $plugin)
+                    <a
+                      href="{{ route('monitors.show', $plugin->monitor_id) }}"
+                      class="flex items-center py-2.5 text-sm text-zinc-700 hover:text-zinc-900 hover:bg-gray-50 -mx-2 px-2 rounded"
+                    >
+                      {{ preg_replace("(^https?://)", "", $plugin->monitor->url) }}
+                    </a>
+                  @endforeach
+                </div>
+              </flux:modal>
             </flux:table.cell>
           </flux:table.row>
         @empty
