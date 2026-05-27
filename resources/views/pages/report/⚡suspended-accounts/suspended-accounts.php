@@ -12,10 +12,10 @@ new #[Title('Suspended Accounts Report')] class extends Component
     use WithPagination;
 
     #[Session]
-    public string $suspendedSortBy = 'servers.name';
+    public string $suspendedSortBy = 'suspend_time';
 
     #[Session]
-    public string $suspendedSortDirection = 'asc';
+    public string $suspendedSortDirection = 'desc';
 
     public function sort(string $column): void
     {
