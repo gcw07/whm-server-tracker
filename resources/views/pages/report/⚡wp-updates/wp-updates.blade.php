@@ -1,17 +1,56 @@
 <div>
-  <div class="pb-5">
-    <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
-      <flux:link :href="route('reports.index')" variant="subtle">Reports</flux:link>
-      <flux:icon.chevron-right class="size-4" />
-      <span>WP Updates</span>
+  <div class="pb-5 flex items-center justify-between">
+    <div>
+      <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+        <flux:link :href="route('reports.index')" variant="subtle">Reports</flux:link>
+        <flux:icon.chevron-right class="size-4" />
+        <span>WP Updates</span>
+      </div>
+      <h3 class="text-2xl leading-6 font-medium text-gray-900">
+        WP Updates
+      </h3>
+      <p class="mt-1 text-sm text-gray-500">Plugin, theme and WordPress version update status for all monitored sites.</p>
     </div>
-    <h3 class="text-2xl leading-6 font-medium text-gray-900">
-      WP Updates
-    </h3>
-    <p class="mt-1 text-sm text-gray-500">Plugin, theme and WordPress version update status for all monitored sites.</p>
+
+    <flux:dropdown>
+      <flux:button icon="adjustments-horizontal" icon:trailing="chevron-down">
+        Filters
+        @if($this->filterBy !== 'none')
+          <flux:badge size="sm" class="ml-1">
+            <span x-text="1" class="tabular-nums">&nbsp;</span>
+          </flux:badge>
+        @endif
+      </flux:button>
+
+      <flux:menu>
+        <flux:menu.radio.group wire:model.live="filterBy">
+          <flux:menu.radio value="agent_installed">Agent Installed</flux:menu.radio>
+          <flux:menu.radio value="agent_not_installed">Agent Not Installed</flux:menu.radio>
+        </flux:menu.radio.group>
+      </flux:menu>
+    </flux:dropdown>
   </div>
 
   <flux:card class="p-0 overflow-hidden bg-gray-50 mt-6">
+    @if($this->filterBy !== 'none')
+      <div class="px-6 py-4 flex justify-between items-center border-b border-zinc-800/10 dark:border-white/20 text-sm">
+        <div class="flex items-center gap-3">
+          Active filters
+          @if($this->filterBy === 'agent_installed')
+            <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">Agent Installed</flux:badge>
+          @endif
+          @if($this->filterBy === 'agent_not_installed')
+            <flux:badge as="button" size="sm" rounded icon:trailing="x-mark" color="sky" wire:click="removeAllFilters">Agent Not Installed</flux:badge>
+          @endif
+        </div>
+        <div>
+          <flux:tooltip content="Remove all filters">
+            <flux:button variant="subtle" size="sm" icon="x-mark" wire:click="removeAllFilters" />
+          </flux:tooltip>
+        </div>
+      </div>
+    @endif
+
     <flux:table :paginate="$this->monitors" pagination:scroll-to>
       <flux:table.columns>
         <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'url'" :direction="$sortDirection" wire:click="sort('url')">SITE</flux:table.column>

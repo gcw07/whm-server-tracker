@@ -18,6 +18,9 @@ new #[Title('WP Updates Report')] class extends Component
     #[Session]
     public string $sortDirection = 'asc';
 
+    #[Session]
+    public string $filterBy = 'none';
+
     public function sort(string $column): void
     {
         if ($this->sortBy === $column) {
@@ -28,11 +31,29 @@ new #[Title('WP Updates Report')] class extends Component
         }
     }
 
+    public function removeAllFilters(): void
+    {
+        $this->filterBy = 'none';
+    }
+
     #[Computed]
     public function monitors()
     {
         return Monitor::query()
             ->with(['wordpressCheck'])
+            ->when($this->filterBy, function (Builder $query) {
+                if ($this->filterBy === 'agent_installed') {
+                    return $query->whereHas('wordpressCheck', fn (Builder $q) => $q->where('check_source', 'agent'));
+                }
+                if ($this->filterBy === 'agent_not_installed') {
+                    return $query->where(fn (Builder $q) => $q
+                        ->whereDoesntHave('wordpressCheck')
+                        ->orWhereHas('wordpressCheck', fn (Builder $q) => $q->where('check_source', '!=', 'agent'))
+                    );
+                }
+
+                return $query;
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate(50);
     }
