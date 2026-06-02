@@ -11,7 +11,7 @@
     "require": {
         "php": "^8.4",
         "ext-simplexml": "*",
-        "aws/aws-sdk-php": "^3.379",
+        "aws/aws-sdk-php": "^3.383",
         "guzzlehttp/guzzle": "^7.10",
         "laravel/fortify": "^1.37",
         "laravel/framework": "^13.13",
