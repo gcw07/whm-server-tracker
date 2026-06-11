@@ -8,12 +8,12 @@
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.3.0",
-        "axios": "^1.16.0",
+        "axios": "^1.17.0",
         "chokidar": "^5.0.0",
         "chrome-launcher": "^1.2.0",
-        "concurrently": "^9.2.0",
+        "concurrently": "^10.0.0",
         "laravel-vite-plugin": "^3.1.0",
-        "lighthouse": "^13.3.0",
+        "lighthouse": "^13.4.0",
         "tailwindcss": "^4.3",
         "vite": "^8.0.0"
     }
