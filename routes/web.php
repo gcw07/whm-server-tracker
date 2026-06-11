@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleOAuthController;
 use App\Http\Controllers\PluginUpdaterController;
 use Illuminate\Support\Facades\Route;
 
@@ -65,4 +66,12 @@ Route::prefix('reports')->middleware('auth')->group(function () {
 // Search Routes...
 Route::middleware('auth')->group(function () {
     Route::livewire('/search', 'pages::search')->name('search');
+});
+
+// Settings Routes...
+Route::middleware('auth')->group(function () {
+    Route::livewire('/settings', 'pages::settings')->name('settings.index');
+    Route::get('/auth/google', [GoogleOAuthController::class, 'redirect'])->name('google.redirect');
+    Route::get('/auth/google/callback', [GoogleOAuthController::class, 'callback'])->name('google.callback');
+    Route::delete('/auth/google', [GoogleOAuthController::class, 'disconnect'])->name('google.disconnect');
 });

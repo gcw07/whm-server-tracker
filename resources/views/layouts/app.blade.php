@@ -49,6 +49,7 @@
 
             <flux:menu>
               <flux:menu.item href="{{ route('users.index') }}" icon="users">Manage Users</flux:menu.item>
+              <flux:menu.item href="{{ route('settings.index') }}" icon="cog-6-tooth">Settings</flux:menu.item>
 
               <form method="POST" action="{{ route('logout') }}" class="w-full">
                 @csrf
@@ -85,6 +86,7 @@
             <flux:sidebar.item icon="activity" href="{{ route('monitors.index') }}">Monitors</flux:sidebar.item>
             <flux:sidebar.item icon="chart-no-axes-column" href="{{ route('reports.index') }}">Reports</flux:sidebar.item>
             <flux:sidebar.item icon="users" href="{{ route('users.index') }}">Manage Users</flux:sidebar.item>
+            <flux:sidebar.item icon="cog-6-tooth" href="{{ route('settings.index') }}">Settings</flux:sidebar.item>
           </flux:sidebar.nav>
 
           <flux:sidebar.spacer />
