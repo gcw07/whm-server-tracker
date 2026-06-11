@@ -10,7 +10,10 @@ class GoogleOAuthController
     public function redirect()
     {
         return Socialite::driver('google')
-            ->scopes(['https://www.googleapis.com/auth/webmasters'])
+            ->scopes([
+                'https://www.googleapis.com/auth/webmasters',
+                'https://www.googleapis.com/auth/siteverification',
+            ])
             ->with(['access_type' => 'offline', 'prompt' => 'consent'])
             ->redirect();
     }
