@@ -44,6 +44,7 @@ new #[Title('Uptime Summary Report')] class extends Component
 
         return Monitor::query()
             ->where('uptime_check_enabled', true)
+            ->with('firstActiveAccount.server')
             ->withSum(
                 ['outages as downtime_7d' => fn ($q) => $q
                     ->where('started_at', '<', $windowEnd)

@@ -45,6 +45,7 @@ use Spatie\Url\Url;
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
  * @property-read mixed $account_ssl_certificate_status
+ * @property-read Account|null $firstActiveAccount
  * @property-read Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
  * @property-read MonitorBlacklistCheck|null $blacklistCheck
@@ -123,6 +124,11 @@ class Monitor extends BaseMonitor
     public function prunable(): Builder
     {
         return static::onlyTrashed()->where('deleted_at', '<', now()->subDays(7));
+    }
+
+    public function firstActiveAccount(): HasOne
+    {
+        return $this->hasOne(Account::class)->where('suspended', false)->orderBy('id');
     }
 
     public function accounts(): HasMany
