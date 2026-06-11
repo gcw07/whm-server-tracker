@@ -43,7 +43,7 @@ new #[Title('Monitors')] class extends Component
     public function monitors()
     {
         return Monitor::query()
-            ->with(['blacklistCheck', 'lighthouseCheck', 'domainCheck', 'accounts.sslCertificates'])
+            ->with(['blacklistCheck', 'lighthouseCheck', 'domainCheck', 'cloudflareCheck', 'accounts.sslCertificates'])
             ->when($this->monitorType !== 'all', fn (Builder $query) => $query->withIssues())
             ->when($this->sortBy, function (Builder $query) {
                 return $query->orderBy('url', $this->sortDirection);
@@ -65,6 +65,10 @@ new #[Title('Monitors')] class extends Component
 
                 if ($this->filterBy === 'not_on_cloudflare') {
                     return $query->whereHas('domainCheck', fn ($q) => $q->where('is_on_cloudflare', false));
+                }
+
+                if ($this->filterBy === 'on_my_cloudflare') {
+                    return $query->whereHas('cloudflareCheck', fn ($q) => $q->whereNotNull('cloudflare_zone_id'));
                 }
 
                 if ($this->filterBy === 'on_blacklist') {
