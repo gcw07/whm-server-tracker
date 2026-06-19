@@ -73,6 +73,53 @@ class CloudflareApiClient
     }
 
     /**
+     * List DNS records for a zone, optionally filtered by type and content.
+     *
+     * @return Collection<int, array{id: string, name: string, content: string}>
+     */
+    public function listDnsRecords(string $zoneId, string $type = 'TXT', ?string $content = null): Collection
+    {
+        $params = array_filter(['type' => $type, 'content' => $content]);
+
+        $response = Http::withToken(config('services.cloudflare.api_token'))
+            ->baseUrl(self::BASE_URL)
+            ->timeout(15)
+            ->connectTimeout(10)
+            ->retry(3, 500)
+            ->get("zones/{$zoneId}/dns_records", $params);
+
+        $response->throw();
+
+        return collect($response->json('result', []))->map(fn (array $record) => [
+            'id' => $record['id'],
+            'name' => $record['name'],
+            'content' => $record['content'],
+        ]);
+    }
+
+    /**
+     * Add a DNS record to a zone.
+     */
+    public function addDnsRecord(string $zoneId, string $type, string $name, string $content): bool
+    {
+        $response = Http::withToken(config('services.cloudflare.api_token'))
+            ->baseUrl(self::BASE_URL)
+            ->timeout(15)
+            ->connectTimeout(10)
+            ->retry(3, 500)
+            ->post("zones/{$zoneId}/dns_records", [
+                'type' => $type,
+                'name' => $name,
+                'content' => $content,
+                'ttl' => 1,
+            ]);
+
+        $response->throw();
+
+        return $response->json('success', false);
+    }
+
+    /**
      * Fetch all zones from the Cloudflare account.
      *
      * Returns a collection keyed by domain name with zone id and status.
