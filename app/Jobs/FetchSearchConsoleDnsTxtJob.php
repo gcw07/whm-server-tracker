@@ -56,6 +56,8 @@ class FetchSearchConsoleDnsTxtJob implements ShouldQueue
             'dns_txt_record' => $response->getToken(),
             'last_synced_at' => now(),
         ]);
+
+        AddGscDnsRecordToCloudflareJob::dispatch($this->check);
     }
 
     public function retryUntil(): \DateTimeInterface

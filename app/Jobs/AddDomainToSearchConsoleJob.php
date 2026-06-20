@@ -47,6 +47,8 @@ class AddDomainToSearchConsoleJob implements ShouldQueue
             'has_domain_property' => true,
             'last_synced_at' => now(),
         ]);
+
+        FetchSearchConsoleDnsTxtJob::dispatch($this->check);
     }
 
     public function retryUntil(): \DateTimeInterface
