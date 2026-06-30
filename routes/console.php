@@ -37,7 +37,9 @@ Schedule::command('server-tracker:sync-cloudflare-zones')->dailyAt('2:05');
 Schedule::command('server-tracker:fetch-cloudflare-analytics')->dailyAt('2:30');
 
 // Schedule Google Search Console Sync (runs after Cloudflare sync is complete)
-Schedule::command('server-tracker:gsc-sync')->dailyAt('2:45');
+// Commented out for now as I don't want to run this on production without first running
+// the manual commands.
+// Schedule::command('server-tracker:gsc-sync')->dailyAt('2:45');
 
 // Schedule Lighthouse Check
 Schedule::command('server-tracker:check-lighthouse')->weeklyOn(0, '3:05');
