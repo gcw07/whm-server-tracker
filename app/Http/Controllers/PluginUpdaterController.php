@@ -13,9 +13,7 @@ class PluginUpdaterController
 {
     public function info(Request $request, string $slug): JsonResponse
     {
-        if ($slug !== config('wp-plugin-updater.slug')) {
-            abort(404);
-        }
+        abort_if($slug !== config('wp-plugin-updater.slug'), 404);
 
         $header = $request->header('Authorization', '');
 
@@ -45,9 +43,7 @@ class PluginUpdaterController
 
     public function download(Request $request, string $slug): BinaryFileResponse
     {
-        if ($slug !== config('wp-plugin-updater.slug')) {
-            abort(404);
-        }
+        abort_if($slug !== config('wp-plugin-updater.slug'), 404);
 
         $version = config('wp-plugin-updater.version');
         $filename = "{$slug}-v{$version}.zip";

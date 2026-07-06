@@ -37,9 +37,7 @@ class SyncMonitorsCommand extends Command
     protected function validateMonitors($accounts)
     {
         $accounts->each(function ($monitorAttributes) {
-            if (! Str::startsWith($monitorAttributes['domain_url'], ['https://', 'http://'])) {
-                throw new CannotSaveMonitor("URL `{$monitorAttributes['url']}` is invalid (is the URL scheme included?)");
-            }
+            throw_unless(Str::startsWith($monitorAttributes['domain_url'], ['https://', 'http://']), new CannotSaveMonitor("URL `{$monitorAttributes['url']}` is invalid (is the URL scheme included?)"));
         });
     }
 
