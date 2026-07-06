@@ -38,7 +38,7 @@
             <div class="flex gap-2">
               <dt class="font-medium text-zinc-500 w-28">Token expires</dt>
               <dd class="text-zinc-800 dark:text-zinc-200">
-                {{ \Carbon\Carbon::parse($this->googleConnection['expires_at'])->format('M d, Y g:ia') }}
+                {{ \Illuminate\Support\Carbon::parse($this->googleConnection['expires_at'])->format('M d, Y g:ia') }}
               </dd>
             </div>
           @endif

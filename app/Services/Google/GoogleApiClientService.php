@@ -3,7 +3,7 @@
 namespace App\Services\Google;
 
 use App\Models\Setting;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Google\Client;
 use RuntimeException;
 
@@ -17,9 +17,7 @@ class GoogleApiClientService
 
         $oauth = Setting::getValue('google_oauth');
 
-        if (! $oauth) {
-            throw new RuntimeException('Google OAuth is not configured. Please connect your Google account.');
-        }
+        throw_unless($oauth, new RuntimeException('Google OAuth is not configured. Please connect your Google account.'));
 
         $expiresIn = (int) $oauth['expires_in'];
 
@@ -33,11 +31,9 @@ class GoogleApiClientService
         if ($client->isAccessTokenExpired()) {
             $newToken = $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
 
-            if (isset($newToken['error'])) {
-                throw new RuntimeException(
+            throw_if(isset($newToken['error']), new RuntimeException(
                     "Google OAuth token refresh failed: {$newToken['error_description']}. Please reconnect your Google account."
-                );
-            }
+                ));
 
             Setting::setValue('google_oauth', array_merge($oauth, [
                 'access_token' => $newToken['access_token'],

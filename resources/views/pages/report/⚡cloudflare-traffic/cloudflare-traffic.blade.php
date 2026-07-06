@@ -44,7 +44,7 @@
 
             <flux:table.cell class="whitespace-nowrap text-sm text-gray-500">
               @if ($monitor->cf_last_synced_at)
-                {{ \Carbon\Carbon::parse($monitor->cf_last_synced_at)->diffForHumans() }}
+                {{ \Illuminate\Support\Carbon::parse($monitor->cf_last_synced_at)->diffForHumans() }}
               @else
                 <span class="text-gray-400">Never</span>
               @endif

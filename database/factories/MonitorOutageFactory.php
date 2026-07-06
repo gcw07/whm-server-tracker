@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\MonitorOutage;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
 

@@ -3,7 +3,7 @@
 use App\Events\DomainNameExpiresSoonEvent;
 use App\Models\Monitor;
 use App\Notifications\DomainNameExpiresSoon;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 uses(LazilyRefreshDatabase::class);

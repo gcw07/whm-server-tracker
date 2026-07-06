@@ -4,7 +4,7 @@ use App\Enums\ServerTypeEnum;
 use App\Models\Account;
 use App\Models\Server;
 use App\Services\WHM\DataProcessors\ProcessAccounts;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Spatie\UptimeMonitor\Models\Monitor;
 

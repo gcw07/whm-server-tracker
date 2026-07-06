@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\DomainNameStatusEnum;
 use App\Events\DomainNameExpiresSoonEvent;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -149,7 +149,7 @@ class Monitor extends BaseMonitor
 
     public function lighthouseLatestAudit(): HasMany
     {
-        return $this->hasMany(LighthouseAudit::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(LighthouseAudit::class)->orderByDesc('created_at');
     }
 
     public function blacklistCheck(): HasOne

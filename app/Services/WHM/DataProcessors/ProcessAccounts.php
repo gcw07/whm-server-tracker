@@ -5,7 +5,7 @@ namespace App\Services\WHM\DataProcessors;
 use App\Models\Account;
 use App\Models\Monitor;
 use App\Models\Server;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class ProcessAccounts
 {

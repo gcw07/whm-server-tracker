@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Models\Monitor;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class DomainNameExpiresSoonEvent implements ShouldQueue

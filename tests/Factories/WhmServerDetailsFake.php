@@ -16,9 +16,7 @@ class WhmServerDetailsFake extends WhmServerDetails
 {
     public function setServer(Server $server): void
     {
-        if (! $server->token) {
-            throw new MissingTokenException;
-        }
+        throw_unless($server->token, new MissingTokenException);
 
         $this->server = $server;
     }

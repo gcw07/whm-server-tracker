@@ -4,7 +4,7 @@ namespace App\Services\WordPress;
 
 use App\Enums\WordPressStatusEnum;
 use App\Models\Monitor;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Http;
 
