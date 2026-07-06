@@ -149,7 +149,7 @@ class Monitor extends BaseMonitor
 
     public function lighthouseLatestAudit(): HasMany
     {
-        return $this->hasMany(LighthouseAudit::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(LighthouseAudit::class)->orderByDesc('created_at');
     }
 
     public function blacklistCheck(): HasOne
