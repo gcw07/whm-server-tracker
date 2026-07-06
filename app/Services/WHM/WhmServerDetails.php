@@ -11,7 +11,7 @@ use App\Services\WHM\DataProcessors\ProcessDiskUsage;
 use App\Services\WHM\DataProcessors\ProcessPhpInstalledVersions;
 use App\Services\WHM\DataProcessors\ProcessPhpSystemVersion;
 use App\Services\WHM\DataProcessors\ProcessWhmVersion;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
 

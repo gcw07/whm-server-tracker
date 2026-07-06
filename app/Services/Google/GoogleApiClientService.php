@@ -3,7 +3,7 @@
 namespace App\Services\Google;
 
 use App\Models\Setting;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Google\Client;
 use RuntimeException;
 

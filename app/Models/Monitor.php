@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\DomainNameStatusEnum;
 use App\Events\DomainNameExpiresSoonEvent;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;

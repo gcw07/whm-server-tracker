@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Server;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AccountFactory extends Factory
