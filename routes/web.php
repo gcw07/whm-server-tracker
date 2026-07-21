@@ -58,6 +58,7 @@ Route::prefix('reports')->middleware('auth')->group(function () {
     Route::livewire('/disk-usage', 'pages::report.disk-usage')->name('reports.disk-usage');
     Route::livewire('/lighthouse-performance', 'pages::report.lighthouse-performance')->name('reports.lighthouse-performance');
     Route::livewire('/wp-plugins', 'pages::report.wp-plugins')->name('reports.wp-plugins');
+    Route::livewire('/wp-plugin-lookup', 'pages::report.wp-plugin-lookup')->name('reports.wp-plugin-lookup');
     Route::livewire('/blacklisted-sites', 'pages::report.blacklisted-sites')->name('reports.blacklisted-sites');
     Route::livewire('/suspended-accounts', 'pages::report.suspended-accounts')->name('reports.suspended-accounts');
     Route::livewire('/cloudflare-traffic', 'pages::report.cloudflare-traffic')->name('reports.cloudflare-traffic');

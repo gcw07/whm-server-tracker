@@ -38,6 +38,21 @@
 
     <flux:card class="flex flex-col gap-4">
       <div class="flex items-center gap-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-teal-100 text-teal-600">
+          <flux:icon.magnifying-glass class="size-5" />
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-gray-900">WP Plugin Lookup</h3>
+          <p class="text-sm text-gray-500">Find which sites have (or are missing) a specific plugin</p>
+        </div>
+      </div>
+      <flux:button :href="route('reports.wp-plugin-lookup')" icon:trailing="arrow-right" variant="ghost" class="self-start">
+        View Report
+      </flux:button>
+    </flux:card>
+
+    <flux:card class="flex flex-col gap-4">
+      <div class="flex items-center gap-3">
         <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 text-blue-600">
           <flux:icon.lock-closed class="size-5" />
         </div>
