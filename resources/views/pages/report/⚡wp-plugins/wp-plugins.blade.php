@@ -59,12 +59,23 @@
                 <flux:subheading>{{ $sites->count() }} {{ Str::plural('affected site', $sites->count()) }}</flux:subheading>
                 <div class="divide-y divide-gray-100 mt-4">
                   @foreach ($sites as $plugin)
-                    <a
-                      href="{{ route('monitors.show', $plugin->monitor_id) }}"
-                      class="flex items-center py-2.5 text-sm text-zinc-700 hover:text-zinc-900 hover:bg-gray-50 -mx-2 px-2 rounded"
-                    >
-                      {{ preg_replace("(^https?://)", "", $plugin->monitor->url) }}
-                    </a>
+                    <div class="flex items-center justify-between gap-2 py-2.5 -mx-2 px-2 rounded hover:bg-gray-50">
+                      <a
+                        href="{{ route('monitors.show', $plugin->monitor_id) }}"
+                        class="text-sm text-zinc-700 hover:text-zinc-900"
+                      >
+                        {{ preg_replace("(^https?://)", "", $plugin->monitor->url) }}
+                      </a>
+                      <flux:tooltip content="Open WP Admin">
+                        <flux:button
+                          href="{{ $plugin->monitor->url->withPath('/wp-admin') }}"
+                          target="_blank"
+                          size="sm"
+                          icon="arrow-top-right-on-square"
+                          class="!size-6 [&_svg]:!size-3.5"
+                        ></flux:button>
+                      </flux:tooltip>
+                    </div>
                   @endforeach
                 </div>
               </flux:modal>
