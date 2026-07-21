@@ -3,6 +3,7 @@
 use App\Models\MonitorWpPlugin;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Session;
 use Livewire\Attributes\Title;
@@ -59,6 +60,9 @@ new #[Title('WP Plugins Report')] class extends Component
             ->whereIn('name', $names)
             ->orderBy('name')
             ->get()
-            ->groupBy('name');
+            ->groupBy('name')
+            ->map(fn (Collection $sites) => $sites->sortBy(
+                fn (MonitorWpPlugin $plugin) => Str::lower(preg_replace('#^https?://#', '', $plugin->monitor->url))
+            )->values());
     }
 };
