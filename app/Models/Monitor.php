@@ -45,6 +45,7 @@ use Spatie\Url\Url;
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
  * @property-read mixed $account_ssl_certificate_status
+ * @property-read bool $all_accounts_suspended
  * @property-read Account|null $firstActiveAccount
  * @property-read Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
@@ -235,6 +236,13 @@ class Monitor extends BaseMonitor
 
                 return $worstStatus;
             }
+        );
+    }
+
+    protected function allAccountsSuspended(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->accounts->isNotEmpty() && $this->accounts->every(fn (Account $account) => $account->suspended),
         );
     }
 

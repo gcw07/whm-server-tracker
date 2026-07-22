@@ -73,6 +73,25 @@
               <flux:link variant="subtle" :href="route('monitors.show', $monitor->id)">
                 {{ preg_replace("(^https?://)", "", $monitor->url) }}
               </flux:link>
+              @if($monitor->all_accounts_suspended)
+                <flux:dropdown position="bottom" align="start">
+                  <flux:badge as="button" size="sm" color="blue" inset="top bottom" icon:trailing="information-circle" class="ml-1">Suspended</flux:badge>
+
+                  <flux:popover class="flex flex-col gap-3 rounded-xl shadow-xl">
+                    @if($monitor->accounts->count() === 1)
+                      <div>
+                        This account was suspended on {{ $monitor->accounts->first()->suspend_time->format('F d, Y \a\t g:ia') }}. It was suspended for "{{ $monitor->accounts->first()->suspend_reason }}".
+                      </div>
+                    @else
+                      <ul class="flex flex-col gap-2">
+                        @foreach($monitor->accounts as $account)
+                          <li>{{ $account->server->name }}: suspended {{ $account->suspend_time->format('F d, Y') }} for "{{ $account->suspend_reason }}"</li>
+                        @endforeach
+                      </ul>
+                    @endif
+                  </flux:popover>
+                </flux:dropdown>
+              @endif
             </flux:table.cell>
 
             <flux:table.cell class="whitespace-nowrap">

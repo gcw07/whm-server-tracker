@@ -41,7 +41,7 @@ new #[Title('WP Updates Report')] class extends Component
     public function monitors()
     {
         return Monitor::query()
-            ->with(['wordpressCheck'])
+            ->with(['wordpressCheck', 'accounts.server'])
             ->when($this->filterBy, function (Builder $query) {
                 if ($this->filterBy === 'agent_installed') {
                     return $query->whereHas('wordpressCheck', fn (Builder $q) => $q->where('check_source', 'agent'));
