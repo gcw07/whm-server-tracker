@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Monitor;
+use App\Models\MonitorWordPressCheck;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Session;
@@ -54,7 +55,17 @@ new #[Title('WP Updates Report')] class extends Component
 
                 return $query;
             })
-            ->orderBy($this->sortBy, $this->sortDirection)
+            ->when($this->sortBy, function (Builder $query) {
+                if ($this->sortBy === 'wordpress_version') {
+                    return $query->orderBy(
+                        MonitorWordPressCheck::select('wordpress_version')
+                            ->whereColumn('monitor_wordpress_checks.monitor_id', 'monitors.id'),
+                        $this->sortDirection
+                    );
+                }
+
+                return $query->orderBy($this->sortBy, $this->sortDirection);
+            })
             ->paginate(50);
     }
 };

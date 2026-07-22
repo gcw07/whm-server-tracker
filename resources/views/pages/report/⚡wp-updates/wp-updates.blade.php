@@ -55,7 +55,7 @@
       <flux:table.columns>
         <flux:table.column class="px-6! bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'url'" :direction="$sortDirection" wire:click="sort('url')">SITE</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">AGENT</flux:table.column>
-        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">WP VERSION</flux:table.column>
+        <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide" sortable :sorted="$sortBy === 'wordpress_version'" :direction="$sortDirection" wire:click="sort('wordpress_version')">WP VERSION</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">PLUGIN UPDATES</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">THEME UPDATES</flux:table.column>
         <flux:table.column class="bg-gray-50 font-medium text-gray-500! text-xs tracking-wide">CORE UPDATE</flux:table.column>
