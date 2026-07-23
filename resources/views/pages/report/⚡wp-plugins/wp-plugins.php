@@ -2,6 +2,7 @@
 
 use App\Models\MonitorWpPlugin;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
@@ -36,6 +37,17 @@ new #[Title('WP Plugins Report')] class extends Component
         }
 
         $this->resetPage();
+    }
+
+    public function refreshWordPressCheck(): void
+    {
+        Artisan::call('server-tracker:check-wordpress');
+
+        Flux::toast(
+            text: 'The WordPress check for all sites will run shortly.',
+            heading: 'Checking...',
+            variant: 'success',
+        );
     }
 
     #[Computed]

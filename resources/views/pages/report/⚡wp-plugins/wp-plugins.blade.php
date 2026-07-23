@@ -1,14 +1,18 @@
 <div>
-  <div class="pb-5">
-    <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
-      <flux:link :href="route('reports.index')" variant="subtle">Reports</flux:link>
-      <flux:icon.chevron-right class="size-4" />
-      <span>WP Plugins</span>
+  <div class="pb-5 flex items-center justify-between">
+    <div>
+      <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+        <flux:link :href="route('reports.index')" variant="subtle">Reports</flux:link>
+        <flux:icon.chevron-right class="size-4" />
+        <span>WP Plugins</span>
+      </div>
+      <h3 class="text-2xl leading-6 font-medium text-gray-900">
+        WP Plugins
+      </h3>
+      <p class="mt-1 text-sm text-gray-500">WordPress plugins with updates available, grouped by plugin name.</p>
     </div>
-    <h3 class="text-2xl leading-6 font-medium text-gray-900">
-      WP Plugins
-    </h3>
-    <p class="mt-1 text-sm text-gray-500">WordPress plugins with updates available, grouped by plugin name.</p>
+
+    <flux:button wire:click="refreshWordPressCheck" icon="arrow-path">Refresh Plugins</flux:button>
   </div>
 
   <flux:card class="p-0 overflow-hidden bg-gray-50 mt-6">
