@@ -8,7 +8,7 @@ use Spatie\UptimeMonitor\Database\Factories\MonitorFactory;
 
 uses(LazilyRefreshDatabase::class);
 
-function makeMonitorWithToken(string $token): Monitor
+function makeMonitorWithApiToken(string $token): Monitor
 {
     MonitorFactory::new()->create(['url' => 'https://example.com', 'wp_api_token' => $token]);
 
@@ -34,7 +34,7 @@ describe('info endpoint', function () {
     });
 
     it('returns 200 with correct JSON shape for a valid token', function () {
-        makeMonitorWithToken('valid-token-abc123');
+        makeMonitorWithApiToken('valid-token-abc123');
 
         $response = $this->getJson('/api/plugin-updates/wp-tracker-agent', [
             'Authorization' => 'Bearer valid-token-abc123',
